@@ -1,0 +1,49 @@
+{
+  "skill_name": "html-output",
+  "description": "Produce well-structured, centered HTML with proper layout classes for complex AI responses.",
+  "harness_version": "1.0",
+  "evals": [
+    {
+      "id": "case_001",
+      "task": "帮我分析这三款云服务的对比：AWS Lambda 冷启动1s，成本按调用次数计；Cloudflare Workers 冷启动5ms，成本按请求量计；Deno Deploy 冷启动10ms，成本按CPU时长计。做成HTML方便比较。",
+      "environment": {
+        "files": {"output.css": "styles at references/output.css"},
+        "tools_available": ["container", "table", "callout", "insight", "meta", "hr"]
+      },
+      "tools": ["container", "table", "callout"],
+      "grader": {
+        "must_use": ["container", "table", "callout"],
+        "must_have": ["3 data rows in table"],
+        "must_not_have": ["missing thead", "inline styles overriding CSS"]
+      }
+    },
+    {
+      "id": "case_002",
+      "task": "按步骤说明如何从零部署一个 Next.js 应用到 Vercel：1.创建项目 2.连接Git仓库 3.配置环境变量 4.部署 5.配置自定义域名。用HTML展示。",
+      "environment": {
+        "files": {"output.css": "styles at references/output.css"},
+        "tools_available": ["container", "steps", "callout", "insight", "meta", "hr"]
+      },
+      "tools": ["steps", "container"],
+      "grader": {
+        "must_use": ["steps", "container"],
+        "must_have": ["5 steps with data-step 1-5"],
+        "must_not_have": ["missing data-step attributes"]
+      }
+    },
+    {
+      "id": "case_003",
+      "task": "对比 agile/waterfall/hybrid 三种开发方法，做成HTML。包含：1)各方法的优缺点表 2)选型建议用callout突出 3)决策流程用step list展示",
+      "environment": {
+        "files": {"output.css": "styles at references/output.css"},
+        "tools_available": ["container", "table", "callout", "steps", "insight", "meta", "hr"]
+      },
+      "tools": ["table", "callout", "steps"],
+      "grader": {
+        "must_use": ["table", "callout", "steps"],
+        "must_have": ["3 methods compared", "recommendation in callout", "decision flow as steps"],
+        "must_not_have": ["plain paragraphs for key insights"]
+      }
+    }
+  ]
+}

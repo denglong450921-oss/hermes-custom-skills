@@ -1,0 +1,28 @@
+{
+  "skill_name": "__SKILL_NAME__",
+  "description": "__SKILL_DESC__",
+  "harness_version": "1.0",
+  "evals": [
+    {
+      "id": "case_001",
+      "task": "__EVAL_TASK_1__",
+      "environment": {"files": {}, "tools_available": []},
+      "tools": [],
+      "grader": {"must_use": [], "must_have": [], "must_not_have": []}
+    },
+    {
+      "id": "case_002",
+      "task": "__EVAL_TASK_2__",
+      "environment": {"files": {}, "tools_available": []},
+      "tools": [],
+      "grader": {"must_use": [], "must_have": [], "must_not_have": []}
+    },
+    {
+      "id": "case_003",
+      "task": "__EVAL_TASK_3__",
+      "environment": {"files": {}, "tools_available": []},
+      "tools": [],
+      "grader": {"must_use": [], "must_have": [], "must_not_have": []}
+    }
+  ]
+}

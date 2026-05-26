@@ -1,0 +1,49 @@
+{
+  "skill_name": "skill-harness",
+  "description": "Inject 5-module Agent Harness (Task, Environment, Tools, Trace, Grader) into any skill.",
+  "harness_version": "1.0",
+  "evals": [
+    {
+      "id": "case_001",
+      "task": "给 pptx skill 加一个 harness",
+      "environment": {
+        "files": {"pptx": "../pptx/SKILL.md"},
+        "tools_available": ["inject.py", "grader.py", "run_harness.py", "evals-template.json"]
+      },
+      "tools": ["inject.py"],
+      "grader": {
+        "must_use": ["inject.py"],
+        "must_have": ["evals/ directory created", "evals.json generated", "Harness section in SKILL.md"],
+        "must_not_have": ["incomplete harness"]
+      }
+    },
+    {
+      "id": "case_002",
+      "task": "给 brainstorming skill 添加 eval 测试",
+      "environment": {
+        "files": {"brainstorming": "../brainstorming/SKILL.md"},
+        "tools_available": ["inject.py", "custom checks in grader.py"]
+      },
+      "tools": ["inject.py", "grader.py"],
+      "grader": {
+        "must_use": ["grader.py"],
+        "must_have": ["custom check added for idea quality"],
+        "must_not_have": ["default HTML checks on non-HTML skill"]
+      }
+    },
+    {
+      "id": "case_003",
+      "task": "升级 ppt-master skill 加入执行记录和评分器",
+      "environment": {
+        "files": {"ppt-master": "../ppt-master/SKILL.md"},
+        "tools_available": ["inject.py", "run_harness.py"]
+      },
+      "tools": ["run_harness.py"],
+      "grader": {
+        "must_use": ["run_harness.py"],
+        "must_have": ["trace recorded", "grade report printed"],
+        "must_not_have": ["trace missing tool calls"]
+      }
+    }
+  ]
+}
