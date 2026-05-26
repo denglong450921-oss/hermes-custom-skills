@@ -1,0 +1,49 @@
+{
+  "skill_name": "global-skill-deployer",
+  "description": "Deploy local skills to global registry with multi-client symlinks",
+  "harness_version": "1.0",
+  "evals": [
+    {
+      "id": "case_001",
+      "task": "把我刚写好的本地 skill `global-skill-deployer` 全局化，并让 Hermes、Trae、Claude 都能共用同一份技能。",
+      "environment": {
+        "files": {"skill": "local skill directory"},
+        "tools_available": ["install_global_skill.py", "manage_global_skills.py"]
+      },
+      "tools": ["install_global_skill.py"],
+      "grader": {
+        "must_use": ["global_source_exists", "symlinks_created", "verify_results"],
+        "must_have": ["global registry path", "symlink mentions"],
+        "must_not_have": ["error traceback"]
+      }
+    },
+    {
+      "id": "case_002",
+      "task": "把 `/Users/f/.trae/skills/my-custom-skill` 安装成全局技能，但这次不要生成命令入口，只做软链接分发。",
+      "environment": {
+        "files": {"source_dir": "/Users/f/.trae/skills/my-custom-skill"},
+        "tools_available": ["install_global_skill.py --skip-wrapper"]
+      },
+      "tools": ["install_global_skill.py"],
+      "grader": {
+        "must_use": ["global_source_exists", "symlinks_created", "skip_cli_wrapper"],
+        "must_have": ["symlink", "no wrapper"],
+        "must_not_have": ["wrapper created"]
+      }
+    },
+    {
+      "id": "case_003",
+      "task": "扫描我本地还没有全局化的自建 skill，批量部署，然后给我一份总清单，标出哪里已经健康、哪里还需要修复。",
+      "environment": {
+        "files": {},
+        "tools_available": ["manage_global_skills.py --scan-local-skills"]
+      },
+      "tools": ["manage_global_skills.py"],
+      "grader": {
+        "must_use": ["global_source_exists", "symlinks_created", "inventory_reports_generated", "needs_attention"],
+        "must_have": ["inventory report", "JSON", "MD", "health status"],
+        "must_not_have": ["no report generated"]
+      }
+    }
+  ]
+}

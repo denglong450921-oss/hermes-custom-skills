@@ -1,0 +1,5336 @@
+{
+  "summary": {
+    "total_skills": 232,
+    "healthy": 6,
+    "needs_attention": 226,
+    "local_only": 0,
+    "custom_skills": 4
+  },
+  "skills": [
+    {
+      "skill_name": "accessibility-review",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/accessibility-review",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/accessibility-review",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "account-research",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/account-research",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/account-research",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "agent-browser",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/agent-browser",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/agent-browser",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "algorithmic-art",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/algorithmic-art",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "local_dir",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/algorithmic-art",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "analyze",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/analyze",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/analyze",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "architecture",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/architecture",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/architecture",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "audit-support",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/audit-support",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/audit-support",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "baoyu-slide-deck",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/baoyu-slide-deck",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/baoyu-slide-deck",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "brainstorming",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/brainstorming",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/brainstorming",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "brand-guidelines",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/brand-guidelines",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "local_dir",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/brand-guidelines",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "brand-review",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/brand-review",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/brand-review",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "brand-voice-enforcement",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/brand-voice-enforcement",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/brand-voice-enforcement",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "brief",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/brief",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/brief",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "browser-use",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/browser-use",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "missing",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "ready",
+      "wrapper_path": "/Users/f/.local/bin/browser-use",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Claude Code",
+        "fix_link:Hermes",
+        "fix_link:Cursor"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "build-dashboard",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/build-dashboard",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/build-dashboard",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "build-zoom-bot",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/build-zoom-bot",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/build-zoom-bot",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "build-zoom-contact-center-app",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/build-zoom-contact-center-app",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/build-zoom-contact-center-app",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "build-zoom-meeting-app",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/build-zoom-meeting-app",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/build-zoom-meeting-app",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "build-zoom-meeting-sdk-app",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/build-zoom-meeting-sdk-app",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/build-zoom-meeting-sdk-app",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "build-zoom-phone-integration",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/build-zoom-phone-integration",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/build-zoom-phone-integration",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "build-zoom-rest-api-app",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/build-zoom-rest-api-app",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/build-zoom-rest-api-app",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "build-zoom-team-chat-app",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/build-zoom-team-chat-app",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/build-zoom-team-chat-app",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "build-zoom-video-sdk-app",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/build-zoom-video-sdk-app",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/build-zoom-video-sdk-app",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "build-zoom-virtual-agent",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/build-zoom-virtual-agent",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/build-zoom-virtual-agent",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "call-prep",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/call-prep",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/call-prep",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "call-summary",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/call-summary",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/call-summary",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "campaign-plan",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/campaign-plan",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/campaign-plan",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "canvas-design",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/canvas-design",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "local_dir",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/canvas-design",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "capacity-plan",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/capacity-plan",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/capacity-plan",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "caveman",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/caveman",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/caveman",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "caveman-commit",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/caveman-commit",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/caveman-commit",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "caveman-compress",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/caveman-compress",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/caveman-compress",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "caveman-help",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/caveman-help",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/caveman-help",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "caveman-review",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/caveman-review",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/caveman-review",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "change-request",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/change-request",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/change-request",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "choose-zoom-approach",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/choose-zoom-approach",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/choose-zoom-approach",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "chrome-devtools",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/chrome-devtools",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/chrome-devtools",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "claude-api",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/claude-api",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "local_dir",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/claude-api",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "clone-website",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/clone-website",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/clone-website",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "close-management",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/close-management",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/close-management",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "code-review",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/code-review",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/code-review",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "comp-analysis",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/comp-analysis",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/comp-analysis",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "competitive-brief",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/competitive-brief",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/competitive-brief",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "competitive-intelligence",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/competitive-intelligence",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/competitive-intelligence",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "compliance-check",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/compliance-check",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/compliance-check",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "compliance-tracking",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/compliance-tracking",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/compliance-tracking",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "compose-outreach",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/compose-outreach",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/compose-outreach",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "contact-research",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/contact-research",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/contact-research",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "content-creation",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/content-creation",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/content-creation",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "cowork-plugin-customizer",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/cowork-plugin-customizer",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/cowork-plugin-customizer",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "create-an-asset",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/create-an-asset",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/create-an-asset",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "create-cowork-plugin",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/create-cowork-plugin",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/create-cowork-plugin",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "create-viz",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/create-viz",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/create-viz",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "customer-escalation",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/customer-escalation",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/customer-escalation",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "customer-research",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/customer-research",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/customer-research",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "daily-briefing",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/daily-briefing",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/daily-briefing",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "data-context-extractor",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/data-context-extractor",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/data-context-extractor",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "data-visualization",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/data-visualization",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/data-visualization",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "debug",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/debug",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/debug",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "debug-zoom",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/debug-zoom",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/debug-zoom",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "debug-zoom-integration",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/debug-zoom-integration",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/debug-zoom-integration",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "defuddle",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/defuddle",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/defuddle",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "deploy-checklist",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/deploy-checklist",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/deploy-checklist",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "design-critique",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/design-critique",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/design-critique",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "design-handoff",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/design-handoff",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/design-handoff",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "design-mcp-workflow",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/design-mcp-workflow",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/design-mcp-workflow",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "design-system",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/design-system",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/design-system",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "digest",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/digest",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/digest",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "discover-brand",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/discover-brand",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/discover-brand",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "dispatching-parallel-agents",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/dispatching-parallel-agents",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/dispatching-parallel-agents",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "doc-coauthoring",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/doc-coauthoring",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "local_dir",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/doc-coauthoring",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "documentation",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/documentation",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/documentation",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "documentation-writer",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/documentation-writer",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/documentation-writer",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "docx",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/docx",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "local_dir",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/docx",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "dogfood",
+      "is_custom": false,
+      "status": "healthy",
+      "global_source": "/Users/f/.agents/skills/dogfood",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "linked",
+        "Cursor": "linked"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/dogfood",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "draft-content",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/draft-content",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/draft-content",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "draft-offer",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/draft-offer",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/draft-offer",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "draft-outreach",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/draft-outreach",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/draft-outreach",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "draft-response",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/draft-response",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/draft-response",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "email-sequence",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/email-sequence",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/email-sequence",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "enrich-lead",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/enrich-lead",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/enrich-lead",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "excalidraw-diagram-generator",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/excalidraw-diagram-generator",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "local_dir",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/excalidraw-diagram-generator",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "executing-plans",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/executing-plans",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/executing-plans",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "explore-data",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/explore-data",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/explore-data",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "financial-statements",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/financial-statements",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/financial-statements",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "find-skills",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/find-skills",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "local_dir",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/find-skills",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "finishing-a-development-branch",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/finishing-a-development-branch",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/finishing-a-development-branch",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "fireworks-tech-graph",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/fireworks-tech-graph",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/fireworks-tech-graph",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "forecast",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/forecast",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/forecast",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "frontend-design",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/frontend-design",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "local_dir",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/frontend-design",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "git-commit",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/git-commit",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/git-commit",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "global-skill-deployer",
+      "is_custom": true,
+      "status": "healthy",
+      "global_source": "/Users/f/.agents/skills/global-skill-deployer",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "linked",
+        "Cursor": "linked"
+      },
+      "wrapper_status": "ready",
+      "wrapper_path": "/Users/f/.local/bin/global-skill-deployer",
+      "manifest_path": "/Users/f/.agents/skills/global-skill-deployer/.custom-skill-manifest.json",
+      "manifest_exists": true,
+      "fix_actions": [],
+      "fixable": false
+    },
+    {
+      "skill_name": "gsap-core",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/gsap-core",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/gsap-core",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "gsap-frameworks",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/gsap-frameworks",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/gsap-frameworks",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "gsap-performance",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/gsap-performance",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/gsap-performance",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "gsap-plugins",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/gsap-plugins",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/gsap-plugins",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "gsap-react",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/gsap-react",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/gsap-react",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "gsap-scrolltrigger",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/gsap-scrolltrigger",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/gsap-scrolltrigger",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "gsap-timeline",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/gsap-timeline",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/gsap-timeline",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "gsap-utils",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/gsap-utils",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/gsap-utils",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "guideline-generation",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/guideline-generation",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/guideline-generation",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "html-ppt",
+      "is_custom": true,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/html-ppt",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/html-ppt",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": true
+    },
+    {
+      "skill_name": "html-ppt-skill",
+      "is_custom": true,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/html-ppt-skill",
+      "links": {
+        "Trae": "missing",
+        "Trae CN": "missing",
+        "Claude Code": "missing",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/html-ppt-skill",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Trae",
+        "fix_link:Trae CN",
+        "fix_link:Claude Code",
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": true
+    },
+    {
+      "skill_name": "hyperframes",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/hyperframes",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/hyperframes",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "hyperframes-cli",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/hyperframes-cli",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/hyperframes-cli",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "hyperframes-registry",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/hyperframes-registry",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/hyperframes-registry",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "incident-response",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/incident-response",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/incident-response",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "instrument-data-to-allotrope",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/instrument-data-to-allotrope",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/instrument-data-to-allotrope",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "internal-comms",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/internal-comms",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "local_dir",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/internal-comms",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "interview-prep",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/interview-prep",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/interview-prep",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "journal-entry",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/journal-entry",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/journal-entry",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "journal-entry-prep",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/journal-entry-prep",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/journal-entry-prep",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "json-canvas",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/json-canvas",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/json-canvas",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "k8s",
+      "is_custom": false,
+      "status": "healthy",
+      "global_source": "/Users/f/.agents/skills/k8s",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "linked",
+        "Cursor": "linked"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/k8s",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "kb-article",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/kb-article",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/kb-article",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "knowledge-synthesis",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/knowledge-synthesis",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/knowledge-synthesis",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "lark-slides",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/lark-slides",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/lark-slides",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "legal-response",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/legal-response",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/legal-response",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "legal-risk-assessment",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/legal-risk-assessment",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/legal-risk-assessment",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "mcp-builder",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/mcp-builder",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "local_dir",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/mcp-builder",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "meeting-briefing",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/meeting-briefing",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/meeting-briefing",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "memory-management",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/memory-management",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/memory-management",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "metrics-review",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/metrics-review",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/metrics-review",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "multilingual-video-voice-workflow",
+      "is_custom": true,
+      "status": "healthy",
+      "global_source": "/Users/f/.agents/skills/multilingual-video-voice-workflow",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "linked",
+        "Cursor": "linked"
+      },
+      "wrapper_status": "ready",
+      "wrapper_path": "/Users/f/.local/bin/multilingual-video-voice-workflow",
+      "manifest_path": "/Users/f/.agents/skills/multilingual-video-voice-workflow/.custom-skill-manifest.json",
+      "manifest_exists": true,
+      "fix_actions": [],
+      "fixable": false
+    },
+    {
+      "skill_name": "nextflow-development",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/nextflow-development",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/nextflow-development",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "obsidian-bases",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/obsidian-bases",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/obsidian-bases",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "obsidian-cli",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/obsidian-cli",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/obsidian-cli",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "obsidian-markdown",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/obsidian-markdown",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/obsidian-markdown",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "onboarding",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/onboarding",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/onboarding",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "org-planning",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/org-planning",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/org-planning",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "pdf",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/pdf",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "local_dir",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/pdf",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "people-report",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/people-report",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/people-report",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "performance-report",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/performance-report",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/performance-report",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "performance-review",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/performance-review",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/performance-review",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "pipeline-review",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/pipeline-review",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/pipeline-review",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "plan-zoom-integration",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/plan-zoom-integration",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/plan-zoom-integration",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "plan-zoom-product",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/plan-zoom-product",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/plan-zoom-product",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "playwright-cli",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/playwright-cli",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/playwright-cli",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "policy-lookup",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/policy-lookup",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/policy-lookup",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "ppt-visual",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/ppt-visual",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "missing",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/ppt-visual",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Claude Code",
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "pptx",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/pptx",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "local_dir",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/pptx",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "pptx-generator",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/pptx-generator",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/pptx-generator",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "probe-sdk",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/probe-sdk",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/probe-sdk",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "process-doc",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/process-doc",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/process-doc",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "process-optimization",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/process-optimization",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/process-optimization",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "product-brainstorming",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/product-brainstorming",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/product-brainstorming",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "prompt-optimizer",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/prompt-optimizer",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/prompt-optimizer",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "prospect",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/prospect",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/prospect",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "react-best-practices",
+      "is_custom": false,
+      "status": "healthy",
+      "global_source": "/Users/f/.agents/skills/react-best-practices",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "linked",
+        "Cursor": "linked"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/react-best-practices",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "receiving-code-review",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/receiving-code-review",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/receiving-code-review",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "reconciliation",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/reconciliation",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/reconciliation",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "recruiting-pipeline",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/recruiting-pipeline",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/recruiting-pipeline",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "refactor",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/refactor",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/refactor",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "remotion-best-practices",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/remotion-best-practices",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/remotion-best-practices",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "requesting-code-review",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/requesting-code-review",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/requesting-code-review",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "research-synthesis",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/research-synthesis",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/research-synthesis",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "review-contract",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/review-contract",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/review-contract",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "risk-assessment",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/risk-assessment",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/risk-assessment",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "rivet-sdk",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/rivet-sdk",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/rivet-sdk",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "roadmap-update",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/roadmap-update",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/roadmap-update",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "runbook",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/runbook",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/runbook",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "scientific-problem-selection",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/scientific-problem-selection",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/scientific-problem-selection",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "scribe",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/scribe",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/scribe",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "scvi-tools",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/scvi-tools",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/scvi-tools",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "search",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/search",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/search",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "search-strategy",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/search-strategy",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/search-strategy",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "self-improving-agent",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/self-improving-agent",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "missing",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/self-improving-agent",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Claude Code",
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "seo-audit",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/seo-audit",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/seo-audit",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "sequence-load",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/sequence-load",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/sequence-load",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "setup-zoom-mcp",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/setup-zoom-mcp",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/setup-zoom-mcp",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "setup-zoom-oauth",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/setup-zoom-oauth",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/setup-zoom-oauth",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "setup-zoom-webhooks",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/setup-zoom-webhooks",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/setup-zoom-webhooks",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "setup-zoom-websockets",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/setup-zoom-websockets",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/setup-zoom-websockets",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "signature-request",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/signature-request",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/signature-request",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "single-cell-rna-qc",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/single-cell-rna-qc",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/single-cell-rna-qc",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "skill-creator",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/skill-creator",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "local_dir",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/skill-creator",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "slack-gif-creator",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/slack-gif-creator",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "local_dir",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/slack-gif-creator",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "slack-messaging",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/slack-messaging",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/slack-messaging",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "slack-search",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/slack-search",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/slack-search",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "soultrace",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/soultrace",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/soultrace",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "source-management",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/source-management",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/source-management",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "sox-testing",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/sox-testing",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/sox-testing",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "sprint-planning",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/sprint-planning",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/sprint-planning",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "sql-queries",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/sql-queries",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/sql-queries",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "stakeholder-update",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/stakeholder-update",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/stakeholder-update",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "standup",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/standup",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/standup",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "start",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/start",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/start",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "statistical-analysis",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/statistical-analysis",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/statistical-analysis",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "status-report",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/status-report",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/status-report",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "subagent-driven-development",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/subagent-driven-development",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/subagent-driven-development",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "svg-logo-designer",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/svg-logo-designer",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/svg-logo-designer",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "synthesize-research",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/synthesize-research",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/synthesize-research",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "system-design",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/system-design",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/system-design",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "systematic-debugging",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/systematic-debugging",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/systematic-debugging",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "task-management",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/task-management",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/task-management",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "tech-debt",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/tech-debt",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/tech-debt",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "template-skill",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/template-skill",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/template-skill",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "test-driven-development",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/test-driven-development",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/test-driven-development",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "testing-strategy",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/testing-strategy",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/testing-strategy",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "theme-factory",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/theme-factory",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "local_dir",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/theme-factory",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "ticket-triage",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/ticket-triage",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/ticket-triage",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "triage-nda",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/triage-nda",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/triage-nda",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "ui-toolkit-web",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/ui-toolkit-web",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/ui-toolkit-web",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "ui-ux-pro-max",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/ui-ux-pro-max",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/ui-ux-pro-max",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "update",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/update",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/update",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "user-research",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/user-research",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/user-research",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "using-git-worktrees",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/using-git-worktrees",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/using-git-worktrees",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "using-superpowers",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/using-superpowers",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/using-superpowers",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "ux-copy",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/ux-copy",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/ux-copy",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "validate-data",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/validate-data",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/validate-data",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "variance-analysis",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/variance-analysis",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/variance-analysis",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "vendor-check",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/vendor-check",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/vendor-check",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "vendor-review",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/vendor-review",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/vendor-review",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "verification-before-completion",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/verification-before-completion",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/verification-before-completion",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "view-pdf",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/view-pdf",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/view-pdf",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "web-artifacts-builder",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/web-artifacts-builder",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "local_dir",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/web-artifacts-builder",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "web-design-guidelines",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/web-design-guidelines",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "local_dir",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/web-design-guidelines",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "webapp-testing",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/webapp-testing",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "local_dir",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/webapp-testing",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "website-to-hyperframes",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/website-to-hyperframes",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/website-to-hyperframes",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "weekly-prep-brief",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/weekly-prep-brief",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/weekly-prep-brief",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "write-query",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/write-query",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/write-query",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "write-spec",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/write-spec",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/write-spec",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "writing-plans",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/writing-plans",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/writing-plans",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "writing-skills",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/writing-skills",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/writing-skills",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "xlsx",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/xlsx",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "local_dir",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/xlsx",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "yuanbao",
+      "is_custom": false,
+      "status": "healthy",
+      "global_source": "/Users/f/.agents/skills/yuanbao",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "linked",
+        "Cursor": "linked"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/yuanbao",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "zoom-apps-sdk",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/zoom-apps-sdk",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/zoom-apps-sdk",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "zoom-cobrowse-sdk",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/zoom-cobrowse-sdk",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/zoom-cobrowse-sdk",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "zoom-general",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/zoom-general",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/zoom-general",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "zoom-mcp",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/zoom-mcp",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/zoom-mcp",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "zoom-oauth",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/zoom-oauth",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/zoom-oauth",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    },
+    {
+      "skill_name": "zoom-rtms",
+      "is_custom": false,
+      "status": "needs_attention",
+      "global_source": "/Users/f/.agents/skills/zoom-rtms",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "missing",
+        "Cursor": "missing"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/zoom-rtms",
+      "manifest_path": "",
+      "manifest_exists": false,
+      "fix_actions": [
+        "fix_link:Hermes",
+        "fix_link:Cursor",
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": false
+    }
+  ]
+}

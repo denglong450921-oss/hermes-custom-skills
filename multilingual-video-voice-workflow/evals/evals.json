@@ -1,0 +1,49 @@
+{
+  "skill_name": "multilingual-video-voice-workflow",
+  "description": "Turn scripts into multilingual voice packages with TTS + SRT",
+  "harness_version": "1.0",
+  "evals": [
+    {
+      "id": "case_001",
+      "task": "把 `/Users/f/Documents/字幕脚本翻译/1.文案` 切成适合口播的长度，目标语言改成英语，品牌名不要翻译，生成三个女生版本的 mp3 和对应 srt。",
+      "environment": {
+        "files": ["/Users/f/Documents/字幕脚本翻译/1.文案"],
+        "tools_available": ["multilingual_video_workflow.py"]
+      },
+      "tools": ["multilingual_video_workflow.py"],
+      "grader": {
+        "must_use": ["script_ran_successfully", "manifest_created", "mp3_files_generated", "srt_files_generated", "pronunciation_protected"],
+        "must_have": ["MP3", "SRT", "manifest", "protected terms"],
+        "must_not_have": ["traceback", "error"]
+      }
+    },
+    {
+      "id": "case_002",
+      "task": "我贴一段西班牙语脚本，请翻成日语并生成配音和字幕，输出文件放在和原稿同目录。",
+      "environment": {
+        "files": [],
+        "tools_available": ["multilingual_video_workflow.py"]
+      },
+      "tools": ["multilingual_video_workflow.py"],
+      "grader": {
+        "must_use": ["script_ran_successfully", "mp3_files_generated", "srt_files_generated", "output_directory_listed"],
+        "must_have": ["output directory", "MP3", "SRT"],
+        "must_not_have": ["traceback"]
+      }
+    },
+    {
+      "id": "case_003",
+      "task": "将这个英文 promo script 切句后转成中文口播，保留 Netflix 和 Disney+ 不变，然后给我音频和 srt。",
+      "environment": {
+        "files": [],
+        "tools_available": ["multilingual_video_workflow.py"]
+      },
+      "tools": ["multilingual_video_workflow.py"],
+      "grader": {
+        "must_use": ["script_ran_successfully", "bilingual_review_created", "pronunciation_protected", "chinese_reference_srt"],
+        "must_have": ["bilingual review", "protected brands", "CN reference SRT"],
+        "must_not_have": ["traceback", "missing"]
+      }
+    }
+  ]
+}

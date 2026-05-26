@@ -1,0 +1,91 @@
+{
+  "summary": {
+    "total_skills": 4,
+    "healthy": 4,
+    "needs_attention": 0,
+    "local_only": 0,
+    "custom_skills": 4
+  },
+  "skills": [
+    {
+      "skill_name": "global-skill-deployer",
+      "is_custom": true,
+      "status": "healthy",
+      "global_source": "/Users/f/.agents/skills/global-skill-deployer",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "linked",
+        "Cursor": "linked"
+      },
+      "wrapper_status": "ready",
+      "wrapper_path": "/Users/f/.local/bin/global-skill-deployer",
+      "manifest_path": "/Users/f/.agents/skills/global-skill-deployer/.custom-skill-manifest.json",
+      "manifest_exists": true,
+      "fix_actions": [],
+      "fixable": false
+    },
+    {
+      "skill_name": "html-ppt",
+      "is_custom": true,
+      "status": "healthy",
+      "global_source": "/Users/f/.agents/skills/html-ppt",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "linked",
+        "Cursor": "linked"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/html-ppt",
+      "manifest_path": "/Users/f/.agents/skills/html-ppt/.custom-skill-manifest.json",
+      "manifest_exists": true,
+      "fix_actions": [
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": true
+    },
+    {
+      "skill_name": "html-ppt-skill",
+      "is_custom": true,
+      "status": "healthy",
+      "global_source": "/Users/f/.agents/skills/html-ppt-skill",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "linked",
+        "Cursor": "linked"
+      },
+      "wrapper_status": "missing",
+      "wrapper_path": "/Users/f/.local/bin/html-ppt-skill",
+      "manifest_path": "/Users/f/.agents/skills/html-ppt-skill/.custom-skill-manifest.json",
+      "manifest_exists": true,
+      "fix_actions": [
+        "create_wrapper_if_detectable"
+      ],
+      "fixable": true
+    },
+    {
+      "skill_name": "multilingual-video-voice-workflow",
+      "is_custom": true,
+      "status": "healthy",
+      "global_source": "/Users/f/.agents/skills/multilingual-video-voice-workflow",
+      "links": {
+        "Trae": "linked",
+        "Trae CN": "linked",
+        "Claude Code": "linked",
+        "Hermes": "linked",
+        "Cursor": "linked"
+      },
+      "wrapper_status": "ready",
+      "wrapper_path": "/Users/f/.local/bin/multilingual-video-voice-workflow",
+      "manifest_path": "/Users/f/.agents/skills/multilingual-video-voice-workflow/.custom-skill-manifest.json",
+      "manifest_exists": true,
+      "fix_actions": [],
+      "fixable": false
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+[
+  {
+    "term": "PAS",
+    "display_text": "PAS",
+    "tts_text_by_locale": {
+      "en-US": "P A S",
+      "en-AU": "P A S",
+      "zh-CN": "P A S"
+    }
+  },
+  {
+    "term": "Prism Systems",
+    "display_text": "Prism Systems",
+    "tts_text_by_locale": {
+      "en-US": "Prism Systems",
+      "en-AU": "Prism Systems"
+    }
+  },
+  {
+    "term": "WFM",
+    "display_text": "WFM",
+    "tts_text_by_locale": {
+      "az-AZ": "double-u ef em"
+    }
+  },
+  {
+    "term": "MENA",
+    "display_text": "MENA",
+    "tts_text_by_locale": {
+      "az-AZ": "mee-nah"
+    }
+  }
+]
