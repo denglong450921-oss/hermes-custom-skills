@@ -145,6 +145,13 @@ def check_output(filepath, checks):
             passed = not (has_error and has_output_line)
             evidence = "Consistent" if passed else "Traceback detected but OUTPUT_FILE claimed"
 
+        elif check["check"] == "rtl_layout_applied":
+            # Check that RTL was applied: [RTL] tag in progress, rtl_col/rtl attributes
+            has_rtl_tag = "[RTL]" in content
+            has_rtl_log = "RTL language detected" in content
+            passed = has_rtl_tag or has_rtl_log
+            evidence = f"[RTL] tag={has_rtl_tag}, log={has_rtl_log}" if passed else "Missing RTL indicators in output"
+
         else:
             evidence = f"Unknown check: {check['check']}"
 

@@ -54,9 +54,11 @@ _ensure_venv()
 import pptx
 from deep_translator import GoogleTranslator
 from pptx.enum.shapes import MSO_SHAPE_TYPE
-from pptx.enum.text import MSO_AUTO_SIZE
+from pptx.enum.text import MSO_AUTO_SIZE, PP_ALIGN
 from pptx.text.fonts import FontFiles
 from pptx.util import Pt
+from pptx.oxml.ns import qn
+from lxml import etree
 
 TERMS = [
     "Prism AI Systems Inc",
@@ -178,6 +180,9 @@ LANGUAGE_ALIASES = {
     "vi": "vi",
     "越南语": "vi",
 }
+
+# Right-to-left (RTL) languages — text direction must flip for these
+_RTL_LANGUAGES = {"ar", "he", "iw", "fa", "ur", "ps", "sd", "ku", "yi", "dv"}
 
 
 def log(message):
@@ -338,6 +343,35 @@ def apply_frame_fit(text_frame, paragraph_entries):
         entry["first_run"].font.size = Pt(scaled_size)
 
 
+def apply_rtl_layout(text_frame):
+    """Set right-to-left text direction for the entire text frame and all paragraphs."""
+    # Body-level RTL column
+    bodyPr = text_frame._bodyPr
+    bodyPr.set('rtlCol', '1')
+
+    # Each paragraph: RTL + right alignment
+    a_ns = 'http://schemas.openxmlformats.org/drawingml/2006/main'
+    for para in text_frame.paragraphs:
+        para.alignment = PP_ALIGN.RIGHT
+        pPr = para._p.find(qn('a:pPr'))
+        if pPr is None:
+            pPr = etree.SubElement(para._p, qn('a:pPr'))
+        pPr.set('rtl', '1')
+
+        # Also set rtl on endParaRPr if present
+        endRPr = para._p.find(qn('a:endParaRPr'))
+        if endRPr is not None:
+            rPr_child = endRPr.find(qn('a:rPr'))
+            if rPr_child is None:
+                rPr_child = etree.SubElement(endRPr, qn('a:rPr'))
+            rPr_child.set('rtl', '1')
+
+
+def is_rtl_target(lang_code):
+    """Check if the normalized language code needs RTL layout."""
+    return lang_code in _RTL_LANGUAGES
+
+
 def normalize_target_language(target_lang):
     """Normalize human-readable language names to translator-friendly codes."""
     normalized = LANGUAGE_ALIASES.get(target_lang.strip().lower())
@@ -360,6 +394,9 @@ def process_presentation(input_path, output_path, target_lang):
 
     normalized_target = normalize_target_language(target_lang)
     log(f"Starting translation: source='{input_path}', target='{normalized_target}'")
+    is_rtl = is_rtl_target(normalized_target)
+    if is_rtl:
+        log("RTL language detected — applying right-to-left text direction")
     load_cache()
     prs = pptx.Presentation(input_path)
     slide_total = len(prs.slides)
@@ -406,7 +443,9 @@ def process_presentation(input_path, output_path, target_lang):
                 )
 
             apply_frame_fit(text_frame, paragraph_entries)
-        log(f"Processed slide {slide_index}/{slide_total}: {slide_blocks} text blocks")
+            if is_rtl and paragraph_entries:
+                apply_rtl_layout(text_frame)
+        log(f"Processed slide {slide_index}/{slide_total}: {slide_blocks} text blocks" + (" [RTL]" if is_rtl else ""))
 
     save_cache()
     prs.save(output_path)

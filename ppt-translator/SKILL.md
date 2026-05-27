@@ -62,6 +62,16 @@ The deliverable is always a new `.pptx` file. Do not overwrite the source file u
 - When translating into multiple languages, run them sequentially and report each output path clearly.
 - Keep progress logs visible rather than suppressing stdout, unless the user explicitly asks for silent mode.
 
+## RTL Language Support
+
+When translating to right-to-left (RTL) languages — Arabic (`ar`), Hebrew (`he`/`iw`), Persian (`fa`), Urdu (`ur`), Pashto (`ps`), Sindhi (`sd`), Kurdish (`ku`), Yiddish (`yi`), Divehi (`dv`) — the script automatically:
+
+- Sets body text direction to RTL (`rtlCol="1"`)
+- Sets all paragraph alignments to **right**
+- Marks every paragraph and its end-of-paragraph run properties with `rtl="1"`
+
+This is logged per slide with `[RTL]` suffix in the progress output.
+
 ## Harness (Self-Eval)
 
 The ppt-translator skill includes a 5-module Agent Harness for automated quality verification.
@@ -73,6 +83,7 @@ The ppt-translator skill includes a 5-module Agent Harness for automated quality
 | case_001 | Translate Q3_Report.pptx to Spanish | Script completion, output file, progress logs, source not overwritten |
 | case_002 | Translate with protected terms (PAS, Prism AI) to Japanese | Term preservation, script completion, progress logs |
 | case_003 | Multi-language sequence: French then Malayalam | Dual output files, sequential progress, script completion |
+| case_004 | Translate to Arabic (RTL) | RTL direction applied, right alignment, script completion |
 
 ### Checks (evals/grader.py)
 
@@ -88,6 +99,7 @@ The ppt-translator skill includes a 5-module Agent Harness for automated quality
 | `reports_failure_honestly` | Truthfulness: errors visible if present |
 | `no_defensive_disclaimers` | No "I might be wrong" disclaimers |
 | `no_false_success` | No success claim when errors exist |
+| `rtl_layout_applied` | RTL direction and right alignment set (Arabic, Hebrew, etc.) |
 
 ### Run
 

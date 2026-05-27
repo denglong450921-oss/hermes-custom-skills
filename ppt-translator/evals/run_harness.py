@@ -88,6 +88,7 @@ def main():
         "reports_failure_honestly": {"text": "Honest report", "check": "reports_failure_honestly"},
         "no_defensive_disclaimers": {"text": "No disclaimers", "check": "no_defensive_disclaimers"},
         "no_false_success": {"text": "No false success", "check": "no_false_success"},
+        "rtl_layout_applied": {"text": "RTL layout", "check": "rtl_layout_applied"},
     }
 
     for case in cases:

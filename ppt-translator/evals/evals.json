@@ -47,6 +47,21 @@
         "must_have": ["two output files (fr + ml)", "progress visible per iteration"],
         "must_not_have": ["Traceback"]
       }
+    },
+    {
+      "id": "case_004",
+      "task": "Translate to Arabic with RTL layout",
+      "prompt": "Translate `BKK英语2.pptx` into Arabic.",
+      "environment": {
+        "files": {"BKK英语2.pptx": "26-slide deck with various text layouts"},
+        "tools_available": ["run_ppt_translator.py", "translate_pptx.py"]
+      },
+      "tools": ["run_ppt_translator.py"],
+      "grader": {
+        "must_use": ["script_completed", "output_file_reported", "progress_logs_visible", "rtl_layout_applied"],
+        "must_have": ["[RTL] tag on slides", "RTL language detected log"],
+        "must_not_have": ["Traceback"]
+      }
     }
   ]
 }
