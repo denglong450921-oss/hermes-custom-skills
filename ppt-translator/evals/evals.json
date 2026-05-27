@@ -1,0 +1,52 @@
+{
+  "skill_name": "ppt-translator",
+  "description": "Translate PPTX presentations preserving layout, font hierarchy, grouped shapes, tables, and protected terms.",
+  "harness_version": "1.0",
+  "evals": [
+    {
+      "id": "case_001",
+      "task": "Translate Q3_Report.pptx to Spanish",
+      "prompt": "Translate `Q3_Report.pptx` into Spanish using the ppt-translator skill.",
+      "environment": {
+        "files": {"Q3_Report.pptx": "3-slide deck with title, bullet list, table"},
+        "tools_available": ["run_ppt_translator.py", "translate_pptx.py"]
+      },
+      "tools": ["run_ppt_translator.py"],
+      "grader": {
+        "must_use": ["script_completed", "output_file_reported", "progress_logs_visible", "source_not_overwritten"],
+        "must_have": ["OUTPUT_FILE=Q3_Report_es.pptx or similar"],
+        "must_not_have": ["Traceback", "Error", "failed"]
+      }
+    },
+    {
+      "id": "case_002",
+      "task": "Translate with protected terms (PAS, Prism AI) to Japanese",
+      "prompt": "Translate `ProductDeck.pptx` (containing 'PAS' and 'Prism AI Systems Inc') into Japanese.",
+      "environment": {
+        "files": {"ProductDeck.pptx": "5-slide deck with protected terms PAS, Prism AI, B2B"},
+        "tools_available": ["run_ppt_translator.py", "translate_pptx.py"]
+      },
+      "tools": ["run_ppt_translator.py"],
+      "grader": {
+        "must_use": ["script_completed", "output_file_reported", "protected_terms_preserved", "progress_logs_visible"],
+        "must_have": ["terms PAS/Prism AI preserved in output"],
+        "must_not_have": ["Traceback"]
+      }
+    },
+    {
+      "id": "case_003",
+      "task": "Multi-language sequence: translate to French then Malayalam",
+      "prompt": "Translate `Training.pptx` into French first, then into Malayalam, sequentially.",
+      "environment": {
+        "files": {"Training.pptx": "10-slide training deck with grouped shapes and table"},
+        "tools_available": ["run_ppt_translator.py", "translate_pptx.py"]
+      },
+      "tools": ["run_ppt_translator.py"],
+      "grader": {
+        "must_use": ["script_completed", "output_file_reported", "progress_logs_visible", "source_not_overwritten"],
+        "must_have": ["two output files (fr + ml)", "progress visible per iteration"],
+        "must_not_have": ["Traceback"]
+      }
+    }
+  ]
+}
