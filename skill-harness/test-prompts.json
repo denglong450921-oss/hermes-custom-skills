@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "prompt": "I have a skill at ~/.hermes/skills/web/my-html-skill that generates HTML posters. It uses .container, .callout, .highlight CSS classes. I need to add a harness so it has evals, grader, and can self-test. Make a harness for this skill.",
+    "expected": "The harness injector adds evals/evals.json, evals/grader.py, evals/run_harness.py, and a Harness section to SKILL.md. Detects HTML mode (container/callout classes) and uses the HTML grader."
+  },
+  {
+    "id": 2,
+    "prompt": "I have a Python CLI tool skill in ~/.hermes/skills/deploy-skill that deploys websites. It runs shell commands and expects JSON output. I need to add quality checks - make a harness for this non-HTML skill.",
+    "expected": "Uses manual injection path (non-HTML mode). Creates a generic grader with domain-agnostic checks (script_ran, output_file, manifest). Adds 3 eval cases."
+  },
+  {
+    "id": 3,
+    "prompt": "Check if ~/.hermes/skills/html-output has a valid harness. Run a compliance check on it.",
+    "expected": "Uses check_harness.py to validate all 9 required criteria (evals/ dir, evals.json ≥3 cases, grader.py check function, run_harness.py main, SKILL.md Harness section, each eval has must_use). Returns pass/fail for each."
+  }
+]
