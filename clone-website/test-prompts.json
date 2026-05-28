@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "prompt": "Clone this website: https://www.example.com",
+    "expected": "完整流程执行: 浏览器侦察→截图→提取样式→写spec→派发builder→组装→视觉QA。输出至少包含部署用的Next.js组件代码和assets。"
+  },
+  {
+    "id": 2,
+    "prompt": "Clone just the hero section from https://www.example.com",
+    "expected": "部分克隆: 只提取hero区域的内容和样式，生成HeroSection.tsx组件。不走完整全站clone流程。"
+  },
+  {
+    "id": 3,
+    "prompt": "Clone this website but change the primary color to blue: https://www.example.com",
+    "expected": "自定义clone: 提取网站全部样式和结构，但将primary color替换为蓝色。挑战skill处理用户定制需求的能力。"
+  }
+]
