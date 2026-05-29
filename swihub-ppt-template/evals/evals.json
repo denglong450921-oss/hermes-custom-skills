@@ -1,0 +1,49 @@
+{
+  "skill_name": "swihub-ppt-template",
+  "description": "Swihub PPT template — generate polished .pptx decks with gold accent design",
+  "harness_version": "1.0",
+  "evals": [
+    {
+      "id": "case_001",
+      "task": "为 Swihub Solutions 做一份投资者 Pitch Deck，包含封面、使命愿景、团队介绍、财务指标和结尾CTA，使用 swihub 模板风格。",
+      "environment": {
+        "files": {"template": "assets/template.pptx"},
+        "tools_available": ["python-pptx", "gen_bonroy_ppt.py"]
+      },
+      "tools": ["gen_bonroy_ppt.py", "python-pptx"],
+      "grader": {
+        "must_use": ["script_ran_successfully", "file_generated"],
+        "must_have": [".pptx", "slide", "template"],
+        "must_not_have": ["traceback", "corrupt"]
+      }
+    },
+    {
+      "id": "case_002",
+      "task": "创建一份员工手册PPT，包含公司文化、组织架构图和福利说明，使用已经存在的 slide 模板直接替换文字内容，不要复制新 slide。",
+      "environment": {
+        "files": {"template": "assets/template.pptx"},
+        "tools_available": ["python-pptx"]
+      },
+      "tools": ["python-pptx"],
+      "grader": {
+        "must_use": ["script_ran_successfully", "file_generated", "reports_failure_honestly"],
+        "must_have": [".pptx", "slide text", "文字"],
+        "must_not_have": ["traceback", "corrupt"]
+      }
+    },
+    {
+      "id": "case_003",
+      "task": "用 swihub 模板制作董事会汇报材料，包含5页关键指标（金色强调卡片、底部结论栏），确保所有卡片都有 #D4AF37 金色左边条。",
+      "environment": {
+        "files": {"template": "assets/template.pptx"},
+        "tools_available": ["python-pptx"]
+      },
+      "tools": ["python-pptx"],
+      "grader": {
+        "must_use": ["script_ran_successfully", "file_generated", "no_false_success"],
+        "must_have": [".pptx", "gold", "card"],
+        "must_not_have": ["traceback", "corrupt"]
+      }
+    }
+  ]
+}

@@ -525,3 +525,48 @@ def duplicate_slide(prs, slide_index):
 7. **16:9 aspect ratio** (10.00" × 5.62") — all slides
 8. **Default layout only** — layout[0] (DEFAULT) with 0 placeholders
 9. **Language**: Spanish (ES) in template; content language follows user preference
+
+## Harness (Self-Eval)
+
+This skill has a built-in eval harness following the Agent Harness 5-module pattern.
+
+### Task (what to test)
+Define 3+ eval cases in `evals/evals.json` — each with task, environment, tools, grader.
+
+### Environment
+- `scripts/gen_bonroy_ppt.py` — PPTX generation script
+- `assets/template.pptx` — master template file
+- `python-pptx` library required
+
+### Tools
+`python-pptx` `gen_bonroy_ppt.py`
+
+### Grader
+Run the harness on any generated output:
+
+```bash
+# Full harness run (tests all 3 cases against one output)
+python3 evals/run_harness.py <output-file>
+
+# Or run individual checks
+python3 evals/grader.py <output-file> '<checks-json>'
+```
+
+### Checks
+
+| Check | Detects |
+|-------|---------|
+| `script_ran_successfully` | No fatal errors in output |
+| `file_generated` | `.pptx` output file referenced |
+| `valid_pptx` | PPTX file passes zip integrity check |
+| `reports_failure_honestly` | Failure details not masked |
+| `no_false_success` | No false success claims |
+| `gold_accent_used` | Gold accent #D4AF37 mentioned |
+| `card_pattern` | Card layout with left accent bar |
+| `slide_count` | Sufficient slide count |
+
+### Eval flow
+1. Define cases in evals/evals.json
+2. Follow skill instructions to produce output
+3. Run grader to verify assertions
+4. Fix failures, re-output, re-check

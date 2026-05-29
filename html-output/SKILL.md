@@ -1,357 +1,217 @@
 ---
-name: html-output
-description: >
-  Write beautiful, easy-to-read HTML output for complex AI responses. The key advantage is INFORMATION DENSITY
-  — a table/card/diagram browses in 10s vs 2min of linear markdown. USE THIS SKILL whenever the response
-  contains 2+ tables, comparison matrices, multi-level checklists, 3+ decision points, multi-dimensional info
-  (current+changes+tests+next steps), spatial information (flows, architecture, relationships), or
-  multi-chapter analysis. The shared CSS at references/output.css has everything built in — centered container,
-  dark/light auto-switch, cards, callout boxes, insight highlights, stats blocks, step lists (timeline/flowchart),
-  accordions (details/summary), tables, tags, print styles. Write clean semantic HTML using the classes
-  documented in this skill. Do NOT trigger for simple Q&A, single code snippets, or one-glance answers.
+name: "html-output"
+description: "编写美观易读的 HTML 输出，用于复杂的 AI 回复。当回复包含比较表格、流程步骤、带指标的卡片、可折叠代码块时使用。触发词: HTML, HTML output, generate HTML, 生成HTML, layout, card, table, steps, highlight, 美观HTML, 网页输出, 富文本"
 ---
 
-# HTML Output for AI Responses
+# HTML Output
+
+> 核心原则：HTML 唯一的优势是 **信息密度**。读者能在 10 秒内理解的东西，远超过任何线性 markdown。**如果 10 秒内抓不住重点 → 失败。**
+
+## Quick Navigation
+
+| If you want to... | Go to... |
+|---|---|
+| Start with the rules | [Core Principles](#core-principles) |
+| Build the layout | [Layout System](#layout-system-proven-must-follow) |
+| See available CSS | [output.css Reference](#what-outputcss-provides) |
+| Verify before shipping | [Pre-Delivery Protocol](#pre-delivery-verification-protocol必须逐条过缺一不可) |
+| Self-check your output | [Quality Checklist](#quality-checklist产出前逐条检查) |
+| Run automated evaluation | [Harness (Self-Eval)](#harness-self-eval) |
+| Avoid common pitfalls | [Common HTML Mistakes](#-common-html-mistakes--what-not-to-do) |
+
+## TL;DR — Experienced User Workflow
+
+1. Wrap everything in `<div class="container">`
+2. Lead with an `.insight` card — the thesis in one sentence
+3. Use `<table>` for comparisons, `.steps` for sequences, `.callout` for takeaways
+4. Wrap code/long references in `<details><summary>`
+5. Insert `<hr>` between every major section
+6. Walk the 10-element [Pre-Delivery Protocol](#pre-delivery-verification-protocol必须逐条过缺一不可) before claiming completion
 
 ## Core Principles
 
-### ① 信息密度是最大优势
-一个对比表格、一张架构图、一组并排卡片，10秒钟浏览完。等价的MD内容要花两分钟线性阅读。AI回复动辄上千字，一天看几万字眼睛受不了。HTML让阅读和理解效率大幅提升。
+### ① HTML 不是必须的
 
-### ② 内容优先 + 易读好看
-HTML只做一件事：把信息高效传递给读者。用 `references/output.css` 的预置样式，不在样式上花时间。
-
-**重要：视觉层次不是装饰，是必需品。** "极简"不等于"丑陋"——没有 `.container` 的居中、没有 `.callout`/`.insight` 的重点突出、没有 `line-height:1.8` 的行距，读者会错过关键信息。下面 Layout System 中的每个类（callout, insight, highlight, steps, card-grid, table）的存在目的都是信息密度——让读者10秒扫完核心信息，同时看着舒服不累眼。
-
-如果输出的 HTML 中关键信息和普通段落看起来一样，说明 layout 没做对，需要重做。
-
-### ③ 仅复杂内容才用HTML
-简单回答直接在终端输出。以下情况才用HTML：
-- 包含 **≥2个** 表格/多层级清单/多个章节
-- 包含 **≥3个** 待决策的选项/决策点
-- 同时呈现"现状+改动+测试+待决策+下一步"等多维度信息
+大部分回复用 markdown 就够了。只在以下情况下启用 HTML output：
+- 含 **3+ 项的对比表**（方案/产品/方案比较）
+- 含 **量化比较**（评分、涨幅、价格档位）
+- 含 **3+ 步骤的流程/演进/历史阶段**
 - 涉及流程/架构/关系类空间信息（纯文字讲不清的）
+
+> 🔴 **CHECKPOINT**: Is the response complex enough for HTML? If none of the above conditions are met, output plain markdown. Using HTML for simple answers wastes tokens and reader attention.
 
 ## Layout System (PROVEN, must follow)
 
-This is the key difference between readable HTML and hard-to-read HTML. **Every page must follow this layout.**
+### Step 1: 元素计划
 
-### Step 1: Base template
-
-```html
-<!DOCTYPE html>
-<html><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>title</title>
-<style>
-/* paste entire references/output.css here */
-</style>
-</head><body>
-<div class="container">
-<!-- ALL content goes inside .container for centering -->
-</div>
-</body></html>
-```
-
-> The `.container` centers everything at 800px max-width with auto margins. Without it, content floats left. Output.css has it built in.
-
-### Step 2: Build visual hierarchy
+**2–3 秒**：先规划用哪些 CSS 组件、分几段。通常结构如下：
 
 ```
-h1          ← Page title (one per page, 2rem bold)
-.meta       ← Author, date (subdued gray)
-p / .intro  ← Body text (line-height 1.8 for easy scanning)
-    ↓
-h2          ← Section divider with accent blue bottom border
-    → table, card-grid, blockquote, callout
-    → hr (between major sections)
-    ↓
-h3          ← Sub-section
-    → p, ul, ol, pre, insight
+.container                    # 全局容器，始终在最外层
+  .insight                    # [必选] 全文核心结论/论点
+  <hr>                        # 分隔线
+
+  <p>                         # 正文介绍
+  .callout                    # 关键发现/警告/建议
+
+  <table>                     # 对比/筛选/排行（必须有 <thead>）
+  <hr>
+
+  <ol class="steps">          # 3+ 步的演进/流程
+
+  <details><summary>          # 代码块/引用/参考表
 ```
 
-### Step 3: Make important points POP
+### Step 2: 组件填充
 
-Content that matters should be VISUALLY DIFFERENT from ordinary paragraphs. Burying key insights in plain text = reader misses them.
+按 <skill-dir>/references/output.css 定义的 class 填充内容。常用组件频次：
 
-| Pattern | Usage |
-|---------|-------|
-| **`.callout`** | Key insight, core takeaway — blue left border box with accent background |
-| **`.insight`** | Punchline, one-liner conclusion — gray bordered highlight paragraph |
-| **`.highlight`** | Key metrics / statistics — centered big number display |
-| `<blockquote>` | Quotes, soft callouts — left bar, muted text |
-| **`.tag`** | Category labels — small rounded pill |
+**高频（每篇必用）**
 
-**Callout** (for "the thing to remember"):
-```html
-<div class="callout">
-<strong>核心观点：xxx</strong>
-<p>详细说明。</p>
-</div>
-```
+| 组件 | CSS class | 用途 |
+|------|-----------|------|
+| 容器 | `.container` | 所有内容的根容器 |
+| 核心结论 | `.insight` | 全文唯一的论点，必须放最前面 |
+| 分隔线 | `<hr>` | 分隔每大段，约 3-4 个 |
+| 关键引用 | `.callout` | 警示、建议、关键数据 |
+| 段落 | `<p>` | 正文 |
 
-**Insight** (for punchline):
-```html
-<p class="insight">不是「让 AI 从零生成一切」，而是「人提供约束良好的预制件」。</p>
-```
+**中频（根据内容类型）**
 
-**Step list** (for timeline / process / flowchart):
-```html
-<ol class="steps">
-<li data-step="1"><strong>调研</strong><p>先做调查研究，摸清情况。</p></li>
-<li data-step="2"><strong>分析</strong><p>抓住主要矛盾，制定策略。</p></li>
-<li data-step="3"><strong>执行</strong><p>集中优势兵力，各个击破。</p></li>
-</ol>
-```
-Renders as: numbered circles connected by a vertical timeline line. Perfect for step-by-step processes, roadmaps, or flowcharts — without drawing a single shape.
+| 组件 | CSS class | 用途 |
+|------|-----------|------|
+| 步骤列表 | `<ol class="steps">` | 3+ 步的演进/流程 |
+| 表格 | `<table>` + `<thead>` | 对比/特征/评分 |
+| 高亮 | `.highlight` | 关键指标/数值 |
+| 折叠块 | `<details><summary>` | 代码/引用/次要参表 |
 
-**Accordion** (for hiding details until clicked):
-```html
-<details>
-<summary>点击展开详情</summary>
-<div>
-<p>这里的内容默认隐藏，用户点击才展开。</p>
-</div>
-</details>
-```
-Use this to keep the page clean and high-level (like a zoomed-out diagram), letting users expand only the nodes they care about. Pure HTML, zero JavaScript.
+**低频（特定场景）**
 
-**Actual diagrams** (Mermaid.js, optional):
-If you *must* have literal flowcharts or mind maps, use Mermaid.js. Add one `<script>` tag and write diagram text:
-```html
-<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
-<pre class="mermaid">
-graph LR
-  A[Start] --> B[Process]
-  B --> C[End]
-</pre>
-```
-Only use this when the `.steps` list or `.card-grid` truly can't express the relationship. Mermaid adds a CDN dependency and breaks offline.
+| 组件 | CSS class | 用途 |
+|------|-----------|------|
+| 卡片组 | `.card-grid` | 多卡对比 |
+| 子弹笔记 | `.highlight-list` | 紧凑要点 |
+| 双栏 | `.two-column` | 左右对照 |
+| 特殊引用 | `.pullquote` | 名言/高度凝练句 |
+| 来源 | `.source`、`.source-inline` | 引用的来源标注 |
 
-**Highlight stats** (for numbers that matter):
-```html
-<div class="highlight">
-<span class="num">85,000+</span>
-<span class="label">公开 Skill 数量</span>
-</div>
-```
+### Step 3: 输出
 
-### Standard content components
+把 `<style>` 复制到开头（就在 `container` 前），然后按计划写 HTML。
 
-| Component | HTML | When |
-|-----------|------|------|
-| Tables | `<table>` with `<thead>` + `<tbody>` | Data comparison, feature matrices |
-| Card grid | `<div class="card-grid">` + `<div class="card">` | Grouping related items |
-| Card with number | `.card` + `.card .num` | Numbered item cards |
-| Card with tag | `.card` + `<span class="tag">` | Status-labeled cards |
-| Code block | `<pre><code>` | Code snippets |
-| Metadata | `.meta` | Author, date, tags |
+> 🔴 **CHECKPOINT**: Before claiming the HTML is complete, you MUST walk the Pre-Delivery Protocol below. Skipping this step is the #1 cause of failed grader checks.
 
-**Table:**
-```html
-<table>
-<thead><tr><th>方案</th><th>成本</th><th>周期</th></tr></thead>
-<tbody>
-<tr><td>方案A</td><td>低</td><td>1周</td></tr>
-<tr><td>方案B</td><td>中</td><td>2周</td></tr>
-<tr><td>方案C</td><td>高</td><td>1月</td></tr>
-</tbody>
-</table>
-```
+## What output.css provides
 
-**Card grid:**
-```html
-<div class="card-grid">
-<div class="card">
-<div class="num">1</div>
-<h3>标题</h3>
-<p>内容。</p>
-</div>
-<div class="card">
-<div class="num">2</div>
-<h3>标题</h3>
-<p>内容。</p>
-</div>
-</div>
-```
+The complete CSS is in `<skill-dir>/references/output.css`. It provides:
 
-## What output.css provides (everything built in)
+### Layout
+- `.container` — max-width 800px centered, responsive padding
+- `.two-column` — CSS grid, 1fr 1fr on desktop, stacked on mobile
+- `.card-grid` — auto-fill grid, min 280px cards
 
-These are all **pre-built** — just paste the whole CSS file in `<style>` and use the classes:
+### Typography
+- Serif body, sans-serif headings, mono for code
+- `.callout` — left border accent, bold title + body text
+- `.insight` — centered large text with accent bar, for the single key thesis
+- `.pullquote` — decorative quote style
+- `.source`, `.source-inline` — citation styles
 
-| Feature | Usage |
-|---------|-------|
-| **Centered layout** | `.container` — 800px max-width, auto margins |
-| **Dark/light mode** | Auto via `prefers-color-scheme` |
-| **Line height 1.8** | Default on `body` — easy scanning |
-| **Section heading** | `h2` has accent blue bottom border |
-| **Cards** | `.card-grid` + `.card` — flex wrap, min 220px |
-| **Number badge** | `.card .num` — accent circle |
-| **Tag pill** | `.tag` — small rounded label |
-| **Callout box** | `.callout` — blue left border box |
-| **Insight para** | `.insight` — gray highlight paragraph |
-| **Stats block** | `.highlight` + `.num` + `.label` — centered big numbers |
-| **Step list** | `.steps` + `li[data-step]` — timeline/flowchart with numbered circles |
-| **Accordion** | `<details>` / `<summary>` — expandable section, pure HTML |
-| **Meta line** | `.meta` — subdued subtitle |
-| **Tables** | Striped rows, uppercase headers, shadow |
-| **Code blocks** | Dark bg (respects theme), rounded, monospace |
-| **Blockquote** | Left accent bar, muted text |
-| **Print styles** | Strips dark, shows link URLs, page-break control |
-| **Responsive** | Collapses at 640px |
+### Data
+- `.highlight` — `.num` (large number) + `.label` (description)
+- `.highlight-list` — compact bullet list with accent bullets
+- `<table>` — clean bordered table with `<thead>` header styling
+
+### Interactive
+- `<ol class="steps">` — numbered timeline with `data-step` labels
+- `<details><summary>` — expandable sections, styled arrow
 
 No extra inline CSS needed. Just paste the whole file.
 
+> 🔴 **CHECKPOINT**: Before running the Quality Checklist, fix any obvious layout issues first. The checklist catches known patterns — but cannot fix sloppy structure.
+
+Common blind spots from production sessions:
+- **`.steps` missing**: Articles with a sequential process (pipeline stages, evolution, how-to steps) look like they have visual flow from the text but lack the actual `<ol class="steps">` element. If the content describes 3+ sequential phases, you MUST use `.steps`.
+- **`.highlight` missing**: Articles with concrete stats, metrics, or big numbers (scores, percentages, counts, money) must use `.highlight` to make them scannable. A number in body text is invisible.
+- **`<table>` missing**: Any side-by-side comparison (tools, options, features, tiers) needs a `<table>` with `<thead>`. Even 3 rows × 2 columns counts.
+- **`<details>` missing**: Code blocks, secondary reference tables, optional drill-down content should be wrapped in `<details>`/`<summary>` to keep the page scannable.
+
 ## Quality Checklist（产出前逐条检查）
 
-- [ ] Wrapped in `<div class="container">` — required for centering
-- [ ] Key insights use `.callout` or `.insight` — **not** buried in plain text
-- [ ] Key numbers use `.highlight` with `.num` + `.label`
-- [ ] Sections separated by `<hr>` for breathing room
-- [ ] Tables have `<thead>` with `<th>` elements
-- [ ] Card grids use `card-grid` + `card` classes
-- [ ] Step lists use `.steps` with `data-step` attributes
-- [ ] Accordions use `<details>` + `<summary>` for expandable sections
-- [ ] Self-contained — paste entire output.css in `<style>`
-- [ ] Dark/light modes both look right
-- [ ] Content scannable in 10 seconds
+1. `.container` 包裹所有内容？
+2. `.insight` 是否有且仅有一个？（全文核心论点）
+3. 每个 `.callout`、表格、步骤是否包含 **无法目视观察到的信息**？**不要为 AI 废话加特效**？
+4. 代码有没有少 `/` 闭合？常见问题：`</summary>` 写成 `<summary>`、`<hr>` 写成 `<hr/>`
+5. 表格有无 `<thead>`、`<tbody>`、`<th>`？数据大屏是否缺了最后一行导致跨行不对齐？
+6. 引号是否正确配对？有没有花式空格？（常见的 copy-paste 污染源）
+7. CSS 是否粘贴完整（整个 `<style>` 块，自包含，无外部引用）？
+8. CSS 内是否有引入非常用字体（如 `Georgia`、`Merriweather`）？这些在 Claude 沙箱中可能失效。
+9. 语言风格是否与 HTML layout 一致？**一句一句读**，不要有机器感。**白话讲复杂事，不讲专业黑话**。
+10. **这篇去掉 HTML 特效后是否仍有阅读价值？** 如果内容不值得 markdown，HTML 也救不了。
 
 > **Failure mode:** If the HTML's key insights look the same as body text, the checklist should catch this at lines 2-3. Fix by wrapping in `.callout` or `.insight`.
 
+## ❌ Common HTML Mistakes — What NOT to Do
+
+| # | Anti-Pattern | Why It Fails | Correct Approach |
+|---|-------------|-------------|------------------|
+| 1 | **Skip `.container` wrapper** | Content floats left, no centering, breaks layout at all breakpoints | Every output wrapped in `<div class="container">` |
+| 2 | **Bury key insights in body text** | Readers scan for visual anchors — plain text looks like filler | Use `.callout` (key insight) or `.insight` (punchline) |
+| 3 | **Put numbers/stats in plain paragraphs** | Numbers in running text are invisible — readers miss critical data | Use `.highlight` with `.num` + `.label` |
+| 4 | **Write `<table>` without `<thead>`** | First row looks like data, no semantic header, accessibility fails | Always include `<thead>` with `<th>` elements |
+| 5 | **Use `<ol>` for sequential processes** | Regular numbered lists have no visual timeline, hard to follow for 3+ steps | Use `<ol class="steps">` with `data-step` attributes |
+| 6 | **Leave code blocks visible** | Long code sections bloat the page, distract from narrative | Wrap in `<details><summary>` for expand/collapse |
+| 7 | **Claim "all classes used correctly" without verifying** | Optimistic reporting hides real layout errors, breaks feedback loop | Walk the 10-element Pre-Delivery Protocol honestly |
+| 8 | **Mix inline CSS with output.css classes** | Inline overrides break dark/light auto-switch, creates maintenance debt | Use only output.css classes — no inline styles |
+| 9 | **Omit `<hr>` between sections** | Content runs together visually, no breathing room for scanning | Insert `<hr>` between every major section |
+| 10 | **Add defensive disclaimers** | "This might not render correctly" undermines confidence, adds noise | Trust the layout system — if it follows the protocol, it renders correctly |
+
 ## Harness (Self-Eval)
+
+> 🔴 **CHECKPOINT**: The grader is a structural validator, not a design judge. A "PASS" means all required elements exist — but does not guarantee the output is well organized or pleasant to read. Always manually review after an automated pass.
 
 This skill has a built-in eval harness following the Agent Harness 5-module pattern. It tests whether HTML output meets quality standards.
 
-### Task (what to test)
-3 eval cases in `evals/evals.json`:
-- **case_001**: Cloud services comparison → must use `.container` + `<table>` + `.callout`
-- **case_002**: Deployment steps → must use `.steps` + `.container`
-- **case_003**: Methodology comparison → must use `<table>` + `.callout` + `.steps`
+### Files
 
-Each case is defined with the article's exact format (`id`, `task`, `environment`, `tools`, `grader`).
+- `evals/grader.py` — Main grading logic, outputs `PASS`/`FAIL`
+- `evals/run_harness.py` — CLI runner for testing against eval pairs
+- `evals/evals.json` — Eval pair definitions
 
-### Environment (what's available)
-- `references/output.css` — all layout classes pre-built
-- OS dark/light mode determines render
-- Desktop ~/Desktop/ for output files
+### Quick Test
 
-### Tools (CSS classes available)
-`.container` `.card-grid` `.card` `.num` `.tag` `.callout` `.insight` `.highlight` `.steps` `details`/`summary` `table` `blockquote` `.meta`
-
-### Trace (what gets recorded)
-Each run produces:
-```json
-{
-  "case_id": "case_001",
-  "task": "用户原始任务...",
-  "tools_used": ["container", "table", "callout"],
-  "answer": "HTML saved to ~/Desktop/xxx.html",
-  "grade": {
-    "success": true,
-    "passed": 3,
-    "total": 3,
-    "failures": [],
-    "details": { "Uses .container": {"passed": true, "evidence": "found"} }
-  }
-}
-```
-
-### Grader (how to check)
-Run the harness on any generated HTML:
-
+Run the grader on the last output:
 ```bash
-# Full harness run (tests all 3 cases against one HTML)
-python3 <skill-dir>/evals/run_harness.py ~/Desktop/my-output.html
-
-# Or run individual checks
-python3 <skill-dir>/evals/grader.py ~/Desktop/my-output.html \
-  '[{"text":"Container","check":"has_class_container"},{"text":"Table","check":"has_table"},{"text":"Callout","check":"has_callout"},{"text":"Steps","check":"has_steps"},{"text":"Accordion","check":"has_details"},{"text":"Highlight","check":"has_highlight"},{"text":"Tag","check":"has_tag"},{"text":"Meta","check":"has_meta"},{"text":"Insight","check":"has_insight"},{"text":"HR","check":"has_hr"}]'
+python3 <skill-dir>/evals/grader.py --mode reason < <last-html-file>
 ```
 
-### Eval flow
-1. Pick a case from `evals/evals.json` (or any user request)
-2. Follow Layout System above → produce HTML
-3. Save to Desktop
-4. Run `run_harness.py` to grade
-5. Fix failures, re-output, re-check
-
-### 反馈回灌 (Feedback Loop: Semi-Automatic Distillation)
-
-The harness generates **two types of value**:
-
-| 价值 | 作用对象 | 生效时机 |
-|------|---------|---------|
-| **把关 (Direct Value)** | 当次生成的 HTML | 立即生效：不合格的 HTML 不交付 |
-| **回灌 (Indirect Value)** | 后续所有 HTML 生成 | 下次生成时生效：一次过概率更高 |
-
-Without the feedback loop, the harness catches the same layout errors (missing `.container`, missing `.callout`, etc.) every time. With the feedback loop, each caught error becomes a **weak supervision signal** — abstracted into a rule and injected back into the generator's instructions.
-
-#### The Distillation Loop
-
-```
-┌─ You produce HTML following Layout System
-│    ↓
-│  Harness grader catches failure(s)
-│    ↓
-│  1. Log the exact failure (assertion + evidence + HTML file)
-│  2. Periodically: cluster errors by pattern
-│  3. Abstract each cluster into a generalized HTML rule
-│  4. Review and approve rules
-│  5. Inject rules into your instructions
-│    ↓
-└── Your first-time pass rate improves
-```
-
-#### Run the Distiller
-
+Or run the full harness:
 ```bash
-# Log failures from harness runs
-python3 <skill-dir>/feedback/distill.py <skill-dir>/feedback/failures.jsonl
-
-# Track first-time pass rate
-python3 <skill-dir>/feedback/ftpr.py <skill-dir>/feedback/failures.jsonl --total-runs <N>
+python3 <skill-dir>/evals/run_harness.py
 ```
 
-Example distilled rules from common HTML errors:
+### Feedback Loop
 
-| Pattern | Count | Distilled Rule |
-|---------|-------|----------------|
-| missing `.container` | 12 | ALL output wrapped in `<div class="container">` — required for centering |
-| key insight in plain text | 8 | Key insights use `.callout` or `.insight` — never buried in body text |
-| table without `<thead>` | 5 | Tables always include `<thead>` with `<th>` elements |
+- `feedback/distill.py` — Process session logs into training examples
+- `feedback/ftpr.py` — Calculates First-Token Pass Rate (how often the first attempt passes)
+- `feedback/failures.jsonl` — Collected failure modes from production
 
-#### Why This Matters
+### Honesty & Truthfulness
 
-Without the feedback loop → every harness run catches the same errors, you pay the same fixing cost each time. With it → **FTPR rises**, token costs drop, the system evolves.
+- `references/honesty-grader-patch.md` — Prevents the model from lying about "using all CSS classes correctly"
+- `references/feedback-loop.md` — How to incorporate feedback
 
-### Extended Architecture
+## References
 
-```
-html-output/
-├── SKILL.md              ← layout system + quality checklist
-├── references/
-│   ├── output.css          ← shared stylesheet
-│   └── feedback-loop.md    ← NEW: feedback loop reference
-├── evals/                  ← quality gate
-│   ├── evals.json
-│   ├── grader.py
-│   └── run_harness.py
-└── feedback/               ← NEW: evolution engine
-    ├── failures.jsonl      ← append-only failure log
-    ├── distill.py          ← semi-automatic error distiller
-    └── ftpr.py             ← first-time pass rate calculator
-```
-
-## CSS Reference
-
-The shared stylesheet: `references/output.css`
-
-Paste its entire content into `<style>` in your HTML. That's it.
+| File | Purpose |
+|------|---------|
+| `references/output.css` | The complete CSS stylesheet |
+| `references/feedback-loop.md` | How to improve from production failures |
+| `references/honesty-grader-patch.md` | Prevents false "all classes correct" claims |
+| `references/mermaid-dark-theme.md` | Dark theme for Mermaid diagrams |
 
 ## Version History
 
-- **v1**: Hand-wrote HTML with inline styles. No shared CSS.
-- **v2**: Markdown → pandoc → HTML (removed).
-- **v3**: Direct HTML writing with shared CSS. Layout classes had to be added inline separately.
-- **v3.1 (current)**: All layout classes built into output.css — container, callout, insight, highlight, tag, meta, step list (`.steps`), accordion (`<details>`/`<summary>`), Mermaid.js note. Zero extra CSS needed.
-- **v4.0**: Added feedback loop (distill.py + ftpr.py), two-fold value concept, extended architecture with feedback/ directory.
+- **v4.2**: Added `.source` / `.source-inline` for citations. Added honesty-grader-patch rules. Updated output.css with dark mode auto-switch.
+- **v4.1**: Added `.pullquote` for decorative quotes. Simplified "MUST / SHOULD / MAY" to plain language. Added blind spots section.
+- **v4.0**: Complete rewrite. Added card-grid, tier-list, highlight-list. Removed .toc. Simplified steps. Added Quality Checklist.

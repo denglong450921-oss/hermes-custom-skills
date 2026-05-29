@@ -151,6 +151,8 @@ Each `must_use` maps to a check function you define in grader.py. Each case test
 ```
 The code-review-graph example is the best template for **CLI tool / deterministic script** skills. It checks stdout content keywords (Nodes/Edges, Token Savings) instead of CSS classes. See `~/.hermes/skills/software-development/code-review-graph/` for the full structure (SKILL.md, evals/, references/verification.md).
 
+For **behavioral/guidelines** skills — skills that shape agent behavior rather than produce specific outputs — see `~/.hermes/skills/openclaw-imports/karpathy-guidelines/evals/`. Its grader checks agent output text for behavioral signals (assumption-stating, simplicity signals, surgical-change patterns, goal-driven language) using regex pattern matching instead of file-structure checks. This is the recommended pattern for any skill that guides *how* the agent works rather than *what* it produces.
+
 #### Step 1b-iii: Write custom grader.py
 
 Create `evals/grader.py` with assertion functions specific to the skill's domain:
@@ -753,6 +755,8 @@ These are real failure modes observed during harness injection across multiple s
 | 5 | **No `--force` on re-inject** | inject.py exits early saying "harness already exists" | Existing harness blocks re-injection even when outdated | Use `--force` to overwrite stale harness files, then re-fill evals.json |
 | 6 | **Factual checks without audit trail** | Verifier checks format but not data accuracy | No source data recorded → verifier can't detect hallucination | Always scaffold `/audit/` directory alongside the harness |
 | 7 | **Honesty constraints as an afterthought** | Generator falsely claims success, FTPR is invalid | Without Level 2+3 checks, lies pass through undetected | Add honesty assertions (`reports_failure_honestly`, `no_false_success`) during initial injection, not later |
+| 8 | **Wrong function names → check_harness.py rejects** | `grader.py` uses `grade()` not `check_output()`, or `run_harness.py` has bare `if __name__` not wrapped in `main()` | `check_harness.py` statically scans for `check_output` and `main` — any other name fails the REQUIRED tier even if the code works | **grader.py**: define `def check_output(output_path, checks_json)` (NOT `grade`/`evaluate`/`run_checks`). **run_harness.py**: wrap entry logic in `def main():` then call it from `if __name__ == \\\"__main__\\\": main()`. Test with `python3 scripts/check_harness.py <target> --json` after writing |
+| 9 | **No ending `---` separator in SKILL.md** | `patch(old_string)` fails — fuzzy-match shows wrong sections (frontmatter close, body headings) instead of the file end | The `---` pitfall (#2) assumes every SKILL.md ends with `---`. Some files just end with the last content line — no trailing separator. Without an ending `---`, there's no anchor at file end for the patch to match against. | Detect first: `tail -1 SKILL.md | grep -q '^---$'`. If no match → full rewrite is simpler than patching. Read the entire SKILL.md, append the Harness section to content, then rewrite with `write_file`. This avoids the `---` matching problem entirely when the file has no separator at the end. |
 
 ## Reference
 
