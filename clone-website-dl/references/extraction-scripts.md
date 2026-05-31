@@ -7,6 +7,18 @@ Pre-built scripts in `scripts/`:
 | `scripts/discover-assets.js` | Phase 2 | Copy-paste into browser MCP console to enumerate all page assets |
 | `scripts/extract-component-css.js` | Phase 3 | Per-component CSS extraction via getComputedStyle |
 | `scripts/verify-css.js` | Phase 5 | QA comparison: run on original AND clone, compare JSON output |
+| `scripts/capture-reference.mjs` | Phase 5 | Deterministic screenshots and DOM geometry snapshots at desktop, tablet, and mobile widths |
+| `scripts/visual-diff.mjs` | Phase 5 | Pixel mismatch score, heatmap, overlay, and JSON report via ImageMagick |
+| `scripts/compare-geometry.mjs` | Phase 5 | DOM geometry drift report with configurable pixel tolerance |
+
+## Measurable QA Commands
+
+```bash
+node scripts/capture-reference.mjs --url https://example.com/path --out docs/qa/path/source --label path
+node scripts/capture-reference.mjs --url http://localhost:4173/path --out docs/qa/path/clone --label path
+node scripts/visual-diff.mjs --reference docs/qa/path/source/path-desktop.png --candidate docs/qa/path/clone/path-desktop.png --out docs/qa/path/diff --label path-desktop --threshold 0.005
+node scripts/compare-geometry.mjs --reference docs/qa/path/source/path-desktop.geometry.json --candidate docs/qa/path/clone/path-desktop.geometry.json --out docs/qa/path/diff --label path-desktop --tolerance 2
+```
 
 ## Asset Discovery Script
 

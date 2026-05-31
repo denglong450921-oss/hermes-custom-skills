@@ -74,6 +74,66 @@
         "must_have": ["Agent Pipeline", "Extraction Agent", "component-graph"],
         "must_not_have": ["only sequential", "no post-clone analysis"]
       }
+    },
+    {
+      "id": "case_006",
+      "name": "per-page-source-of-truth-gate",
+      "task": "Verify every cloned page requires a unique canonical source of truth before coding and that derived specs remain traceable to it",
+      "environment": {
+        "files": {
+          "SKILL.md": "/Users/f/.codex/skills/clone-website-dl/SKILL.md",
+          "source-truth-template": "references/page-source-of-truth-template.md",
+          "spec-template": "references/spec-template.md",
+          "pre-dispatch-checklist": "references/checklist.md"
+        },
+        "tools_available": ["page_source_truth_template", "pre_dispatch_checklist"]
+      },
+      "tools": ["page_source_truth_template", "pre_dispatch_checklist"],
+      "grader": {
+        "must_use": ["page_source_truth_documented", "source_truth_gate_enforced"],
+        "must_have": ["SOURCE_OF_TRUTH.md", "One Canonical Record Per Page", "source-of-truth gate", "Do not code yet"],
+        "must_not_have": ["code first", "optional source of truth", "guess missing CSS"]
+      }
+    },
+    {
+      "id": "case_007",
+      "name": "visual-occupancy-and-booth-fallback",
+      "task": "Verify reachable source media must be visibly rendered and unavailable media receives a deliberate booth fallback instead of blank space",
+      "environment": {
+        "files": {
+          "SKILL.md": "/Users/f/.codex/skills/clone-website-dl/SKILL.md",
+          "source-truth-template": "references/page-source-of-truth-template.md",
+          "pre-dispatch-checklist": "references/checklist.md"
+        },
+        "tools_available": ["visual_occupancy_gate", "booth_fallback"]
+      },
+      "tools": ["visual_occupancy_gate", "booth_fallback"],
+      "grader": {
+        "must_use": ["asset_visibility_enforced", "booth_fallback_documented"],
+        "must_have": ["visual occupancy", "booth fallback", "unexplained blank", "opacity: 0"],
+        "must_not_have": ["leave blank", "skip missing media"]
+      }
+    },
+    {
+      "id": "case_008",
+      "name": "measurable-convergence-harness",
+      "task": "Verify deterministic screenshots, pixel diff reports, geometry comparison, and explicit acceptance thresholds gate 1:1 completion",
+      "environment": {
+        "files": {
+          "SKILL.md": "/Users/f/.codex/skills/clone-website-dl/SKILL.md",
+          "capture": "scripts/capture-reference.mjs",
+          "visual-diff": "scripts/visual-diff.mjs",
+          "geometry": "scripts/compare-geometry.mjs",
+          "workflow": "references/measurable-convergence.md"
+        },
+        "tools_available": ["deterministic_capture", "visual_diff", "geometry_diff"]
+      },
+      "tools": ["deterministic_capture", "visual_diff", "geometry_diff"],
+      "grader": {
+        "must_use": ["measurable_diff_harness_documented", "acceptance_thresholds_enforced"],
+        "must_have": ["capture-reference.mjs", "visual-diff.mjs", "compare-geometry.mjs", "0.5%", "1.5%", "2px"],
+        "must_not_have": ["eyeball only", "looks close enough"]
+      }
     }
   ]
 }

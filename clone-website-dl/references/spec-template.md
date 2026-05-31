@@ -4,6 +4,10 @@
 - **Target file:** `src/components/<ComponentName>.tsx`
 - **Screenshot:** `docs/design-references/<screenshot-name>.png`
 - **Interaction model:** <static | click-driven | scroll-driven | time-driven>
+- **Page source of truth:** `docs/research/pages/<page-slug>/SOURCE_OF_TRUTH.md`
+- **Source section ID:** `<section-id>`
+
+Copy the values below from the linked page source of truth. Do not introduce independent guesses or alternate interpretations.
 
 ## Props Interface
 

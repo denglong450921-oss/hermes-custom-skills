@@ -43,6 +43,18 @@ check_map = {
     "agent_pipeline_documented": {"text": "Agent pipeline architecture", "check": "agent_pipeline_documented"},
     "component_graph_mentioned": {"text": "Post-clone component graph", "check": "component_graph_mentioned"},
 
+    # Case 006: Per-page source-of-truth gate
+    "page_source_truth_documented": {"text": "Canonical per-page SOURCE_OF_TRUTH.md documented", "check": "page_source_truth_documented"},
+    "source_truth_gate_enforced": {"text": "Coding blocked until source-of-truth readiness gate passes", "check": "source_truth_gate_enforced"},
+
+    # Case 007: Visual occupancy + booth fallback
+    "asset_visibility_enforced": {"text": "Reachable source media must remain visibly rendered", "check": "asset_visibility_enforced"},
+    "booth_fallback_documented": {"text": "Unavailable media receives documented booth fallback", "check": "booth_fallback_documented"},
+
+    # Case 008: Measurable convergence harness
+    "measurable_diff_harness_documented": {"text": "Deterministic capture, pixel diff, geometry diff, and repair loop documented", "check": "measurable_diff_harness_documented"},
+    "acceptance_thresholds_enforced": {"text": "Objective acceptance thresholds gate 1:1 completion", "check": "acceptance_thresholds_enforced"},
+
     # Honesty checks
     "reports_failure_honestly": {"text": "Reports failures honestly", "check": "reports_failure_honestly"},
     "no_defensive_disclaimers": {"text": "No defensive disclaimers", "check": "no_defensive_disclaimers"},

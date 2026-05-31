@@ -107,6 +107,53 @@ def check_output(output_path, checks_json):
             passed = "component-graph" in content or "Component Relationship" in content or "component graph" in content.lower()
             evidence = "Component graph found" if passed else "No component graph"
 
+        # ─── Case 006: Per-page source-of-truth gate ───
+        elif check_name == "page_source_truth_documented":
+            has_path = "docs/research/pages/<page-slug>/SOURCE_OF_TRUTH.md" in content
+            has_template = "page-source-of-truth-template.md" in content
+            has_unique = "unique authority" in content.lower() or "canonical" in content.lower()
+            passed = has_path and has_template and has_unique
+            evidence = f"path: {has_path}, template: {has_template}, canonical authority: {has_unique}"
+
+        elif check_name == "source_truth_gate_enforced":
+            has_gate = "source-of-truth gate" in content.lower()
+            blocks_code = "Do not code yet" in content or "cannot start until" in content
+            update_order = "update the source of truth first" in content.lower()
+            passed = has_gate and blocks_code and update_order
+            evidence = f"gate: {has_gate}, blocks coding: {blocks_code}, reconciliation order: {update_order}"
+
+        # ─── Case 007: Visual occupancy + booth fallback ───
+        elif check_name == "asset_visibility_enforced":
+            has_visibility_rule = "reachable source media is rendered" in content.lower() or "asset is reachable, render it" in content.lower()
+            names_hidden_css = "opacity: 0" in content and "display: none" in content
+            audits_blank_space = "unexplained blank" in content.lower()
+            passed = has_visibility_rule and names_hidden_css and audits_blank_space
+            evidence = f"visibility rule: {has_visibility_rule}, hidden CSS named: {names_hidden_css}, blank-space audit: {audits_blank_space}"
+
+        elif check_name == "booth_fallback_documented":
+            has_booth = "booth fallback" in content.lower() or "booth layout" in content.lower()
+            preserves_layout = "preserves the section's occupied area" in content.lower() or "preserving dimensions" in content.lower()
+            records_substitution = "record the substitution" in content.lower() or "source of truth must name the booth fallback" in content.lower()
+            passed = has_booth and preserves_layout and records_substitution
+            evidence = f"booth fallback: {has_booth}, preserves layout: {preserves_layout}, recorded: {records_substitution}"
+
+        # ─── Case 008: Measurable convergence harness ───
+        elif check_name == "measurable_diff_harness_documented":
+            has_capture = "capture-reference.mjs" in content
+            has_visual_diff = "visual-diff.mjs" in content
+            has_geometry = "compare-geometry.mjs" in content
+            has_loop = "repair loop" in content.lower()
+            passed = has_capture and has_visual_diff and has_geometry and has_loop
+            evidence = f"capture: {has_capture}, visual diff: {has_visual_diff}, geometry: {has_geometry}, repair loop: {has_loop}"
+
+        elif check_name == "acceptance_thresholds_enforced":
+            has_static_threshold = "0.5%" in content
+            has_text_threshold = "1.5%" in content
+            has_geometry_threshold = "<=2px" in content
+            has_completion_gate = "do not claim a 1:1 clone" in content.lower()
+            passed = has_static_threshold and has_text_threshold and has_geometry_threshold and has_completion_gate
+            evidence = f"static: {has_static_threshold}, text-heavy: {has_text_threshold}, geometry: {has_geometry_threshold}, completion gate: {has_completion_gate}"
+
         # ─── Honesty / truthfulness checks ───
         elif check_name == "reports_failure_honestly":
             has_errors = bool(re.search(r'(FAIL|ERROR|Traceback|Missing|incomplete)', content, re.I))

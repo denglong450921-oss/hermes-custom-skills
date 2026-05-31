@@ -13,7 +13,7 @@ You are about to reverse-engineer and rebuild **$ARGUMENTS** as pixel-perfect cl
 
 When multiple URLs are provided, process them independently and in parallel where possible, keeping each site's extraction artifacts isolated in dedicated folders (`docs/research/<hostname>/`).
 
-This is not a two-phase process (inspect then build). You are a **foreman walking the job site** — as you inspect each section, you write a detailed spec file, then hand that file to a specialist builder agent. Extraction and construction happen in parallel.
+This is not a two-phase process (inspect then build). You are a **foreman walking the job site** — as you inspect each page, you assemble its page-level source of truth, then derive section specs and hand them to specialist builder agents. Extraction and construction may overlap across pages, but coding for a page cannot start until that page's source of truth is complete.
 
 ## Scope Defaults
 
@@ -124,6 +124,13 @@ One agent per distinct design pattern. If a builder prompt exceeds ~150 lines of
 Extract actual text, images, SVGs from the live site. Download every `<img>`. Extract inline `<svg>` as React components.
 ⚠️ Check for `<video>`, Lottie, or canvas before building HTML mockups. Missing assets make the clone look fake.
 
+### 3A. Never Leave an Unexplained Visual Hole
+If the original page exposes an image, video, illustration, or layered composition and the asset is reachable, render it. Do not hide available media with `display: none`, `visibility: hidden`, `opacity: 0`, off-screen placement, or an oversized empty wrapper.
+
+If the original media is genuinely unavailable after extraction and fallback attempts, build a deliberate booth layout: a styled placeholder composition that preserves the section's occupied area, hierarchy, color, and visual balance. Record the substitution in the page source of truth. A booth is an explicit fidelity fallback, not an excuse to skip extraction.
+
+During visual QA, treat unexplained blank regions as failures. Compare each large empty area with the original screenshot and prove it is intentional. If it is not intentional, restore the source media or add the documented booth layout.
+
 ### 4. Foundation First
 Global CSS with design tokens, TypeScript types, global assets — this is sequential, non-negotiable. Everything after is parallel.
 
@@ -145,12 +152,17 @@ The single most expensive mistake: building click-based UI when the original is 
 Click each tab, scroll past each threshold, hover over each element. Capture ALL states.
 ⚠️ Missing a state means rebuilding the component later.
 
-### 8. Spec Files Are the Source of Truth
-Every component gets a `.spec.md` file BEFORE any builder is dispatched. The spec is the contract.
+### 8. Page Source of Truth Controls Fidelity
+Every page gets one canonical `docs/research/pages/<page-slug>/SOURCE_OF_TRUTH.md` BEFORE coding starts. Every component then gets a `.spec.md` file derived from it BEFORE any builder is dispatched. The page source of truth controls fidelity; the component spec is the implementation handoff.
 See `references/spec-template.md` for the full template.
 
 ### 9. Build Must Always Compile
 Every builder verifies `npx tsc --noEmit` before finishing. After merging, verify `npm run build`.
+
+### 10. One Canonical Record Per Page
+Create each page record with `references/page-source-of-truth-template.md`. It is the unique authority for screenshots, section order, dimensions, computed CSS, exact text, assets, responsive states, interactions, and known constraints.
+
+Do not code a page while its record has blanks, guesses, or unresolved conflicts. If later extraction contradicts it, update the source of truth first, then update derived specs and code. This prevents implementation from drifting into a second, unofficial interpretation of the live page.
 
 ## Phase 1: Reconnaissance (Extraction Agent)
 
@@ -171,6 +183,8 @@ You run this phase yourself.
   - Document alternating layout direction between adjacent sections (many sites use zigzag: section 1 text-left, section 2 text-right, section 3 text-left...)
   
   **Verify extraction quality before dispatching any sub-page builder:** read the saved `.html` or `.json` files for one section and confirm the heading text matches the live site screenshot. If you can't explain the section's layout pattern in one sentence ("sticky scroll, image left, ~800px"), you haven't extracted enough.
+
+  **Per-page source-of-truth gate:** Finish `docs/research/pages/<page-slug>/SOURCE_OF_TRUTH.md` for each URL independently. A complete homepage record does not authorize coding a subpage.
 
 - **Clone with customizations:** "Clone [URL] but change X to Y" — extract originals, apply overrides (see `references/customization.md`)
 
@@ -246,7 +260,14 @@ When the user says "clone [URL] but change X to Y" — apply customizations whil
 ### Page Topology
 Map every section from top to bottom. Document visual order, sticky overlays, scroll container, column structure, z-index layers, interaction model per section. Save as `docs/research/PAGE_TOPOLOGY.md`.
 
-**🔴 CHECKPOINT:** For a full clone, review `PAGE_TOPOLOGY.md` and `BEHAVIORS.md` with the user: "Ready to build foundation?" For a partial clone, review the target screenshots and `BEHAVIORS.md`; `PAGE_TOPOLOGY.md` is intentionally skipped.
+### Per-Page Source of Truth
+For every URL, consolidate the extracted evidence into `docs/research/pages/<page-slug>/SOURCE_OF_TRUTH.md`. Use `references/page-source-of-truth-template.md` and complete its readiness checklist. Link raw screenshots, section HTML/JSON, and asset manifests instead of leaving evidence implicit.
+
+**🔴 CHECKPOINT (source-of-truth gate):** Before writing page or component code for a URL, verify its `SOURCE_OF_TRUTH.md` is complete: no placeholders, no guessed CSS values, exact text captured, desktop/mobile screenshots linked, every section mapped, assets resolved, and interactions documented. If the gate fails, continue extraction. Do not code yet.
+
+**🔴 CHECKPOINT (visual occupancy gate):** For every section, confirm reachable source media is rendered and visually occupies the expected region. If a source asset is unavailable, the source of truth must name the booth fallback. Do not accept unexplained blank space.
+
+**🔴 CHECKPOINT:** For a full clone, review the per-page `SOURCE_OF_TRUTH.md`, `PAGE_TOPOLOGY.md`, and `BEHAVIORS.md` with the user: "Ready to build foundation?" For a partial clone, review the target screenshots, focused `SOURCE_OF_TRUTH.md`, and `BEHAVIORS.md`; `PAGE_TOPOLOGY.md` is intentionally skipped.
 
 ## Phase 2: Foundation Build
 
@@ -277,7 +298,7 @@ See `references/extraction-scripts.md` for the JS scripts to run in browser cons
 
 ## Phase 3: Component Specification & Dispatch
 
-The core loop. For a full clone, process each section in `PAGE_TOPOLOGY.md` from top to bottom. For a partial clone, run the loop once for the selected section.
+The core loop. For a full clone, process each section in the page's completed `SOURCE_OF_TRUTH.md` from top to bottom. For a partial clone, run the loop once for the selected section.
 
 ### Step 1: Extract (yourself)
 1. **Screenshot** the section → `docs/design-references/`
@@ -286,6 +307,8 @@ The core loop. For a full clone, process each section in `PAGE_TOPOLOGY.md` from
 4. **Extract real content** — `element.textContent` verbatim
 5. **Identify assets** — which images, videos, icons from Phase 2
 6. **Check for lazy-loaded images** — if `<img>` has `data-src` or `data-lazy` attribute, use that (not `src`) for the real image URL. Extract both the placeholder and the real URL.
+   - Verify each recovered asset is actually visible in the clone. A valid URL in code is not enough if CSS hides it.
+   - When the asset cannot be recovered, specify the booth fallback layout: occupied dimensions, background, borders, decorative blocks, and responsive behavior.
 7. **Identify external dependencies** — social widgets (Facebook, Twitter), analytics (GA, Umami), CDN fonts. Flag these as "third-party — skip or replace with static alternatives."
    - Known third-party patterns: `facebook.com`, `twitter.com`, `google-analytics`, `gtag`, `googletagmanager`, `cloudflare`, `cdn.*`, `unpkg.com`, `cdnjs`
    - For analytics: skip entirely (not needed in clone)
@@ -332,6 +355,7 @@ The core loop. For a full clone, process each section in `PAGE_TOPOLOGY.md` from
 ### Step 2: Write the Component Spec File
 Create `docs/research/components/<name>.spec.md` using the template at `references/spec-template.md`.
 Fill every section. If a section doesn't apply, write "N/A" — but think twice.
+Copy values from the page's `SOURCE_OF_TRUTH.md`; do not reinterpret or estimate them. Add the page source-of-truth path and section ID to the spec so discrepancies can be traced back to one authority.
 
 ### Step 3: Dispatch Builder Agents
 Based on complexity:
@@ -361,6 +385,8 @@ As builders complete: integrate the component → verify build → fix type erro
 2. **Structural layout pattern** — does the component use the same section type (sticky scroll, card grid, full-width hero, carousel) as the original? A sticky-scroll section rebuilt as a card grid passes text/CSS checks but looks completely wrong. If the pattern mismatches, rebuild from scratch instead of patching.
 3. **CSS values** — verify key values (bg, color, padding) match extracted getComputedStyle() output.
 
+If implementation, component spec, and live evidence disagree, update the page `SOURCE_OF_TRUTH.md` first. Then reconcile the derived spec and code in that order.
+
 **🔴 CHECKPOINT (Partial clone complete):** If this is a partial clone, run Phase 5 visual QA against the standalone component. Skip Phase 4 — the component is the deliverable. Confirm with user: "Component built and verified. Ready to deliver?"
 
 ## Phase 4: Page Assembly
@@ -381,6 +407,10 @@ After all sections built and merged:
 2. Compare section by section, top to bottom
 3. For each discrepancy: check spec → re-extract → fix component
 4. Test all interactive behaviors (scroll, click, hover)
+5. Audit visual occupancy: flag large blank regions, confirm every reachable media asset is displayed, and confirm every unavailable asset has a documented booth fallback
+
+### Measurable Convergence Gate
+Run `scripts/capture-reference.mjs`, `scripts/visual-diff.mjs`, and `scripts/compare-geometry.mjs` using `references/measurable-convergence.md`. Acceptance thresholds are: static sections `<0.5%` pixel mismatch, text-heavy sections `<1.5%`, geometry drift `<=2px`, missing visible assets `0`, unexplained blank regions `0`, and broken network assets `0`. Explicitly mask and document dynamic regions. Repeat the repair loop until reports pass. Do not claim a 1:1 clone without the saved reports.
 
 ### CSS Verification
 Run `scripts/verify-css.js` on BOTH original and clone. Compare key values:
@@ -424,6 +454,7 @@ Save the visual as `docs/component-graph.md` for the user to inspect.
 |-------|------|
 | Full antipatterns table | `references/antipatterns.md` |
 | Spec file template | `references/spec-template.md` |
+| Per-page source-of-truth template | `references/page-source-of-truth-template.md` |
 | Common pitfalls | `references/pitfalls.md` |
 | Fallback decision table | `references/fallback-table.md` |
 | Pre-dispatch checklist | `references/checklist.md` |
@@ -432,11 +463,12 @@ Save the visual as `docs/component-graph.md` for the user to inspect.
 | Batch extraction testing | `references/batch-extraction-testing.md` |
 | Firecrawl mode | `references/firecrawl-mode.md` |
 | Playwright extraction mode | `references/playwright-extraction.md` |
+| Measurable convergence harness | `references/measurable-convergence.md` |
 | Preflight audit script | `scripts/preflight-audit.sh` |
 
 ## Harness (Self-Eval)
 
-5 eval cases in `evals/evals.json`:
+8 eval cases in `evals/evals.json`:
 
 | Case | What it tests | Key assertions |
 |------|---------------|----------------|
@@ -445,5 +477,8 @@ Save the visual as `docs/component-graph.md` for the user to inspect.
 | `case_003` | Antipatterns + checkpoints | has_antipatterns_section, has_checkpoint_count, has_fallback_table |
 | `case_004` | Firecrawl fallback mode | firecrawl_mentioned, dual_mode_documented, fallback_scenario |
 | `case_005` | Agent pipeline + component graph | agent_pipeline_documented, component_graph_mentioned |
+| `case_006` | Per-page source-of-truth gate | page_source_truth_documented, source_truth_gate_enforced |
+| `case_007` | Visual occupancy and booth fallback | asset_visibility_enforced, booth_fallback_documented |
+| `case_008` | Measurable convergence gate | measurable_diff_harness_documented, acceptance_thresholds_enforced |
 
 Run `bash evals/test-preflight-audit.sh` after changing the preflight auditor. It covers HTTP localhost preservation, transport failures, valid JSON output, attribute-order variations, uppercase/single-quoted markup, SVG pressure, viewport detection, dark mode, animation markers, and `!important` counts.
