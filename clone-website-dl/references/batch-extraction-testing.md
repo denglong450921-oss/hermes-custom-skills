@@ -1,6 +1,6 @@
 # Batch Extraction Testing Methodology
 
-> Developed through 5 rounds of testing on 250 websites (2026-05-31).
+> Developed through 6 rounds of testing on 300 websites (2026-05-31).
 > Goal: systematically discover edge cases in website extraction/cloning by testing at scale.
 
 ## Why Batch Test
@@ -63,6 +63,15 @@ site_id	status	size	js	css	lazy	svg	3rd_party	problems
 01-deepseek	ISSUES	48518	11	0	2	6	12	3rd-party=12
 ```
 
+The bundled `scripts/preflight-audit.sh` also reports:
+
+- `fetch_ok`: response has a usable HTTP status and at least 200 bytes of HTML
+- `partial_fetch`: curl timed out after receiving usable HTML; continue analysis but record the warning
+- `curl_exit_code` and `http_status`: distinguish transport failures, rate limits, and blocked targets
+- `inline_style_blocks`, `dark_mode_markers`, `animation_library_markers`, `important_rules`
+
+Do not treat `partial_fetch: 1` as a hard failure. Large pages can exceed the curl time budget after enough HTML has already arrived for reconnaissance.
+
 ## Pattern Analysis
 
 After each batch, aggregate problem frequencies:
@@ -98,6 +107,17 @@ for cat, count in problem_counts.most_common():
 | Hash CSS filenames | 10% | LOW — save as main.css |
 | CSS vars (100+) | 4% | LOW — automated grep extraction |
 | Inline style blocks | 13% | LOW — extract and merge |
+
+## Round 6 Regression Findings
+
+The 50-site regression added explicit handling for:
+
+- empty or blocked responses that previously received a normal recommendation
+- HTTP-only and localhost targets that must not be rewritten to HTTPS
+- curl timeout code `28` after a usable partial HTML response
+- uppercase, single-quoted, and reordered HTML attributes
+- large inline SVG sets, missing viewport metadata, dark mode, animation libraries, and heavy `!important` usage
+- `grep -q` early exits that polluted JSON output with broken-pipe stderr on large pages
 
 ## Cleanest Clone Targets (server-rendered, minimal deps)
 

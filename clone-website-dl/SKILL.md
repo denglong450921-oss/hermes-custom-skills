@@ -445,3 +445,5 @@ Save the visual as `docs/component-graph.md` for the user to inspect.
 | `case_003` | Antipatterns + checkpoints | has_antipatterns_section, has_checkpoint_count, has_fallback_table |
 | `case_004` | Firecrawl fallback mode | firecrawl_mentioned, dual_mode_documented, fallback_scenario |
 | `case_005` | Agent pipeline + component graph | agent_pipeline_documented, component_graph_mentioned |
+
+Run `bash evals/test-preflight-audit.sh` after changing the preflight auditor. It covers HTTP localhost preservation, transport failures, valid JSON output, attribute-order variations, uppercase/single-quoted markup, SVG pressure, viewport detection, dark mode, animation markers, and `!important` counts.
