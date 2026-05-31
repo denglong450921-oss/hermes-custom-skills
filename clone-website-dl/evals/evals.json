@@ -134,6 +134,26 @@
         "must_have": ["capture-reference.mjs", "visual-diff.mjs", "compare-geometry.mjs", "0.5%", "1.5%", "2px"],
         "must_not_have": ["eyeball only", "looks close enough"]
       }
+    },
+    {
+      "id": "case_009",
+      "name": "animation-reconstruction",
+      "task": "Verify animated pages are audited before deterministic freezing and receive a recorded motion contract with faithful implementation routing",
+      "environment": {
+        "files": {
+          "SKILL.md": "/Users/f/.codex/skills/clone-website-dl/SKILL.md",
+          "audit": "scripts/audit-animations.mjs",
+          "workflow": "references/animation-reconstruction.md",
+          "source-truth-template": "references/page-source-of-truth-template.md"
+        },
+        "tools_available": ["animation_audit", "motion_contract", "reduced_motion_check"]
+      },
+      "tools": ["animation_audit", "motion_contract"],
+      "grader": {
+        "must_use": ["animation_audit_documented", "animation_contract_enforced"],
+        "must_have": ["audit-animations.mjs", "animation-reconstruction.md", "start/mid/end", "reduced-motion", "IntersectionObserver"],
+        "must_not_have": ["freeze before audit", "always static"]
+      }
     }
   ]
 }

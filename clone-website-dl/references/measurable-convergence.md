@@ -1,6 +1,6 @@
 # Measurable Convergence Harness
 
-Use this harness for every cloned page. Visual QA is a measured repair loop, not an eyeball-only review.
+Use this harness for every cloned page. Visual QA is a measured repair loop, not an eyeball-only review. When the page contains motion, run `scripts/audit-animations.mjs` first; never freeze animation before recording runtime states.
 
 ## Capture Contract
 

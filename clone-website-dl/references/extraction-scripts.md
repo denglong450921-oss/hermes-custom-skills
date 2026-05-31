@@ -10,10 +10,12 @@ Pre-built scripts in `scripts/`:
 | `scripts/capture-reference.mjs` | Phase 5 | Deterministic screenshots and DOM geometry snapshots at desktop, tablet, and mobile widths |
 | `scripts/visual-diff.mjs` | Phase 5 | Pixel mismatch score, heatmap, overlay, and JSON report via ImageMagick |
 | `scripts/compare-geometry.mjs` | Phase 5 | DOM geometry drift report with configurable pixel tolerance |
+| `scripts/audit-animations.mjs` | Phase 1 | Motion inventory and runtime style snapshots across scroll positions; run before deterministic capture |
 
 ## Measurable QA Commands
 
 ```bash
+node scripts/audit-animations.mjs --url https://example.com/path --out docs/research/animations --label path
 node scripts/capture-reference.mjs --url https://example.com/path --out docs/qa/path/source --label path
 node scripts/capture-reference.mjs --url http://localhost:4173/path --out docs/qa/path/clone --label path
 node scripts/visual-diff.mjs --reference docs/qa/path/source/path-desktop.png --candidate docs/qa/path/clone/path-desktop.png --out docs/qa/path/diff --label path-desktop --threshold 0.005

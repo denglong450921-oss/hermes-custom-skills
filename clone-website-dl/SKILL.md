@@ -253,8 +253,9 @@ When the user says "clone [URL] but change X to Y" — apply customizations whil
 **Full clone:** Complete **Scroll sweep** → **Click sweep** → **Hover sweep** → **Responsive sweep** (1440px / 768px / 390px). Save all findings to `docs/research/BEHAVIORS.md`.
 **Partial clone:** Sweep only the target section + adjacent header. Check desktop (1440px) and mobile (390px); add tablet (768px) when the layout changes between them. Save to `docs/research/BEHAVIORS.md` (still useful for component-level behaviors).
 **Animation library detection:** Check for GSAP, Framer Motion, Lottie, Three.js, AOS (scan HTML for library-specific patterns: `data-aos`, `gsap`, `framer-motion`, `lottie`). If detected:
-- Note in BEHAVIORS.md: "Animations driven by [library name] — reproduce using CSS transitions/animations instead (libraries are overkill for a static demo clone)"
-- Extract keyframe values from the library's runtime output via getComputedStyle() at animation start and end states
+- Run `scripts/audit-animations.mjs` before injecting animation-disabling CSS or taking deterministic reference screenshots. Follow `references/animation-reconstruction.md`.
+- Record triggers, timeline values, start/mid/end styles, responsive differences, and reduced-motion behavior in `BEHAVIORS.md` and the page source of truth.
+- Reproduce behavior with the simplest faithful mechanism: CSS transitions, `IntersectionObserver`, scroll progress, explicit React state, or the reachable media player. Do not default every animated region to a static block.
 - For Three.js / Canvas content: take a screenshot and use as a static image placeholder
 
 ### Page Topology
@@ -463,12 +464,13 @@ Save the visual as `docs/component-graph.md` for the user to inspect.
 | Batch extraction testing | `references/batch-extraction-testing.md` |
 | Firecrawl mode | `references/firecrawl-mode.md` |
 | Playwright extraction mode | `references/playwright-extraction.md` |
+| Animation reconstruction | `references/animation-reconstruction.md` |
 | Measurable convergence harness | `references/measurable-convergence.md` |
 | Preflight audit script | `scripts/preflight-audit.sh` |
 
 ## Harness (Self-Eval)
 
-8 eval cases in `evals/evals.json`:
+9 eval cases in `evals/evals.json`:
 
 | Case | What it tests | Key assertions |
 |------|---------------|----------------|
@@ -480,5 +482,6 @@ Save the visual as `docs/component-graph.md` for the user to inspect.
 | `case_006` | Per-page source-of-truth gate | page_source_truth_documented, source_truth_gate_enforced |
 | `case_007` | Visual occupancy and booth fallback | asset_visibility_enforced, booth_fallback_documented |
 | `case_008` | Measurable convergence gate | measurable_diff_harness_documented, acceptance_thresholds_enforced |
+| `case_009` | Animation reconstruction | animation_audit_documented, animation_contract_enforced |
 
 Run `bash evals/test-preflight-audit.sh` after changing the preflight auditor. It covers HTTP localhost preservation, transport failures, valid JSON output, attribute-order variations, uppercase/single-quoted markup, SVG pressure, viewport detection, dark mode, animation markers, and `!important` counts.

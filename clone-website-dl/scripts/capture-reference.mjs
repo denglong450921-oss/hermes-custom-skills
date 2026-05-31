@@ -1,7 +1,26 @@
 #!/usr/bin/env node
-import { chromium } from "playwright";
 import { mkdir, writeFile } from "node:fs/promises";
+import { existsSync } from "node:fs";
 import { basename, resolve } from "node:path";
+import { pathToFileURL } from "node:url";
+
+async function loadPlaywright() {
+  const candidates = [
+    "playwright",
+    resolve(process.env.HOME || "", "node_modules/playwright/index.js"),
+    resolve(process.cwd(), "node_modules/playwright/index.js"),
+  ];
+  for (const candidate of candidates) {
+    if (candidate !== "playwright" && !existsSync(candidate)) continue;
+    try {
+      const module = await import(candidate === "playwright" ? candidate : pathToFileURL(candidate).href);
+      return module.chromium ? module : module.default;
+    } catch {}
+  }
+  throw new Error("Playwright is required. Install it locally or make $HOME/node_modules/playwright available.");
+}
+
+const { chromium } = await loadPlaywright();
 
 const args = Object.fromEntries(
   process.argv.slice(2).reduce((pairs, arg, index, all) => {
@@ -13,13 +32,13 @@ const args = Object.fromEntries(
 
 const url = args.url;
 const outDir = resolve(args.out || "docs/qa/reference");
-const label = args.label || basename(new URL(url).pathname) || "home";
 const settleMs = Number(args.settle || 1800);
 
 if (!url) {
   console.error("Usage: node capture-reference.mjs --url <url> [--out <dir>] [--label <name>]");
   process.exit(1);
 }
+const label = args.label || basename(new URL(url).pathname) || "home";
 
 const viewports = [
   ["desktop", { width: 1440, height: 1000 }],

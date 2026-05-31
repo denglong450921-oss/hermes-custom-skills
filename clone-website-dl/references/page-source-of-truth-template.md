@@ -46,6 +46,13 @@ Create one entry for every visible section in top-to-bottom order.
 ## Route And Link Contract
 - `<visible label>` → `<exact href or route>`
 
+## Animation Contract
+- **Audit report:** `docs/research/animations/<page>.animations.json`
+- **Animated regions:** `<region → trigger, duration, easing, start/mid/end styles>`
+- **Responsive differences:** `<desktop/tablet/mobile>`
+- **Reduced motion:** `<stable readable state>`
+- **Fallbacks:** `<N/A or evidence-backed poster/static composition>`
+
 ## Known Constraints
 - `<N/A or evidence-backed limitation>`
 
@@ -70,6 +77,7 @@ Create one entry for every visible section in top-to-bottom order.
 - [ ] Unavailable media assets have deliberate booth fallbacks.
 - [ ] Large blank regions are confirmed intentional or removed.
 - [ ] Responsive changes and interactive states are documented.
+- [ ] Animated pages have a pre-freeze audit report, start/mid/end states, and reduced-motion behavior.
 - [ ] Unresolved conflicts, blanks, and placeholders are removed.
 - [ ] Component specs link back to this page and section IDs.
 - [ ] Deterministic screenshots, pixel diff reports, and geometry reports pass the QA acceptance contract.

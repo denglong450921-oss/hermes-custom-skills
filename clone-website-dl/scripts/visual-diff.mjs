@@ -45,7 +45,7 @@ if (![0, 1].includes(comparison.status)) {
   throw new Error(`ImageMagick compare failed: ${comparison.stderr || comparison.stdout}`);
 }
 const metric = `${comparison.stdout || ""}${comparison.stderr || ""}`.trim();
-const mismatchedPixels = Number(metric.match(/\d+/)?.[0] || 0);
+const mismatchedPixels = Number.parseFloat(metric.match(/[+-]?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?/i)?.[0] || "0");
 const comparedPixels = width * height;
 const mismatchRatio = comparedPixels ? mismatchedPixels / comparedPixels : 1;
 const heightDelta = candidateHeight - referenceHeight;

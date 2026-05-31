@@ -55,6 +55,10 @@ check_map = {
     "measurable_diff_harness_documented": {"text": "Deterministic capture, pixel diff, geometry diff, and repair loop documented", "check": "measurable_diff_harness_documented"},
     "acceptance_thresholds_enforced": {"text": "Objective acceptance thresholds gate 1:1 completion", "check": "acceptance_thresholds_enforced"},
 
+    # Case 009: Animation reconstruction
+    "animation_audit_documented": {"text": "Motion audit runs before deterministic animation freezing", "check": "animation_audit_documented"},
+    "animation_contract_enforced": {"text": "Animation states, reduced motion, and implementation routing are documented", "check": "animation_contract_enforced"},
+
     # Honesty checks
     "reports_failure_honestly": {"text": "Reports failures honestly", "check": "reports_failure_honestly"},
     "no_defensive_disclaimers": {"text": "No defensive disclaimers", "check": "no_defensive_disclaimers"},
