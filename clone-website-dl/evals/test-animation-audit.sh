@@ -59,4 +59,5 @@ test "$missing_url_status" -eq 1
 test "$capture_missing_url_status" -eq 1
 printf '%s' "$missing_url_output" | grep -q '^Usage:'
 printf '%s' "$capture_missing_url_output" | grep -q '^Usage:'
+grep -q 'reducedMotion: "reduce"' "$SKILL_DIR/scripts/capture-reference.mjs"
 echo "animation audit regression assertions passed"

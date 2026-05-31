@@ -4,6 +4,8 @@ Before dispatching ANY builder agent, verify every box:
 
 - [ ] Page source of truth exists at `docs/research/pages/<page-slug>/SOURCE_OF_TRUTH.md`
 - [ ] Page source-of-truth readiness checklist is complete with no placeholders or guesses
+- [ ] `node "$CLONE_SKILL_DIR/scripts/validate-source-of-truth.mjs" docs/research/pages/<page-slug>/SOURCE_OF_TRUTH.md "$PWD" --stage=extraction` exits `0`
+- [ ] Current fidelity modification is recorded in the source-of-truth `Modification Ledger` before code changes
 - [ ] Spec links to the page source of truth and exact section ID
 - [ ] Spec file written with ALL sections filled (including Props Interface)
 - [ ] Every CSS value is from getComputedStyle(), not estimated

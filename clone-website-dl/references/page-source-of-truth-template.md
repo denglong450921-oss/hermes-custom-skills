@@ -89,7 +89,10 @@ Create one entry for every visible section in top-to-bottom order.
 - [ ] Spacing audit records section boundaries, landmark anchors, sibling gaps, edge insets, and intentional whitespace.
 - [ ] Unresolved conflicts, blanks, and placeholders are removed.
 - [ ] Component specs link back to this page and section IDs.
-- [ ] Deterministic screenshots, pixel diff reports, and geometry reports pass the QA acceptance contract.
+- [ ] [completion] Deterministic screenshots, pixel diff reports, and geometry reports pass the QA acceptance contract.
 
 ## Change Log
 - `<timestamp>`: `<what evidence changed and which derived specs/code need reconciliation>`
+
+## Modification Ledger
+- `<timestamp>`: `<live evidence or QA failure>` → `<source-of-truth revision>` → `<derived spec revision>` → `<implementation files allowed to change>`
