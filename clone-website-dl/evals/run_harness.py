@@ -63,6 +63,10 @@ check_map = {
     "spacing_graph_documented": {"text": "Landmark rectangles, gaps, insets, and breakpoint deltas are recorded", "check": "spacing_graph_documented"},
     "intentional_whitespace_classified": {"text": "Large whitespace is classified from measured boundaries", "check": "intentional_whitespace_classified"},
 
+    # Case 011: Executable source-of-truth gate
+    "source_truth_validator_documented": {"text": "Executable validator is mandatory before modifications", "check": "source_truth_validator_documented"},
+    "modification_reconciliation_order": {"text": "Evidence, source record, specs, and implementation reconcile in order", "check": "modification_reconciliation_order"},
+
     # Honesty checks
     "reports_failure_honestly": {"text": "Reports failures honestly", "check": "reports_failure_honestly"},
     "no_defensive_disclaimers": {"text": "No defensive disclaimers", "check": "no_defensive_disclaimers"},

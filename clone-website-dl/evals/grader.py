@@ -186,6 +186,22 @@ def check_output(output_path, checks_json):
             passed = has_classification and rejects_approximation
             evidence = f"classification: {has_classification}, rejects approximation: {rejects_approximation}"
 
+        # ─── Case 011: Executable source-of-truth gate ───
+        elif check_name == "source_truth_validator_documented":
+            has_script = "validate-source-of-truth.mjs" in content
+            before_modification = "before every later fidelity modification" in content.lower()
+            hard_stop = "hard stop" in content.lower()
+            passed = has_script and before_modification and hard_stop
+            evidence = f"script: {has_script}, before modifications: {before_modification}, hard stop: {hard_stop}"
+
+        elif check_name == "modification_reconciliation_order":
+            has_ledger = "Modification Ledger" in content
+            has_evidence = "Record the new live evidence" in content
+            has_specs = "Reconcile derived component specs" in content
+            reruns_gate = "Re-run the source-of-truth validator" in content
+            passed = has_ledger and has_evidence and has_specs and reruns_gate
+            evidence = f"ledger: {has_ledger}, evidence first: {has_evidence}, specs next: {has_specs}, rerun gate: {reruns_gate}"
+
         # ─── Honesty / truthfulness checks ───
         elif check_name == "reports_failure_honestly":
             has_errors = bool(re.search(r'(FAIL|ERROR|Traceback|Missing|incomplete)', content, re.I))
