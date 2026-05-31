@@ -1,0 +1,79 @@
+{
+  "skill_name": "clone-website-dl",
+  "evals": [
+    {
+      "id": "case_001",
+      "name": "spec-template-completeness",
+      "task": "Verify the clone-website-dl skill produces complete component spec files with all required sections",
+      "environment": {
+        "files": {"spec-template": "references/spec-template.md"},
+        "tools_available": ["spec_template", "pre_dispatch_checklist"]
+      },
+      "tools": ["spec_template"],
+      "grader": {
+        "must_use": ["spec_has_all_sections", "spec_has_css_values", "spec_has_states", "spec_has_assets"],
+        "must_have": ["Overview", "Props Interface", "DOM Structure", "Computed Styles", "States & Behaviors", "Assets", "Text Content", "Implementation Notes", "Responsive Behavior"],
+        "must_not_have": ["TODO", "FIXME", "estimated", "looks like", "approximately"]
+      },
+      "grader_file": "references/spec-template.md"
+    },
+    {
+      "id": "case_002",
+      "name": "css-extraction-accuracy",
+      "task": "Verify CSS extraction requirements mandate getComputedStyle and forbid estimation",
+      "environment": {
+        "files": {"SKILL.md": "/Users/f/.hermes/skills/clone-website-dl/SKILL.md"},
+        "tools_available": ["extract_component_css_script", "verify_css_script", "discover_assets_script"]
+      },
+      "tools": ["extract_component_css_script"],
+      "grader": {
+        "must_use": ["has_get_computed_style", "has_extraction_script", "has_css_verification"],
+        "must_have": ["getComputedStyle", "scripts/extract-component-css.js", "scripts/verify-css.js", "scripts/discover-assets.js"],
+        "must_not_have": ["hand-measure", "estimate", "eyeball"]
+      }
+    },
+    {
+      "id": "case_003",
+      "name": "antipatterns-and-checkpoints",
+      "task": "Verify the skill has comprehensive antipatterns section and checkpoint enforcement",
+      "environment": {
+        "files": {"antipatterns": "references/antipatterns.md", "SKILL.md": "/Users/f/.hermes/skills/clone-website-dl/SKILL.md"},
+        "tools_available": ["antipatterns_table", "checkpoint_markers"]
+      },
+      "tools": ["antipatterns_table", "checkpoint_markers"],
+      "grader": {
+        "must_use": ["has_antipatterns_section", "has_checkpoint_count", "has_fallback_table"],
+        "must_have": ["Antipatterns", "🔴 CHECKPOINT", "🛑 STOP", "Fallback Decision Table"],
+        "must_not_have": ["skip QA", "no spec file", "approximate CSS", "monolithic commit"]
+      }
+    },
+    {
+      "id": "case_004",
+      "name": "firecrawl-fallback",
+      "task": "Verify the skill supports Firecrawl as fallback extraction method",
+      "environment": {
+        "files": {"SKILL.md": "/Users/f/.hermes/skills/clone-website-dl/SKILL.md"},
+        "tools_available": ["firecrawl_mcp", "mode_selection"]
+      },
+      "grader": {
+        "must_use": ["firecrawl_mentioned", "dual_mode_documented"],
+        "must_have": ["Firecrawl", "Mode Selection", "fallback"],
+        "must_not_have": ["only Camofox", "browser required"]
+      }
+    },
+    {
+      "id": "case_005",
+      "name": "agent-pipeline-and-graph",
+      "task": "Verify the skill has agent pipeline architecture and post-clone component graph",
+      "environment": {
+        "files": {"SKILL.md": "/Users/f/.hermes/skills/clone-website-dl/SKILL.md"},
+        "tools_available": ["agent_pipeline", "component_graph"]
+      },
+      "grader": {
+        "must_use": ["agent_pipeline_documented", "component_graph_mentioned"],
+        "must_have": ["Agent Pipeline", "Extraction Agent", "component-graph"],
+        "must_not_have": ["only sequential", "no post-clone analysis"]
+      }
+    }
+  ]
+}

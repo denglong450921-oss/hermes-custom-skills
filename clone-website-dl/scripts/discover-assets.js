@@ -5,7 +5,9 @@
  */
 JSON.stringify({
   images: [...document.querySelectorAll('img')].map(img => ({
-    src: img.src || img.currentSrc,
+    src: img.currentSrc || img.src,
+    lazySrc: img.dataset.src || img.dataset.lazy || null,
+    srcset: img.currentSrc || img.dataset.srcset || img.srcset || null,
     alt: img.alt,
     width: img.naturalWidth,
     height: img.naturalHeight,

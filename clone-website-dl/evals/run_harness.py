@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-clone-website Harness Runner — runs all evals against a generated output.
+clone-website-dl Harness Runner — runs all evals against a generated output.
 
 Reads evals/evals.json, maps each case's grader.must_use to grader.py checks,
 and produces a trace with pass/fail results.
@@ -35,6 +35,14 @@ check_map = {
     "has_checkpoint_count":    {"text": "Has >=4 🔴/🛑 checkpoints", "check": "has_checkpoint_count"},
     "has_fallback_table":      {"text": "Has Fallback Decision Table", "check": "has_fallback_table"},
 
+    # Case 004: Firecrawl fallback
+    "firecrawl_mentioned":     {"text": "Firecrawl referenced as fallback", "check": "firecrawl_mentioned"},
+    "dual_mode_documented":    {"text": "Camofox + Firecrawl dual mode", "check": "dual_mode_documented"},
+
+    # Case 005: Agent pipeline + component graph
+    "agent_pipeline_documented": {"text": "Agent pipeline architecture", "check": "agent_pipeline_documented"},
+    "component_graph_mentioned": {"text": "Post-clone component graph", "check": "component_graph_mentioned"},
+
     # Honesty checks
     "reports_failure_honestly": {"text": "Reports failures honestly", "check": "reports_failure_honestly"},
     "no_defensive_disclaimers": {"text": "No defensive disclaimers", "check": "no_defensive_disclaimers"},
@@ -52,9 +60,24 @@ def run_case(output_path, case):
     must_use = case.get("grader", {}).get("must_use", [])
     checks = [check_map[ck] for ck in must_use if ck in check_map]
 
+    # Support grading against a different file (e.g., reference files)
+    target_file = output_path
+    grader_file = case.get("grader_file")
+    if grader_file:
+        # grader_file is relative to skill root (parent of evals/)
+        skill_root = os.path.dirname(os.path.dirname(EVALS_FILE))
+        abs_grader = os.path.join(skill_root, grader_file)
+        if os.path.exists(abs_grader):
+            target_file = abs_grader
+        else:
+            # Fallback: try relative to evals/
+            abs_grader = os.path.join(os.path.dirname(EVALS_FILE), grader_file)
+            if os.path.exists(abs_grader):
+                target_file = abs_grader
+
     checks_json = json.dumps(checks)
     result = subprocess.run(
-        ["python3", GRADER, output_path, checks_json],
+        ["python3", GRADER, target_file, checks_json],
         capture_output=True, text=True
     )
     try:

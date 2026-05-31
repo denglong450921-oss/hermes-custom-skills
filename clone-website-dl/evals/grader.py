@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-clone-website Harness Grader — domain-specific assertion checker.
+clone-website-dl Harness Grader — domain-specific assertion checker.
 
 Each check reads the output text (e.g., skill SKILL.md content, generated spec files)
-and verifies it contains expected evidence for clone-website workflow quality.
+and verifies it contains expected evidence for clone-website-dl workflow quality.
 
 Usage:
   python3 evals/grader.py <output-file> '<checks-json>'
@@ -83,8 +83,29 @@ def check_output(output_path, checks_json):
             evidence = f"🔴: {checkpoints}, 🛑: {stops}, total: {total} (need >=4)"
 
         elif check_name == "has_fallback_table":
-            passed = "Fallback Decision Table" in content
+            passed = "Fallback Decision Table" in content or "references/fallback-table" in content
             evidence = "Fallback table found" if passed else "Fallback table missing"
+
+        # ─── Case 004: Firecrawl fallback ───
+        elif check_name == "firecrawl_mentioned":
+            passed = "Firecrawl" in content
+            evidence = "Firecrawl referenced" if passed else "Firecrawl NOT found"
+
+        elif check_name == "dual_mode_documented":
+            has_camofox = "Camofox" in content
+            has_firecrawl = "Firecrawl" in content
+            has_fallback = "fallback" in content.lower()
+            passed = has_camofox and has_firecrawl and has_fallback
+            evidence = f"Camofox: {has_camofox}, Firecrawl: {has_firecrawl}, fallback: {has_fallback}"
+
+        # ─── Case 005: Agent pipeline + graph ───
+        elif check_name == "agent_pipeline_documented":
+            passed = "Agent Pipeline" in content or "Extraction Agent" in content
+            evidence = "Agent pipeline found" if passed else "No agent pipeline"
+
+        elif check_name == "component_graph_mentioned":
+            passed = "component-graph" in content or "Component Relationship" in content or "component graph" in content.lower()
+            evidence = "Component graph found" if passed else "No component graph"
 
         # ─── Honesty / truthfulness checks ───
         elif check_name == "reports_failure_honestly":

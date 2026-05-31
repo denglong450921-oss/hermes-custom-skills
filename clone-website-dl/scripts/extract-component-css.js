@@ -35,7 +35,14 @@
       classes: element.className?.toString().split(' ').slice(0, 5).join(' '),
       text: element.childNodes.length === 1 && element.childNodes[0].nodeType === 3 ? element.textContent.trim().slice(0, 200) : null,
       styles: extractStyles(element),
-      images: element.tagName === 'IMG' ? { src: element.src, alt: element.alt, naturalWidth: element.naturalWidth, naturalHeight: element.naturalHeight } : null,
+      images: element.tagName === 'IMG' ? {
+        src: element.currentSrc || element.src,
+        lazySrc: element.dataset.src || element.dataset.lazy || null,
+        srcset: element.dataset.srcset || element.srcset || null,
+        alt: element.alt,
+        naturalWidth: element.naturalWidth,
+        naturalHeight: element.naturalHeight
+      } : null,
       childCount: children.length,
       children: children.slice(0, 20).map(c => walk(c, depth + 1)).filter(Boolean)
     };

@@ -1,0 +1,22 @@
+{
+  "score": 6.25,
+  "criteria": {
+    "screenshot_guidance": {
+      "score": 7,
+      "reasoning": "The Screenshots section (lines 147-152) clearly differentiates full vs partial mode with specific viewports (1440px/390px), saving location, and a checkpoint with exact confirmation wording. The fallback to Playwright is noted. However, it doesn't address how the user sees the screenshot for confirmation — in a chat context the agent must send MEDIA:path/to/file, but the skill assumes the user can somehow see it. Also missing: framing guidance (tight crop vs contextual, how much header to include). The checkpoint asks 'Does this look like the right section?' but the user can't answer without being shown the image."
+    },
+    "partial_workflow_clarity": {
+      "score": 6,
+      "reasoning": "The dedicated 'Partial Clone Mode' section (lines 127-144) provides 5 clear directives: identify section, scaffold, extraction scope, output format, independent testability. There's also a STOP sign for scroll-driven animations. However, Phase 3 Step 1 (line 188) still says 'Screenshot the section' without noting this was already done in Phase 1 for partial mode, creating confusion. The skip of PAGE_TOPOLOGY.md is stated in a bullet but doesn't propagate to later checkpoints (line 167 still says 'Review both docs'). There's no condensed step-by-step for partial-only mode — the user must cross-reference the full pipeline and mentally subtract what doesn't apply."
+    },
+    "checkpoints_markers": {
+      "score": 5,
+      "reasoning": "There are 7 STOP/CHECKPOINT markers in the skill (lines 123, 144, 151, 167, 213, 220, 232). Only ONE (line 151, the screenshot confirmation) is explicitly labeled '(partial mode)'. The Phase 1 checkpoint (line 167) says 'Review both docs with user' — but PAGE_TOPOLOGY.md is skipped in partial mode, so the prompt is inaccurate. The Phase 4 checkpoint (line 232) about starting a dev server is never reached in partial mode because Phase 4 is skipped. There's no dedicated 'partial clone complete' verification checkpoint for the standalone component. The Builder Output Verification checkpoint (line 220) applies universally but isn't marked as relevant to partial mode."
+    },
+    "interaction_sweep_scope": {
+      "score": 7,
+      "reasoning": "The Mandatory Interaction Sweep (lines 161-162) has a clean full vs partial split: partial mode scopes to 'target section + adjacent header' and skips responsive sweep. Saving to BEHAVIORS.md still happens, which is appropriate for component-level behaviors. The scoping is clear and actionable. However, there's an inconsistency: screenshots are captured at two viewports (desktop + mobile) for partial mode, but the interaction sweep skips responsive entirely. The spec template's 'Responsive Behavior' section still expects data for all three viewports (1440px/768px/390px), but partial mode has no guidance on where responsive data comes from if the sweep is skipped. The 'skip responsive sweep' instruction is clear but creates a gap."
+    }
+  },
+  "overall_assessment": "Round 2 improvements added meaningful differentiation between full and partial clone mode in the screenshot guidance and interaction sweep sections. The dedicated 'Partial Clone Mode' section provides solid structural guidance. However, the improvements are inconsistently applied across the pipeline: (1) screenshots are dual-viewport but interaction sweep skips responsive, (2) only 1 of 7 checkpoints is adapted for partial mode, (3) Phase 3 instructions don't acknowledge that partial mode already completed screenshot extraction in Phase 1, and (4) there's no end-to-end partial workflow summary. The partial clone path is functional for an experienced operator who can mentally filter, but it's not as clear as it could be for a subagent executing the skill literally. Recommendations: add a condensed partial-only workflow step list, adapt remaining checkpoints with partial-mode variants (or note which are skipped), resolve the screenshot-vs-sweep viewport inconsistency, and add a final verification checkpoint for the standalone partial component."
+}
