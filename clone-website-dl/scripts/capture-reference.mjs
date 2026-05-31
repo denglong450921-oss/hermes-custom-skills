@@ -97,6 +97,7 @@ async function settle(page) {
         caret-color: transparent !important;
       }
       [class*="cookie"], [id*="cookie"], [class*="consent"], [id*="consent"] { display: none !important; }
+      [data-reveal] { opacity: 1 !important; transform: none !important; }
     `,
   });
   await page.evaluate(async () => {
@@ -105,6 +106,7 @@ async function settle(page) {
     for (let y = 0; y < document.body.scrollHeight; y += step) {
       scrollTo(0, y);
       await new Promise((resolve) => setTimeout(resolve, 90));
+      await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
     }
     scrollTo(0, 0);
     const images = [...document.images];

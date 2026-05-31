@@ -11,6 +11,8 @@ Before dispatching ANY builder agent, verify every box:
 - [ ] For stateful components: every state's content and styles captured
 - [ ] For scroll-driven components: trigger threshold, before/after styles, transition recorded
 - [ ] Animation audit ran before deterministic capture; start/mid/end states and reduced-motion behavior are documented
+- [ ] Spacing audit ran before coding; landmark rectangles, sibling gaps, edge insets, alignment anchors, and breakpoint deltas are recorded
+- [ ] Every large whitespace interval is classified as intentional or unexplained from measured boundaries
 - [ ] All images identified (including overlays and layered compositions)
 - [ ] Image paths match actual files in public/
 - [ ] Every reachable source image is visibly rendered; CSS does not suppress it

@@ -53,6 +53,14 @@ Create one entry for every visible section in top-to-bottom order.
 - **Reduced motion:** `<stable readable state>`
 - **Fallbacks:** `<N/A or evidence-backed poster/static composition>`
 
+## Strict Spacing Contract
+- **Audit report:** `docs/research/spacing/<page>.spacing.json`
+- **Section boundaries:** `<section → desktop/tablet/mobile top, bottom, height>`
+- **Landmark anchors:** `<heading/media/CTA → viewport x, y, width, height>`
+- **Sibling gaps and edge insets:** `<exact px values>`
+- **Intentional whitespace:** `<region → measured boundaries + reason>`
+- **Breakpoint deltas:** `<what changes and by how many px>`
+
 ## Known Constraints
 - `<N/A or evidence-backed limitation>`
 
@@ -78,6 +86,7 @@ Create one entry for every visible section in top-to-bottom order.
 - [ ] Large blank regions are confirmed intentional or removed.
 - [ ] Responsive changes and interactive states are documented.
 - [ ] Animated pages have a pre-freeze audit report, start/mid/end states, and reduced-motion behavior.
+- [ ] Spacing audit records section boundaries, landmark anchors, sibling gaps, edge insets, and intentional whitespace.
 - [ ] Unresolved conflicts, blanks, and placeholders are removed.
 - [ ] Component specs link back to this page and section IDs.
 - [ ] Deterministic screenshots, pixel diff reports, and geometry reports pass the QA acceptance contract.

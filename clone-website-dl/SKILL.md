@@ -140,6 +140,9 @@ A website is not a screenshot — elements move, change, appear, disappear. Use 
 
 See references/extraction-scripts.md for the per-component extraction script.
 
+### 5A. Record A Strict Spacing Graph
+Run `scripts/audit-spacing.mjs` before coding. Record landmark rectangles, section boundaries, sibling gaps, edge insets, alignment anchors, and breakpoint-specific deltas in the page source of truth. Classify large whitespace as intentional or unexplained from measured boundaries and visible media. Do not replace a spacing graph with approximate section heights.
+
 ### 6. Identify the Interaction Model Before Building
 The single most expensive mistake: building click-based UI when the original is scroll-driven.
 1. Scroll first — observe what changes
@@ -465,12 +468,13 @@ Save the visual as `docs/component-graph.md` for the user to inspect.
 | Firecrawl mode | `references/firecrawl-mode.md` |
 | Playwright extraction mode | `references/playwright-extraction.md` |
 | Animation reconstruction | `references/animation-reconstruction.md` |
+| Strict spacing audit | `scripts/audit-spacing.mjs` |
 | Measurable convergence harness | `references/measurable-convergence.md` |
 | Preflight audit script | `scripts/preflight-audit.sh` |
 
 ## Harness (Self-Eval)
 
-9 eval cases in `evals/evals.json`:
+10 eval cases in `evals/evals.json`:
 
 | Case | What it tests | Key assertions |
 |------|---------------|----------------|
@@ -483,5 +487,6 @@ Save the visual as `docs/component-graph.md` for the user to inspect.
 | `case_007` | Visual occupancy and booth fallback | asset_visibility_enforced, booth_fallback_documented |
 | `case_008` | Measurable convergence gate | measurable_diff_harness_documented, acceptance_thresholds_enforced |
 | `case_009` | Animation reconstruction | animation_audit_documented, animation_contract_enforced |
+| `case_010` | Strict spacing graph | spacing_graph_documented, intentional_whitespace_classified |
 
 Run `bash evals/test-preflight-audit.sh` after changing the preflight auditor. It covers HTTP localhost preservation, transport failures, valid JSON output, attribute-order variations, uppercase/single-quoted markup, SVG pressure, viewport detection, dark mode, animation markers, and `!important` counts.

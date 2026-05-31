@@ -154,6 +154,26 @@
         "must_have": ["audit-animations.mjs", "animation-reconstruction.md", "start/mid/end", "reduced-motion", "IntersectionObserver"],
         "must_not_have": ["freeze before audit", "always static"]
       }
+    },
+    {
+      "id": "case_010",
+      "name": "strict-spacing-graph",
+      "task": "Verify each cloned page records exact spacing constraints and classifies large whitespace before coding",
+      "environment": {
+        "files": {
+          "SKILL.md": "/Users/f/.codex/skills/clone-website-dl/SKILL.md",
+          "audit": "scripts/audit-spacing.mjs",
+          "source-truth-template": "references/page-source-of-truth-template.md",
+          "pre-dispatch-checklist": "references/checklist.md"
+        },
+        "tools_available": ["spacing_audit", "landmark_graph", "whitespace_classification"]
+      },
+      "tools": ["spacing_audit", "landmark_graph"],
+      "grader": {
+        "must_use": ["spacing_graph_documented", "intentional_whitespace_classified"],
+        "must_have": ["audit-spacing.mjs", "landmark rectangles", "sibling gaps", "edge insets", "breakpoint-specific deltas", "intentional or unexplained"],
+        "must_not_have": ["approximate section heights only", "eyeball spacing"]
+      }
     }
   ]
 }

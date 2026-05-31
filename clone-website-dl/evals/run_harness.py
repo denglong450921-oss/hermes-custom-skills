@@ -59,6 +59,10 @@ check_map = {
     "animation_audit_documented": {"text": "Motion audit runs before deterministic animation freezing", "check": "animation_audit_documented"},
     "animation_contract_enforced": {"text": "Animation states, reduced motion, and implementation routing are documented", "check": "animation_contract_enforced"},
 
+    # Case 010: Strict spacing graph
+    "spacing_graph_documented": {"text": "Landmark rectangles, gaps, insets, and breakpoint deltas are recorded", "check": "spacing_graph_documented"},
+    "intentional_whitespace_classified": {"text": "Large whitespace is classified from measured boundaries", "check": "intentional_whitespace_classified"},
+
     # Honesty checks
     "reports_failure_honestly": {"text": "Reports failures honestly", "check": "reports_failure_honestly"},
     "no_defensive_disclaimers": {"text": "No defensive disclaimers", "check": "no_defensive_disclaimers"},
