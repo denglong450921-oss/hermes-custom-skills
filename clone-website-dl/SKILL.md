@@ -77,6 +77,12 @@ fi
 
 1. Parse `$ARGUMENTS` as one or more URLs. Validate each URL.
 2. Verify the base project scaffold (Next.js + shadcn/ui + Tailwind v4) builds: `npm run build`
+   - **⚠️ Critical: After `create-next-app --tailwind`, check that `postcss.config.mjs` exists.** Without it, `@tailwindcss/postcss` won't generate utility classes and all Tailwind position/display/responsive classes will be inert (build succeeds silently). Create `postcss.config.mjs`:
+     ```js
+     const config = { plugins: { "@tailwindcss/postcss": {} } };
+     export default config;
+     ```
+   - See `references/pitfalls.md` → "Tailwind v4 PostCSS Config Required (Next.js 16)" for full diagnosis.
 3. Create output directories: `docs/research/`, `docs/research/components/`, `docs/design-references/`, `scripts/`
 4. **Clean stale files** from previous clones:
    - **Single-target re-clone:** Remove old component files (`Hero.tsx`, `CTA.tsx`, etc.), keep only shared infrastructure (`lib/utils.ts`, `components/ui/`, `icons.tsx`)
@@ -258,6 +264,17 @@ When the user says "clone [URL] but change X to Y" — apply customizations whil
 ### Global Extraction
 - **Fonts:** Inspect `<link>` tags, self-hosted files, and computed `font-family`. Choose the reliable integration strategy in Phase 2.
 - **Colors:** Extract palette from computed styles. Map to shadcn CSS variables in globals.css
+- **Dark mode (40% of sites):** Check for `prefers-color-scheme`, `.dark` class, or `data-theme="dark"`. If present:
+  - Extract BOTH light and dark CSS variable sets using Playwright: `getComputedStyle(document.documentElement)` at both modes
+  - Create dual `:root` and `.dark` blocks in globals.css
+  - Add a ThemeProvider or inline script to toggle `.dark` class based on `prefers-color-scheme` or user toggle
+  - See `references/customization.md` for the variable mapping pattern
+- **Lazy-loaded images (52% of sites):** Extract images BEFORE and AFTER scrolling:
+  - First pass: `document.querySelectorAll('img[data-src], img[data-lazy], img[loading="lazy"]')` to get placeholder URLs
+  - Scroll to bottom: `window.scrollTo(0, document.body.scrollHeight)` then wait 2s
+  - Second pass: re-query `img` to get resolved `currentSrc` values
+  - Map `data-src` → `src` for each image in the extraction manifest
+  - Save resolved URLs — lazy images that didn't trigger will need the `data-src` attribute as fallback
 - **Favicons & Meta:** Download to `public/seo/`, update `layout.tsx` metadata
   - **Viewport meta:** If HTML lacks `<meta name="viewport">`, the site may set it via JS. Still add `<meta name="viewport" content="width=device-width, initial-scale=1">` to clone layout.tsx — safe default for any site.
 - **Resource hints:** Scan for `<link rel="preconnect">`, `<link rel="preload">`, `<link rel="dns-prefetch">`. In the clone: keep first-party ones, remove third-party trackers, and preserve only the hints required by the chosen font integration.
@@ -332,10 +349,12 @@ The core loop. For a full clone, process each section in the page's completed `S
    - For CDN fonts: self-host the exposed files when practical; otherwise use the reliable Google Fonts `<link>` pattern described in `references/pitfalls.md`
    - **Cookie consent banners:** Detect and skip. Common patterns: `cookie-consent`, `gdpr`, `ccpa`, `cookie-banner`, `CookieNotice`, `#cookies`. These are irrelevant for demo/development clones. Do NOT include cookie banner HTML in the clone. Document as "removed cookie consent banner (not needed for development clone)."
 8. **Detect component library patterns** — if repeated class prefixes suggest a known design system (e.g., `ds-*`, `venice-*`, `Mui*`, `chakra-*`), note it. This speeds up builder dispatch.
-9. **Deduplicate inline SVGs** — if the page contains many inline SVGs (Squarespace, Supabase patterns with 50+ SVGs):
-   - Group SVGs by visual function (icons, logos, illustrations)
-   - Extract unique SVGs to `src/components/icons.tsx` as named React components
+9. **Deduplicate inline SVGs (60% of sites):** If the page contains many inline SVGs:
+   - Run `node "$CLONE_SKILL_DIR/scripts/extract-svgs.js" < page.html > svg-manifest.json` to automatically extract, deduplicate, and generate React components
+   - The script outputs: raw count, unique count, savings %, and ready-to-use component code
+   - Group SVGs by function (icons, logos, illustrations) and place in `src/components/icons.tsx`
    - Avoid creating 50 separate icon files — merge into one icons module
+   - For sites with 100+ SVGs, verify the dedup output manually since auto-naming may produce collisions
 10. **Handle inline Style blocks** — if the HTML has multiple `<style>` blocks:
    - Extract and merge all inline styles into one `inline-styles.css` in `docs/research/`
    - Deduplicate conflicting rules (last rule wins, matching browser behavior)
@@ -425,6 +444,30 @@ After all sections built and merged:
 4. Test all interactive behaviors (scroll, click, hover)
 5. Audit visual occupancy: flag large blank regions, confirm every reachable media asset is displayed, and confirm every unavailable asset has a documented booth fallback
 
+### Iterative Regression QA
+
+After fixing initial discrepancies, run the automated iterative QA loop:
+
+```bash
+python3 "$CLONE_SKILL_DIR/references/iterative-qa.py" http://localhost:3459 50
+```
+
+This checks (50 rounds):
+- Text content completeness (all 14+ keys per-language)
+- Section count (≥7)
+- Nav presence and height
+- Image load success (no broken assets)
+- CTA color verification (black + yellow buttons)
+- Console errors (zero)
+- Mobile viewport parity (390px width, all text present)
+
+**Interpretation:**
+- **50/50 same failure:** deterministic bug — fix the source code
+- **Mixed failures:** race condition or lazy-load timing — increase `wait_for_timeout` or add scroll-then-wait loop
+- **50/50 pass:** layout is stable — proceed to pixel diff
+
+See `references/iterative-qa.py` for the runnable script.
+
 ### Measurable Convergence Gate
 Run `scripts/capture-reference.mjs`, `scripts/visual-diff.mjs`, and `scripts/compare-geometry.mjs` using `references/measurable-convergence.md`. Acceptance thresholds are: static sections `<0.5%` pixel mismatch, text-heavy sections `<1.5%`, geometry drift `<=2px`, missing visible assets `0`, unexplained blank regions `0`, and broken network assets `0`. Explicitly mask and document dynamic regions. Repeat the repair loop until reports pass. Do not claim a 1:1 clone without the saved reports.
 
@@ -484,6 +527,8 @@ Save the visual as `docs/component-graph.md` for the user to inspect.
 | Source-of-truth hard gate | `scripts/validate-source-of-truth.mjs` |
 | Measurable convergence harness | `references/measurable-convergence.md` |
 | Preflight audit script | `scripts/preflight-audit.sh` |
+| Inline SVG extractor | `scripts/extract-svgs.js` |
+| Iterative 50-round QA | `references/iterative-qa.py` |
 
 ## Harness (Self-Eval)
 

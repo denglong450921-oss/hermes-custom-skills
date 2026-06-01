@@ -14,12 +14,21 @@ URL=$(echo "$URL" | sed 's|^//|https://|')
 
 echo "{\"url\":\"$URL\",\"checks\":{"
 
-# Fetch HTML
+# Fetch HTML with retry for rate-limited/blocked sites
 TMP_BODY=$(mktemp)
 trap 'rm -f "$TMP_BODY"' EXIT
-CURL_META=$(curl -sSL --max-time 8 -o "$TMP_BODY" -w '%{http_code}\t%{url_effective}\t%{content_type}' "$URL" 2>/dev/null)
+CURL_META=$(curl -sSL --max-time 8 -o "$TMP_BODY" -w '%{http_code}\\t%{url_effective}\\t%{content_type}' "$URL" 2>/dev/null)
 CURL_RC=$?
 HTTP_CODE=$(printf '%s' "$CURL_META" | cut -f1)
+
+# Retry with different user-agent on 403/503/429 or empty
+if [ "$HTTP_CODE" = "403" ] || [ "$HTTP_CODE" = "503" ] || [ "$HTTP_CODE" = "429" ] || [ -z "$HTTP_CODE" ]; then
+  CURL_META=$(curl -sSL --max-time 8 -o "$TMP_BODY" \
+    -A 'Mozilla/5.0 (compatible; PreflightBot/1.0; +https://hermes-agent.ai)' \
+    -w '%{http_code}\\t%{url_effective}\\t%{content_type}' "$URL" 2>/dev/null)
+  CURL_RC=$?
+  HTTP_CODE=$(printf '%s' "$CURL_META" | cut -f1)
+fi
 EFFECTIVE_URL=$(printf '%s' "$CURL_META" | cut -f2)
 CONTENT_TYPE=$(printf '%s' "$CURL_META" | cut -f3-)
 HTML=$(cat "$TMP_BODY")
