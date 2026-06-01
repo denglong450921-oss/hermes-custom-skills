@@ -7,7 +7,7 @@ Pre-built scripts in `scripts/`:
 | `scripts/discover-assets.js` | Phase 2 | Copy-paste into browser MCP console to enumerate all page assets |
 | `scripts/extract-component-css.js` | Phase 3 | Per-component CSS extraction via getComputedStyle |
 | `scripts/verify-css.js` | Phase 5 | QA comparison: run on original AND clone, compare JSON output |
-| `scripts/capture-reference.mjs` | Phase 5 | Deterministic screenshots and DOM geometry snapshots at desktop, tablet, and mobile widths |
+| `scripts/capture-reference.mjs` | Phase 5 | Deterministic reduced-motion screenshots and DOM geometry snapshots at desktop, tablet, and mobile widths |
 | `scripts/visual-diff.mjs` | Phase 5 | Pixel mismatch score, heatmap, overlay, and JSON report via ImageMagick |
 | `scripts/compare-geometry.mjs` | Phase 5 | DOM geometry drift report with configurable pixel tolerance |
 | `scripts/audit-animations.mjs` | Phase 1 | Motion inventory and runtime style snapshots across scroll positions; run before deterministic capture |

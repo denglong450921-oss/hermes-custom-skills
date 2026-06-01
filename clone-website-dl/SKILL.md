@@ -167,6 +167,17 @@ Create each page record with `references/page-source-of-truth-template.md`. It i
 
 Do not code a page while its record has blanks, guesses, or unresolved conflicts. If later extraction contradicts it, update the source of truth first, then update derived specs and code. This prevents implementation from drifting into a second, unofficial interpretation of the live page.
 
+### 10A. Enforce The Source Of Truth Before Every Modification
+Run `node "$CLONE_SKILL_DIR/scripts/validate-source-of-truth.mjs" docs/research/pages/<page-slug>/SOURCE_OF_TRUTH.md "$PWD" --stage=extraction` before the first implementation edit and before every later fidelity modification. Before completion, run the stricter `--stage=completion` gate. Treat any non-zero exit as a hard stop: return to extraction or QA and repair the canonical record before changing code or claiming completion.
+
+Every fidelity modification must follow this order:
+1. Record the new live evidence and reason in the page source of truth `Modification Ledger`.
+2. Reconcile derived component specs.
+3. Modify implementation.
+4. Re-run the source-of-truth validator, build, occupancy checks, and visual QA.
+
+Do not preserve an outdated first draft merely because it was written first. Preserve one canonical record by revising it whenever stronger live evidence appears.
+
 ## Phase 1: Reconnaissance (Extraction Agent)
 
 You run this phase yourself.
@@ -268,6 +279,7 @@ Map every section from top to bottom. Document visual order, sticky overlays, sc
 For every URL, consolidate the extracted evidence into `docs/research/pages/<page-slug>/SOURCE_OF_TRUTH.md`. Use `references/page-source-of-truth-template.md` and complete its readiness checklist. Link raw screenshots, section HTML/JSON, and asset manifests instead of leaving evidence implicit.
 
 **🔴 CHECKPOINT (source-of-truth gate):** Before writing page or component code for a URL, verify its `SOURCE_OF_TRUTH.md` is complete: no placeholders, no guessed CSS values, exact text captured, desktop/mobile screenshots linked, every section mapped, assets resolved, and interactions documented. If the gate fails, continue extraction. Do not code yet.
+Run `node "$CLONE_SKILL_DIR/scripts/validate-source-of-truth.mjs" docs/research/pages/<page-slug>/SOURCE_OF_TRUTH.md "$PWD" --stage=extraction` and require exit code `0`.
 
 **🔴 CHECKPOINT (visual occupancy gate):** For every section, confirm reachable source media is rendered and visually occupies the expected region. If a source asset is unavailable, the source of truth must name the booth fallback. Do not accept unexplained blank space.
 
@@ -469,12 +481,13 @@ Save the visual as `docs/component-graph.md` for the user to inspect.
 | Playwright extraction mode | `references/playwright-extraction.md` |
 | Animation reconstruction | `references/animation-reconstruction.md` |
 | Strict spacing audit | `scripts/audit-spacing.mjs` |
+| Source-of-truth hard gate | `scripts/validate-source-of-truth.mjs` |
 | Measurable convergence harness | `references/measurable-convergence.md` |
 | Preflight audit script | `scripts/preflight-audit.sh` |
 
 ## Harness (Self-Eval)
 
-10 eval cases in `evals/evals.json`:
+11 eval cases in `evals/evals.json`:
 
 | Case | What it tests | Key assertions |
 |------|---------------|----------------|
@@ -488,5 +501,6 @@ Save the visual as `docs/component-graph.md` for the user to inspect.
 | `case_008` | Measurable convergence gate | measurable_diff_harness_documented, acceptance_thresholds_enforced |
 | `case_009` | Animation reconstruction | animation_audit_documented, animation_contract_enforced |
 | `case_010` | Strict spacing graph | spacing_graph_documented, intentional_whitespace_classified |
+| `case_011` | Executable source-of-truth gate | source_truth_validator_documented, modification_reconciliation_order |
 
 Run `bash evals/test-preflight-audit.sh` after changing the preflight auditor. It covers HTTP localhost preservation, transport failures, valid JSON output, attribute-order variations, uppercase/single-quoted markup, SVG pressure, viewport detection, dark mode, animation markers, and `!important` counts.

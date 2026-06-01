@@ -124,7 +124,7 @@ const report = { url, label, capturedAt: new Date().toISOString(), viewports: {}
 
 try {
   for (const [name, viewport] of viewports) {
-    const context = await browser.newContext({ viewport, locale: "zh-CN", deviceScaleFactor: 1 });
+    const context = await browser.newContext({ viewport, locale: "zh-CN", deviceScaleFactor: 1, reducedMotion: "reduce" });
     const page = await context.newPage();
     const failures = [];
     page.on("response", (response) => {

@@ -174,6 +174,26 @@
         "must_have": ["audit-spacing.mjs", "landmark rectangles", "sibling gaps", "edge insets", "breakpoint-specific deltas", "intentional or unexplained"],
         "must_not_have": ["approximate section heights only", "eyeball spacing"]
       }
+    },
+    {
+      "id": "case_011",
+      "name": "executable-source-truth-gate",
+      "task": "Verify incomplete source-of-truth files block coding and later fidelity modifications reconcile evidence before implementation",
+      "environment": {
+        "files": {
+          "SKILL.md": "/Users/f/.codex/skills/clone-website-dl/SKILL.md",
+          "validator": "scripts/validate-source-of-truth.mjs",
+          "regression": "evals/test-source-truth-gate.sh",
+          "source-truth-template": "references/page-source-of-truth-template.md"
+        },
+        "tools_available": ["source_truth_validator", "modification_ledger"]
+      },
+      "tools": ["source_truth_validator", "modification_ledger"],
+      "grader": {
+        "must_use": ["source_truth_validator_documented", "modification_reconciliation_order"],
+        "must_have": ["validate-source-of-truth.mjs", "Modification Ledger", "hard stop", "Record the new live evidence"],
+        "must_not_have": ["optional validation", "code before evidence"]
+      }
     }
   ]
 }
