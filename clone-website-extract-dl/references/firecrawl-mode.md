@@ -42,7 +42,7 @@ fi
    ```
 4. **Take screenshots** via screenshot.py (Playwright) — for layout reference:
    ```bash
-   python3 ~/.hermes/skills/web/html-to-png/scripts/screenshot.py page.html --output docs/design-references/fullpage.png
+   python3 <html-to-png-screenshot-script> page.html --output docs/design-references/fullpage.png
    ```
 5. **Mark interaction model** as "unknown — Firecrawl mode (no behavior data)"
 6. **Write PAGE_TOPOLOGY.md** with caveat: "CSS values are heuristic — verify with browser DevTools"

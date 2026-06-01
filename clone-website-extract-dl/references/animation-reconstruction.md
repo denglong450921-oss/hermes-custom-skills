@@ -5,7 +5,7 @@ Use a two-pass workflow. Audit motion before deterministic screenshots freeze it
 ## 1. Inventory And Sample
 
 ```bash
-node scripts/audit-animations.mjs --url https://example.com/path --out docs/research/animations --label path
+node "$CLONE_EXTRACT_DIR/scripts/audit-animations.mjs" --url https://example.com/path --out docs/research/animations --label path
 ```
 
 The report records detected libraries, videos, canvases, active Web Animations, transition-bearing elements, and runtime styles across scroll positions. For hover, click, carousel, and modal states, trigger the interaction in the browser and save additional screenshots plus computed styles.

@@ -1,14 +1,14 @@
 # Measurable Convergence Harness
 
-Use this harness for every cloned page. Visual QA is a measured repair loop, not an eyeball-only review. When the page contains motion, run `scripts/audit-animations.mjs` first; never freeze animation before recording runtime states.
+Use this harness for every cloned page. Visual QA is a measured repair loop, not an eyeball-only review. When the page contains motion, run `$CLONE_EXTRACT_DIR/scripts/audit-animations.mjs` first; never freeze animation before recording runtime states.
 
 ## Capture Contract
 
 Capture the source and clone with identical desktop, tablet, and mobile viewports. The capture script disables animations and caret rendering, hides cookie-consent UI, warms lazy-loaded assets by scrolling, waits for fonts and images, then saves a full-page PNG and a DOM geometry snapshot.
 
 ```bash
-node scripts/capture-reference.mjs --url https://example.com/path --out docs/qa/path/source --label path
-node scripts/capture-reference.mjs --url http://localhost:4173/path --out docs/qa/path/clone --label path
+node "$CLONE_QA_DIR/scripts/capture-reference.mjs" --url https://example.com/path --out docs/qa/path/source --label path
+node "$CLONE_QA_DIR/scripts/capture-reference.mjs" --url http://localhost:4173/path --out docs/qa/path/clone --label path
 ```
 
 ## Diff Contract
@@ -16,14 +16,14 @@ node scripts/capture-reference.mjs --url http://localhost:4173/path --out docs/q
 Run the pixel diff and DOM geometry checks for each viewport. For section-level repair, crop matching source and clone sections before running the image diff.
 
 ```bash
-node scripts/visual-diff.mjs \
+node "$CLONE_QA_DIR/scripts/visual-diff.mjs" \
   --reference docs/qa/path/source/path-desktop.png \
   --candidate docs/qa/path/clone/path-desktop.png \
   --out docs/qa/path/diff \
   --label path-desktop \
   --threshold 0.005
 
-node scripts/compare-geometry.mjs \
+node "$CLONE_QA_DIR/scripts/compare-geometry.mjs" \
   --reference docs/qa/path/source/path-desktop.geometry.json \
   --candidate docs/qa/path/clone/path-desktop.geometry.json \
   --out docs/qa/path/diff \

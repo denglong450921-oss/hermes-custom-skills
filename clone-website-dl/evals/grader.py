@@ -86,6 +86,12 @@ def check_output(output_path, checks_json):
             passed = "Fallback Decision Table" in content or "references/fallback-table" in content
             evidence = "Fallback table found" if passed else "Fallback table missing"
 
+        elif check_name == "has_recovery_table":
+            has_recovery = "## Recovery" in content
+            has_table = "| Failure signal |" in content or "| Step | Failure signal |" in content
+            passed = has_recovery and has_table
+            evidence = f"recovery section: {has_recovery}, table: {has_table}"
+
         # ─── Case 004: Firecrawl fallback ───
         elif check_name == "firecrawl_mentioned":
             passed = "Firecrawl" in content
@@ -201,6 +207,31 @@ def check_output(output_path, checks_json):
             reruns_gate = "Re-run the source-of-truth validator" in content
             passed = has_ledger and has_evidence and has_specs and reruns_gate
             evidence = f"ledger: {has_ledger}, evidence first: {has_evidence}, specs next: {has_specs}, rerun gate: {reruns_gate}"
+
+        # ─── Case 012: Split-skill architecture ───
+        elif check_name == "split_companions_documented":
+            companions = [
+                "clone-website-extract-dl",
+                "clone-website-build-dl",
+                "clone-website-qa-dl",
+            ]
+            missing = [name for name in companions if name not in content]
+            passed = len(missing) == 0
+            evidence = "all companion skills documented" if passed else f"missing: {', '.join(missing)}"
+
+        elif check_name == "thin_orchestrator":
+            line_count = len(content.splitlines())
+            has_flow = "## Orchestration Flow" in content
+            embeds_css_details = "getComputedStyle()" in content or "capture-reference.mjs" in content
+            passed = line_count <= 220 and has_flow and not embeds_css_details
+            evidence = f"lines: {line_count}, flow: {has_flow}, embedded implementation details: {embeds_css_details}"
+
+        elif check_name == "atomic_handoffs":
+            evidence_stop = "STOP: wait for user confirmation before implementation" in content
+            repair_order = "evidence -> source record -> specs -> implementation -> QA" in content
+            partial_route = "Partial Clone Route" in content
+            passed = evidence_stop and repair_order and partial_route
+            evidence = f"evidence approval: {evidence_stop}, repair order: {repair_order}, partial route: {partial_route}"
 
         # ─── Honesty / truthfulness checks ───
         elif check_name == "reports_failure_honestly":

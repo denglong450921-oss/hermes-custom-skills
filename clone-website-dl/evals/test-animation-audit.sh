@@ -1,7 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
-SKILL_DIR=$(cd "$(dirname "$0")/.." && pwd)
+SKILL_DIR=$(cd "$(dirname "$0")/../../clone-website-extract-dl" && pwd)
+QA_DIR=$(cd "$(dirname "$0")/../../clone-website-qa-dl" && pwd)
 TMP_DIR=$(mktemp -d)
 trap 'kill "${SERVER_PID:-}" 2>/dev/null || true; wait "${SERVER_PID:-}" 2>/dev/null || true; rm -rf "$TMP_DIR"' EXIT
 
@@ -51,7 +52,7 @@ PY
 set +e
 missing_url_output=$(node "$SKILL_DIR/scripts/audit-animations.mjs" 2>&1)
 missing_url_status=$?
-capture_missing_url_output=$(node "$SKILL_DIR/scripts/capture-reference.mjs" 2>&1)
+capture_missing_url_output=$(node "$QA_DIR/scripts/capture-reference.mjs" 2>&1)
 capture_missing_url_status=$?
 set -e
 
@@ -59,5 +60,5 @@ test "$missing_url_status" -eq 1
 test "$capture_missing_url_status" -eq 1
 printf '%s' "$missing_url_output" | grep -q '^Usage:'
 printf '%s' "$capture_missing_url_output" | grep -q '^Usage:'
-grep -q 'reducedMotion: "reduce"' "$SKILL_DIR/scripts/capture-reference.mjs"
+grep -q 'reducedMotion: "reduce"' "$QA_DIR/scripts/capture-reference.mjs"
 echo "animation audit regression assertions passed"

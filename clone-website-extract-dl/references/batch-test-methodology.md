@@ -46,5 +46,5 @@ For each site, check:
 Collect all problems across sites, aggregate by frequency. Sort descending — the top problems at 30-40% frequency are the ones to address first.
 
 ### Script
-Use `scripts/preflight-audit.sh <url>` for single-site analysis.
+Use `$CLONE_EXTRACT_DIR/scripts/preflight-audit.sh <url>` for single-site analysis.
 Use `execute_code` with the batch loop pattern for multi-site runs (see code in session transcripts).

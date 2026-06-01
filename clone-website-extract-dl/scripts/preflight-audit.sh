@@ -17,7 +17,7 @@ echo "{\"url\":\"$URL\",\"checks\":{"
 # Fetch HTML with retry for rate-limited/blocked sites
 TMP_BODY=$(mktemp)
 trap 'rm -f "$TMP_BODY"' EXIT
-CURL_META=$(curl -sSL --max-time 8 -o "$TMP_BODY" -w '%{http_code}\\t%{url_effective}\\t%{content_type}' "$URL" 2>/dev/null)
+CURL_META=$(curl -sSL --max-time 8 -o "$TMP_BODY" -w '%{http_code}\t%{url_effective}\t%{content_type}' "$URL" 2>/dev/null)
 CURL_RC=$?
 HTTP_CODE=$(printf '%s' "$CURL_META" | cut -f1)
 
@@ -25,7 +25,7 @@ HTTP_CODE=$(printf '%s' "$CURL_META" | cut -f1)
 if [ "$HTTP_CODE" = "403" ] || [ "$HTTP_CODE" = "503" ] || [ "$HTTP_CODE" = "429" ] || [ -z "$HTTP_CODE" ]; then
   CURL_META=$(curl -sSL --max-time 8 -o "$TMP_BODY" \
     -A 'Mozilla/5.0 (compatible; PreflightBot/1.0; +https://hermes-agent.ai)' \
-    -w '%{http_code}\\t%{url_effective}\\t%{content_type}' "$URL" 2>/dev/null)
+    -w '%{http_code}\t%{url_effective}\t%{content_type}' "$URL" 2>/dev/null)
   CURL_RC=$?
   HTTP_CODE=$(printf '%s' "$CURL_META" | cut -f1)
 fi

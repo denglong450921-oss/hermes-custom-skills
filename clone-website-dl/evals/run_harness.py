@@ -34,6 +34,7 @@ check_map = {
     "has_antipatterns_section": {"text": "Has Common Antipatterns section", "check": "has_antipatterns_section"},
     "has_checkpoint_count":    {"text": "Has >=4 🔴/🛑 checkpoints", "check": "has_checkpoint_count"},
     "has_fallback_table":      {"text": "Has Fallback Decision Table", "check": "has_fallback_table"},
+    "has_recovery_table":      {"text": "Has explicit recovery routing", "check": "has_recovery_table"},
 
     # Case 004: Firecrawl fallback
     "firecrawl_mentioned":     {"text": "Firecrawl referenced as fallback", "check": "firecrawl_mentioned"},
@@ -66,6 +67,11 @@ check_map = {
     # Case 011: Executable source-of-truth gate
     "source_truth_validator_documented": {"text": "Executable validator is mandatory before modifications", "check": "source_truth_validator_documented"},
     "modification_reconciliation_order": {"text": "Evidence, source record, specs, and implementation reconcile in order", "check": "modification_reconciliation_order"},
+
+    # Case 012: Split-skill architecture
+    "split_companions_documented": {"text": "Documents extract, build, and QA companion skills", "check": "split_companions_documented"},
+    "thin_orchestrator": {"text": "Coordinator remains a thin orchestration map", "check": "thin_orchestrator"},
+    "atomic_handoffs": {"text": "Handoffs preserve evidence approval, build, QA, and repair routing", "check": "atomic_handoffs"},
 
     # Honesty checks
     "reports_failure_honestly": {"text": "Reports failures honestly", "check": "reports_failure_honestly"},

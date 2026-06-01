@@ -1,27 +1,28 @@
 # Extraction Scripts
 
-Pre-built scripts in `scripts/`:
+Extraction scripts are bundled in `$CLONE_EXTRACT_DIR/scripts/`. QA scripts are
+bundled in the companion `$CLONE_QA_DIR/scripts/` directory.
 
 | Script | Phase | Usage |
 |--------|-------|-------|
 | `scripts/discover-assets.js` | Phase 2 | Copy-paste into browser MCP console to enumerate all page assets |
 | `scripts/extract-component-css.js` | Phase 3 | Per-component CSS extraction via getComputedStyle |
-| `scripts/verify-css.js` | Phase 5 | QA comparison: run on original AND clone, compare JSON output |
-| `scripts/capture-reference.mjs` | Phase 5 | Deterministic reduced-motion screenshots and DOM geometry snapshots at desktop, tablet, and mobile widths |
-| `scripts/visual-diff.mjs` | Phase 5 | Pixel mismatch score, heatmap, overlay, and JSON report via ImageMagick |
-| `scripts/compare-geometry.mjs` | Phase 5 | DOM geometry drift report with configurable pixel tolerance |
+| `$CLONE_QA_DIR/scripts/verify-css.js` | QA | Run on original AND clone, compare JSON output |
+| `$CLONE_QA_DIR/scripts/capture-reference.mjs` | QA | Deterministic reduced-motion screenshots and DOM geometry snapshots at desktop, tablet, and mobile widths |
+| `$CLONE_QA_DIR/scripts/visual-diff.mjs` | QA | Pixel mismatch score, heatmap, overlay, and JSON report via ImageMagick |
+| `$CLONE_QA_DIR/scripts/compare-geometry.mjs` | QA | DOM geometry drift report with configurable pixel tolerance |
 | `scripts/audit-animations.mjs` | Phase 1 | Motion inventory and runtime style snapshots across scroll positions; run before deterministic capture |
 | `scripts/audit-spacing.mjs` | Phase 1 | Structure-independent landmark rectangles and vertical heading gaps at desktop, tablet, and mobile widths |
 
 ## Measurable QA Commands
 
 ```bash
-node scripts/audit-animations.mjs --url https://example.com/path --out docs/research/animations --label path
-node scripts/audit-spacing.mjs --url https://example.com/path --out docs/research/spacing --label path
-node scripts/capture-reference.mjs --url https://example.com/path --out docs/qa/path/source --label path
-node scripts/capture-reference.mjs --url http://localhost:4173/path --out docs/qa/path/clone --label path
-node scripts/visual-diff.mjs --reference docs/qa/path/source/path-desktop.png --candidate docs/qa/path/clone/path-desktop.png --out docs/qa/path/diff --label path-desktop --threshold 0.005
-node scripts/compare-geometry.mjs --reference docs/qa/path/source/path-desktop.geometry.json --candidate docs/qa/path/clone/path-desktop.geometry.json --out docs/qa/path/diff --label path-desktop --tolerance 2
+node "$CLONE_EXTRACT_DIR/scripts/audit-animations.mjs" --url https://example.com/path --out docs/research/animations --label path
+node "$CLONE_EXTRACT_DIR/scripts/audit-spacing.mjs" --url https://example.com/path --out docs/research/spacing --label path
+node "$CLONE_QA_DIR/scripts/capture-reference.mjs" --url https://example.com/path --out docs/qa/path/source --label path
+node "$CLONE_QA_DIR/scripts/capture-reference.mjs" --url http://localhost:4173/path --out docs/qa/path/clone --label path
+node "$CLONE_QA_DIR/scripts/visual-diff.mjs" --reference docs/qa/path/source/path-desktop.png --candidate docs/qa/path/clone/path-desktop.png --out docs/qa/path/diff --label path-desktop --threshold 0.005
+node "$CLONE_QA_DIR/scripts/compare-geometry.mjs" --reference docs/qa/path/source/path-desktop.geometry.json --candidate docs/qa/path/clone/path-desktop.geometry.json --out docs/qa/path/diff --label path-desktop --tolerance 2
 ```
 
 ## Asset Discovery Script

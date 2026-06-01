@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-SKILL_DIR=$(cd "$(dirname "$0")/.." && pwd)
+SKILL_DIR=$(cd "$(dirname "$0")/../../clone-website-extract-dl" && pwd)
 FIXTURE_DIR=$(mktemp -d)
 PORT=${PORT:-18765}
 SERVER_PID=

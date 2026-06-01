@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-SKILL_DIR=$(cd "$(dirname "$0")/.." && pwd)
+SKILL_DIR=$(cd "$(dirname "$0")/../../clone-website-extract-dl" && pwd)
 TMP_DIR=$(mktemp -d)
 trap 'kill "${SERVER_PID:-}" 2>/dev/null || true; wait "${SERVER_PID:-}" 2>/dev/null || true; rm -rf "$TMP_DIR"' EXIT
 
