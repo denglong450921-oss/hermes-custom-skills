@@ -186,7 +186,30 @@ Do not preserve an outdated first draft merely because it was written first. Pre
 
 ## Phase 1: Reconnaissance (Extraction Agent)
 
-You run this phase yourself.
+You run this phase yourself. **Preferred method:** Use the bundled Playwright extraction script:
+
+```bash
+CLONE_SKILL_DIR=$(find "$HOME" -path '*/clone-website-dl/SKILL.md' -print -quit | xargs dirname)
+python3 "$CLONE_SKILL_DIR/scripts/extract-playwright.py" "$URL" "docs/research/$(echo $URL | sed 's|https://||' | sed 's|/|-|g')"
+```
+
+This single command performs the entire Phase 1 extraction automatically:
+- Desktop (1440px) + mobile (390px) full-page screenshots
+- Page structure (section boundaries, classes, text)
+- Design tokens (CSS variables, fonts, colors, computed styles)
+- Key element CSS (headings, body, CTA buttons)
+- Image/asset manifest with lazy-image resolution
+- Section HTML content
+- Nav/header detection (fixed/sticky/static)
+- Dark mode detection
+- Lazy image resolution (scrolls to bottom, waits, recaptures)
+
+**Output:** All files are written to `docs/design-references/*.json` and `docs/design-references/*.png`. These feed directly into the Source of Truth document.
+
+**Fallback methods** (when Playwright is unavailable):
+- Use Camofox interactive browser (if running at localhost:9377)
+- Use the manual extraction patterns in `references/playwright-extraction.md`
+- Use curl-only extraction for SSR/static sites (see `references/firecrawl-mode.md`)
 
 ### Determine Scope
 - **Full clone:** Run all 5 phases. Default.
@@ -569,6 +592,7 @@ Save the visual as `docs/component-graph.md` for the user to inspect.
 | Source-of-truth hard gate | `scripts/validate-source-of-truth.mjs` |
 | Measurable convergence harness | `references/measurable-convergence.md` |
 | Preflight audit script | `scripts/preflight-audit.sh` |
+| Playwright full extraction | `scripts/extract-playwright.py` |
 | Inline SVG extractor | `scripts/extract-svgs.js` |
 | Iterative 50-round QA | `references/iterative-qa.py` |
 
