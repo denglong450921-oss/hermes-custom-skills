@@ -302,6 +302,15 @@ Run `node "$CLONE_SKILL_DIR/scripts/validate-source-of-truth.mjs" docs/research/
 
 **🔴 CHECKPOINT:** For a full clone, review the per-page `SOURCE_OF_TRUTH.md`, `PAGE_TOPOLOGY.md`, and `BEHAVIORS.md` with the user: "Ready to build foundation?" For a partial clone, review the target screenshots, focused `SOURCE_OF_TRUTH.md`, and `BEHAVIORS.md`; `PAGE_TOPOLOGY.md` is intentionally skipped.
 
+### ⚠️ Phase Failure Modes (Phase 1)
+| Trigger | First-line fix | Fallback |
+|---------|---------------|----------|
+| Playwright extraction fails (timeout/network) | Retry with `wait_until="domcontentloaded"` and `timeout=60000` | Use curl-only extraction for SSR content; abort with user notification for SPAs |
+| Screenshot capture fails | Check viewport size is valid; reduce to `full_page=false` | Note "screenshot unavailable" in source of truth; continue with DOM extraction |
+| All extraction tools unavailable | Check for `python3 -c "import playwright"` and `curl` | Use `web_extract` MCP or Firecrawl if available; ask user for live screenshots |
+| Lazy images don't resolve after scroll | Add `page.evaluate("window.scrollTo(0, document.body.scrollHeight)")` with 3s wait | Record `data-src` values as fallback URLs in asset manifest |
+| Dark mode cannot be toggled | Check for `prefers-color-scheme` media query or `.dark` class toggling | Default to light mode only; document dark mode as "not captured" in source of truth |
+
 ## Phase 2: Foundation Build
 
 Sequential. Do it yourself — it touches many files:
@@ -323,6 +332,15 @@ Sequential. Do it yourself — it touches many files:
    - **Tailwind variable mapping:** If target uses `--tw-*` variables (Tailwind), compare Tailwind version. If both clone and target use Tailwind, many values can be mapped directly: `--tw-*` → Tailwind utilities, avoiding px-by-px rebuild for standard spacing/colors.
 3. **Create TypeScript interfaces** in `src/types/`
 4. **Extract SVG icons** — deduplicate and save as React components in `src/components/icons.tsx`
+
+### ⚠️ Phase Failure Modes (Phase 2)
+| Trigger | First-line fix | Fallback |
+|---------|---------------|----------|
+| `npm run build` fails after setup | Check for `postcss.config.mjs` (Tailwind v4 needs it). Run `npx next build --no-lint` for narrowed error | Create postcss.config.mjs if missing; as last resort remove Tailwind classes and use plain CSS |
+| Google Fonts `<link>` fails in dev | Switch to `next/font/google` import | Self-host the font files in `public/fonts/` |
+| CSS variable extraction yields 0 results | Use Playwright `page.evaluate(getComputedStyle(document.documentElement))` instead of grep | Fall back to manually inspecting the browser DevTools styles panel |
+| Asset download (CDN) fails | Retry with `User-Agent: Mozilla/5.0` header | Replace with placeholder SVG; document as "CDN asset unavailable" |
+
 5. **Download global assets** — write `scripts/download-assets.mjs` (batched parallel, 4 at a time)
 6. **Extraction scripts:** Pre-built at `scripts/discover-assets.js`, `scripts/extract-component-css.js`, `scripts/verify-css.js`
 7. **Verify:** `npm run build` passes
@@ -412,6 +430,15 @@ Based on complexity:
 
 **Don't wait.** Dispatch builders and immediately move to extracting the next section.
 
+### ⚠️ Phase Failure Modes (Phase 3)
+| Trigger | First-line fix | Fallback |
+|---------|---------------|----------|
+| Builder agent returns broken component (tsc fails) | Read the output file; fix type errors directly with patch() | Re-dispatch with stricter prompt: include exact TypeScript interface and expected prop structure |
+| Builder produces wrong layout pattern | Do NOT patch — the pattern mismatch is structural. Rebuild from scratch with correct pattern spec | Write the component directly instead of dispatching |
+| `delegate_task` concurrency limit hit | Queue remaining builders; dispatch in next batch when slots free | Build sequentially instead |
+| Spec file has contradicting values | Cross-reference with page `SOURCE_OF_TRUTH.md` | Re-extract the section with Playwright and update both documents |
+| Builder paraphrases non-English text | Patch with exact text from extracted source | Append "Copy text EXACTLY — do not paraphrase" to future builder prompts |
+
 ### Step 4: Integrate
 As builders complete: integrate the component → verify build → fix type errors. Merge worktrees only when the environment actually provides them.
 
@@ -432,9 +459,16 @@ After all sections built and merged:
 - Connect real content to component props
 - Implement page-level behaviors (scroll snap, IntersectionObserver, smooth scroll)
 - **Fix layout.tsx locale** — update `<html lang="XX">` to match original
-- Verify: `npm run build` passes
+| Verify: `npm run build` passes
 
 **🔴 CHECKPOINT:** Start dev server, verify every section's text matches the original. Check for stale content from a previous clone target.
+
+### ⚠️ Phase Failure Modes (Phase 4)
+| Trigger | First-line fix | Fallback |
+|---------|---------------|----------|
+| Build fails after wiring components | Check for missing imports, unused variables, or conflicting CSS classes | Temporarily comment out sections in page.tsx to isolate the faulty component |
+| Sections overlap or have wrong z-index | Check `position: relative` on parent containers; ensure sticky elements have explicit `top` value | Add `position: relative; z-index: 1` to overlapping section wrappers |
+| Dev server shows stale content from previous clone | Run `rm -rf .next` and rebuild | Check page.tsx for leftover component references |
 
 ## Phase 5: Visual QA Diff
 
@@ -443,6 +477,14 @@ After all sections built and merged:
 3. For each discrepancy: check spec → re-extract → fix component
 4. Test all interactive behaviors (scroll, click, hover)
 5. Audit visual occupancy: flag large blank regions, confirm every reachable media asset is displayed, and confirm every unavailable asset has a documented booth fallback
+
+### ⚠️ Phase Failure Modes (Phase 5)
+| Trigger | First-line fix | Fallback |
+|---------|---------------|----------|
+| Visual diff shows >5% mismatch | Check if dynamic content (animations, carousels) is causing false positives; add explicit mask regions | Run QA on static sections only; document dynamic regions as masked |
+| Original site has changed since extraction | Re-extract the section that differs | Update source of truth with new evidence; rebuild affected components |
+| Screenshot comparison tools unavailable | Use manual side-by-side comparison via browser tabs | Run `python3 "$CLONE_SKILL_DIR/scripts/verify-css.js"` for CSS-level verification instead |
+| 50-round QA shows mixed (not deterministic) failures | Increase `wait_for_timeout` in iterative QA script; add scroll-then-wait loop before checks | Flag as "timing-sensitive — manual review needed" |
 
 ### Iterative Regression QA
 
