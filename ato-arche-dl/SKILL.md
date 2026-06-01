@@ -1,7 +1,8 @@
 ---
-name: atomic-orchestration
+name: ato-arche-dl
 description: >
-  Use when designing or refactoring multi-step agent workflows. This skill teaches the "atomic + orchestration" pattern: break complex workflows into small, single-responsibility atomic skills, then chain them with a lightweight orchestration skill that has no business logic — only a step sequence. Trigger on: "设计工作流", "编排skill", "原子化", "拆skill", "multi-step workflow", "orchestrate", "workflow design", "pipeline", "chain skills", "workflow refactor", "reusable workflow", "将工作流拆分为skill". Prefer this skill whenever the user describes a multi-step data pipeline, content processing pipeline, or any task that involves 3+ sequential operations that could be independently maintained.
+  Use when designing or refactoring multi-step agent workflows. This skill teaches the "atomic + orchestration" pattern: break complex workflows into small, single-responsibility atomic skills, then chain them with a lightweight orchestration skill that has no business logic — only a step sequence. Trigger on: "设计工作流", "编排skill", "原子化", "拆skill", "multi-step workflow", "orchestrate", "workflow design", "pipeline", "chain skills", "workflow refactor", "reusable workflow", "将工作流拆分为skill", "工作流设计原则", "skill拆分方案". Prefer this skill whenever the user describes a multi-step data pipeline, content processing pipeline, or any task that involves 3+ sequential operations that could be independently maintained.
+  Also use when discussing how to organize a complex workflow, decompose a monolithic skill, or evaluate cross-platform reuse of existing workflow capabilities. This is a design-pattern skill: it adds value through templates, consistency, and completeness guarantees rather than through novel logic.
 compatibility:
   - hermes-agent
 ---
