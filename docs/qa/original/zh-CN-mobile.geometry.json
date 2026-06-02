@@ -1,0 +1,3335 @@
+{
+  "url": "https://www.ecwid.com/zh-CN/",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "bodyHeight": 5726,
+  "elements": [
+    {
+      "index": 0,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "",
+      "rect": {
+        "x": 20,
+        "y": 22,
+        "width": 81,
+        "height": 22
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(1, 109, 210)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "600",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 1,
+      "tag": "svg",
+      "id": "",
+      "className": "",
+      "text": "",
+      "rect": {
+        "x": 20,
+        "y": 15,
+        "width": 81,
+        "height": 24
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(1, 109, 210)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "600",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 2,
+      "tag": "a",
+      "id": "",
+      "className": "btn btn--small btn--nowrap cta-signup",
+      "text": "开始",
+      "rect": {
+        "x": 186,
+        "y": 11,
+        "width": 144,
+        "height": 30
+      },
+      "style": {
+        "display": "inline-block",
+        "position": "static",
+        "color": "rgb(255, 255, 255)",
+        "backgroundColor": "rgb(0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "600",
+        "lineHeight": "14px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 3,
+      "tag": "a",
+      "id": "",
+      "className": "btn btn--w100 cta-signup btn--nowrap",
+      "text": "开始",
+      "rect": {
+        "x": 422,
+        "y": 247,
+        "width": 312,
+        "height": 55
+      },
+      "style": {
+        "display": "inline-block",
+        "position": "static",
+        "color": "rgb(255, 255, 255)",
+        "backgroundColor": "rgb(0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "600",
+        "lineHeight": "24px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 4,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "登录",
+      "rect": {
+        "x": 560,
+        "y": 321,
+        "width": 36,
+        "height": 22
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(1, 109, 210)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "600",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 5,
+      "tag": "section",
+      "id": "",
+      "className": "calypso-block calypso-block--EW19-tile-1",
+      "text": "var imgPath = CDN + \"/wp-content/themes/ecwid/images/hpc/\"; function get_lang_prefix() { return 'zh-CN'; } function get_",
+      "rect": {
+        "x": 0,
+        "y": 56,
+        "width": 390,
+        "height": 1183
+      },
+      "style": {
+        "display": "block",
+        "position": "relative",
+        "color": "rgb(10, 12, 15)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 6,
+      "tag": "h1",
+      "id": "",
+      "className": "h1--EW19 hpc-animate hpc-animate--from-left hpc-animate--delay-1 hpc-animate--animated",
+      "text": "开始销售 免费在线",
+      "rect": {
+        "x": 20,
+        "y": 200,
+        "width": 350,
+        "height": 115
+      },
+      "style": {
+        "display": "block",
+        "position": "static",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "48px",
+        "fontWeight": "700",
+        "lineHeight": "57.6px",
+        "opacity": "1",
+        "transform": "matrix(1, 0, 0, 1, 0, 0)"
+      }
+    },
+    {
+      "index": 7,
+      "tag": "p",
+      "id": "",
+      "className": "hpc-animate hpc-animate--from-left hpc-animate--delay-2 calypso-block__text hpc-animate--animated",
+      "text": "没有技术或设计技能？没问题！轻松打造一个既美观又易用的在线商店——并享受零交易手续费。",
+      "rect": {
+        "x": 20,
+        "y": 339,
+        "width": 350,
+        "height": 86
+      },
+      "style": {
+        "display": "block",
+        "position": "static",
+        "color": "rgb(10, 12, 15)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "matrix(1, 0, 0, 1, 0, 0)"
+      }
+    },
+    {
+      "index": 8,
+      "tag": "a",
+      "id": "",
+      "className": "btn btn--large btn--hpc-shadow cta-signup",
+      "text": "创建商店",
+      "rect": {
+        "x": 20,
+        "y": 450,
+        "width": 350,
+        "height": 55
+      },
+      "style": {
+        "display": "inline-block",
+        "position": "relative",
+        "color": "rgb(255, 255, 255)",
+        "backgroundColor": "rgb(0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "600",
+        "lineHeight": "24px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 9,
+      "tag": "img",
+      "id": "hpc_mobile_single_slide",
+      "className": "hpc-mobile-pics__image hpc-mobile-pics__image--mobile tablet-hidden",
+      "text": "",
+      "rect": {
+        "x": 4,
+        "y": 553,
+        "width": 600,
+        "height": 398
+      },
+      "style": {
+        "display": "inline",
+        "position": "relative",
+        "color": "rgb(10, 12, 15)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 10,
+      "tag": "section",
+      "id": "",
+      "className": "calypso-block calypso-block--EW19 calypso-block--b0",
+      "text": "随时随地销售设置一次 Ecwid 店铺即可轻松地在网站、社交媒体、Amazon 等购物平台进行同步和销售，也支持面对面销售方式。 您可以先尝试一项，或全都试一试。 了解详情1234",
+      "rect": {
+        "x": 0,
+        "y": 1289,
+        "width": 390,
+        "height": 627
+      },
+      "style": {
+        "display": "block",
+        "position": "relative",
+        "color": "rgb(10, 12, 15)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 11,
+      "tag": "h2",
+      "id": "",
+      "className": "calypso-block__text ",
+      "text": "随时随地销售",
+      "rect": {
+        "x": 20,
+        "y": 1369,
+        "width": 350,
+        "height": 48
+      },
+      "style": {
+        "display": "block",
+        "position": "static",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "40px",
+        "fontWeight": "700",
+        "lineHeight": "48px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 12,
+      "tag": "p",
+      "id": "",
+      "className": "",
+      "text": "设置一次 Ecwid 店铺即可轻松地在网站、社交媒体、Amazon 等购物平台进行同步和销售，也支持面对面销售方式。 您可以先尝试一项，或全都试一试。",
+      "rect": {
+        "x": 20,
+        "y": 1441,
+        "width": 350,
+        "height": 115
+      },
+      "style": {
+        "display": "block",
+        "position": "static",
+        "color": "rgb(10, 12, 15)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 13,
+      "tag": "a",
+      "id": "",
+      "className": "chevron-right chevron-right--EW19 chevron-right--EW19-small",
+      "text": "了解详情",
+      "rect": {
+        "x": 20,
+        "y": 1583,
+        "width": 72,
+        "height": 27
+      },
+      "style": {
+        "display": "inline-block",
+        "position": "relative",
+        "color": "rgb(10, 12, 15)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "600",
+        "lineHeight": "24px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 14,
+      "tag": "img",
+      "id": "",
+      "className": "",
+      "text": "",
+      "rect": {
+        "x": -165,
+        "y": 1642,
+        "width": 240,
+        "height": 240
+      },
+      "style": {
+        "display": "block",
+        "position": "static",
+        "color": "rgb(10, 12, 15)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 15,
+      "tag": "img",
+      "id": "",
+      "className": "",
+      "text": "",
+      "rect": {
+        "x": 75,
+        "y": 1642,
+        "width": 240,
+        "height": 240
+      },
+      "style": {
+        "display": "block",
+        "position": "static",
+        "color": "rgb(10, 12, 15)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 16,
+      "tag": "img",
+      "id": "",
+      "className": "",
+      "text": "",
+      "rect": {
+        "x": 315,
+        "y": 1642,
+        "width": 240,
+        "height": 240
+      },
+      "style": {
+        "display": "block",
+        "position": "static",
+        "color": "rgb(10, 12, 15)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 17,
+      "tag": "img",
+      "id": "",
+      "className": "",
+      "text": "",
+      "rect": {
+        "x": 555,
+        "y": 1642,
+        "width": 240,
+        "height": 240
+      },
+      "style": {
+        "display": "block",
+        "position": "static",
+        "color": "rgb(10, 12, 15)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 18,
+      "tag": "img",
+      "id": "",
+      "className": "",
+      "text": "",
+      "rect": {
+        "x": 795,
+        "y": 1642,
+        "width": 240,
+        "height": 240
+      },
+      "style": {
+        "display": "block",
+        "position": "static",
+        "color": "rgb(10, 12, 15)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 19,
+      "tag": "img",
+      "id": "",
+      "className": "",
+      "text": "",
+      "rect": {
+        "x": 1035,
+        "y": 1642,
+        "width": 240,
+        "height": 240
+      },
+      "style": {
+        "display": "block",
+        "position": "static",
+        "color": "rgb(10, 12, 15)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 20,
+      "tag": "img",
+      "id": "",
+      "className": "",
+      "text": "",
+      "rect": {
+        "x": 1275,
+        "y": 1642,
+        "width": 240,
+        "height": 240
+      },
+      "style": {
+        "display": "block",
+        "position": "static",
+        "color": "rgb(10, 12, 15)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 21,
+      "tag": "img",
+      "id": "",
+      "className": "",
+      "text": "",
+      "rect": {
+        "x": 1515,
+        "y": 1642,
+        "width": 240,
+        "height": 240
+      },
+      "style": {
+        "display": "block",
+        "position": "static",
+        "color": "rgb(10, 12, 15)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 22,
+      "tag": "img",
+      "id": "",
+      "className": "",
+      "text": "",
+      "rect": {
+        "x": 1755,
+        "y": 1642,
+        "width": 240,
+        "height": 240
+      },
+      "style": {
+        "display": "block",
+        "position": "static",
+        "color": "rgb(10, 12, 15)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 23,
+      "tag": "button",
+      "id": "slick-slide-control10",
+      "className": "",
+      "text": "1",
+      "rect": {
+        "x": 154,
+        "y": 1891,
+        "width": 10,
+        "height": 10
+      },
+      "style": {
+        "display": "block",
+        "position": "relative",
+        "color": "rgba(0, 0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Arial",
+        "fontSize": "0px",
+        "fontWeight": "400",
+        "lineHeight": "0px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 24,
+      "tag": "button",
+      "id": "slick-slide-control11",
+      "className": "",
+      "text": "2",
+      "rect": {
+        "x": 178,
+        "y": 1891,
+        "width": 10,
+        "height": 10
+      },
+      "style": {
+        "display": "block",
+        "position": "relative",
+        "color": "rgba(0, 0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Arial",
+        "fontSize": "0px",
+        "fontWeight": "400",
+        "lineHeight": "0px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 25,
+      "tag": "button",
+      "id": "slick-slide-control12",
+      "className": "",
+      "text": "3",
+      "rect": {
+        "x": 202,
+        "y": 1891,
+        "width": 10,
+        "height": 10
+      },
+      "style": {
+        "display": "block",
+        "position": "relative",
+        "color": "rgba(0, 0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Arial",
+        "fontSize": "0px",
+        "fontWeight": "400",
+        "lineHeight": "0px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 26,
+      "tag": "button",
+      "id": "slick-slide-control13",
+      "className": "",
+      "text": "4",
+      "rect": {
+        "x": 226,
+        "y": 1891,
+        "width": 10,
+        "height": 10
+      },
+      "style": {
+        "display": "block",
+        "position": "relative",
+        "color": "rgba(0, 0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Arial",
+        "fontSize": "0px",
+        "fontWeight": "400",
+        "lineHeight": "0px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 27,
+      "tag": "section",
+      "id": "",
+      "className": "calypso-block calypso-block--EW19 calypso-block--b0",
+      "text": "更快地成长您是否需要像 Google 和 Facebook 广告这样简单易用的营销工具来让您的企业快速成长？您找到了。 了解详情12",
+      "rect": {
+        "x": 0,
+        "y": 1967,
+        "width": 390,
+        "height": 598
+      },
+      "style": {
+        "display": "block",
+        "position": "relative",
+        "color": "rgb(10, 12, 15)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 28,
+      "tag": "h2",
+      "id": "",
+      "className": "calypso-block__text ",
+      "text": "更快地成长",
+      "rect": {
+        "x": 20,
+        "y": 2047,
+        "width": 350,
+        "height": 48
+      },
+      "style": {
+        "display": "block",
+        "position": "static",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "40px",
+        "fontWeight": "700",
+        "lineHeight": "48px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 29,
+      "tag": "p",
+      "id": "",
+      "className": "",
+      "text": "您是否需要像 Google 和 Facebook 广告这样简单易用的营销工具来让您的企业快速成长？您找到了。",
+      "rect": {
+        "x": 20,
+        "y": 2119,
+        "width": 350,
+        "height": 86
+      },
+      "style": {
+        "display": "block",
+        "position": "static",
+        "color": "rgb(10, 12, 15)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 30,
+      "tag": "a",
+      "id": "",
+      "className": "chevron-right chevron-right--EW19 chevron-right--EW19-small",
+      "text": "了解详情",
+      "rect": {
+        "x": 20,
+        "y": 2231,
+        "width": 72,
+        "height": 27
+      },
+      "style": {
+        "display": "inline-block",
+        "position": "relative",
+        "color": "rgb(10, 12, 15)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "600",
+        "lineHeight": "24px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 31,
+      "tag": "img",
+      "id": "",
+      "className": "",
+      "text": "",
+      "rect": {
+        "x": -165,
+        "y": 2290,
+        "width": 240,
+        "height": 240
+      },
+      "style": {
+        "display": "block",
+        "position": "static",
+        "color": "rgb(10, 12, 15)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 32,
+      "tag": "img",
+      "id": "",
+      "className": "",
+      "text": "",
+      "rect": {
+        "x": 75,
+        "y": 2290,
+        "width": 240,
+        "height": 240
+      },
+      "style": {
+        "display": "block",
+        "position": "static",
+        "color": "rgb(10, 12, 15)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 33,
+      "tag": "img",
+      "id": "",
+      "className": "",
+      "text": "",
+      "rect": {
+        "x": 315,
+        "y": 2290,
+        "width": 240,
+        "height": 240
+      },
+      "style": {
+        "display": "block",
+        "position": "static",
+        "color": "rgb(10, 12, 15)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 34,
+      "tag": "img",
+      "id": "",
+      "className": "",
+      "text": "",
+      "rect": {
+        "x": 555,
+        "y": 2290,
+        "width": 240,
+        "height": 240
+      },
+      "style": {
+        "display": "block",
+        "position": "static",
+        "color": "rgb(10, 12, 15)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 35,
+      "tag": "img",
+      "id": "",
+      "className": "",
+      "text": "",
+      "rect": {
+        "x": 795,
+        "y": 2290,
+        "width": 240,
+        "height": 240
+      },
+      "style": {
+        "display": "block",
+        "position": "static",
+        "color": "rgb(10, 12, 15)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 36,
+      "tag": "button",
+      "id": "slick-slide-control20",
+      "className": "",
+      "text": "1",
+      "rect": {
+        "x": 178,
+        "y": 2539,
+        "width": 10,
+        "height": 10
+      },
+      "style": {
+        "display": "block",
+        "position": "relative",
+        "color": "rgba(0, 0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Arial",
+        "fontSize": "0px",
+        "fontWeight": "400",
+        "lineHeight": "0px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 37,
+      "tag": "button",
+      "id": "slick-slide-control21",
+      "className": "",
+      "text": "2",
+      "rect": {
+        "x": 202,
+        "y": 2539,
+        "width": 10,
+        "height": 10
+      },
+      "style": {
+        "display": "block",
+        "position": "relative",
+        "color": "rgba(0, 0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Arial",
+        "fontSize": "0px",
+        "fontWeight": "400",
+        "lineHeight": "0px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 38,
+      "tag": "section",
+      "id": "",
+      "className": "calypso-block calypso-block--EW19 calypso-block--b0",
+      "text": "管理简单通过一个包含集中式存货、订单管理和定价等功能的信息中心管理一切事务。2023 年实现速度最快的电子商务平台。 了解详情",
+      "rect": {
+        "x": 0,
+        "y": 2615,
+        "width": 390,
+        "height": 631
+      },
+      "style": {
+        "display": "block",
+        "position": "relative",
+        "color": "rgb(10, 12, 15)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 39,
+      "tag": "h2",
+      "id": "",
+      "className": "calypso-block__text ",
+      "text": "管理简单",
+      "rect": {
+        "x": 20,
+        "y": 2695,
+        "width": 350,
+        "height": 48
+      },
+      "style": {
+        "display": "block",
+        "position": "static",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "40px",
+        "fontWeight": "700",
+        "lineHeight": "48px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 40,
+      "tag": "p",
+      "id": "",
+      "className": "",
+      "text": "通过一个包含集中式存货、订单管理和定价等功能的信息中心管理一切事务。",
+      "rect": {
+        "x": 20,
+        "y": 2767,
+        "width": 350,
+        "height": 58
+      },
+      "style": {
+        "display": "block",
+        "position": "static",
+        "color": "rgb(10, 12, 15)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 41,
+      "tag": "svg",
+      "id": "",
+      "className": "",
+      "text": "",
+      "rect": {
+        "x": 20,
+        "y": 2849,
+        "width": 103,
+        "height": 40
+      },
+      "style": {
+        "display": "block",
+        "position": "static",
+        "color": "rgb(10, 12, 15)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 42,
+      "tag": "a",
+      "id": "",
+      "className": "chevron-right chevron-right--EW19 chevron-right--EW19-small",
+      "text": "了解详情",
+      "rect": {
+        "x": 20,
+        "y": 2947,
+        "width": 72,
+        "height": 27
+      },
+      "style": {
+        "display": "inline-block",
+        "position": "relative",
+        "color": "rgb(10, 12, 15)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "600",
+        "lineHeight": "24px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 43,
+      "tag": "img",
+      "id": "",
+      "className": "",
+      "text": "",
+      "rect": {
+        "x": 75,
+        "y": 3006,
+        "width": 240,
+        "height": 240
+      },
+      "style": {
+        "display": "block",
+        "position": "static",
+        "color": "rgb(10, 12, 15)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 44,
+      "tag": "section",
+      "id": "",
+      "className": "calypso-block calypso-block--EW19",
+      "text": "Hands together实时支持您可以根据需要随时获得专业的技术支持。了解详情 Ecwid app storeEcwid 应用商店通过 Ecwid 合作伙伴提供的新工具和应用发展您的在线店铺。了解详情 Mobile apps在移动设备上",
+      "rect": {
+        "x": 0,
+        "y": 3246,
+        "width": 390,
+        "height": 1234
+      },
+      "style": {
+        "display": "block",
+        "position": "relative",
+        "color": "rgb(10, 12, 15)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 45,
+      "tag": "a",
+      "id": "",
+      "className": "hpc-cart",
+      "text": "Hands together实时支持您可以根据需要随时获得专业的技术支持。了解详情",
+      "rect": {
+        "x": 20,
+        "y": 3310,
+        "width": 350,
+        "height": 329
+      },
+      "style": {
+        "display": "block",
+        "position": "relative",
+        "color": "rgb(1, 109, 210)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "600",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 46,
+      "tag": "svg",
+      "id": "",
+      "className": "",
+      "text": "Hands together",
+      "rect": {
+        "x": 52,
+        "y": 3342,
+        "width": 97,
+        "height": 94
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(1, 109, 210)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "600",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 47,
+      "tag": "p",
+      "id": "",
+      "className": "calypso-block__text ",
+      "text": "您可以根据需要随时获得专业的技术支持。",
+      "rect": {
+        "x": 52,
+        "y": 3504,
+        "width": 286,
+        "height": 58
+      },
+      "style": {
+        "display": "block",
+        "position": "static",
+        "color": "rgb(10, 12, 15)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 48,
+      "tag": "p",
+      "id": "",
+      "className": "hpc-cart__learn-more ",
+      "text": "了解详情",
+      "rect": {
+        "x": 52,
+        "y": 3577,
+        "width": 286,
+        "height": 29
+      },
+      "style": {
+        "display": "block",
+        "position": "static",
+        "color": "rgb(10, 12, 15)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 49,
+      "tag": "a",
+      "id": "",
+      "className": "hpc-cart",
+      "text": "Ecwid app storeEcwid 应用商店通过 Ecwid 合作伙伴提供的新工具和应用发展您的在线店铺。了解详情",
+      "rect": {
+        "x": 20,
+        "y": 3678,
+        "width": 350,
+        "height": 329
+      },
+      "style": {
+        "display": "block",
+        "position": "relative",
+        "color": "rgb(1, 109, 210)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "600",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 50,
+      "tag": "svg",
+      "id": "",
+      "className": "",
+      "text": "Ecwid app store",
+      "rect": {
+        "x": 52,
+        "y": 3710,
+        "width": 95,
+        "height": 94
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(1, 109, 210)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "600",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 51,
+      "tag": "p",
+      "id": "",
+      "className": "calypso-block__text ",
+      "text": "通过 Ecwid 合作伙伴提供的新工具和应用发展您的在线店铺。",
+      "rect": {
+        "x": 52,
+        "y": 3872,
+        "width": 286,
+        "height": 58
+      },
+      "style": {
+        "display": "block",
+        "position": "static",
+        "color": "rgb(10, 12, 15)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 52,
+      "tag": "p",
+      "id": "",
+      "className": "hpc-cart__learn-more ",
+      "text": "了解详情",
+      "rect": {
+        "x": 52,
+        "y": 3946,
+        "width": 286,
+        "height": 29
+      },
+      "style": {
+        "display": "block",
+        "position": "static",
+        "color": "rgb(10, 12, 15)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 53,
+      "tag": "a",
+      "id": "",
+      "className": "hpc-cart",
+      "text": "Mobile apps在移动设备上管理随时随地使用 Ecwid 移动应用管理您的业务。了解详情",
+      "rect": {
+        "x": 20,
+        "y": 4047,
+        "width": 350,
+        "height": 329
+      },
+      "style": {
+        "display": "block",
+        "position": "relative",
+        "color": "rgb(1, 109, 210)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "600",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 54,
+      "tag": "svg",
+      "id": "",
+      "className": "",
+      "text": "Mobile apps",
+      "rect": {
+        "x": 52,
+        "y": 4079,
+        "width": 84,
+        "height": 94
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(1, 109, 210)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "600",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 55,
+      "tag": "p",
+      "id": "",
+      "className": "calypso-block__text ",
+      "text": "随时随地使用 Ecwid 移动应用管理您的业务。",
+      "rect": {
+        "x": 52,
+        "y": 4241,
+        "width": 286,
+        "height": 58
+      },
+      "style": {
+        "display": "block",
+        "position": "static",
+        "color": "rgb(10, 12, 15)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 56,
+      "tag": "p",
+      "id": "",
+      "className": "hpc-cart__learn-more ",
+      "text": "了解详情",
+      "rect": {
+        "x": 52,
+        "y": 4314,
+        "width": 286,
+        "height": 29
+      },
+      "style": {
+        "display": "block",
+        "position": "static",
+        "color": "rgb(10, 12, 15)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 57,
+      "tag": "img",
+      "id": "",
+      "className": "calypso-awards__image",
+      "text": "",
+      "rect": {
+        "x": 27,
+        "y": 4479,
+        "width": 96,
+        "height": 96
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(10, 12, 15)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 58,
+      "tag": "img",
+      "id": "",
+      "className": "calypso-awards__image",
+      "text": "",
+      "rect": {
+        "x": 147,
+        "y": 4479,
+        "width": 96,
+        "height": 96
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(10, 12, 15)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 59,
+      "tag": "img",
+      "id": "",
+      "className": "calypso-awards__image",
+      "text": "",
+      "rect": {
+        "x": 267,
+        "y": 4479,
+        "width": 96,
+        "height": 96
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(10, 12, 15)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 60,
+      "tag": "img",
+      "id": "",
+      "className": "calypso-awards__image",
+      "text": "",
+      "rect": {
+        "x": 87,
+        "y": 4608,
+        "width": 96,
+        "height": 96
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(10, 12, 15)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 61,
+      "tag": "img",
+      "id": "",
+      "className": "calypso-awards__image",
+      "text": "",
+      "rect": {
+        "x": 207,
+        "y": 4608,
+        "width": 96,
+        "height": 96
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(10, 12, 15)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 62,
+      "tag": "section",
+      "id": "",
+      "className": "calypso-block ",
+      "text": "开始在线销售创建商店",
+      "rect": {
+        "x": 0,
+        "y": 4737,
+        "width": 390,
+        "height": 287
+      },
+      "style": {
+        "display": "block",
+        "position": "relative",
+        "color": "rgb(10, 12, 15)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 63,
+      "tag": "h2",
+      "id": "",
+      "className": "",
+      "text": "开始在线销售",
+      "rect": {
+        "x": 20,
+        "y": 4801,
+        "width": 350,
+        "height": 48
+      },
+      "style": {
+        "display": "block",
+        "position": "static",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "40px",
+        "fontWeight": "700",
+        "lineHeight": "48px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 64,
+      "tag": "a",
+      "id": "",
+      "className": "btn btn--large btn--yellow",
+      "text": "创建商店",
+      "rect": {
+        "x": 119,
+        "y": 4905,
+        "width": 152,
+        "height": 55
+      },
+      "style": {
+        "display": "inline-block",
+        "position": "static",
+        "color": "rgb(33, 43, 55)",
+        "backgroundColor": "rgb(250, 224, 83)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "600",
+        "lineHeight": "24px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 65,
+      "tag": "section",
+      "id": "",
+      "className": "calypso-block calypso-block--b0",
+      "text": "Ecwid Ecwid.com 帮助中心 在线销售 到处销售 在 Facebook 上销售 (opens in new window) (opens in new window) (opens in new window) (opens i",
+      "rect": {
+        "x": 0,
+        "y": 5024,
+        "width": 390,
+        "height": 702
+      },
+      "style": {
+        "display": "block",
+        "position": "relative",
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 66,
+      "tag": "a",
+      "id": "",
+      "className": "footer-menu__logo",
+      "text": "",
+      "rect": {
+        "x": 20,
+        "y": 5105,
+        "width": 114,
+        "height": 22
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(1, 109, 210)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "600",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 67,
+      "tag": "svg",
+      "id": "",
+      "className": "",
+      "text": "",
+      "rect": {
+        "x": 20,
+        "y": 5088,
+        "width": 114,
+        "height": 34
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(1, 109, 210)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "600",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 68,
+      "tag": "p",
+      "id": "",
+      "className": "footer-menu__section",
+      "text": "Ecwid",
+      "rect": {
+        "x": 20,
+        "y": 5147,
+        "width": 350,
+        "height": 29
+      },
+      "style": {
+        "display": "block",
+        "position": "relative",
+        "color": "rgb(151, 151, 151)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "500",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 69,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "Ecwid.com",
+      "rect": {
+        "x": 20,
+        "y": 5176,
+        "width": 350,
+        "height": 22
+      },
+      "style": {
+        "display": "flow-root",
+        "position": "static",
+        "color": "rgb(255, 255, 255)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "22px",
+        "opacity": "1",
+        "transform": "matrix(1, 0, 0, 1, 0, 0)"
+      }
+    },
+    {
+      "index": 70,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "帮助中心",
+      "rect": {
+        "x": 20,
+        "y": 5206,
+        "width": 350,
+        "height": 22
+      },
+      "style": {
+        "display": "flow-root",
+        "position": "static",
+        "color": "rgb(255, 255, 255)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "22px",
+        "opacity": "1",
+        "transform": "matrix(1, 0, 0, 1, 0, 0)"
+      }
+    },
+    {
+      "index": 71,
+      "tag": "p",
+      "id": "",
+      "className": "footer-menu__section",
+      "text": "在线销售",
+      "rect": {
+        "x": 20,
+        "y": 5192,
+        "width": 350,
+        "height": 29
+      },
+      "style": {
+        "display": "block",
+        "position": "relative",
+        "color": "rgb(151, 151, 151)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "500",
+        "lineHeight": "28.8px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 72,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "到处销售",
+      "rect": {
+        "x": 20,
+        "y": 5220,
+        "width": 350,
+        "height": 22
+      },
+      "style": {
+        "display": "flow-root",
+        "position": "static",
+        "color": "rgb(255, 255, 255)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "22px",
+        "opacity": "1",
+        "transform": "matrix(1, 0, 0, 1, 0, 0)"
+      }
+    },
+    {
+      "index": 73,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "在 Facebook 上销售",
+      "rect": {
+        "x": 20,
+        "y": 5250,
+        "width": 350,
+        "height": 22
+      },
+      "style": {
+        "display": "flow-root",
+        "position": "static",
+        "color": "rgb(255, 255, 255)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "22px",
+        "opacity": "1",
+        "transform": "matrix(1, 0, 0, 1, 0, 0)"
+      }
+    },
+    {
+      "index": 74,
+      "tag": "button",
+      "id": "",
+      "className": "footer-menu__search-submit",
+      "text": "",
+      "rect": {
+        "x": 344,
+        "y": 5268,
+        "width": 18,
+        "height": 18
+      },
+      "style": {
+        "display": "block",
+        "position": "absolute",
+        "color": "rgb(255, 255, 255)",
+        "backgroundColor": "rgb(0, 0, 0)",
+        "fontFamily": "Arial",
+        "fontSize": "0px",
+        "fontWeight": "400",
+        "lineHeight": "normal",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 75,
+      "tag": "svg",
+      "id": "",
+      "className": "",
+      "text": "",
+      "rect": {
+        "x": 344,
+        "y": 5268,
+        "width": 18,
+        "height": 24
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(255, 255, 255)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Arial",
+        "fontSize": "0px",
+        "fontWeight": "400",
+        "lineHeight": "normal",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 76,
+      "tag": "a",
+      "id": "",
+      "className": "icon-blog",
+      "text": "",
+      "rect": {
+        "x": 20,
+        "y": 5352,
+        "width": 37,
+        "height": 24
+      },
+      "style": {
+        "display": "flow-root",
+        "position": "static",
+        "color": "rgb(255, 255, 255)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "font_icons",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "14px",
+        "opacity": "1",
+        "transform": "matrix(1, 0, 0, 1, 0, 0)"
+      }
+    },
+    {
+      "index": 77,
+      "tag": "a",
+      "id": "",
+      "className": "icon-podcast",
+      "text": "",
+      "rect": {
+        "x": 72,
+        "y": 5352,
+        "width": 37,
+        "height": 24
+      },
+      "style": {
+        "display": "flow-root",
+        "position": "static",
+        "color": "rgb(255, 255, 255)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "font_icons",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "14px",
+        "opacity": "1",
+        "transform": "matrix(1, 0, 0, 1, 0, 0)"
+      }
+    },
+    {
+      "index": 78,
+      "tag": "a",
+      "id": "",
+      "className": "icon-pinterest",
+      "text": "(opens in new window)",
+      "rect": {
+        "x": 124,
+        "y": 5352,
+        "width": 37,
+        "height": 24
+      },
+      "style": {
+        "display": "flow-root",
+        "position": "static",
+        "color": "rgb(255, 255, 255)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "font_icons",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "14px",
+        "opacity": "1",
+        "transform": "matrix(1, 0, 0, 1, 0, 0)"
+      }
+    },
+    {
+      "index": 79,
+      "tag": "a",
+      "id": "",
+      "className": "icon-facebook",
+      "text": "(opens in new window)",
+      "rect": {
+        "x": 177,
+        "y": 5352,
+        "width": 37,
+        "height": 24
+      },
+      "style": {
+        "display": "flow-root",
+        "position": "static",
+        "color": "rgb(255, 255, 255)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "font_icons",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "14px",
+        "opacity": "1",
+        "transform": "matrix(1, 0, 0, 1, 0, 0)"
+      }
+    },
+    {
+      "index": 80,
+      "tag": "a",
+      "id": "",
+      "className": "icon-twitter",
+      "text": "(opens in new window)",
+      "rect": {
+        "x": 229,
+        "y": 5352,
+        "width": 37,
+        "height": 24
+      },
+      "style": {
+        "display": "flow-root",
+        "position": "static",
+        "color": "rgb(255, 255, 255)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "font_icons",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "14px",
+        "opacity": "1",
+        "transform": "matrix(1, 0, 0, 1, 0, 0)"
+      }
+    },
+    {
+      "index": 81,
+      "tag": "a",
+      "id": "",
+      "className": "icon-instagram",
+      "text": "(opens in new window)",
+      "rect": {
+        "x": 281,
+        "y": 5352,
+        "width": 37,
+        "height": 24
+      },
+      "style": {
+        "display": "flow-root",
+        "position": "static",
+        "color": "rgb(255, 255, 255)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "font_icons",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "14px",
+        "opacity": "1",
+        "transform": "matrix(1, 0, 0, 1, 0, 0)"
+      }
+    },
+    {
+      "index": 82,
+      "tag": "a",
+      "id": "",
+      "className": "icon-youtube",
+      "text": "(opens in new window)",
+      "rect": {
+        "x": 333,
+        "y": 5352,
+        "width": 37,
+        "height": 24
+      },
+      "style": {
+        "display": "flow-root",
+        "position": "static",
+        "color": "rgb(255, 255, 255)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "font_icons",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "14px",
+        "opacity": "1",
+        "transform": "matrix(1, 0, 0, 1, 0, 0)"
+      }
+    },
+    {
+      "index": 83,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "(opens in new window)",
+      "rect": {
+        "x": 64,
+        "y": 5402,
+        "width": 114,
+        "height": 24
+      },
+      "style": {
+        "display": "block",
+        "position": "static",
+        "color": "rgb(1, 109, 210)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "lineHeight": "16px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 84,
+      "tag": "img",
+      "id": "",
+      "className": "",
+      "text": "",
+      "rect": {
+        "x": 64,
+        "y": 5402,
+        "width": 114,
+        "height": 38
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(1, 109, 210)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "lineHeight": "16px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 85,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "(opens in new window)",
+      "rect": {
+        "x": 189,
+        "y": 5402,
+        "width": 137,
+        "height": 24
+      },
+      "style": {
+        "display": "block",
+        "position": "static",
+        "color": "rgb(1, 109, 210)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "lineHeight": "16px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 86,
+      "tag": "img",
+      "id": "",
+      "className": "",
+      "text": "",
+      "rect": {
+        "x": 197,
+        "y": 5402,
+        "width": 129,
+        "height": 38
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(1, 109, 210)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "12px",
+        "fontWeight": "600",
+        "lineHeight": "16px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 87,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "Privacy Policy",
+      "rect": {
+        "x": 20,
+        "y": 5466,
+        "width": 334,
+        "height": 22
+      },
+      "style": {
+        "display": "flow-root",
+        "position": "static",
+        "color": "rgb(255, 255, 255)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "22px",
+        "opacity": "1",
+        "transform": "matrix(1, 0, 0, 1, 0, 0)"
+      }
+    },
+    {
+      "index": 88,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "DPA",
+      "rect": {
+        "x": 20,
+        "y": 5496,
+        "width": 334,
+        "height": 22
+      },
+      "style": {
+        "display": "flow-root",
+        "position": "static",
+        "color": "rgb(255, 255, 255)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "22px",
+        "opacity": "1",
+        "transform": "matrix(1, 0, 0, 1, 0, 0)"
+      }
+    },
+    {
+      "index": 89,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "Terms of Service",
+      "rect": {
+        "x": 20,
+        "y": 5526,
+        "width": 334,
+        "height": 22
+      },
+      "style": {
+        "display": "flow-root",
+        "position": "static",
+        "color": "rgb(255, 255, 255)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "22px",
+        "opacity": "1",
+        "transform": "matrix(1, 0, 0, 1, 0, 0)"
+      }
+    },
+    {
+      "index": 90,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "Copyright Policy‎",
+      "rect": {
+        "x": 20,
+        "y": 5556,
+        "width": 334,
+        "height": 22
+      },
+      "style": {
+        "display": "flow-root",
+        "position": "static",
+        "color": "rgb(255, 255, 255)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "22px",
+        "opacity": "1",
+        "transform": "matrix(1, 0, 0, 1, 0, 0)"
+      }
+    },
+    {
+      "index": 91,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "China",
+      "rect": {
+        "x": 145,
+        "y": 5667,
+        "width": 96,
+        "height": 18
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(7, 79, 81)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "18px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 92,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "Argentina",
+      "rect": {
+        "x": 36,
+        "y": 5757,
+        "width": 105,
+        "height": 18
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "18px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 93,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "Lithuania",
+      "rect": {
+        "x": 231,
+        "y": 5757,
+        "width": 101,
+        "height": 18
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "18px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 94,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "Brazil",
+      "rect": {
+        "x": 36,
+        "y": 5810,
+        "width": 74,
+        "height": 18
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "18px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 95,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "Mexico",
+      "rect": {
+        "x": 231,
+        "y": 5810,
+        "width": 84,
+        "height": 18
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "18px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 96,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "Bulgaria",
+      "rect": {
+        "x": 36,
+        "y": 5862,
+        "width": 94,
+        "height": 18
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "18px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 97,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "Netherlands",
+      "rect": {
+        "x": 231,
+        "y": 5862,
+        "width": 122,
+        "height": 18
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "18px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 98,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "Canada (English)",
+      "rect": {
+        "x": 36,
+        "y": 5921,
+        "width": 148,
+        "height": 18
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "18px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 99,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "Norway",
+      "rect": {
+        "x": 231,
+        "y": 5921,
+        "width": 89,
+        "height": 18
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "18px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 100,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "Canada (Français)",
+      "rect": {
+        "x": 36,
+        "y": 5987,
+        "width": 148,
+        "height": 18
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "18px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 101,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "Peru",
+      "rect": {
+        "x": 231,
+        "y": 5987,
+        "width": 68,
+        "height": 18
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "18px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 102,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "China",
+      "rect": {
+        "x": 36,
+        "y": 6046,
+        "width": 76,
+        "height": 18
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "18px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 103,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "Philippines",
+      "rect": {
+        "x": 231,
+        "y": 6046,
+        "width": 113,
+        "height": 18
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "18px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 104,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "Colombia",
+      "rect": {
+        "x": 36,
+        "y": 6099,
+        "width": 102,
+        "height": 18
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "18px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 105,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "Poland",
+      "rect": {
+        "x": 231,
+        "y": 6099,
+        "width": 85,
+        "height": 18
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "18px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 106,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "Croatia",
+      "rect": {
+        "x": 36,
+        "y": 6151,
+        "width": 85,
+        "height": 18
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "18px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 107,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "Portugal",
+      "rect": {
+        "x": 231,
+        "y": 6151,
+        "width": 96,
+        "height": 18
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "18px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 108,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "Czech Republic",
+      "rect": {
+        "x": 36,
+        "y": 6203,
+        "width": 143,
+        "height": 18
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "18px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 109,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "Romania",
+      "rect": {
+        "x": 231,
+        "y": 6203,
+        "width": 99,
+        "height": 18
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "18px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 110,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "Denmark",
+      "rect": {
+        "x": 36,
+        "y": 6256,
+        "width": 101,
+        "height": 18
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "18px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 111,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "Slovakia",
+      "rect": {
+        "x": 231,
+        "y": 6256,
+        "width": 92,
+        "height": 18
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "18px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 112,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "Egypt",
+      "rect": {
+        "x": 36,
+        "y": 6308,
+        "width": 77,
+        "height": 18
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "18px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 113,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "Slovenia",
+      "rect": {
+        "x": 231,
+        "y": 6308,
+        "width": 93,
+        "height": 18
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "18px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 114,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "Finland",
+      "rect": {
+        "x": 36,
+        "y": 6360,
+        "width": 88,
+        "height": 18
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "18px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 115,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "Spain",
+      "rect": {
+        "x": 231,
+        "y": 6360,
+        "width": 75,
+        "height": 18
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "18px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 116,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "France",
+      "rect": {
+        "x": 36,
+        "y": 6413,
+        "width": 83,
+        "height": 18
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "18px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 117,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "Sweden",
+      "rect": {
+        "x": 231,
+        "y": 6413,
+        "width": 91,
+        "height": 18
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "18px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 118,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "Germany",
+      "rect": {
+        "x": 36,
+        "y": 6465,
+        "width": 100,
+        "height": 18
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "18px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 119,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "Thailand",
+      "rect": {
+        "x": 231,
+        "y": 6465,
+        "width": 96,
+        "height": 18
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "18px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 120,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "Greece",
+      "rect": {
+        "x": 36,
+        "y": 6517,
+        "width": 84,
+        "height": 18
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "18px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 121,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "Türkiye",
+      "rect": {
+        "x": 231,
+        "y": 6517,
+        "width": 86,
+        "height": 18
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "18px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 122,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "Hungary",
+      "rect": {
+        "x": 36,
+        "y": 6570,
+        "width": 96,
+        "height": 18
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "18px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 123,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "USA",
+      "rect": {
+        "x": 231,
+        "y": 6570,
+        "width": 65,
+        "height": 18
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "18px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 124,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "Indonesia",
+      "rect": {
+        "x": 36,
+        "y": 6622,
+        "width": 104,
+        "height": 18
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "18px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 125,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "Venezuela",
+      "rect": {
+        "x": 231,
+        "y": 6622,
+        "width": 107,
+        "height": 18
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "18px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 126,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "Italy",
+      "rect": {
+        "x": 36,
+        "y": 6674,
+        "width": 64,
+        "height": 18
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "18px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 127,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "Vietnam",
+      "rect": {
+        "x": 231,
+        "y": 6674,
+        "width": 95,
+        "height": 18
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "18px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 128,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "Japan",
+      "rect": {
+        "x": 36,
+        "y": 6733,
+        "width": 77,
+        "height": 18
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "18px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 129,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "United Arab Emirates",
+      "rect": {
+        "x": 231,
+        "y": 6733,
+        "width": 148,
+        "height": 18
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "18px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 130,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "Korea",
+      "rect": {
+        "x": 36,
+        "y": 6793,
+        "width": 75,
+        "height": 18
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "18px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 131,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "Global",
+      "rect": {
+        "x": 231,
+        "y": 6793,
+        "width": 80,
+        "height": 18
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "18px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    },
+    {
+      "index": 132,
+      "tag": "a",
+      "id": "",
+      "className": "",
+      "text": "Latvia",
+      "rect": {
+        "x": 36,
+        "y": 6845,
+        "width": 77,
+        "height": 18
+      },
+      "style": {
+        "display": "inline",
+        "position": "static",
+        "color": "rgb(51, 51, 51)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "Montserrat, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": "400",
+        "lineHeight": "18px",
+        "opacity": "1",
+        "transform": "none"
+      }
+    }
+  ]
+}

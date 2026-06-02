@@ -1,0 +1,227 @@
+{
+  "skill_name": "clone-website-dl",
+  "evals": [
+    {
+      "id": "case_001",
+      "name": "spec-template-completeness",
+      "task": "Verify the clone-website-dl skill produces complete component spec files with all required sections",
+      "environment": {
+        "files": {"spec-template": "references/spec-template.md"},
+        "tools_available": ["spec_template", "pre_dispatch_checklist"]
+      },
+      "tools": ["spec_template"],
+      "grader": {
+        "must_use": ["spec_has_all_sections", "spec_has_css_values", "spec_has_states", "spec_has_assets"],
+        "must_have": ["Overview", "Props Interface", "DOM Structure", "Computed Styles", "States & Behaviors", "Assets", "Text Content", "Implementation Notes", "Responsive Behavior"],
+        "must_not_have": ["TODO", "FIXME", "estimated", "looks like", "approximately"]
+      },
+      "grader_file": "../clone-website-build-dl/references/spec-template.md"
+    },
+    {
+      "id": "case_002",
+      "name": "css-extraction-accuracy",
+      "task": "Verify CSS extraction requirements mandate getComputedStyle and forbid estimation",
+      "environment": {
+        "files": {"SKILL.md": "SKILL.md"},
+        "tools_available": ["extract_component_css_script", "verify_css_script", "discover_assets_script"]
+      },
+      "tools": ["extract_component_css_script"],
+      "grader": {
+        "must_use": ["has_get_computed_style", "has_extraction_script", "has_css_verification"],
+        "must_have": ["getComputedStyle", "scripts/extract-component-css.js", "scripts/verify-css.js", "scripts/discover-assets.js"],
+        "must_not_have": ["hand-measure", "estimate", "eyeball"]
+      },
+      "grader_file": "../clone-website-extract-dl/SKILL.md"
+    },
+    {
+      "id": "case_003",
+      "name": "antipatterns-and-checkpoints",
+      "task": "Verify the skill has comprehensive antipatterns section and checkpoint enforcement",
+      "environment": {
+        "files": {"antipatterns": "../clone-website-build-dl/references/antipatterns.md", "SKILL.md": "SKILL.md"},
+        "tools_available": ["antipatterns_table", "checkpoint_markers"]
+      },
+      "tools": ["antipatterns_table", "checkpoint_markers"],
+      "grader": {
+        "must_use": ["has_antipatterns_section", "has_recovery_table", "split_companions_documented"],
+        "must_have": ["Antipatterns", "Recovery", "clone-website-extract-dl", "clone-website-build-dl", "clone-website-qa-dl"],
+        "must_not_have": ["skip QA", "no spec file", "approximate CSS", "monolithic commit"]
+      }
+    },
+    {
+      "id": "case_004",
+      "name": "firecrawl-fallback",
+      "task": "Verify the skill supports Firecrawl as fallback extraction method",
+      "environment": {
+        "files": {"SKILL.md": "SKILL.md"},
+        "tools_available": ["firecrawl_mcp", "mode_selection"]
+      },
+      "grader": {
+        "must_use": ["firecrawl_mentioned", "dual_mode_documented"],
+        "must_have": ["Firecrawl", "Mode Selection", "fallback"],
+        "must_not_have": ["only Camofox", "browser required"]
+      },
+      "grader_file": "../clone-website-extract-dl/SKILL.md"
+    },
+    {
+      "id": "case_005",
+      "name": "agent-pipeline-and-graph",
+      "task": "Verify the skill has agent pipeline architecture and post-clone component graph",
+      "environment": {
+        "files": {"SKILL.md": "SKILL.md"},
+        "tools_available": ["agent_pipeline", "component_graph"]
+      },
+      "grader": {
+        "must_use": ["agent_pipeline_documented", "component_graph_mentioned"],
+        "must_have": ["Agent Pipeline", "Extraction Agent", "component-graph"],
+        "must_not_have": ["only sequential", "no post-clone analysis"]
+      }
+    },
+    {
+      "id": "case_006",
+      "name": "per-page-source-of-truth-gate",
+      "task": "Verify every cloned page requires a unique canonical source of truth before coding and that derived specs remain traceable to it",
+      "environment": {
+        "files": {
+          "SKILL.md": "SKILL.md",
+          "source-truth-template": "../clone-website-extract-dl/references/page-source-of-truth-template.md",
+          "spec-template": "../clone-website-build-dl/references/spec-template.md",
+          "pre-dispatch-checklist": "../clone-website-build-dl/references/checklist.md"
+        },
+        "tools_available": ["page_source_truth_template", "pre_dispatch_checklist"]
+      },
+      "tools": ["page_source_truth_template", "pre_dispatch_checklist"],
+      "grader": {
+        "must_use": ["page_source_truth_documented", "source_truth_gate_enforced"],
+        "must_have": ["SOURCE_OF_TRUTH.md", "One Canonical Record Per Page", "source-of-truth gate", "Do not code yet"],
+        "must_not_have": ["code first", "optional source of truth", "guess missing CSS"]
+      },
+      "grader_file": "../clone-website-extract-dl/SKILL.md"
+    },
+    {
+      "id": "case_007",
+      "name": "visual-occupancy-and-booth-fallback",
+      "task": "Verify reachable source media must be visibly rendered and unavailable media receives a deliberate booth fallback instead of blank space",
+      "environment": {
+        "files": {
+          "SKILL.md": "SKILL.md",
+          "source-truth-template": "../clone-website-extract-dl/references/page-source-of-truth-template.md",
+          "pre-dispatch-checklist": "../clone-website-build-dl/references/checklist.md"
+        },
+        "tools_available": ["visual_occupancy_gate", "booth_fallback"]
+      },
+      "tools": ["visual_occupancy_gate", "booth_fallback"],
+      "grader": {
+        "must_use": ["asset_visibility_enforced", "booth_fallback_documented"],
+        "must_have": ["visual occupancy", "booth fallback", "unexplained blank", "opacity: 0"],
+        "must_not_have": ["leave blank", "skip missing media"]
+      },
+      "grader_file": "../clone-website-extract-dl/SKILL.md"
+    },
+    {
+      "id": "case_008",
+      "name": "measurable-convergence-harness",
+      "task": "Verify deterministic screenshots, pixel diff reports, geometry comparison, and explicit acceptance thresholds gate 1:1 completion",
+      "environment": {
+        "files": {
+          "SKILL.md": "SKILL.md",
+          "capture": "../clone-website-qa-dl/scripts/capture-reference.mjs",
+          "visual-diff": "../clone-website-qa-dl/scripts/visual-diff.mjs",
+          "geometry": "../clone-website-qa-dl/scripts/compare-geometry.mjs",
+          "workflow": "../clone-website-qa-dl/references/measurable-convergence.md"
+        },
+        "tools_available": ["deterministic_capture", "visual_diff", "geometry_diff"]
+      },
+      "tools": ["deterministic_capture", "visual_diff", "geometry_diff"],
+      "grader": {
+        "must_use": ["measurable_diff_harness_documented", "acceptance_thresholds_enforced"],
+        "must_have": ["capture-reference.mjs", "visual-diff.mjs", "compare-geometry.mjs", "0.5%", "1.5%", "2px"],
+        "must_not_have": ["eyeball only", "looks close enough"]
+      },
+      "grader_file": "../clone-website-qa-dl/SKILL.md"
+    },
+    {
+      "id": "case_009",
+      "name": "animation-reconstruction",
+      "task": "Verify animated pages are audited before deterministic freezing and receive a recorded motion contract with faithful implementation routing",
+      "environment": {
+        "files": {
+          "SKILL.md": "SKILL.md",
+          "audit": "../clone-website-extract-dl/scripts/audit-animations.mjs",
+          "workflow": "../clone-website-extract-dl/references/animation-reconstruction.md",
+          "source-truth-template": "../clone-website-extract-dl/references/page-source-of-truth-template.md"
+        },
+        "tools_available": ["animation_audit", "motion_contract", "reduced_motion_check"]
+      },
+      "tools": ["animation_audit", "motion_contract"],
+      "grader": {
+        "must_use": ["animation_audit_documented", "animation_contract_enforced"],
+        "must_have": ["audit-animations.mjs", "animation-reconstruction.md", "start/mid/end", "reduced-motion", "IntersectionObserver"],
+        "must_not_have": ["freeze before audit", "always static"]
+      },
+      "grader_file": "../clone-website-extract-dl/SKILL.md"
+    },
+    {
+      "id": "case_010",
+      "name": "strict-spacing-graph",
+      "task": "Verify each cloned page records exact spacing constraints and classifies large whitespace before coding",
+      "environment": {
+        "files": {
+          "SKILL.md": "SKILL.md",
+          "audit": "../clone-website-extract-dl/scripts/audit-spacing.mjs",
+          "source-truth-template": "../clone-website-extract-dl/references/page-source-of-truth-template.md",
+          "pre-dispatch-checklist": "../clone-website-build-dl/references/checklist.md"
+        },
+        "tools_available": ["spacing_audit", "landmark_graph", "whitespace_classification"]
+      },
+      "tools": ["spacing_audit", "landmark_graph"],
+      "grader": {
+        "must_use": ["spacing_graph_documented", "intentional_whitespace_classified"],
+        "must_have": ["audit-spacing.mjs", "landmark rectangles", "sibling gaps", "edge insets", "breakpoint-specific deltas", "intentional or unexplained"],
+        "must_not_have": ["approximate section heights only", "eyeball spacing"]
+      },
+      "grader_file": "../clone-website-extract-dl/SKILL.md"
+    },
+    {
+      "id": "case_011",
+      "name": "executable-source-truth-gate",
+      "task": "Verify incomplete source-of-truth files block coding and later fidelity modifications reconcile evidence before implementation",
+      "environment": {
+        "files": {
+          "SKILL.md": "SKILL.md",
+          "validator": "../clone-website-extract-dl/scripts/validate-source-of-truth.mjs",
+          "regression": "evals/test-source-truth-gate.sh",
+          "source-truth-template": "../clone-website-extract-dl/references/page-source-of-truth-template.md"
+        },
+        "tools_available": ["source_truth_validator", "modification_ledger"]
+      },
+      "tools": ["source_truth_validator", "modification_ledger"],
+      "grader": {
+        "must_use": ["source_truth_validator_documented", "modification_reconciliation_order"],
+        "must_have": ["validate-source-of-truth.mjs", "Modification Ledger", "hard stop", "Record the new live evidence"],
+        "must_not_have": ["optional validation", "code before evidence"]
+      },
+      "grader_file": "../clone-website-extract-dl/SKILL.md"
+    },
+    {
+      "id": "case_012",
+      "name": "split-skill-orchestration-contract",
+      "task": "Verify clone-website-dl is a thin coordinator with explicit extract, build, QA, approval, partial-clone, and evidence-first repair handoffs",
+      "environment": {
+        "files": {
+          "orchestrator": "SKILL.md",
+          "extract": "../clone-website-extract-dl/SKILL.md",
+          "build": "../clone-website-build-dl/SKILL.md",
+          "qa": "../clone-website-qa-dl/SKILL.md"
+        },
+        "tools_available": ["split_skill_contracts", "orchestration_flow"]
+      },
+      "tools": ["split_skill_contracts", "orchestration_flow"],
+      "grader": {
+        "must_use": ["split_companions_documented", "thin_orchestrator", "atomic_handoffs"],
+        "must_have": ["clone-website-extract-dl", "clone-website-build-dl", "clone-website-qa-dl", "STOP: wait for user confirmation before implementation"],
+        "must_not_have": ["getComputedStyle()", "capture-reference.mjs"]
+      }
+    }
+  ]
+}

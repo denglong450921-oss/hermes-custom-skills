@@ -5,3 +5,12 @@ __pycache__/
 *.pyc
 *.pyo
 .DS_Store
+
+# Next.js and Node
+node_modules
+.next
+.env
+
+# QA artifacts
+docs/qa/clone
+docs/qa/diff

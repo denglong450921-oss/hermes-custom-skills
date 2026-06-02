@@ -1,0 +1,41 @@
+{
+  "skill_name": "clone-website-dl",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Clone https://example.com as faithfully as possible. Keep the work resumable and tell me where you need confirmation before coding.",
+      "expected_output": "A thin orchestration plan that routes to extraction first, stops for canonical evidence approval, then routes to build and measurable QA.",
+      "assertions": [
+        "Routes rendered evidence gathering through clone-website-extract-dl before implementation.",
+        "Includes a STOP for user confirmation after the canonical source of truth is ready.",
+        "Routes implementation through clone-website-build-dl and fidelity measurement through clone-website-qa-dl.",
+        "Uses an evidence-first repair loop when QA finds a mismatch."
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Clone just the pricing section from https://example.com/pricing and give me a reusable standalone React component.",
+      "expected_output": "A partial-clone route with focused responsive evidence, screenshot confirmation, standalone component props, skipped page assembly, and standalone QA.",
+      "assertions": [
+        "Uses the partial clone route instead of full-page topology work.",
+        "Captures desktop and mobile section evidence and asks the user to confirm the selected section.",
+        "Builds one standalone component with props and defaults.",
+        "Skips full page assembly and still performs visual QA."
+      ],
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "The clone is close, but the original hero artwork is missing and the mobile spacing is wrong. Fix it and call it done when it matches.",
+      "expected_output": "An evidence-first repair route that records the discrepancy, re-extracts media and spacing evidence, updates the canonical record and specs, repairs implementation, and reruns measurable QA.",
+      "assertions": [
+        "Does not patch implementation before updating live evidence and the canonical source of truth.",
+        "Uses the extraction skill to recover media and spacing evidence.",
+        "Requires reachable media to render or a documented booth fallback.",
+        "Reruns build and measurable QA before claiming completion."
+      ],
+      "files": []
+    }
+  ]
+}
