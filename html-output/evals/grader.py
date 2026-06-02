@@ -72,34 +72,6 @@ def check_html(filepath, checks):
             passed = "<hr" in html
             evidence = "<hr> found" if passed else "missing <hr>"
 
-        elif check["check"] == "has_executive_summary":
-            passed = 'class="executive-summary"' in html
-            evidence = ".executive-summary found" if passed else "missing opening .executive-summary"
-
-        elif check["check"] == "summary_before_detail":
-            summary_at = html.find('class="executive-summary"')
-            detail_candidates = [pos for pos in [
-                html.find("<hr"),
-                html.find("<table"),
-                html.find('class="logic-map"'),
-                html.find("<section", summary_at + 1),
-            ] if pos >= 0]
-            passed = summary_at >= 0 and (not detail_candidates or summary_at < min(detail_candidates))
-            evidence = "opening summary precedes detail sections" if passed else "summary is missing or buried after details"
-
-        elif check["check"] == "has_logic_visual":
-            passed = 'class="logic-map"' in html
-            evidence = ".logic-map found" if passed else "missing .logic-map"
-
-        elif check["check"] == "has_closing_synthesis":
-            passed = 'class="closing-synthesis"' in html
-            evidence = ".closing-synthesis found" if passed else "missing .closing-synthesis"
-
-        elif check["check"] == "has_key_highlight":
-            patterns = ['class="highlight-list"', 'class="callout"', 'class="highlight"', "<table"]
-            passed = any(pattern in html for pattern in patterns)
-            evidence = "key-point visual anchor found" if passed else "missing highlighted key points"
-
         else:
             evidence = f"Unknown check: {check['check']}"
 

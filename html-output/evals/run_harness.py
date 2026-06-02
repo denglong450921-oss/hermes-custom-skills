@@ -90,11 +90,6 @@ def main():
             "tag": {"text": f"Has .tag", "check": "has_tag"},
             "meta": {"text": f"Has .meta", "check": "has_meta"},
             "insight": {"text": f"Has .insight", "check": "has_insight"},
-            "executive-summary": {"text": f"Starts with .executive-summary", "check": "has_executive_summary"},
-            "summary-first": {"text": f"Summary precedes detail sections", "check": "summary_before_detail"},
-            "logic-map": {"text": f"Has .logic-map", "check": "has_logic_visual"},
-            "closing-synthesis": {"text": f"Has .closing-synthesis", "check": "has_closing_synthesis"},
-            "key-highlight": {"text": f"Highlights key points", "check": "has_key_highlight"},
         }
 
         checks = []

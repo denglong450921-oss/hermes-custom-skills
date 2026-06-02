@@ -1,30 +1,11 @@
 ---
 name: "html-output"
-description: "将复杂 AI 回复改写为美观、易读、逻辑清晰的 HTML 页面。凡是用户要求 HTML、网页输出、富文本、美化排版，或内容包含多层论证、关键结论、比较表格、流程步骤、指标卡片、架构关系、决策路径时，都应使用此技能。输出必须先总结核心观点，再突出关键点，用合适的图示或结构表达逻辑，展开细节后回到整体结论，形成总—分—总结构。触发词: HTML, HTML output, generate HTML, 生成HTML, layout, card, table, steps, highlight, diagram, flowchart, 美观HTML, 网页输出, 富文本, 总结重点, 逻辑图"
+description: "编写美观易读的 HTML 输出，用于复杂的 AI 回复。当回复包含比较表格、流程步骤、带指标的卡片、可折叠代码块时使用。触发词: HTML, HTML output, generate HTML, 生成HTML, layout, card, table, steps, highlight, 美观HTML, 网页输出, 富文本"
 ---
 
 # HTML Output
 
 > 核心原则：HTML 唯一的优势是 **信息密度**。读者能在 10 秒内理解的东西，远超过任何线性 markdown。**如果 10 秒内抓不住重点 → 失败。**
-
-## Ultimate Principles
-
-每次修改或生成 HTML，都先把原始内容变成一个可扫读的论证，而不是把段落机械地套进卡片。
-
-1. **先总结核心观点**：开头用 `.executive-summary` 承载标题、一个 `.insight` 核心结论，以及 3–5 个最重要要点。读者先拿到地图，再进入细节。
-2. **突出关键点**：重要结论、数字、风险、建议必须成为视觉锚点。用 `.callout`、`.highlight`、`.highlight-list` 或表格，不要把关键内容埋在普通段落里。
-3. **让逻辑可见**：用 `.logic-map` 包裹最合适的关系表达。线性过程用 `.steps`，对比用 `<table>`，并列维度用 `.card-grid`，左右关系用 `.two-column`，复杂分支或网络关系才使用 Mermaid。
-4. **总—分—总**：开头给全局结论，中间按逻辑拆分并展开证据，结尾用 `.closing-synthesis` 回到整体判断和下一步。结尾不是重复开头，而是把细节重新压缩成行动。
-
-### 10-second reading path
-
-```text
-Executive summary
-  -> highlighted key points
-  -> logic map
-  -> detailed sections and evidence
-  -> closing synthesis
-```
 
 ## Quick Navigation
 
@@ -32,9 +13,8 @@ Executive summary
 |---|---|
 | Start with the rules | [Core Principles](#core-principles) |
 | Build the layout | [Layout System](#layout-system-proven-must-follow) |
-| Choose the logic visual | [Logic Visual Selection](#logic-visual-selection) |
 | See available CSS | [output.css Reference](#what-outputcss-provides) |
-| Recover from a failed review | [Failure Recovery Matrix](#failure-recovery-matrix) |
+| Verify before shipping | [Pre-Delivery Protocol](#pre-delivery-verification-protocol必须逐条过缺一不可) |
 | Self-check your output | [Quality Checklist](#quality-checklist产出前逐条检查) |
 | Run automated evaluation | [Harness (Self-Eval)](#harness-self-eval) |
 | Avoid common pitfalls | [Common HTML Mistakes](#-common-html-mistakes--what-not-to-do) |
@@ -42,13 +22,11 @@ Executive summary
 ## TL;DR — Experienced User Workflow
 
 1. Wrap everything in `<div class="container">`
-2. Open with `<section class="executive-summary">`: title, one `.insight`, then 3–5 key points
-3. Add one `.logic-map` using the simplest visual grammar that makes the reasoning obvious
-4. Use `<table>` for comparisons, `.steps` for sequences, `.callout` and `.highlight` for important takeaways
-5. Develop the details in logical sections, wrapping secondary material in `<details><summary>`
-6. Close with `<section class="closing-synthesis">` that reconnects the details to the overall judgment and next step
-7. Insert `<hr>` between every major section
-8. Walk the [Quality Checklist](#quality-checklist产出前逐条检查) before claiming completion
+2. Lead with an `.insight` card — the thesis in one sentence
+3. Use `<table>` for comparisons, `.steps` for sequences, `.callout` for takeaways
+4. Wrap code/long references in `<details><summary>`
+5. Insert `<hr>` between every major section
+6. Walk the 10-element [Pre-Delivery Protocol](#pre-delivery-verification-protocol必须逐条过缺一不可) before claiming completion
 
 ## Core Principles
 
@@ -70,21 +48,18 @@ Executive summary
 
 ```
 .container                    # 全局容器，始终在最外层
-  .executive-summary          # [必选] 开头总览
-    .insight                  # [必选] 全文核心结论/论点
-    .highlight-list           # [必选] 3–5 个关键点
+  .insight                    # [必选] 全文核心结论/论点
   <hr>                        # 分隔线
 
-  .logic-map                  # [必选] 逻辑图：steps/table/cards/two-column/Mermaid
+  <p>                         # 正文介绍
+  .callout                    # 关键发现/警告/建议
+
+  <table>                     # 对比/筛选/排行（必须有 <thead>）
   <hr>
 
-  <section>                   # 分：正文解释、证据、比较和细节
-    <p>
-    .callout                  # 关键发现/警告/建议
-    <table>                   # 对比/筛选/排行（必须有 <thead>）
-  <hr>
+  <ol class="steps">          # 3+ 步的演进/流程
 
-  .closing-synthesis          # [必选] 总：归纳判断 + 下一步
+  <details><summary>          # 代码块/引用/参考表
 ```
 
 ### Step 2: 组件填充
@@ -96,10 +71,7 @@ Executive summary
 | 组件 | CSS class | 用途 |
 |------|-----------|------|
 | 容器 | `.container` | 所有内容的根容器 |
-| 总览 | `.executive-summary` | 开头总览：标题、核心结论、关键要点 |
 | 核心结论 | `.insight` | 全文唯一的论点，必须放最前面 |
-| 逻辑图 | `.logic-map` | 包裹最合适的关系表达 |
-| 结尾归纳 | `.closing-synthesis` | 回到整体判断和下一步 |
 | 分隔线 | `<hr>` | 分隔每大段，约 3-4 个 |
 | 关键引用 | `.callout` | 警示、建议、关键数据 |
 | 段落 | `<p>` | 正文 |
@@ -120,7 +92,6 @@ Executive summary
 | 卡片组 | `.card-grid` | 多卡对比 |
 | 子弹笔记 | `.highlight-list` | 紧凑要点 |
 | 双栏 | `.two-column` | 左右对照 |
-| Mermaid | `.mermaid` | 复杂分支、依赖网络、架构关系；简单流程不要用 |
 | 特殊引用 | `.pullquote` | 名言/高度凝练句 |
 | 来源 | `.source`、`.source-inline` | 引用的来源标注 |
 
@@ -148,43 +119,9 @@ HTML 文件写入后，**必须立即用 Chrome 打开**：
 open -a "Google Chrome" ~/Downloads/<filename>.html
 ```
 
-用当前运行时可用的 shell 或 terminal 工具执行。不要等用户问"打开看看"——直接打开。
+用 `terminal()` 执行。不要等用户问"打开看看"——直接打开。
 
-> 🔴 **CHECKPOINT**: Before claiming the HTML is complete, you MUST walk the [Quality Checklist](#quality-checklist产出前逐条检查) below. If any item fails, use the [Failure Recovery Matrix](#failure-recovery-matrix) before rechecking.
-
-## Logic Visual Selection
-
-逻辑图不是装饰。它要让读者比阅读段落更快地理解结构。选择最简单、最准确的表达：
-
-| 内容关系 | 优先表达 | 原因 |
-|---|---|---|
-| 3+ 个连续阶段、操作步骤、演进过程 | `<ol class="steps">` inside `.logic-map` | 最轻量，离线可用 |
-| 方案、产品、优缺点、参数差异 | `<table>` inside `.logic-map` | 横向比较最快 |
-| 并列的支柱、模块、原因、策略 | `.card-grid` inside `.logic-map` | 让同层概念一眼可见 |
-| 输入/输出、现状/目标、问题/解法 | `.two-column` inside `.logic-map` | 强化两侧关系 |
-| 分支决策、依赖网络、架构、反馈回路 | Mermaid inside `.logic-map` | 图关系无法用线性列表清楚表达 |
-
-如果使用 Mermaid，先读 `references/mermaid-dark-theme.md`。不要为了“看起来高级”把简单列表升级成 CDN 图。
-
-## General-Specific-General Writing Pattern
-
-### General: opening map
-
-- 用 `.executive-summary` 先说清楚：主题是什么、最重要判断是什么、读者该记住哪 3–5 点。
-- `.insight` 只保留一个，写成一句有判断力的话。
-- 关键点按重要性排序，不按原文出现顺序排序。
-
-### Specific: structured development
-
-- 每一段只承担一个任务：解释、比较、举证、风险或行动。
-- 用标题和 `<hr>` 让阅读层级可见。
-- 每个视觉组件必须承载真实信息差：表格用于比较，步骤用于顺序，卡片用于并列，callout 用于提醒。
-
-### General: closing synthesis
-
-- 用 `.closing-synthesis` 收束全文。
-- 回答两个问题：细节共同说明了什么？读者下一步应该做什么？
-- 不要逐句复述开头，要把分散证据重新压缩成一个可行动的结论。
+> 🔴 **CHECKPOINT**: Before claiming the HTML is complete, you MUST walk the Pre-Delivery Protocol below. Skipping this step is the #1 cause of failed grader checks.
 
 ## What output.css provides
 
@@ -194,9 +131,6 @@ The complete CSS is in `<skill-dir>/references/output.css`. It provides:
 - `.container` — max-width 800px centered, responsive padding
 - `.two-column` — CSS grid, 1fr 1fr on desktop, stacked on mobile
 - `.card-grid` — auto-fill grid, min 280px cards
-- `.executive-summary` — summary-first opening block
-- `.logic-map` — visual reasoning wrapper
-- `.closing-synthesis` — concluding synthesis block
 
 ### Typography
 - Serif body, sans-serif headings, mono for code
@@ -219,45 +153,29 @@ No extra inline CSS needed. Just paste the whole file.
 
 > 🔴 **CHECKPOINT**: Before running the Quality Checklist, fix any obvious layout issues first. The checklist catches known patterns — but cannot fix sloppy structure.
 
-Production remedies are encoded once in the matrix below. Use the first matching row, apply the smallest repair, then rerun the checklist.
-
-## Failure Recovery Matrix
-
-检查失败时不要继续堆组件。先修复最小根因，再重新走 Quality Checklist。只有第一修复仍然不能表达内容时，才使用 fallback。
-
-| If this trigger appears | First repair | Fallback |
-|---|---|---|
-| 标题后直接进入长段落，10 秒内看不到结论 | 把核心判断移到开头 `.executive-summary`，保留一个 `.insight` 和 3–5 条 `.highlight-list` | 原始材料无法形成可靠结论时，明确写出“已知事实”和“待确认问题”，不要编造总结 |
-| 关键数字、风险或建议和正文长得一样 | 将最重要的信息改为 `.highlight`、`.callout` 或比较表格 | 信息过多时只保留影响决策的 3–5 项，其余放入 `<details>` |
-| `.logic-map` 只是装饰，不能更快解释关系 | 回到 [Logic Visual Selection](#logic-visual-selection)，替换为最简单准确的 steps / table / cards / two-column | 关系确实包含复杂分支或网络时才使用 Mermaid；外部图加载不可靠时回退到离线 HTML 结构 |
-| 3+ 个连续阶段或并排方案仍写成长段落 | 连续阶段改为 `<ol class="steps">`；并排方案改为带 `<thead>` 的 `<table>` | 不适合步骤或表格时，使用 `.card-grid` 或 `.two-column` 表达同层关系 |
-| 代码、引用或次要参表抢占正文注意力 | 用 `<details><summary>` 收起次要内容 | 仍然过长时，正文只保留结论，将完整材料移到独立附录 |
-| 文章停在最后一个细节，没有整体判断 | 添加 `.closing-synthesis`，回答“这些细节共同说明什么”和“下一步做什么” | 无法给出建议时，收束为决策条件和下一步验证动作 |
-| 结构检查失败：缺少 wrapper、闭合标签、表头或 `data-step` | 修复最小 HTML 错误，再运行 `python3 <skill-dir>/evals/grader.py <last-html-file>` | 自动检查仍失败时，减少到 `.container` + summary + one logic view + details + synthesis 的最小有效结构 |
-| CJK 正文显示为系统回退字体 | 在内联 `<style>` 的 body `font-family` 末尾追加 `"PingFang SC", "Hiragino Sans GB", "Microsoft YaHei"` | 字体不可用时保留系统 sans-serif，确保可读性优先 |
-| 浏览器没有自动打开，或当前环境不能调用 Chrome | 仍然写入 `~/Downloads/<descriptive-name>.html`，然后使用当前运行时可用的打开方式 | 无法打开浏览器时，返回完整文件路径并明确说明预览未自动启动 |
+Common blind spots from production sessions:
+- **`.steps` missing**: Articles with a sequential process (pipeline stages, evolution, how-to steps) look like they have visual flow from the text but lack the actual `<ol class="steps">` element. If the content describes 3+ sequential phases, you MUST use `.steps`.
+- **`.highlight` missing**: Articles with concrete stats, metrics, or big numbers (scores, percentages, counts, money) must use `.highlight` to make them scannable. A number in body text is invisible.
+- **`<table>` missing**: Any side-by-side comparison (tools, options, features, tiers) needs a `<table>` with `<thead>`. Even 3 rows × 2 columns counts.
+- **`<details>` missing**: Code blocks, secondary reference tables, optional drill-down content should be wrapped in `<details>`/`<summary>` to keep the page scannable.
+- **Chinese font missing**: CJK content without explicit Chinese fonts (`PingFang SC`, `Hiragino Sans GB`, `Microsoft YaHei`) renders with system fallback — legible but noticeably uglier on macOS. Always extend the body `font-family` when the HTML text is primarily Chinese.
 
 ## Quality Checklist（产出前逐条检查）
 
 1. `.container` 包裹所有内容？
-2. 开头是否是 `.executive-summary`，并在进入细节前总结核心观点？
-3. `.insight` 是否有且仅有一个？（全文核心论点）
-4. 是否用 `.highlight-list`、`.callout`、`.highlight` 或表格突出真正关键的点？
-5. 是否有 `.logic-map`？其表达方式是否比正文更快地解释关系？
-6. 中间细节是否按解释、比较、证据、风险或行动分段，而不是堆砌？
-7. 结尾是否有 `.closing-synthesis`，把细节重新归纳为整体判断和下一步？
-8. 每个 `.callout`、表格、步骤是否包含 **无法目视观察到的信息**？**不要为 AI 废话加特效**？
-9. 代码有没有少 `/` 闭合？常见问题：`</summary>` 写成 `<summary>`、`<hr>` 写成 `<hr/>`
-10. 表格有无 `<thead>`、`<tbody>`、`<th>`？数据大屏是否缺了最后一行导致跨行不对齐？
-11. 引号是否正确配对？有没有花式空格？（常见的 copy-paste 污染源）
-12. CSS 是否粘贴完整（整个 `<style>` 块，自包含，无外部引用）？
-13. CSS 内是否有引入非常用字体（如 `Georgia`、`Merriweather`）？这些在 Claude 沙箱中可能失效。
-14. 语言风格是否与 HTML layout 一致？**一句一句读**，不要有机器感。**白话讲复杂事，不讲专业黑话**。
-15. **这篇去掉 HTML 特效后是否仍有阅读价值？** 如果内容不值得 markdown，HTML 也救不了。
-16. **HTML 文件是否写入 `~/Downloads/`？** 不要放到项目目录里。
-17. **CJK 内容是否追加了中文/日文/韩文字体？** 如果 HTML 正文主要是中文，必须在 body `font-family` 末尾添加 `"PingFang SC", "Hiragino Sans GB", "Microsoft YaHei"`。
+2. `.insight` 是否有且仅有一个？（全文核心论点）
+3. 每个 `.callout`、表格、步骤是否包含 **无法目视观察到的信息**？**不要为 AI 废话加特效**？
+4. 代码有没有少 `/` 闭合？常见问题：`</summary>` 写成 `<summary>`、`<hr>` 写成 `<hr/>`
+5. 表格有无 `<thead>`、`<tbody>`、`<th>`？数据大屏是否缺了最后一行导致跨行不对齐？
+6. 引号是否正确配对？有没有花式空格？（常见的 copy-paste 污染源）
+7. CSS 是否粘贴完整（整个 `<style>` 块，自包含，无外部引用）？
+8. CSS 内是否有引入非常用字体（如 `Georgia`、`Merriweather`）？这些在 Claude 沙箱中可能失效。
+9. 语言风格是否与 HTML layout 一致？**一句一句读**，不要有机器感。**白话讲复杂事，不讲专业黑话**。
+10. **这篇去掉 HTML 特效后是否仍有阅读价值？** 如果内容不值得 markdown，HTML 也救不了。
+11. **HTML 文件是否写入 `~/Downloads/`？** 不要放到项目目录里。
+12. **CJK 内容是否追加了中文/日文/韩文字体？** 如果 HTML 正文主要是中文，必须在 body `font-family` 末尾添加 `"PingFang SC", "Hiragino Sans GB", "Microsoft YaHei"`。
 
-> If any item fails, use the first matching row in the [Failure Recovery Matrix](#failure-recovery-matrix), repair the smallest root cause, then rerun this checklist.
+> **Failure mode:** If the HTML's key insights look the same as body text, the checklist should catch this at lines 2-3. Fix by wrapping in `.callout` or `.insight`.
 
 ## ❌ Common HTML Mistakes — What NOT to Do
 
@@ -269,13 +187,11 @@ Production remedies are encoded once in the matrix below. Use the first matching
 | 4 | **Write `<table>` without `<thead>`** | First row looks like data, no semantic header, accessibility fails | Always include `<thead>` with `<th>` elements |
 | 5 | **Use `<ol>` for sequential processes** | Regular numbered lists have no visual timeline, hard to follow for 3+ steps | Use `<ol class="steps">` with `data-step` attributes |
 | 6 | **Leave code blocks visible** | Long code sections bloat the page, distract from narrative | Wrap in `<details><summary>` for expand/collapse |
-| 7 | **Claim "all classes used correctly" without verifying** | Optimistic reporting hides real layout errors, breaks feedback loop | Walk the Quality Checklist honestly and use the Failure Recovery Matrix for any failed item |
+| 7 | **Claim "all classes used correctly" without verifying** | Optimistic reporting hides real layout errors, breaks feedback loop | Walk the 10-element Pre-Delivery Protocol honestly |
 | 8 | **Mix inline CSS with output.css classes** | Inline overrides break dark/light auto-switch, creates maintenance debt | Use only output.css classes — no inline styles |
 | 9 | **Omit `<hr>` between sections** | Content runs together visually, no breathing room for scanning | Insert `<hr>` between every major section |
 | 10 | **Add defensive disclaimers** | "This might not render correctly" undermines confidence, adds noise | Trust the layout system — if it follows the protocol, it renders correctly |
-| 11 | **Start with details before summarizing** | Reader must reconstruct the argument before knowing why it matters | Open with `.executive-summary` |
-| 12 | **Treat diagrams as decoration** | Adds visual noise without improving comprehension | Put the simplest accurate relationship view inside `.logic-map` |
-| 13 | **End after the last detail** | Reader gets information but no integrated judgment or next step | Close with `.closing-synthesis` |
+| 11 | **`"\\n".join() in execute_code`** | Python `"\\n".join(list)` produces literal `\n` text (backslash + n) in the HTML file — 73+ `\n` strings visible in browser between elements. | Use `"\n".join(list)` (real newline). Fix accidental `"\\n"` with `html.replace("\\n", "\n")`. Watch escape depth: one `\n` per level.
 
 ## Harness (Self-Eval)
 
@@ -293,12 +209,12 @@ This skill has a built-in eval harness following the Agent Harness 5-module patt
 
 Run the grader on the last output:
 ```bash
-python3 <skill-dir>/evals/grader.py <last-html-file>
+python3 <skill-dir>/evals/grader.py --mode reason < <last-html-file>
 ```
 
-Or run every eval case against the last output:
+Or run the full harness:
 ```bash
-python3 <skill-dir>/evals/run_harness.py <last-html-file>
+python3 <skill-dir>/evals/run_harness.py
 ```
 
 ### Feedback Loop
@@ -323,9 +239,7 @@ python3 <skill-dir>/evals/run_harness.py <last-html-file>
 
 ## Version History
 
-- **v5.2**: Consolidated repeated production blind spots into the Failure Recovery Matrix and added a direct logic-visual navigation route.
-- **v5.1**: Added an explicit trigger → first repair → fallback recovery matrix. Replaced obsolete verification links with the current Quality Checklist and recovery flow.
-- **v5.0**: Added summary-first, highlighted-key-point, visible-logic, and general-specific-general editorial contract. Added `.executive-summary`, `.logic-map`, and `.closing-synthesis` structure.
+- **v4.4**: Added `execute_code` string-escape pitfall (#11 in Common HTML Mistakes) — `"\\n".join()` produces literal `\n` text, not newlines. Documented fix with correct escape depth.
 - **v4.3**: Added CJK font guidance — append `PingFang SC` / `Hiragino Sans GB` / `Microsoft YaHei` for Chinese content. Added blind spot + checklist item.
 - **v4.1**: Added `.pullquote` for decorative quotes. Simplified "MUST / SHOULD / MAY" to plain language. Added blind spots section.
 - **v4.0**: Complete rewrite. Added card-grid, tier-list, highlight-list. Removed .toc. Simplified steps. Added Quality Checklist.
