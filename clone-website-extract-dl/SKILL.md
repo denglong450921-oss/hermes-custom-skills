@@ -78,6 +78,13 @@ is available.
 Save desktop `1440px`, tablet `768px` when layout changes, and mobile `390px`
 screenshots under `docs/design-references/`.
 
+**CRITICAL: Anti-Animation & Force Visibility**
+Before taking full-page screenshots, you MUST:
+- Inject CSS to force `opacity: 1 !important`, `visibility: visible !important`, and `transform: none !important` on elements with animation classes (e.g., `[class*="animate"]`, `[class*="hpc-"]`).
+- Disable all transitions and animations (`animation-duration: 0s !important`).
+- Perform a full scroll sweep to trigger lazy-loaded assets and ScrollMagic-style triggers.
+- Wait at least 2 seconds after scrolling back to the top to ensure the layout has stabilized.
+
 Use `scripts/extract-playwright.py` when a reusable headless extraction run is
 helpful. Read `references/playwright-extraction.md` for the rendered-browser
 pattern and `references/firecrawl-mode.md` for HTML-only fallback behavior.

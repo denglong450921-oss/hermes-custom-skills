@@ -35,7 +35,44 @@ async def extract_url(url: str, output_dir: str):
         ctx = await browser.new_context(viewport={"width": 1440, "height": 900})
         page = await ctx.new_page()
         await page.goto(url, wait_until="networkidle", timeout=45000)
-        await page.wait_for_timeout(2000)
+        
+        # [Anti-Animation & Force Visibility]
+        print("  - Disabling animations and forcing element visibility...")
+        await page.evaluate("""
+            () => {
+                const style = document.createElement('style');
+                style.textContent = `
+                    *, *::before, *::after {
+                        animation-duration: 0.01ms !important;
+                        animation-iteration-count: 1 !important;
+                        transition-duration: 0.01ms !important;
+                        scroll-behavior: auto !important;
+                    }
+                    /* Force visibility for scroll-triggered elements */
+                    [class*="animate"], [class*="hpc-"], .opacity-0, .hidden, .invisible {
+                        opacity: 1 !important;
+                        visibility: visible !important;
+                        transform: none !important;
+                        display: block !important; /* Be careful with display, but often needed for hidden sections */
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        """)
+
+        # [Full Scroll Sweep for Lazy Assets]
+        print("  - Performing scroll sweep to trigger lazy loading...")
+        await page.evaluate("""
+            async () => {
+                const distance = 200;
+                while (document.documentElement.scrollTop + window.innerHeight < document.documentElement.scrollHeight) {
+                    window.scrollBy(0, distance);
+                    await new Promise(r => setTimeout(r, 50));
+                }
+                window.scrollTo(0, 0);
+            }
+        """)
+        await page.wait_for_timeout(2000) # Wait for stability
 
         # Screenshot
         await page.screenshot(path=f"{output_dir}/docs/design-references/desktop-full.png", full_page=True)
@@ -207,6 +244,38 @@ async def extract_url(url: str, output_dir: str):
         ctx_m = await browser.new_context(viewport={"width": 390, "height": 844})
         page_m = await ctx_m.new_page()
         await page_m.goto(url, wait_until="networkidle", timeout=45000)
+        
+        # [Anti-Animation & Force Visibility]
+        await page_m.evaluate("""
+            () => {
+                const style = document.createElement('style');
+                style.textContent = `
+                    *, *::before, *::after {
+                        animation-duration: 0.01ms !important;
+                        transition-duration: 0.01ms !important;
+                        scroll-behavior: auto !important;
+                    }
+                    [class*="animate"], [class*="hpc-"], .opacity-0, .hidden, .invisible {
+                        opacity: 1 !important;
+                        visibility: visible !important;
+                        transform: none !important;
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        """)
+
+        # [Full Scroll Sweep]
+        await page_m.evaluate("""
+            async () => {
+                const distance = 200;
+                while (document.documentElement.scrollTop + window.innerHeight < document.documentElement.scrollHeight) {
+                    window.scrollBy(0, distance);
+                    await new Promise(r => setTimeout(r, 50));
+                }
+                window.scrollTo(0, 0);
+            }
+        """)
         await page_m.wait_for_timeout(2000)
         await page_m.screenshot(path=f"{output_dir}/docs/design-references/mobile-full.png", full_page=True)
         await ctx_m.close()
