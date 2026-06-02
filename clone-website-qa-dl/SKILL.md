@@ -144,10 +144,17 @@ Relationship graph in delivery so the clone remains maintainable.
 
 ## Recovery
 
-| Failure signal | First response | Final fallback |
-|---|---|---|
-| Dynamic mismatch | Add documented mask only for genuinely dynamic regions | Re-extract interaction states |
-| Geometry drift | Compare measured landmarks with the canonical spacing graph | Return to focused evidence extraction |
-| Broken assets | Restore reachable source media | Use only documented booth fallback |
-| Mixed iterative failures | Increase settle time and add scroll-then-wait | Flag manual review requirement |
-| Screenshot tooling unavailable | Compare manually and run CSS verification | Report blocked quantitative gate honestly |
+| Failure signal                 | First response                                              | Final fallback                            |
+| ------------------------------ | ----------------------------------------------------------- | ----------------------------------------- |
+| Dynamic mismatch               | Add documented mask only for genuinely dynamic regions      | Re-extract interaction states             |
+| Geometry drift                 | Compare measured landmarks with the canonical spacing graph | Return to focused evidence extraction     |
+| Broken assets                  | Restore reachable source media                              | Use only documented booth fallback        |
+| Mixed iterative failures       | Increase settle time and add scroll-then-wait               | Flag manual review requirement            |
+| Screenshot tooling unavailable | Compare manually and run CSS verification                   | Report blocked quantitative gate honestly |
+
+## Best Practices & Experience (Ecwid Project)
+
+1. **Spacer Injection**: Use responsive spacers (`hidden lg:block lg:h-[xxxpx]`) to align vertical rhythm between React and static sources.
+2. **Fuzzy Matching**: The `compare-geometry.mjs` script should use normalized class names (sorted) and bucket-based matching to handle minor DOM variations.
+3. **SVG Identity**: Detect SVGs using their `<title>` or unique path data to avoid coordinate drift misdetection.
+4. **Layout Patches**: When `bodyHeightDelta` persists, use `jq` to identify the specific section where the cumulative offset begins and apply localized padding or margin adjustments.

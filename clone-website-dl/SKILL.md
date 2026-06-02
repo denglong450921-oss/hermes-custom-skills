@@ -152,3 +152,9 @@ python3 evals/run_harness.py SKILL.md
 
 The split-skills test validates companion contracts, resource ownership, thin
 orchestration, and the existing regression harness.
+
+## Field Notes
+
+- For animation-heavy marketing pages, expect QA failures to cluster around lazy-loaded media and scroll-triggered visibility before they cluster around CSS.
+- Treat `clone-website-qa-dl` as an evidence engine, not just a pass-fail gate: geometry deltas often reveal the exact section where cumulative spacing drift starts.
+- When a clone is visually close but geometry is still off, fix the DOM contract first, then patch spacing. This reduces noisy `missing` and `svg` mismatch reports.
