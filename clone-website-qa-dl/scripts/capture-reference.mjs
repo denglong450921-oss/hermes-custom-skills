@@ -130,19 +130,42 @@ async function settle(page) {
       );
     }
     scrollTo(0, 0);
+
+    // Force loading of lazy images by touching their layout
     const images = [...document.images];
+    images.forEach((img) => {
+      if (img.loading === "lazy") {
+        img.loading = "eager";
+      }
+    });
+
+    // Wait for images to load, but with a timeout so one broken image doesn't hang everything
     await Promise.all(
-      images.map((img) =>
-        img.complete
-          ? null
-          : new Promise((resolve) => {
-              img.addEventListener("load", resolve, { once: true });
-              img.addEventListener("error", resolve, { once: true });
-            }),
-      ),
+      images.map((img) => {
+        if (img.complete) return Promise.resolve();
+        return new Promise((resolve) => {
+          const timeout = setTimeout(resolve, 3000); // 3s max wait per image
+          img.addEventListener(
+            "load",
+            () => {
+              clearTimeout(timeout);
+              resolve();
+            },
+            { once: true },
+          );
+          img.addEventListener(
+            "error",
+            () => {
+              clearTimeout(timeout);
+              resolve();
+            },
+            { once: true },
+          );
+        });
+      }),
     );
   });
-  await page.waitForTimeout(Math.max(settleMs, 2000));
+  await page.waitForTimeout(Math.max(settleMs, 3000));
 }
 
 await mkdir(outDir, { recursive: true });
