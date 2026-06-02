@@ -105,6 +105,27 @@ def generate_rule_suggestion(assertion_type, evidence, count, severity="medium")
             "with <span class=\"num\"> for the number and <span class=\"label\"> "
             "for the label. This draws attention to important figures."
         ),
+        "has_executive_summary": (
+            "Open complex HTML pages with <section class=\"executive-summary\">. "
+            "Give readers the overall map before details: include the title, one "
+            ".insight thesis, and 3–5 prioritized key points."
+        ),
+        "summary_before_detail": (
+            "Place .executive-summary before tables, logic maps, and detailed sections. "
+            "Readers should understand the core message before they inspect evidence."
+        ),
+        "has_logic_visual": (
+            "Make the argument structure visible with a .logic-map wrapper. Choose the "
+            "simplest accurate visual grammar: steps, table, cards, two-column, or Mermaid."
+        ),
+        "has_closing_synthesis": (
+            "Close with <section class=\"closing-synthesis\">. Reconnect the detailed "
+            "evidence to the overall judgment and state the next action."
+        ),
+        "has_key_highlight": (
+            "Turn important conclusions, metrics, risks, or recommendations into visual "
+            "anchors with .highlight-list, .callout, .highlight, or a comparison table."
+        ),
     }
     
     rule = known_rules.get(assertion_type)
@@ -131,6 +152,11 @@ def infer_inject_to(assertion_type):
         "has_meta": "step-2",
         "has_insight": "step-3",
         "has_hr": "layout-system",
+        "has_executive_summary": "ultimate-principles",
+        "summary_before_detail": "ultimate-principles",
+        "has_logic_visual": "logic-visual-selection",
+        "has_closing_synthesis": "general-specific-general-writing-pattern",
+        "has_key_highlight": "ultimate-principles",
     }
     return section_map.get(assertion_type, "general-instructions")
 

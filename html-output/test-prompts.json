@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "name": "business-options-comparison",
+    "prompt": "请把这份选型分析整理成美观的 HTML：我们在评估三种客服方案。自建团队每月成本 18 万，响应时间 5 分钟，可控性高；外包团队每月成本 9 万，响应时间 15 分钟，可控性中；AI + 人工混合每月成本 12 万，响应时间 30 秒，可控性中高。请先总结结论，突出关键指标，用清晰的图或表说明选择逻辑，展开风险，最后给出整体建议。",
+    "expected": "HTML begins with a concise executive summary, highlights the decisive metrics, uses a comparison logic map, develops risks by option, and closes with a synthesized recommendation."
+  },
+  {
+    "id": 2,
+    "name": "technical-deployment-flow",
+    "prompt": "用 HTML 写一份给新同事看的发布流程说明：代码合并后先跑测试，再构建镜像，推送镜像仓库，部署到 staging，做 smoke test，通过后再发布 production；任何一步失败都停止并回滚。请把重点和逻辑关系做得一眼能看懂，不要只写长段落。",
+    "expected": "HTML summarizes the release rule first, highlights the stop-and-rollback condition, uses a visual sequential logic map, explains each stage, and ends with the operating principle."
+  },
+  {
+    "id": 3,
+    "name": "rewrite-detail-first-html",
+    "prompt": "改进下面这段 HTML，让它更适合管理层快速阅读。要求保留事实，但重组逻辑并突出重点：<div><h1>订阅制转型计划</h1><p>客户续费率目前是 62%。一次性项目收入波动较大。订阅服务需要先改造交付流程，再建立客户成功团队，还要调整销售激励。</p><p>短期成本会增加 20%，预计 12 个月后经常性收入占比达到 55%。</p><p>主要风险是团队能力不足和老客户迁移失败。</p></div>",
+    "expected": "Rewritten HTML preserves facts, starts with the core judgment, highlights 62%, 20%, 12 months, and 55%, exposes the transformation logic visually, develops execution and risk details, and closes with an integrated management recommendation."
+  }
+]

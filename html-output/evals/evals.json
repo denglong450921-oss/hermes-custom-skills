@@ -10,9 +10,9 @@
         "files": {"output.css": "styles at references/output.css"},
         "tools_available": ["container", "table", "callout", "insight", "meta", "hr"]
       },
-      "tools": ["container", "table", "callout"],
+      "tools": ["container", "executive-summary", "summary-first", "table", "callout", "logic-map", "key-highlight", "closing-synthesis"],
       "grader": {
-        "must_use": ["container", "table", "callout"],
+        "must_use": ["container", "executive-summary", "summary-first", "table", "callout", "logic-map", "key-highlight", "closing-synthesis"],
         "must_have": ["3 data rows in table"],
         "must_not_have": ["missing thead", "inline styles overriding CSS"]
       }
@@ -24,9 +24,9 @@
         "files": {"output.css": "styles at references/output.css"},
         "tools_available": ["container", "steps", "callout", "insight", "meta", "hr"]
       },
-      "tools": ["steps", "container"],
+      "tools": ["container", "executive-summary", "summary-first", "logic-map", "steps", "key-highlight", "closing-synthesis"],
       "grader": {
-        "must_use": ["steps", "container"],
+        "must_use": ["container", "executive-summary", "summary-first", "logic-map", "steps", "key-highlight", "closing-synthesis"],
         "must_have": ["5 steps with data-step 1-5"],
         "must_not_have": ["missing data-step attributes"]
       }
@@ -38,11 +38,25 @@
         "files": {"output.css": "styles at references/output.css"},
         "tools_available": ["container", "table", "callout", "steps", "insight", "meta", "hr"]
       },
-      "tools": ["table", "callout", "steps"],
+      "tools": ["container", "executive-summary", "summary-first", "logic-map", "table", "callout", "steps", "key-highlight", "closing-synthesis"],
       "grader": {
-        "must_use": ["table", "callout", "steps"],
+        "must_use": ["container", "executive-summary", "summary-first", "logic-map", "table", "callout", "steps", "key-highlight", "closing-synthesis"],
         "must_have": ["3 methods compared", "recommendation in callout", "decision flow as steps"],
         "must_not_have": ["plain paragraphs for key insights"]
+      }
+    },
+    {
+      "id": "case_004",
+      "task": "把这份产品策略备忘录改成HTML：我们要从一次性项目转向订阅制服务。请先总结核心判断，再突出三个关键原因，用清晰的逻辑图展示“问题→策略→执行→结果”，中间展开风险和行动，最后回到整体建议。",
+      "environment": {
+        "files": {"output.css": "styles at references/output.css"},
+        "tools_available": ["container", "executive-summary", "insight", "highlight-list", "logic-map", "steps", "callout", "closing-synthesis", "hr"]
+      },
+      "tools": ["container", "executive-summary", "summary-first", "logic-map", "steps", "key-highlight", "callout", "closing-synthesis"],
+      "grader": {
+        "must_use": ["container", "executive-summary", "summary-first", "logic-map", "steps", "key-highlight", "callout", "closing-synthesis"],
+        "must_have": ["summary first", "three highlighted reasons", "problem-strategy-execution-result logic", "risk and action details", "closing synthesis"],
+        "must_not_have": ["detail-first narrative", "decorative diagram without meaning", "missing final recommendation"]
       }
     }
   ]
