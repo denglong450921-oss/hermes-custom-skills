@@ -137,6 +137,20 @@ async function settle(page) {
       if (img.loading === "lazy") {
         img.loading = "eager";
       }
+      // Handle custom lazy loading attributes (like data-src, data-lazy)
+      const dataSrc = img.getAttribute("data-src");
+      const dataLazy = img.getAttribute("data-lazy");
+      if (dataSrc && !img.src) img.src = dataSrc;
+      if (dataLazy && !img.src) img.src = dataLazy;
+    });
+
+    // Handle background images with data-bg or similar lazy loading attributes
+    const allElements = document.querySelectorAll("*");
+    allElements.forEach((el) => {
+      const dataBg = el.getAttribute("data-bg");
+      if (dataBg) {
+        el.style.backgroundImage = `url(${dataBg})`;
+      }
     });
 
     // Wait for images to load, but with a timeout so one broken image doesn't hang everything
