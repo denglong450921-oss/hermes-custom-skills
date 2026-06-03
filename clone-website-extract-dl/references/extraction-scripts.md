@@ -7,6 +7,7 @@ bundled in the companion `$CLONE_QA_DIR/scripts/` directory.
 |--------|-------|-------|
 | `scripts/discover-assets.js` | Phase 2 | Copy-paste into browser MCP console to enumerate all page assets |
 | `scripts/extract-component-css.js` | Phase 3 | Per-component CSS extraction via getComputedStyle |
+| `scripts/capture-stitched-reference.js` | Phase 1 | Rebuild a desktop reference from a top clip plus per-section captures when scroll-driven media disappears in naive full-page screenshots |
 | `$CLONE_QA_DIR/scripts/verify-css.js` | QA | Run on original AND clone, compare JSON output |
 | `$CLONE_QA_DIR/scripts/capture-reference.mjs` | QA | Deterministic reduced-motion screenshots and DOM geometry snapshots at desktop, tablet, and mobile widths |
 | `$CLONE_QA_DIR/scripts/visual-diff.mjs` | QA | Pixel mismatch score, heatmap, overlay, and JSON report via ImageMagick |
@@ -19,6 +20,7 @@ bundled in the companion `$CLONE_QA_DIR/scripts/` directory.
 ```bash
 node "$CLONE_EXTRACT_DIR/scripts/audit-animations.mjs" --url https://example.com/path --out docs/research/animations --label path
 node "$CLONE_EXTRACT_DIR/scripts/audit-spacing.mjs" --url https://example.com/path --out docs/research/spacing --label path
+node "$CLONE_EXTRACT_DIR/scripts/capture-stitched-reference.js" --url https://example.com/path --out docs/design-references --label path --spec docs/research/pages/path/stitch-spec.json
 node "$CLONE_QA_DIR/scripts/capture-reference.mjs" --url https://example.com/path --out docs/qa/path/source --label path
 node "$CLONE_QA_DIR/scripts/capture-reference.mjs" --url http://localhost:4173/path --out docs/qa/path/clone --label path
 node "$CLONE_QA_DIR/scripts/visual-diff.mjs" --reference docs/qa/path/source/path-desktop.png --candidate docs/qa/path/clone/path-desktop.png --out docs/qa/path/diff --label path-desktop --threshold 0.005
@@ -61,6 +63,45 @@ JSON.stringify({
   favicons: [...document.querySelectorAll('link[rel*="icon"]')].map(l => ({ href: l.href, sizes: l.sizes?.toString() }))
 });
 ```
+
+## Stitched Reference Script
+
+Use this when a desktop page is scroll-driven and each text block has paired
+artwork that only appears while that section is active in the viewport.
+
+Create `docs/research/pages/<page-slug>/stitch-spec.json` like this:
+
+```json
+{
+  "topClipHeight": 1003,
+  "pieces": [
+    { "name": "channel-website", "selector": "#sticky-promo--1" },
+    { "name": "channel-social", "selector": "#sticky-promo--2" },
+    { "name": "channel-marketplaces", "selector": "#sticky-promo--3" },
+    { "name": "channel-pos", "selector": "#sticky-promo--4" },
+    { "name": "footer", "selector": "#footer" }
+  ]
+}
+```
+
+Then run:
+
+```bash
+node "$CLONE_EXTRACT_DIR/scripts/capture-stitched-reference.js" \
+  --url "https://example.com/path" \
+  --out docs/design-references \
+  --label "path" \
+  --spec docs/research/pages/path/stitch-spec.json
+```
+
+Outputs:
+- `docs/design-references/<page-slug>-desktop-full.png`
+- `docs/design-references/<page-slug>-desktop-sections/*.png`
+- `docs/research/pages/<page-slug>/<page-slug>-stitched-report.json`
+
+Record the capture method in `SOURCE_OF_TRUTH.md` so downstream builders and QA
+know the desktop reference is a stitched composite rather than a naive single
+full-page screenshot.
 
 ## Per-Component CSS Extraction
 

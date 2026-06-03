@@ -6,7 +6,10 @@ description: >
   preflight checks, select an extraction mode, capture screenshots, computed
   CSS, assets, responsive states, motion, spacing, and a canonical per-page
   SOURCE_OF_TRUTH.md. This is the evidence phase used by clone-website-dl.
-compatibility: Rendered browser automation, Playwright, Firecrawl, or curl depending on target complexity.
+  Use this skill especially when a page is scroll-driven, sticky, or animation-
+  linked and a naive full-page screenshot might hide media that is visible in
+  the live viewport.
+compatibility: Rendered browser automation, Playwright, optional ImageMagick for stitched screenshots, Firecrawl, or curl depending on target complexity.
 ---
 
 # Clone Website Evidence Extraction
@@ -84,6 +87,31 @@ Before taking full-page screenshots, you MUST:
 - Disable all transitions and animations (`animation-duration: 0s !important`).
 - Perform a full scroll sweep to trigger lazy-loaded assets and ScrollMagic-style triggers.
 - Wait at least 2 seconds after scrolling back to the top to ensure the layout has stabilized.
+
+**CRITICAL: Stitched Capture For Scroll-Driven Pages**
+If the live page pairs text with media that only appears while a section is the
+active viewport target, a naive single full-page screenshot is not acceptable
+canonical evidence. Typical signs:
+- Sticky promo sections where the right-side artwork changes as you scroll.
+- ScrollMagic, GSAP, or section-pinned media that depends on current viewport state.
+- A full-page screenshot that preserves the text blocks but drops or blanks the paired media.
+
+When this happens:
+1. Capture a top clip for the pre-sticky region.
+2. Capture each scroll-driven section individually while it is active in the viewport.
+3. Stitch those captures vertically into the canonical desktop reference.
+4. Save the piece directory and stitched report alongside the final screenshot.
+5. Record the screenshot method explicitly in `SOURCE_OF_TRUTH.md`.
+
+Use:
+
+```bash
+node "$CLONE_EXTRACT_DIR/scripts/capture-stitched-reference.js" \
+  --url "$URL" \
+  --out docs/design-references \
+  --label "$PAGE_SLUG" \
+  --spec "docs/research/pages/$PAGE_SLUG/stitch-spec.json"
+```
 
 Use `scripts/extract-playwright.py` when a reusable headless extraction run is
 helpful. Read `references/playwright-extraction.md` for the rendered-browser
@@ -199,6 +227,7 @@ hard stop. Reconcile in this order:
 | Browser navigation blocked | Check headers and alternate rendered mode | Ask for access, screenshots, or assets |
 | Lazy media unresolved | Scroll, wait, and inspect `data-src` | Record fallback URL or booth requirement |
 | Motion state unclear | Increase samples and inspect trigger points | Record limitation and block unsupported implementation |
+| Full-page screenshot drops section-paired media | Switch to stitched section capture and save the piece manifest | Stop before build and mark extraction incomplete |
 | Canonical record incomplete | Re-run focused extraction | Stop before build |
 
 ## Verification
@@ -207,6 +236,7 @@ Before handing off to `clone-website-build-dl`, confirm:
 
 - The canonical page record passes the extraction validator.
 - Screenshots exist for required viewports.
+- Scroll-driven pages use a stitched reference when a naive full-page screenshot loses visible paired media.
 - Every section has exact content, layout pattern, assets, and CSS evidence.
 - Behavior, animation, and spacing reports are linked.
 - Visible media has either a reachable asset or a documented booth fallback.

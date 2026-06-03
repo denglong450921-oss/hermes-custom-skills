@@ -207,11 +207,62 @@ nav_info = await page.evaluate("""
 """)
 ```
 
+### Pattern F: Stitched Desktop Reference For Scroll-Driven Pages
+
+Use this pattern when the live desktop page pairs copy with media, but a naive
+single full-page screenshot loses that pairing because the media depends on the
+currently active viewport section.
+
+Typical signs:
+- Sticky promo sections with changing right-side artwork.
+- ScrollMagic / GSAP / pinned sections.
+- The live page clearly shows text + image together, but the full-page screenshot shows text with missing or blank media.
+
+In these cases, the canonical desktop reference should be a stitched composite:
+1. Capture the top pre-sticky region as one clip.
+2. Scroll each dynamic section into view.
+3. Wait for visible section images to finish loading.
+4. Screenshot each section individually while it is active.
+5. Stitch the captures vertically.
+6. Keep the stitched report and section-piece directory as evidence.
+
+Example stitch spec:
+
+```json
+{
+  "topClipHeight": 1003,
+  "pieces": [
+    { "name": "channel-website", "selector": "#sticky-promo--1" },
+    { "name": "channel-social", "selector": "#sticky-promo--2" },
+    { "name": "channel-marketplaces", "selector": "#sticky-promo--3" },
+    { "name": "channel-pos", "selector": "#sticky-promo--4" },
+    { "name": "showcase", "selector": "section:has(.calypso-showcase)" },
+    { "name": "footer", "selector": "#footer" }
+  ]
+}
+```
+
+Command:
+
+```bash
+node "$CLONE_EXTRACT_DIR/scripts/capture-stitched-reference.js" \
+  --url "$URL" \
+  --out docs/design-references \
+  --label "$PAGE_SLUG" \
+  --spec "docs/research/pages/$PAGE_SLUG/stitch-spec.json"
+```
+
+Important:
+- Do not treat the stitched desktop image as a QA screenshot. It is extraction evidence.
+- Record `Desktop screenshot method` in `SOURCE_OF_TRUTH.md`.
+- If ImageMagick is unavailable, keep the per-section captures and report the limitation instead of pretending a naive full-page screenshot is authoritative.
+
 ## Pipeline Adaptations
 
 ### Phase 1: Reconnaissance (Playwright Mode)
 
 1. **Full page navigation & screenshots** — see Pattern A
+   - If the full-page screenshot loses section-paired media on a scroll-driven page, replace it with Pattern F stitched capture.
 2. **Design token extraction** — see Pattern B (CSS variables, font stack, color palette)
 3. **Section structure** — see Pattern A (page-structure.json gives component boundaries)
 4. **Content extraction** — see Pattern C (per-section HTML for spec files)
