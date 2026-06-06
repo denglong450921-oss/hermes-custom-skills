@@ -852,6 +852,8 @@ These are real failure modes observed during harness injection across multiple s
 > Running bundled scripts? See [security checklist](references/security-checklist.md) — 13-node gate for destructive ops, injection, secrets, and network safety.
 >
 > Ready to publish? See [verification checklist](references/verification-checklist.md) — 11-node gate: functional, build, runtime, and quality metrics.
+>
+> Writing a new skill? See [anti-patterns checklist](references/anti-patterns-checklist.md) — 8-node gate for the 6 most common SKILL.md structural mistakes.
 
 ## Reference
 
