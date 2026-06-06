@@ -9,8 +9,9 @@ description: >
   The harness creates evals/evals.json, grader.py, run_harness.py, and a Harness section in SKILL.md.
   Now also supports the feedback loop concept: audit trail, semi-automatic error distillation,
   first-time pass rate (FTPR) tracking, prompt rule injection for continuous improvement,
-  truthfulness/honesty constraints for accurate self-reporting, and harness compliance
-  checking with check_harness.py (validates any skill against the standard harness checklist).
+  truthfulness/honesty constraints for accurate self-reporting, harness compliance
+  checking with check_harness.py (validates any skill against the standard harness checklist),
+  and workspace-based process artifacts (timing, postmortem, iteration loop) inspired by Skill Creator 2.0.
 ---
 
 # Skill Harness — Inject the 5-Module Agent Harness
@@ -315,6 +316,93 @@ If any step above fails, consult the table below for the corresponding failure b
 | `run_harness.py` exits early with "no cases found" | Verify `EVALS_FILE` in run_harness.py points to correct `evals.json` path | Hard-code path: `EVALS_FILE = os.path.join(os.path.dirname(__file__), "evals.json")` |
 | All assertions pass but output is clearly wrong | Harness asserts format not correctness. Need deeper checks (factual alignment via /audit/ trail) | Add audit middleware (see 审计追踪 section below) and a factual accuracy check function |
 | `check_harness.py` returns exit code 2 (no harness) | Run in check mode first: `python3 scripts/check_harness.py <target> --json` to see exactly which criteria failed | Fix each failed criterion one by one; re-run check after each fix |
+
+## 📁 Workspace 模式：过程产物（Process Artifacts）
+
+> Core insight from Skill Creator 2.0: every execution step should leave a checkable trace. The $WORKSPACE pattern makes this concrete.
+
+### Why Workspace Matters
+
+Without a workspace, outputs scatter across random paths (Desktop, Downloads, /tmp). Next iteration can't find previous results. Debugging requires scrolling through chat logs. This is the "过程产物" (process artifacts) bone of Harness.
+
+### The Pattern
+
+Every execution starts with a timestamped workspace:
+
+```bash
+WORKSPACE=/tmp/<skill-name>-$(date +%Y%m%d-%H%M%S)
+mkdir -p "$WORKSPACE"
+```
+
+### Standard Artifact Files
+
+| File | When Created | Purpose |
+|------|-------------|---------|
+| `brief.md` | Before execution | Record user intent: task URL, expected output, delivery method |
+| `timing.json` | After each step | Per-step duration (ms) for performance tracking |
+| `timing_stepN.json` | Per step | Individual timing files, merged at end |
+| `postmortem.md` | After completion | Record problems encountered, solutions, improvement ideas |
+| `rendered.html` | After rendering | Intermediate HTML output |
+| `output.png` | Final step | Final deliverable |
+
+### Timing Recording (per step)
+
+```bash
+STEP_START=$(date +%s%N)
+# ... do the work ...
+STEP_END=$(date +%s%N)
+DURATION_MS=$(( (STEP_END - STEP_START) / 1000000 ))
+echo "{\"step\":\"step-name\",\"duration_ms\":$DURATION_MS}" > "$WORKSPACE/timing_stepname.json"
+```
+
+### Merge timings at end
+
+```bash
+python3 -c "
+import json, os
+ws = '$WORKSPACE'
+timings = {}
+for f in os.listdir(ws):
+    if f.startswith('timing_') and f.endswith('.json'):
+        with open(os.path.join(ws, f)) as fp:
+            t = json.load(fp)
+            timings[t['step']] = t['duration_ms']
+with open(os.path.join(ws, 'timing.json'), 'w') as fp:
+    json.dump(timings, fp, indent=2)
+"
+```
+
+### Postmortem Template
+
+```markdown
+# Postmortem
+## Basic Info
+- Task: {description}
+- Date: {date}
+## Step Durations
+- Step 1: {duration}ms
+## Problems
+- {problem} → {solution}
+## Next Improvements
+- {improvement}
+```
+
+### Iteration Loop
+
+When task fails or user gives negative feedback:
+1. **Diagnose** — Read `postmortem.md` + timing to find bottleneck
+2. **Improve** — Update SKILL.md or scripts
+3. **Rerun** — New `$WORKSPACE` (different timestamp)
+4. **Compare** — Compare timing.json and output quality
+5. **Record** — Update `evals/evals.json` with new edge cases
+
+### Anti-Patterns
+
+| Anti-Pattern | Why | Instead |
+|-------------|-----|---------|
+| No workspace | Files scattered across paths, next run can't find previous output | Always create `$WORKSPACE` |
+| No timing | Can't tell which step is slow | Record per-step `timing_stepN.json` |
+| No postmortem | Same mistakes repeat across sessions | Write `postmortem.md` every execution |
 
 ## Architecture
 
@@ -756,7 +844,10 @@ These are real failure modes observed during harness injection across multiple s
 | 6 | **Factual checks without audit trail** | Verifier checks format but not data accuracy | No source data recorded → verifier can't detect hallucination | Always scaffold `/audit/` directory alongside the harness |
 | 7 | **Honesty constraints as an afterthought** | Generator falsely claims success, FTPR is invalid | Without Level 2+3 checks, lies pass through undetected | Add honesty assertions (`reports_failure_honestly`, `no_false_success`) during initial injection, not later |
 | 8 | **Wrong function names → check_harness.py rejects** | `grader.py` uses `grade()` not `check_output()`, or `run_harness.py` has bare `if __name__` not wrapped in `main()` | `check_harness.py` statically scans for `check_output` and `main` — any other name fails the REQUIRED tier even if the code works | **grader.py**: define `def check_output(output_path, checks_json)` (NOT `grade`/`evaluate`/`run_checks`). **run_harness.py**: wrap entry logic in `def main():` then call it from `if __name__ == \\\"__main__\\\": main()`. Test with `python3 scripts/check_harness.py <target> --json` after writing |
-| 9 | **No ending `---` separator in SKILL.md** | `patch(old_string)` fails — fuzzy-match shows wrong sections (frontmatter close, body headings) instead of the file end | The `---` pitfall (#2) assumes every SKILL.md ends with `---`. Some files just end with the last content line — no trailing separator. Without an ending `---`, there's no anchor at file end for the patch to match against. | Detect first: `tail -1 SKILL.md | grep -q '^---$'`. If no match → full rewrite is simpler than patching. Read the entire SKILL.md, append the Harness section to content, then rewrite with `write_file`. This avoids the `---` matching problem entirely when the file has no separator at the end. |
+| 9 | **No ending `---` separator in SKILL.md** | `patch(old_string)` fails — fuzzy-match shows wrong sections (frontmatter close, body headings) instead of the file end | The `---` pitfall (#2) assumes every SKILL.md ends with `---`. Some files just end with the last content line — no trailing separator. | Detect first: `tail -1 SKILL.md | grep -q '^---$'`. If no match → full rewrite is simpler than patching. Read the entire SKILL.md, append the Harness section to content, then rewrite with `write_file`. |
+| 10 | **Narrow grader regex for behavioral skills** | `measurable_progress`/`real_environment` checks return false negatives — output discusses Lighthouse CI, DevTools Profiler, and asks "build tool? React version?" but grader expects exact phrases "benchmark" or "same stack" | Behavioral signals come in many vocabularies. | Add broad catch-all patterns: tool names (Lighthouse, DevTools) and stack-probing question patterns. Never rely on a single exact phrase. |
+
+> Post-injection: does the skill need an FAQ? See [FAQ decision tree](references/faq-decision-tree.md) — 7-node flow for documentation completeness.
 
 ## Reference
 
