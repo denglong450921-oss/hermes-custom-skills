@@ -850,6 +850,8 @@ These are real failure modes observed during harness injection across multiple s
 > Post-injection: does the skill need an FAQ? See [FAQ decision tree](references/faq-decision-tree.md) — 7-node flow for documentation completeness.
 >
 > Running bundled scripts? See [security checklist](references/security-checklist.md) — 13-node gate for destructive ops, injection, secrets, and network safety.
+>
+> Ready to publish? See [verification checklist](references/verification-checklist.md) — 11-node gate: functional, build, runtime, and quality metrics.
 
 ## Reference
 
