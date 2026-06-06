@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "prompt": "Write a goal for Codex: our React dashboard is slow, users complaining about 5-second load times. We need it faster. Go.",
+    "expected": "Agent should push back — ask for specific metrics (current load time, target), ask for starting point (which component/page), mention profiling tools, and include a measurable exit condition with a number. Should NOT just write 'make dashboard faster'."
+  },
+  {
+    "id": 2,
+    "prompt": "I need a goal prompt for an AI agent that's going to run in the background for a week, migrating 40 microservices one by one from Express to Fastify. Each service has its own repo. I won't be watching it — I'll just check in once a day. What should the goal look like?",
+    "expected": "Agent should embed progress tracking (commit at milestones, push draft PRs, update STATUS.md or similar artifact), include a cleanup/review step at the end, and address the async/long-running nature with visibility mechanisms. Should NOT write a goal with no progress signals."
+  },
+  {
+    "id": 3,
+    "prompt": "Write me a goal for cloning the Notion landing page. I want it to look EXACTLY the same — pixel perfect. Use whatever tools you need.",
+    "expected": "Agent should warn about pure visual targets being risky, suggest pairing screenshots with functional checklists or spec docs, address the need for same-stack environment (Next.js, Tailwind, etc.), and include measurable verification beyond 'looks the same'. Should NOT blindly accept pixel-perfect without caveats."
+  }
+]

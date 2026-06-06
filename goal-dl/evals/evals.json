@@ -1,0 +1,73 @@
+{
+  "skill_name": "goal-dl",
+  "description": "7-principle framework for writing effective goal prompts for autonomous coding agents — exit criteria, direction, measurability, environment, visual targets, progress tracking, and cleanup.",
+  "harness_version": "1.0",
+  "evals": [
+    {
+      "id": "case_001",
+      "task": "The user says: 'Write a goal for an AI agent to improve the performance of our React dashboard. It's slow and our users are complaining.' No metrics, no baseline, no constraints given. The agent applying goal-dl should push back: ask for measurable targets, a starting point, and known constraints before writing any goal.",
+      "environment": {
+        "files": {},
+        "tools_available": ["read", "write", "terminal"],
+        "guidelines": ["exit_criteria", "give_direction"]
+      },
+      "tools": ["exit_criteria", "give_direction"],
+      "grader": {
+        "must_use": ["exit_criteria", "give_direction"],
+        "must_have": [
+          "ask for a specific measurable target or number",
+          "ask for a starting point or current baseline",
+          "push back on vagueness before crafting the goal"
+        ],
+        "must_not_have": [
+          "accept the vague request without asking clarifying questions",
+          "write a goal with no specific exit condition"
+        ]
+      }
+    },
+    {
+      "id": "case_002",
+      "task": "The user says: 'I need a goal for a multi-day refactoring agent. It needs to migrate 40 microservices from Express to Fastify, one by one. I'll have the agent running in the background.' The agent applying goal-dl should embed progress tracking (commit milestones, status artifacts) and a cleanup step (review pass, dead-end removal) into the goal prompt.",
+      "environment": {
+        "files": {},
+        "tools_available": ["read", "write", "terminal"],
+        "guidelines": ["track_progress", "cleanup"]
+      },
+      "tools": ["track_progress", "cleanup"],
+      "grader": {
+        "must_use": ["track_progress", "cleanup"],
+        "must_have": [
+          "suggest commit milestones or draft PR pattern",
+          "suggest a living artifact for status visibility",
+          "include a review or cleanup step at the end"
+        ],
+        "must_not_have": [
+          "write a goal with no progress visibility mechanism",
+          "omit the cleanup/review step for a days-long run"
+        ]
+      }
+    },
+    {
+      "id": "case_003",
+      "task": "The user says: 'Write a goal for an agent to clone the Stripe landing page. I want pixel-perfect fidelity.' The agent applying goal-dl should warn against pure visual targets, suggest pairing screenshots with functional checklists and design tokens, and ensure the environment is production-like (same framework, same build tools).",
+      "environment": {
+        "files": {},
+        "tools_available": ["read", "write", "terminal", "browser"],
+        "guidelines": ["not_visual_only", "real_environment"]
+      },
+      "tools": ["not_visual_only", "real_environment"],
+      "grader": {
+        "must_use": ["not_visual_only", "real_environment"],
+        "must_have": [
+          "warn about risks of pure visual/pixel-perfect targets",
+          "suggest pairing visual references with functional specs or checklists",
+          "address the environment (same framework, flags, tools)"
+        ],
+        "must_not_have": [
+          "blindly accept 'pixel-perfect' without caveats",
+          "write a goal that ignores functional verification"
+        ]
+      }
+    }
+  ]
+}
