@@ -181,6 +181,8 @@ Before finalizing, ask:
 - Does each failure-prone step have a fallback or an intentional stop?
 - Can the workflow resume safely after an interruption?
 
+> Walkthrough: [decomposition checklist](references/decomposition-checklist.md) — 4-node decision tree with ato-arche-dl mapping.
+
 ## Required Design Output
 
 When answering a workflow-design or workflow-refactor request, provide the
