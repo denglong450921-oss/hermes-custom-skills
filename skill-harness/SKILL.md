@@ -845,9 +845,11 @@ These are real failure modes observed during harness injection across multiple s
 | 7 | **Honesty constraints as an afterthought** | Generator falsely claims success, FTPR is invalid | Without Level 2+3 checks, lies pass through undetected | Add honesty assertions (`reports_failure_honestly`, `no_false_success`) during initial injection, not later |
 | 8 | **Wrong function names → check_harness.py rejects** | `grader.py` uses `grade()` not `check_output()`, or `run_harness.py` has bare `if __name__` not wrapped in `main()` | `check_harness.py` statically scans for `check_output` and `main` — any other name fails the REQUIRED tier even if the code works | **grader.py**: define `def check_output(output_path, checks_json)` (NOT `grade`/`evaluate`/`run_checks`). **run_harness.py**: wrap entry logic in `def main():` then call it from `if __name__ == \\\"__main__\\\": main()`. Test with `python3 scripts/check_harness.py <target> --json` after writing |
 | 9 | **No ending `---` separator in SKILL.md** | `patch(old_string)` fails — fuzzy-match shows wrong sections (frontmatter close, body headings) instead of the file end | The `---` pitfall (#2) assumes every SKILL.md ends with `---`. Some files just end with the last content line — no trailing separator. | Detect first: `tail -1 SKILL.md | grep -q '^---$'`. If no match → full rewrite is simpler than patching. Read the entire SKILL.md, append the Harness section to content, then rewrite with `write_file`. |
-| 10 | **Narrow grader regex for behavioral skills** | `measurable_progress`/`real_environment` checks return false negatives — output discusses Lighthouse CI, DevTools Profiler, and asks "build tool? React version?" but grader expects exact phrases "benchmark" or "same stack" | Behavioral signals come in many vocabularies. | Add broad catch-all patterns: tool names (Lighthouse, DevTools) and stack-probing question patterns. Never rely on a single exact phrase. |
+| 10 | **Narrow grader regex for behavioral skills** | `measurable_progress`/`real_environment` checks return false negatives — output discusses Lighthouse CI, DevTools Profiler, and asks "build tool? React version?" but grader expects exact phrases "benchmark" or "same stack" | Behavioral signals come in many vocabularies. | Add broad catch-all patterns: tool names (Lighthouse, DevTools) and stack-probing question patterns. Never rely on a single exact phrase. See [grader calibration](references/grader-calibration.md) for before/after regex patterns and methodology. |
 
 > Post-injection: does the skill need an FAQ? See [FAQ decision tree](references/faq-decision-tree.md) — 7-node flow for documentation completeness.
+>
+> Running bundled scripts? See [security checklist](references/security-checklist.md) — 13-node gate for destructive ops, injection, secrets, and network safety.
 
 ## Reference
 
@@ -867,3 +869,5 @@ For non-HTML injection templates (generic grader + runner), see `references/temp
 For the GitHub auto-sync backup pattern, see `references/github-sync.md` in this skill.
 
 For making skills visible to Trae (ByteDance AI IDE), see `references/trae-visibility.md` in this skill.
+
+For behavioral grader calibration (avoiding regex false negatives), see `references/grader-calibration.md` in this skill.
