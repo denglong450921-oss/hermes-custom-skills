@@ -20,7 +20,7 @@ Preferred Hermes command:
 hermes -z "$TASK_PACKAGE" --skills engineering-cybernetics-hermes --yolo
 ```
 
-If the `hermes` MCP server is available in Codex, prefer that bridge for conversation. Otherwise use the CLI command above from the workspace root.
+Default to the CLI command above from the workspace root. Do not start or keep a Hermes MCP bridge just because this skill exists; the bridge can cost local performance. Use a Hermes MCP bridge only when the user explicitly asks for MCP mode for the current task.
 
 🔴 CHECKPOINT: before delegation, confirm scope, verification command, and acceptance criteria. If any are missing, ask or inspect; do not delegate a vague build.
 
@@ -79,7 +79,7 @@ When upgrading this skill, use `evals/evals.json` as the test set. For a full sk
 
 | Trigger | First response | If still failing |
 |---|---|---|
-| Hermes MCP unavailable | Run `hermes acp --check`, then use CLI from the workspace root. | Report setup blocked and ask whether Codex should code directly. |
+| User explicitly asks for Hermes MCP and it is unavailable | Run `hermes acp --check`, then use CLI from the workspace root. | Report MCP setup blocked and ask whether CLI delegation is acceptable. |
 | Hermes hangs or returns long logs | Stop after timeout and ask Hermes for compact status only. | Kill the stuck process, summarize state, and ask before retrying. |
 | Hermes edits outside scope | Do not hand off. Ask Hermes to revert the forbidden files. | If revert is risky, stop and ask before changing those files. |
 | Verification fails | Send Hermes the failing command and the smallest relevant error excerpt. | Codex reviews the diff and decides whether to narrow scope or ask the user. |
@@ -122,6 +122,7 @@ Return only:
 - Keep Codex in the planner/reviewer lane whenever practical.
 - If Hermes Agent can do the labor, Codex should not implement it.
 - If local CLI can do search, logs, tests, or diffs cheaply, do not spend Codex context on raw output.
+- Keep Hermes MCP off by default; use on-demand CLI delegation unless the user explicitly requests MCP mode.
 - Do not paste long Hermes logs into the user response.
 - Do not let Hermes do product/design decisions that need user approval.
 - Do not claim global forced delegation; this is policy-driven unless Codex exposes a verified hard delegation setting.
