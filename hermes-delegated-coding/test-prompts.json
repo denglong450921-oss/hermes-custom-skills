@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "prompt": "Use hermes-delegated-coding to add a small responsive component to this web project while saving Codex tokens.",
+    "expected": "Codex creates a compact task package, delegates implementation to Hermes, then reviews changed files, runs verification, and returns a preview or verification summary."
+  },
+  {
+    "id": 2,
+    "prompt": "Can you make Hermes code everything automatically from now on? Apply this workflow globally if possible.",
+    "expected": "The agent states the honest limit that global hard-forced delegation is not verified, then applies the supported policy-driven workflow through Hermes MCP or Hermes CLI."
+  },
+  {
+    "id": 3,
+    "prompt": "Hermes implemented the task but touched files outside scope and the preview does not match the acceptance criteria. Continue using the delegated workflow.",
+    "expected": "Codex catches the scope and acceptance failures, sends a narrow correction package back to Hermes, reruns verification, and reports remaining risks without directly patching unless allowed."
+  }
+]
