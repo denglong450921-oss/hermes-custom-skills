@@ -7,6 +7,8 @@ description: Routes coding labor through Hermes while Codex plans, reviews, veri
 
 Use this skill for coding tasks where Codex should avoid doing bulk implementation work.
 
+Core operating rule: Codex plans and reviews; Hermes Agent codes; local CLI handles cheap search, tests, logs, and diffs.
+
 Default roles:
 
 - Codex: plan, acceptance criteria, risk boundaries, final review, verification, preview.
@@ -21,6 +23,23 @@ hermes -z "$TASK_PACKAGE" --skills engineering-cybernetics-hermes --yolo
 If the `hermes` MCP server is available in Codex, prefer that bridge for conversation. Otherwise use the CLI command above from the workspace root.
 
 🔴 CHECKPOINT: before delegation, confirm scope, verification command, and acceptance criteria. If any are missing, ask or inspect; do not delegate a vague build.
+
+## Quota-Saver Decision Tree
+
+1. If the task is high-risk or architecture-level, Codex may spend judgment on architecture, decomposition, risk analysis, acceptance criteria, and review checklist.
+   Codex should not write full code, scan the whole repo, run long loops, paste long logs, or repeatedly debug.
+
+2. If the task is normal coding work, send it to Hermes.
+   Hermes handles reading files, implementation, refactors, tests, logs, bug fixing, and reruns.
+
+3. If Hermes fails tests, keep Codex out of the debugging loop at first.
+   Send Hermes the failing command and smallest useful error excerpt, then have Hermes fix and rerun.
+
+4. If Hermes passes tests and the diff is small and low-risk, use a quick Codex checklist: goal met, tests passed, no unrelated files, no obvious security issue.
+
+5. If the diff is large, risky, or user-facing, Codex reviews only a compact package: goal, changed files, key diff notes, test result, risks, and review questions.
+
+6. If Codex requests changes, send that feedback back to Hermes and repeat the compact loop.
 
 ## Workflow
 1. Observe the workspace with cheap local commands only.
@@ -45,6 +64,16 @@ If the `hermes` MCP server is available in Codex, prefer that bridge for convers
 
 7. Handoff.
    Return the preview URL first when available, then changed files, verification, and remaining risks.
+
+## Task Size Control
+
+- Small task: Codex gives one short plan and one final review; Hermes does all coding, testing, and fixing.
+- Medium task: Codex gives solution direction, task package, diff review, and final check; Hermes runs the implementation loop.
+- Large task: Codex creates milestones and reviews each milestone; Hermes implements each milestone and runs repeated verification.
+
+## Skill Evaluation
+
+When upgrading this skill, use `evals/evals.json` as the test set. For a full skill-creator style benchmark loop, read `references/evaluation-loop.md`.
 
 ## Failure Branches
 
@@ -91,6 +120,8 @@ Return only:
 ## Rules
 
 - Keep Codex in the planner/reviewer lane whenever practical.
+- If Hermes Agent can do the labor, Codex should not implement it.
+- If local CLI can do search, logs, tests, or diffs cheaply, do not spend Codex context on raw output.
 - Do not paste long Hermes logs into the user response.
 - Do not let Hermes do product/design decisions that need user approval.
 - Do not claim global forced delegation; this is policy-driven unless Codex exposes a verified hard delegation setting.

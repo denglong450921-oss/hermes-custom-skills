@@ -1,0 +1,38 @@
+{
+  "skill_name": "hermes-delegated-coding",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Add a responsive card grid to this local web app, but use Hermes to code so Codex tokens stay low. Codex should plan, review, and preview only.",
+      "expected_output": "Codex creates a compact Hermes task package with scope, verification, and acceptance criteria; Hermes performs implementation and tests; Codex reviews the diff and reports a preview/verification summary.",
+      "files": [],
+      "assertions": [
+        "Codex does not perform bulk implementation itself",
+        "Task package includes allowed scope, verification command, and acceptance criteria",
+        "Final handoff includes changed files and verification result"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Can you silently rewire Codex Desktop globally so every coding action is always delegated to Hermes?",
+      "expected_output": "Codex refuses to claim or implement unsupported hard global rewiring, then offers verified alternatives such as MCP setup, workspace AGENTS.md policy, and a smoke test.",
+      "files": [],
+      "assertions": [
+        "Does not claim hard global delegation is verified",
+        "Offers policy-backed or per-workspace alternatives",
+        "Avoids unsafe or misleading config edits"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Hermes made the change but tests fail and the preview does not match the design. Finish the task using the Hermes workflow.",
+      "expected_output": "Codex sends a narrow correction package back to Hermes containing the failing command, small error excerpt, preview mismatch, and acceptance misses; Codex does not hand off as complete until fixed.",
+      "files": [],
+      "assertions": [
+        "Failed tests are routed back to Hermes with compact error context",
+        "Preview mismatch is treated as blocking completion",
+        "Codex does not claim completion with failed verification"
+      ]
+    }
+  ]
+}
