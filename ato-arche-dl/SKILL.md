@@ -7,9 +7,13 @@ description: >
   more maintainable steps, or asks how to split, orchestrate, compose, reuse, or
   migrate skills. Trigger for phrases such as "workflow design", "pipeline",
   "orchestrate", "chain skills", "workflow refactor", "设计工作流", "编排 skill",
-  "原子化", "拆 skill", "工作流重构", and "复用 skill". Produce a concrete
-  architecture: atomic boundaries, contracts, orchestration steps, checkpoints,
-  failure routes, reuse analysis, and an implementation order.
+  "原子化", "拆 skill", "工作流重构", and "复用 skill". Also trigger when a user
+  has a skill that's grown too large, has hidden dependencies between steps,
+  needs resume/checkpoint capability, runs steps in parallel, or wants to add
+  a new platform to an existing workflow. Produce a concrete architecture:
+  atomic boundaries, contracts, orchestration steps, checkpoints, failure
+  routes, parallel execution plan, cost budget, reuse analysis, and an
+  implementation order.
 compatibility: Hermes Agent and Codex-style skill environments.
 ---
 
@@ -27,6 +31,34 @@ The aim is not to create the largest possible number of skills. Choose the
 smallest set of stable boundaries that makes testing, replacement, and reuse
 meaningfully easier.
 
+## Quick Start: Scaffolding Tools
+
+Before writing by hand, use bundled scripts:
+
+```bash
+# Scaffold a new atomic skill from template
+python3 scripts/scaffold-skill.py atomic --name parse-author --dir ./skills/
+# Output: ./skills/parse-author/SKILL.md + references/ + scripts/
+
+# Scaffold a new orchestration skill from template
+python3 scripts/scaffold-skill.py orchestration --name content-collection --dir ./skills/
+# Output: ./skills/content-collection/SKILL.md with workflow table
+
+# Generate contract docs from a workflow spec (JSON input required)
+python3 scripts/generate-contract.py workflow.json --output-dir ./contracts/
+# Input: workflow.json — see script docstring for required schema
+# Output: ./contracts/<skill-name>.md per atomic skill in spec
+```
+
+| Script | Required args | Optional args | Output |
+|--------|---------------|---------------|--------|
+| `scaffold-skill.py` | `atomic\|orchestration`, `--name` | `--dir` (default `.`) | `<dir>/<name>/SKILL.md` + `references/` + `scripts/` |
+| `generate-contract.py` | `workflow.json` path | `--output-dir` (default `./contracts/`) | `<output-dir>/<skill>.md` per atomic skill |
+
+The scaffold produces structured starting points with contract tables, failure handling,
+and verification sections already in place. Edit the generated files to fill in
+domain-specific details.
+
 ## Design Workflow
 
 ### 1. Capture the outcome
@@ -37,7 +69,7 @@ Summarize:
 - Inputs and final deliverables
 - External systems, tools, and runtime dependencies
 - Human decisions that cannot be automated safely
-- Constraints such as cost, latency, privacy, and partial-result tolerance
+- Constraints: cost, latency, privacy, partial-result tolerance
 
 Do not start naming skills until the end-to-end outcome is clear.
 
@@ -47,11 +79,11 @@ List the actual operations in execution order. Include setup, validation,
 conversion, analysis, persistence, reporting, and cleanup. Mark:
 
 - Conditional branches
-- Steps that can run in parallel
+- Steps that can run in parallel (see `references/parallel-patterns.md`)
 - Repeated operations
 - Platform-specific operations
 - Human review points
-- Failure-prone boundaries such as network requests or model calls
+- Failure-prone boundaries (network requests, model calls)
 
 This inventory is a behavior map, not yet a skill list.
 
@@ -124,8 +156,27 @@ For each atomic skill, specify:
 | Failure behavior | Errors, retries, partial results, and fallback output |
 | Verification | How to confirm the result is usable |
 
-Prefer structured contracts such as JSON objects or documented file layouts.
+Prefer structured contracts (JSON objects, documented file layouts).
 Avoid implicit handoffs that require downstream skills to guess field names.
+
+#### Contract versioning
+
+Contracts evolve. Plan for backward compatibility:
+
+- **Minor version** (1.0 → 1.1): Add optional fields. Backward compatible.
+- **Major version** (1.x → 2.0): Rename or remove fields. Breaking change.
+  Provide an adapter skill that converts new format to old format for
+  downstream consumers not yet migrated.
+
+Document version in each skill's SKILL.md frontmatter:
+
+```yaml
+contract_version: "1.1"
+```
+
+Orchestrators should declare which contract version they expect per step.
+A mismatch between orchestrator expectation and skill output is a bug, not
+a runtime surprise — catch it in testing.
 
 ### 6. Design the orchestration skill
 
@@ -146,6 +197,40 @@ The orchestrator may contain routing logic such as:
 It should not duplicate implementation details such as selectors, parsing
 rules, API payloads, prompts, or shell commands owned by an atomic skill.
 
+#### Parallel execution
+
+When steps have no data dependency, run them in parallel. Three patterns:
+
+**Fan-out / Fan-in:** Multiple items need same processing (batch OCR, parallel
+API calls). Each parallel skill gets independent input. Aggregator defines
+timeout and partial-result policy.
+
+**Pipeline with buffers:** Streaming data through transformations. Each stage
+defines I/O schema. Buffers handle backpressure.
+
+**Competitive execution:** Multiple implementations with different cost/latency
+tradeoffs. All produce same output schema. Orchestrator picks first success
+and cancels losers.
+
+For detailed patterns, concurrency limits, and examples, see
+`references/parallel-patterns.md`.
+
+#### Cost budgeting
+
+Add budget constraints to orchestration contracts:
+
+```json
+{
+  "max_tokens": 50000,
+  "max_api_calls": 100,
+  "max_wall_time_seconds": 300,
+  "on_budget_exceeded": "stop_and_report"
+}
+```
+
+Track cumulative cost per `run_id`. Check budget before each step. Route to
+cheaper alternatives when approaching limits.
+
 ### 7. Make recovery explicit
 
 Workflows become trustworthy when failure is a designed state rather than a
@@ -153,12 +238,12 @@ surprise. Define a fallback table:
 
 | Step | Failure signal | First response | Final fallback |
 |---|---|---|---|
-| `[step]` | `[timeout / empty output / invalid data]` | `[retry / alternate route]` | `[partial result / manual review / stop]` |
+| `[step]` | `[timeout / empty / invalid]` | `[retry / alternate]` | `[partial / manual / stop]` |
 
 Add run-state fields when a workflow is long-running or expensive:
 
 - `run_id`
-- `step_status`
+- `step_status` (per step: pending / completed / failed / partial)
 - `completed_items`
 - `failed_items`
 - `artifact_paths`
@@ -167,60 +252,149 @@ Add run-state fields when a workflow is long-running or expensive:
 Favor idempotent steps so a resumed workflow does not duplicate downloads,
 database rows, messages, or charges.
 
+#### Idempotency patterns
+
+- **Idempotency key:** Hash of `(input_params + run_id + step_name)` passed to
+  APIs, DBs, or file systems. Server checks if key already processed.
+- **Conditional write:** Only write if output doesn't already exist.
+- **Upsert:** `INSERT ... ON CONFLICT UPDATE` for database writes.
+
+Non-idempotent steps (email, SMS, payment) must check completion status
+before re-executing on resume.
+
+#### Checkpoint strategy
+
+Checkpoint when a step is:
+- Expensive (API calls, GPU time)
+- Slow (> 1 minute)
+- Failure-prone (network requests, model calls)
+- Produces partial results with standalone value
+
+On resume, validate checkpoint before trusting it: verify referenced files
+still exist, API tokens still valid, data not corrupted. If invalid, restart
+from beginning and log warning.
+
 ### 8. Verify the architecture
 
-Before finalizing, ask:
+Don't just ask questions — run tests. Execute each procedure from
+`references/testing-procedures.md`:
 
-- Does each atomic skill do one coherent job?
-- Can each atomic skill be tested without running the full workflow?
-- Does the orchestrator contain only coordination logic?
-- Are all handoffs explicit and stable?
-- Are platform-specific skills isolated?
-- Can common capabilities be reused in another workflow?
-- Are checkpoints and human decisions clearly marked?
-- Does each failure-prone step have a fallback or an intentional stop?
-- Can the workflow resume safely after an interruption?
+1. **Single responsibility verification:** List all actions, confirm each
+   contributes to one responsibility. Fail if skill name contains "and".
+2. **Independent testability:** Run each atomic skill in isolation with mock
+   input. Verify output matches contract. Fail if it requires another skill
+   to run first.
+3. **Contract validation:** Check every orchestration step has explicit input
+   source (not "previous output"), structured output schema, and documented
+   failure behavior.
+4. **Failure route verification:** Simulate each failure-prone step's failure
+   modes. Verify orchestrator routes to correct fallback.
+5. **Platform isolation:** Verify reusable skills contain no platform-specific
+   logic. Test with 2+ platform inputs.
+6. **Resume safety:** Run to checkpoint, kill process, resume. Verify completed
+   steps skipped, no duplicate side effects.
+7. **Human decision points:** Verify all STOP points documented, no silent
+   auto-approval timeouts.
+8. **Cost and time estimation:** Estimate API calls, tokens, wall time per
+   step. Sum and compare to budget.
 
-> Walkthrough: [decomposition checklist](references/decomposition-checklist.md) — 4-node decision tree with ato-arche-dl mapping.
+Also run each sub-skill through the 4-node decomposition decision tree in
+`references/decomposition-checklist.md`.
 
 ## Required Design Output
 
-When answering a workflow-design or workflow-refactor request, provide the
-following sections. Keep the depth proportional to the workflow.
+When answering a workflow-design or workflow-refactor request, provide these
+sections. Keep depth proportional to the workflow.
 
 ### 1. Workflow summary
 
-State the goal, inputs, final deliverables, and major constraints.
+Goal, inputs, final deliverables, major constraints.
 
 ### 2. Atomic skill map
 
 | Skill | Responsibility | Input | Output | Classification | Reuse status | Evidence |
 |---|---|---|---|---|---|---|
-| `[skill-name]` | `[single responsibility]` | `[contract]` | `[contract]` | `[reusable / domain / platform / workflow]` | `[verified / unverified / extract / create]` | `[inspected path / quoted contract / source monolith / search scope]` |
+| `[name]` | `[responsibility]` | `[contract]` | `[contract]` | `[type]` | `[status]` | `[evidence]` |
 
 ### 3. Orchestration flow
 
 | Step | Invoke | Input source | Output | Route, checkpoint, or fallback |
 |---|---|---|---|---|
-| `0` | `[skill-name]` | `[user input or prior output]` | `[result]` | `[next step or fallback]` |
+| `0` | `[skill]` | `[source]` | `[result]` | `[next]` |
 
-Mark human review points clearly as `STOP: wait for user confirmation`.
+Mark human review points as `🔴 STOP: wait for user confirmation`.
 Do not invent an automatic approval timeout unless the user requests one.
 
-### 4. Reuse and migration plan
+### 4. Parallel execution plan
 
-Explain what already exists, what should be extracted from a monolith, what
-must be created, and what can remain unchanged when adding another platform.
+Which steps run in parallel, which pattern (fan-out, pipeline, competitive),
+max concurrency, and partial-failure policy. Omit if all steps are sequential.
 
-### 5. Implementation order
+### 5. Recovery and resume plan
 
-Recommend an incremental build sequence:
+Fallback table, checkpoint locations, idempotency strategy for non-idempotent
+steps.
 
-1. Define contracts.
+### 6. Cost budget
+
+Estimated API calls, tokens, wall time per step. Total budget. Action on
+budget exceeded.
+
+### 7. Reuse and migration plan
+
+What exists, what to extract, what to create, what stays unchanged when
+adding another platform.
+
+### 8. Implementation order
+
+1. Define contracts (run `scripts/generate-contract.py`).
 2. Implement and verify atomic skills independently.
-3. Test routing and fallbacks.
+3. Test routing, parallel execution, and fallbacks.
 4. Add the orchestration skill.
-5. Run an end-to-end test with checkpoints.
+5. Run end-to-end test with checkpoints and resume.
+
+## Common Anti-Patterns
+
+| Anti-pattern | Why it hurts | Better design |
+|---|---|---|
+| Monolithic skill owns full pipeline | One change disturbs unrelated behavior | Extract capabilities, add orchestrator |
+| Orchestrator repeats business logic | Logic diverges across workflows | Keep implementation in atomic skills |
+| Atomic skill secretly calls other skills | Dependencies become invisible | Declare cross-skill calls in orchestrator |
+| Every tiny helper becomes a skill | Coordination overhead exceeds benefit | Keep inseparable helpers in one skill |
+| Contracts are prose-only or implicit | Downstream behavior becomes fragile | Structured inputs, outputs, failure states |
+| Configuration is hard-coded | Reuse requires source edits | Pass configuration through contracts |
+| Human decisions auto-approve silently | Workflow takes unintended actions | 🔴 Explicit STOP or user-approved policy |
+| Recovery is missing | One failure discards useful work | Retry, fallback, partial output, resume |
+| Parallel without concurrency limit | Resource exhaustion, rate limits | Max workers, semaphore, backpressure |
+| No cost tracking | Budget exceeded silently | Track per step, alert on threshold |
+| Checkpoint without validation | Resume from corrupted state | Validate before trusting checkpoint |
+| Contract changes without versioning | Downstream skills break silently | Version contracts, adapter skills for breaking changes |
+
+## Real-World Pitfalls
+
+Production deployments surface patterns that design-time reviews miss.
+Read `references/pitfalls.md` for 14 documented pitfalls with symptoms,
+root causes, and fixes. Two patterns the anti-patterns table above does not
+cover in depth:
+
+1. **Retry storms:** No exponential backoff, infinite retry loops hitting
+   rate limits. Anti-patterns row 8 covers missing recovery, but storms need
+   explicit backoff — add `retry_interval = min(2^attempt, 60)` to contracts.
+2. **Implicit state sharing:** Skills share files through hardcoded paths
+   instead of explicit contracts (anti-patterns row 5 catches prose-only
+   contracts; this is the runtime symptom — always use contract fields,
+   never assume file locations).
+
+## Reference Materials
+
+| File | When to read |
+|---|---|
+| `references/decomposition-checklist.md` | Validating each sub-skill meets the 3 principles |
+| `references/parallel-patterns.md` | Designing concurrent execution, cost budgets, checkpoints |
+| `references/testing-procedures.md` | Step 8 verification — actionable tests, not questions |
+| `references/pitfalls.md` | Learning from 14 production failure patterns |
+| `references/cross-domain-cases.md` | Seeing the pattern in SaaS onboarding, ML training, e-commerce, content moderation |
+| `references/douyin-case-study.md` | Original content-collection pipeline example |
 
 ## Atomic Skill Template
 
@@ -228,6 +402,7 @@ Recommend an incremental build sequence:
 ---
 name: my-atomic-skill
 description: Perform one specific capability. Use when [trigger context].
+contract_version: "1.0"
 ---
 
 # My Atomic Skill
@@ -242,6 +417,14 @@ description: Perform one specific capability. Use when [trigger context].
   "optional_field": "value"
 }
 ```
+
+| Field | Type | Required | Default |
+|-------|------|----------|---------|
+| `required_field` | string | Yes | - |
+| `optional_field` | string | No | "default" |
+
+## Preconditions
+- [Tools, credentials, files, prior state]
 
 ## Process
 1. Validate preconditions.
@@ -259,8 +442,11 @@ description: Perform one specific capability. Use when [trigger context].
 
 ## Failure Handling
 | Signal | Response | Fallback |
-|---|---|---|
+|--------|----------|----------|
 | `[signal]` | `[response]` | `[fallback]` |
+
+## Verification
+[How to confirm the result is usable.]
 ````
 
 ## Orchestration Skill Template
@@ -282,34 +468,26 @@ description: Orchestrate [workflow outcome] by routing data through atomic skill
 | `0` | `health-check` | Runtime context | `health_status` | Continue or fallback |
 | `1` | `parse-source` | User input | `source_record` | Step 2 |
 | `2` | `collect-items` | `source_record.id` | `items[]` | Step 3 |
-| `3a` | `image-ocr` | Image items | `text_results[]` | Step 4 |
-| `3b` | `audio-transcribe` | Video items | `text_results[]` | Step 4 |
+| `3a` | `image-ocr` | Image items (parallel) | `text_results[]` | Step 4 |
+| `3b` | `audio-transcribe` | Video items (parallel) | `text_results[]` | Step 4 |
 | `4` | `generate-report` | All results | Report artifact | Complete |
+
+## Parallel Execution
+Steps 3a and 3b run concurrently. Max concurrency: 10 items per skill.
+Partial failure policy: continue with successful items if > 90% succeed.
 
 ## Recovery
 | Step | Failure signal | First response | Final fallback |
 |---|---|---|---|
 | `[step]` | `[signal]` | `[response]` | `[fallback]` |
 
+## Cost Budget
+| Resource | Limit | On exceeded |
+|----------|-------|-------------|
+| API calls | 100 | Stop and report |
+| Model tokens | 50000 | Switch to cheaper model |
+
 ## Resume
 Persist `run_id`, `step_status`, `failed_items`, and `artifact_paths`.
+Validate checkpoint before resuming.
 ```
-
-## Common Anti-Patterns
-
-| Anti-pattern | Why it hurts | Better design |
-|---|---|---|
-| Monolithic skill owns the full pipeline | One change can disturb unrelated behavior | Extract stable capabilities and add an orchestrator |
-| Orchestrator repeats business logic | Logic diverges across workflows | Keep implementation in atomic skills |
-| Atomic skill secretly calls other skills | Dependencies become invisible | Declare cross-skill calls in the orchestrator |
-| Every tiny helper becomes a skill | Coordination overhead exceeds the benefit | Keep inseparable helpers inside one atomic skill |
-| Contracts are prose-only or implicit | Downstream behavior becomes fragile | Define structured inputs, outputs, and failure states |
-| Configuration is hard-coded | Reuse requires source edits | Pass configuration through contracts |
-| Human decisions auto-approve silently | The workflow can take unintended actions | Add an explicit stop or user-approved policy |
-| Recovery is missing | One failure discards useful work | Design retry, fallback, partial output, and resume behavior |
-
-## Reference Case
-
-Read `references/douyin-case-study.md` when a concrete example, reuse matrix, or
-comparison with a content-collection pipeline would help. Treat it as an
-illustration of the pattern, not as a required workflow shape.
