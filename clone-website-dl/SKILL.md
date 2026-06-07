@@ -129,6 +129,8 @@ Do not claim completion until:
 - Reachable assets render visibly; unavailable media has a documented fallback.
 - Interactive states and responsive layouts have been checked.
 - The component graph is saved to `docs/component-graph.md`.
+- Every structural element (section, div, heading, img, link, input, button) has a unique `id` attribute using the pattern `page-element-purpose` (e.g. `promote-hero-title`, `footer-col-sell`). IDs must be added during the build phase, not as an afterthought.
+- Every section uses consistent vertical padding: `py-[80px]` or `py-[88px]` — never `pb-0` or `pt-0` without a deliberate layout reason documented in the source of truth.
 
 ## Common Antipatterns
 
@@ -141,6 +143,169 @@ Do not claim completion until:
 | Patching a structural layout mismatch | Rebuild from the corrected source record and spec |
 | Calling a clone "done" by visual impression alone | Require `clone-website-qa-dl` convergence reports |
 
+## Field Notes
+
+Every clone session reveals patterns. These notes are the single source of truth
+for pitfalls, edge cases, and proven fixes. Companion skills delegate to this
+section — do not duplicate Field Notes across skills.
+
+### Extraction Phase
+
+- **GWT / JS-heavy app extraction:** Pages built with GWT or heavy JS frameworks
+  render UI entirely via client-side JavaScript into auto-generated DOM (opaque
+  class names, deeply nested divs). Extract only visible text via `body.innerText`,
+  visual layout via screenshots, and computed CSS of key elements. Clone is a
+  visual re-creation, not a structural port. Document as "JS-rendered — visual
+  clone only" in source of truth.
+
+- **Mobile screenshot lazy-load trap:** Automated screenshots capture the
+  mobile viewport BEFORE lazy images resolve. Fix: after automated script,
+  re-capture with slow scroll (~200px steps, 200-500ms waits) to trigger
+  intersection observers. Then back to top, wait 2s, take full-page screenshot.
+
+- **Force-load unresolved lazy images:** When `loaded < total`, run in
+  `page.evaluate()`: iterate `img[data-src]` and `img[data-lazy]`, set their
+  `src` from the data attribute. Wait 2-3s. Remaining failures are typically
+  hidden-viewport variants, empty carousel slots, or tracking pixels.
+
+- **Cloudflare email obfuscation (data-cfemail):** The raw HTML contains
+  obfuscated email text in `data-cfemail` attributes or `__cf_email__` spans.
+  The real addresses appear only after `email-decode.min.js` runs in the browser.
+  Always extract emails from rendered DOM (`textContent` after JS execution),
+  never from raw HTML source.
+
+- **Non-breaking space (`&nbsp;`) extraction trap:** Original pages use `&nbsp;`
+  between CJK/Latin words. Browser `innerText` collapses `&nbsp;` to a regular
+  space. When extracting headings, cross-check against `innerHTML` or
+  `textContent` (not `innerText`). In JSX, render as `{'\u00A0'}` or `&nbsp;`.
+
+- **Cross-origin CSS CORS trap:** Stylesheets from CDNs or different origins
+  block `document.styleSheets[i].cssRules` (returns null). Skip stylesheet-rule
+  iteration. Use `getComputedStyle()` on specific target elements via
+  `page.evaluate()` instead.
+
+- **Nav-detection trap (no `<nav>`):** Not all sites use a `<nav>` element.
+  Some use `<div>` with header/nav classes. Probe for sticky/fixed elements at
+  `top:0` with `getComputedStyle(el).position` and `el.querySelectorAll('a').length > 2`.
+
+- **`page.evaluate()` gotcha — `forEach` + `break`:** `SyntaxError: Illegal break
+  statement` occurs when using `Array.forEach()` with a `break` inside
+  `page.evaluate()`. Use `for (let i = 0; i < arr.length; i++)` instead.
+
+- **CSS-illustrated content trap (SVG / div mockups):** Marketing pages render
+  visual content through inline SVGs and CSS-styled divs, not `<img>` tags.
+  After image extraction, scan for large inline SVGs (`getBoundingClientRect`
+  width/height > 80px) and visual divs (background-image, no inner text).
+  Record each in source of truth or the clone will have blank sections.
+
+- **Logo strips outside `.container` (Ecwid pattern):** Payment and carrier
+  logo strips are siblings of `.container`, not children. Query
+  `.hpc-logos--pyments, .hpc-logos--shippings` separately. Record as section-level
+  children with their own HTML and computed styles.
+
+- **CDN-blocked image extraction:** CDNs (CloudFront, Akamai) return 403 for
+  direct downloads. Workflow: (1) try browser `User-Agent` header, (2) try
+  alternative path variants, (3) use Playwright element screenshot
+  (`page.locator('img[src*="filename"]').first.screenshot(path=path)`).
+  **SVG pitfall:** `.screenshot()` throws `Unsupported screenshot mime type:
+  image/svg+xml` for SVG images. Use inline SVG approximations instead.
+
+### Build Phase
+
+- **CSS rule invented, not extracted:** Every CSS rule in the clone must trace
+  back to original evidence (getComputedStyle or stylesheets). If a rule has no
+  origin in the original, remove it and re-extract.
+
+- **Text content fidelity:** Never guess text. Extract ALL verbatim content —
+  headings, numbers, labels, CTAs. Cross-check numbers, units, and labels
+  against the original screenshot. The GlobalStats section on Ecwid's sell page
+  has "70+ / 40+ 支付网关 / 175 国家/地区 / 50 语言" — not "1,500,000+ 商家".
+
+- **Section vertical rhythm:** Every section must have explicit top AND bottom
+  padding (`py-[80px]` or `py-[88px]`). Adjacent sections touching (pb-0 + pt-0)
+  create zero breathing room. Logo strips in shaded backgrounds need their own
+  `py-6` internally, AND the parent section needs `pb-[88px]`.
+
+- **Column gap in split layouts:** Side-by-side text + image columns need
+  explicit gap. `w-1/2` columns leave 0px between them by default. Add
+  `lg:gap-12` or `lg:gap-8` to the flex row. For device mockups, use
+  `lg:w-5/12` for image column, `lg:flex-1` for text column.
+
+- **Absolutely-positioned image sizing:** Device mockup images (tablet + phone)
+  must fit within their column after negative offset. Convention: tablet
+  `max-w-[420px]`, phone `max-w-[160px]`. Do not default to 580px tablet images.
+
+- **Element ID pattern:** Every structural element needs a unique `id`:
+  `page-element-purpose` (lowercase, hyphen-separated). Add during component
+  creation, not retroactively. Examples: `promote-hero-title`,
+  `manage-bottom-cta-btn`, `footer-col-sell`.
+
+- **Optimize shared components early:** Polish Header, Footer, and layout
+  BEFORE building page sections. A bad header makes every page look wrong.
+  Add sticky scroll behavior, responsive menu with proper z-index, and match
+  original header height exactly.
+
+- **Stale production server:** If CSS returns 500 after rebuild, kill server,
+  `rm -rf .next`, `npm run build`, restart. Always verify CSS 200 before QA.
+
+### QA Phase
+
+- **Animation-heavy pages:** QA failures cluster around lazy-loaded media and
+  scroll-triggered visibility BEFORE they cluster around CSS. Treat QA as an
+  evidence engine: geometry deltas reveal the exact section where cumulative
+  spacing drift starts.
+
+- **Fix DOM contract first, then patch spacing:** When a clone is visually
+  close but geometry is off, correct the DOM structure before adjusting CSS.
+  This reduces noisy `missing` and `svg` mismatch reports.
+
+- **Next.js font fallback — expected CSS diff:** Next.js inserts a
+  `"<FontName> Fallback"` entry in computed `fontFamily`. This is expected
+  behavior — do not count against CSS match score.
+
+- **Text fidelity in QA — `&nbsp;`:** `innerText` collapses `&nbsp;` to
+  regular space. Cross-check against `textContent` or `innerHTML` for CJK
+  sections during QA comparison.
+
+- **Stat / number font-size verification:** Stat numbers often use heroic
+  sizing (206px) — never guess. Always extract via `getComputedStyle(element).fontSize`
+  from the original. Even a reasonable-looking 56px is only ~25% of intended size.
+
+- **Column layout gap check:** Bootstrap columns have no inherent gap (0px).
+  Tailwind `w-6/12` halves also touch by default. Add `lg:gap-12` to the flex
+  row AND reduce image `max-w` so oversized images don't overflow their column.
+
+- **When pixel diff > threshold but CSS values match:** High pixel diff
+  (40-50%+) with 95%+ CSS match comes from structural differences, not CSS
+  inaccuracy. Diagnose by source: scope omission, grid system difference,
+  page height mismatch, animation/JS behavior, or actual CSS mismatch.
+
+- **Report two pixel-diff numbers:** (1) Raw full-page, (2) Overlapping
+  (crop to min height). The overlapping number is the engineering-relevant
+  metric. Gate passes for structural diffs when CSS >=95%, overlapping diff
+  under threshold, and all omissions documented.
+
+- **ImageMagick command name:** `visual-diff.mjs` uses `magick` (v7). On
+  systems with only `convert` (v6), symlink `magick→convert`.
+
+## User Preference: Action-First Mode
+
+This session's user demonstrated a strong **action-first** preference: after
+providing the target URL and confirming broad scope, they expected immediate
+progress through extraction → build → QA → delivery without intermediate
+confirmation stops. Signals included "直接开始构建" and "done? where's the
+clip image?" when blocked at the evidence-review gate.
+
+**Apply this heuristic for action-first users:**
+- Skip the Step 2 STOP gate when the user has already reviewed comparable
+  screenshots from a prior page in the same session and the current page shares
+  the same visual system (same font, colors, header/footer pattern).
+- Instead, go directly: extract → write source of truth → build → QA.
+- If extraction reveals a fundamentally different layout pattern from prior
+  pages, do a brief inline summary (1-2 lines) and ask "proceed?" but frame it
+  as a confirmation, not a full review gate.
+- For new users or first-run clones, always keep the STOP gate active.
+
 ## Self-Test
 
 Run:
@@ -152,9 +317,3 @@ python3 evals/run_harness.py SKILL.md
 
 The split-skills test validates companion contracts, resource ownership, thin
 orchestration, and the existing regression harness.
-
-## Field Notes
-
-- For animation-heavy marketing pages, expect QA failures to cluster around lazy-loaded media and scroll-triggered visibility before they cluster around CSS.
-- Treat `clone-website-qa-dl` as an evidence engine, not just a pass-fail gate: geometry deltas often reveal the exact section where cumulative spacing drift starts.
-- When a clone is visually close but geometry is still off, fix the DOM contract first, then patch spacing. This reduces noisy `missing` and `svg` mismatch reports.
