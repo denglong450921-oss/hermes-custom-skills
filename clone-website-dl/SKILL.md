@@ -67,10 +67,10 @@ Persist enough state to resume safely:
 
 ```text
 clone-website-extract-dl
-  -> STOP: review canonical source of truth
+  -> 🔴 CHECKPOINT: review canonical source of truth
   -> clone-website-build-dl
   -> clone-website-qa-dl
-  -> repair loop: evidence -> source record -> specs -> implementation -> QA
+  -> 🔴 CHECKPOINT: repair loop — evidence -> source record -> specs -> implementation -> QA
   -> component graph and delivery
 ```
 
@@ -84,7 +84,7 @@ same specs sequentially. The architecture does not depend on subagents.
 |---|---|---|---|---|
 | `0` | Parse target and scope | User request | Validated targets and scope | Ask only if full versus partial scope is genuinely ambiguous |
 | `1` | `clone-website-extract-dl` | Targets, scope, project root | Canonical evidence bundle per page | Stop on inaccessible SPA without rendered-browser capability |
-| `2` | Review evidence | Step 1 | Approved page records | **STOP: wait for user confirmation before implementation** |
+| `2` | Review evidence | Step 1 | Approved page records | 🔴 CHECKPOINT — **STOP: wait for user confirmation before implementation** (see Action-First Mode for exceptions) |
 | `3` | `clone-website-build-dl` | Approved records and requested customizations | Compiling implementation | Partial clones skip full page assembly |
 | `4` | `clone-website-qa-dl` | Original URL, clone URL, records | QA reports and pass/fail decision | On mismatch, enter the repair loop |
 | `5` | Reconcile fidelity change | QA discrepancy | Updated record, specs, code | Return to step `4`; never patch code before recording stronger evidence |
@@ -95,7 +95,7 @@ same specs sequentially. The architecture does not depend on subagents.
 For a named section such as hero, pricing, or footer:
 
 1. Ask `clone-website-extract-dl` for focused desktop and mobile evidence.
-2. Show the target screenshots and confirm the selected section.
+2. 🔴 CHECKPOINT — show the target screenshots and confirm the selected section.
 3. Ask `clone-website-build-dl` for one independently testable component with
    props and defaults.
 4. Skip page assembly.
@@ -142,6 +142,10 @@ Do not claim completion until:
 | Splitting every small command into a skill | Keep helpers bundled with their stable capability |
 | Patching a structural layout mismatch | Rebuild from the corrected source record and spec |
 | Calling a clone "done" by visual impression alone | Require `clone-website-qa-dl` convergence reports |
+| Skipping element IDs and waiting until later | Add IDs during component creation — retroactive ID passes miss 40%+ of elements |
+| Using `pb-0` or `pt-0` on sections "because it looks fine" | Every section needs `py-[80px]` or `py-[88px]`; zero-breathing sections are invisible until QA catches them |
+| Letting Action-First Mode skip the first evidence review | 🔴 CHECKPOINT always applies on first-run clones regardless of user preference |
+| Restarting the production server without rebuilding | Kill server → `rm -rf .next` → `npm run build` → restart; stale CSS returns 500 |
 
 ## Field Notes
 
@@ -297,14 +301,22 @@ confirmation stops. Signals included "直接开始构建" and "done? where's the
 clip image?" when blocked at the evidence-review gate.
 
 **Apply this heuristic for action-first users:**
-- Skip the Step 2 STOP gate when the user has already reviewed comparable
-  screenshots from a prior page in the same session and the current page shares
-  the same visual system (same font, colors, header/footer pattern).
-- Instead, go directly: extract → write source of truth → build → QA.
-- If extraction reveals a fundamentally different layout pattern from prior
-  pages, do a brief inline summary (1-2 lines) and ask "proceed?" but frame it
-  as a confirmation, not a full review gate.
-- For new users or first-run clones, always keep the STOP gate active.
+
+- **First-run clone (new project):** 🔴 CHECKPOINT always applies. Do NOT skip Step 2.
+- **Same-project multi-page (shared visual system):** Skip Step 2 STOP gate when
+  the user has already reviewed comparable screenshots from a prior page and the
+  current page shares the same font, colors, and header/footer pattern.
+  Instead, go directly: extract → write source of truth → build → QA.
+- **Layout divergence detected:** If extraction reveals a fundamentally
+  different layout pattern from prior pages, 🔴 CHECKPOINT reactivates.
+  Do a brief inline summary (1-2 lines) and ask "proceed?" — frame as a
+  confirmation, not a full review gate.
+- **New users:** Always keep the 🔴 CHECKPOINT gate active on Step 2.
+
+**Priority rule:** When in doubt, 🔴 CHECKPOINT wins. Action-First Mode is a
+convenience for experienced same-project workflows, not a license to skip
+evidence review. If the user has never seen the extracted evidence before,
+the gate applies.
 
 ## Self-Test
 
@@ -317,3 +329,20 @@ python3 evals/run_harness.py SKILL.md
 
 The split-skills test validates companion contracts, resource ownership, thin
 orchestration, and the existing regression harness.
+
+## Key Resources (Companion Skills)
+
+Scripts and references live with their owning skill. When a builder or QA
+step needs a specific script, load the companion skill's SKILL.md:
+
+| Resource | Owned by | Path |
+|---|---|---|
+| `extract-playwright.py` | `clone-website-extract-dl` | One-command Phase 1 extraction (12 output files) |
+| `preflight-audit.sh` | `clone-website-extract-dl` | SPA detection, cookie banners, CSS hash, lazy images |
+| `extract-component-css.js` | `clone-website-extract-dl` | Per-section computed CSS via getComputedStyle |
+| `discover-assets.js` | `clone-website-extract-dl` | Image/video/font/SVG enumeration |
+| `validate-source-of-truth.mjs` | `clone-website-extract-dl` | Hard gate before build and QA |
+| `capture-reference.mjs` | `clone-website-qa-dl` | Deterministic original + clone screenshots |
+| `visual-diff.mjs` | `clone-website-qa-dl` | Pixel comparison (ImageMagick v7) |
+| `compare-geometry.mjs` | `clone-website-qa-dl` | Section boundary drift detection |
+| `verify-css.js` | `clone-website-qa-dl` | Typography, background, CTA CSS verification |
