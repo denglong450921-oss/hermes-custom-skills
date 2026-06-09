@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Script/Style Test</title>
+<style>
+  body { font-family: 'Inter', sans-serif; }
+  .hero { background: #f0f0f0; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Welcome to the world's best site</h1>
+  <p>This page tests script & style tag safety.</p>
+</div>
+
+<script>
+(function() {
+  const deck = document.getElementById('deck');
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  for (let i = 0; i < total; i++) {
+    const dot = document.createElement('a');
+    dot.href = '#';
+    dot.addEventListener('click', function() {
+      if (current < total) goTo(i);
+    });
+    deck.appendChild(dot);
+  }
+
+  function goTo(index) {
+    if (index < 0 || index >= total) return;
+    slides[current].classList.remove('active');
+    slides[index].classList.add('active');
+    current = index;
+  }
+
+  goTo(0);
+})();
+</script>
+</body>
+</html>

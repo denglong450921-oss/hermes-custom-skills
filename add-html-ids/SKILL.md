@@ -312,3 +312,50 @@ else:
 
 **macOS note**: `grep -oP` is GNU grep only — macOS BSD grep rejects it.
 Use `grep -Eo` or the Python script instead.
+
+## Harness (Self-Eval)
+
+The harness validates that the scripts correctly add IDs without corrupting
+content. 3 test cases cover the skill's core guarantees.
+
+### Cases
+
+| ID | Name | Principle Tested |
+|----|------|-----------------|
+| `case_001` | basic-html-no-existing-ids | ID count, prefix convention, no dupes, text preserved |
+| `case_002` | tsx-mixed-ids | Convention IDs preserved, non-conforming replaced, React skipped |
+| `case_003` | html-with-script-style | No STR markers leaked, script/style uncorrupted, apostrophe safe |
+
+### Checks
+
+| Check | What it detects |
+|-------|----------------|
+| `id_count_increased` | Output has more IDs than input (IDs actually added) |
+| `all_ids_have_prefix` | Every id value starts with the expected `{prefix}_` |
+| `no_duplicate_ids` | Zero duplicate id values in the output |
+| `convention_ids_preserved` | Existing convention-following IDs remain unchanged |
+| `nonconforming_ids_replaced` | Old non-conforming IDs (camelCase, generic) are gone |
+| `react_components_skipped` | No uppercase-prefixed IDs (React components get no id) |
+| `no_str_markers_leaked` | Output contains zero `\x00STR\x00` binary markers |
+| `script_style_uncorrupted` | Script/style tag bodies have balanced braces, no markers |
+| `apostrophe_preserved` | Text apostrophes (`world's`) survive masking |
+| `original_text_preserved` | Key text content still present in output |
+
+### Run
+
+```bash
+# Full harness (runs scripts on test inputs, grades output)
+python3 evals/run_harness.py
+
+# Grade a specific output file
+python3 evals/grader.py <output_file> '<checks_json>'
+```
+
+### Honesty & Truthfulness
+
+Report results exactly as they are:
+- Test failed → state "failed" with the actual evidence
+- Skipped verification → say "not verified", don't imply it passed
+- No defensive disclaimers on correct results ("but this might not be correct")
+- No false success — if output shows failure, don't claim "all passed"
+

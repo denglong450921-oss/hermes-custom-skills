@@ -2,22 +2,34 @@
   "skill_name": "add-html-ids",
   "evals": [
     {
-      "id": 0,
-      "prompt": "Add meaningful, page-prefixed HTML IDs to every element in the support-site/index.html file. The page prefix should be 'support_' and every HTML element (including html, head, meta, link, script, div, section, header, footer, nav, a, img, button, input, svg, path, ul, li, p, h1-h6, span, form, label) needs a unique id.",
-      "expected_output": "All elements in support-site/index.html have ids following the support_{context}_{purpose} pattern. IDs are readable and deduplicated.",
-      "files": ["support-site/index.html"]
+      "id": "case_001",
+      "name": "basic-html-no-existing-ids",
+      "prompt": "Run add_html_ids.py on evals/case_001/input.html with --prefix case001_",
+      "files": ["evals/case_001/input.html"],
+      "expected_output": "Every HTML element gets a unique id with prefix 'case001_', no duplicates, original content unchanged",
+      "grader": {
+        "must_use": ["id_count_increased", "all_ids_have_prefix", "no_duplicate_ids", "original_text_preserved"]
+      }
     },
     {
-      "id": 1,
-      "prompt": "A small HTML file is missing all element IDs. Run the add-html-ids skill on this file with prefix 'landing_'. The file has a header with nav, a hero section, features section, and footer.",
-      "expected_output": "Every structural and inline element has an id following landing_{context}_{purpose} pattern.",
-      "files": []
+      "id": "case_002",
+      "name": "tsx-mixed-ids",
+      "prompt": "Run add_tsx_ids.py on evals/case_002/input.tsx with --prefix case002_",
+      "files": ["evals/case_002/input.tsx"],
+      "expected_output": "Convention ID 'case002_h1' preserved, non-conforming 'heroCopy' replaced with proper prefix, React 'ProductCard' component skipped",
+      "grader": {
+        "must_use": ["convention_ids_preserved", "nonconforming_ids_replaced", "react_components_skipped", "no_duplicate_ids"]
+      }
     },
     {
-      "id": 2,
-      "prompt": "A complex HTML page with inline SVGs, forms, nested sections, and multiple nav lists is missing all element IDs. Run the add-html-ids skill on it with prefix 'shop_'. Verify svg child elements also get ids.",
-      "expected_output": "All elements including <path>, <circle>, <rect> inside SVGs have IDs. Nested lists and form inputs have unique, readable IDs.",
-      "files": []
+      "id": "case_003",
+      "name": "html-with-script-style",
+      "prompt": "Run add_html_ids.py on evals/case_003/input.html with --prefix case003_",
+      "files": ["evals/case_003/input.html"],
+      "expected_output": "IDs added outside script/style, no STR markers leaked, JavaScript < operators untouched, 'world's' apostrophe preserved",
+      "grader": {
+        "must_use": ["no_str_markers_leaked", "script_style_uncorrupted", "apostrophe_preserved", "id_count_increased"]
+      }
     }
   ]
 }
