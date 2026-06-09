@@ -257,40 +257,19 @@ it causes two subtle bugs that are easy to introduce:
   handle string literals.  TSX uses flat naming to avoid cross-function
   context pollution.  TSX skips capitalized-component tags.
 
-## Current known edges
+## Failure recovery table
 
-- **Always-visible UI inside responsive containers**: If the file being ID'ed
-  is part of a responsive layout, check that elements you plan to target from
-  CSS/JS aren't placed inside a container that gets `display: none` at certain
-  breakpoints (e.g., `.site-header__desktop-actions` hides at ≤899px).  If a
-  button or control needs to work at all screen sizes (like a language
-  switcher), it must live OUTSIDE any responsive-hiding container.  This is a
-  CSS architecture issue, not a script bug, but it commonly surfaces when
-  developers rely on the new IDs to write targeting CSS/JS.
-- **TSX expression blocks** (`{variable}`): The JSX parser skips balanced `{}` blocks
-  that don't contain JSX tags. Review the output if the file has complex nested ternaries.
-- **SVG `<path>` / `<circle>`**: Both scripts handle these. For complex SVGs with
-  `<defs>`, `<use>`, or `<clipPath>`, add IDs manually.
-- **Existing IDs that follow the convention are preserved** — non-conforming
-  IDs (`id="myCustomId"`) are stripped and replaced with proper prefixed IDs.
-- **Fragment `<>...</>`**: Skipped intentionally (can't have attributes).
-- **Pre-existing duplicate IDs**: The v3+ pre-processing step strips any `id=`
-  whose value doesn't start with the prefix, so many pre-existing dupes (e.g.
-  copy-pasted SVGs in FAQ cards that all had the same `id="svg_icon"`) get
-  cleaned up automatically — each instance gets a unique suffix (`_2`, `_3`).
-  BUT: if the pre-existing dupes already follow the convention (e.g. two
-  elements both have `id="header_div"`), neither is stripped and the dupes
-  persist. After running, always verify with the duplicate check below and
-  manually patch any surviving dupes.
-- **HTML `<script>` / `<style>` content (v3.2+ SAFE)**: The HTML script now
-  contextually masks quotes — only quotes inside HTML tags, `<script>` body,
-  and `<style>` body are treated as string delimiters. Apostrophes in text
-  content (`world's`) pass through safely. The tag-finding step replaces
-  script/style/template body with same-length spaces to prevent JavaScript `<`
-  operators (`i < total`) from being mistaken for HTML tags. Review only if
-  the file uses non-standard script embedding (e.g. CDATA sections, XMP tags).
-- **`.tsx` with custom Babel transforms**: Review edge cases if the project uses
-  unusual JSX pragmas or custom element types.
+If any issue below occurs, follow the recovery path. Don't guess — use the table.
+
+| Trigger | First response | Fallback |
+|---------|---------------|----------|
+| Duplicate IDs found after run | Script counters should prevent this. Check `seen_ids` seeding (pitfall #4). Re-create `seen_ids` from existing IDs | Manually rename duplicates with unique suffixes |
+| STR markers in output | Pre-processing regex failed to strip old IDs. Re-run script on original file | Post-processing regex on final output: `content = re.sub(r'\s+id\s*=\s*(["\x27])(?!herosection_)[^"\x27]+\1', '', content)` |
+| Script corrupts `<script>` content | `<script>` body has unescaped `</script>` or CDATA. v3.2+ space-fill should handle normal cases | Manually wrap JS in `/*<![CDATA[*/ ... /*]]>*/` or use external .js file |
+| React component gets an `id` | Component name is lowercase — script treated it as HTML. Rename component to uppercase (React convention) | Add `id` prop type to the component so TS accepts it |
+| File with `src/app/page.tsx` nested 3+ deep | Prefix derivation uses immediate parent, may collide. Check other locale folders for duplicate prefixes | Pass `--prefix` override explicitly |
+| `id=""` (empty) in source | Script preserves convention-following IDs. Empty ID doesn't start with prefix, gets replaced with proper one | Verify output: the element now has a proper prefixed ID |
+| Node.js HTTP request in script content | `http://` or `https://` in `<script>` body triggers `<` matching in old parser. v3.2+ space-fill prevents this | If using pre-v3.2, upgrade the script
 
 ## Reference examples
 
