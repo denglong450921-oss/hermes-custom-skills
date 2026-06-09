@@ -1,0 +1,23 @@
+{
+  "skill_name": "add-html-ids",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "Add meaningful, page-prefixed HTML IDs to every element in the support-site/index.html file. The page prefix should be 'support_' and every HTML element (including html, head, meta, link, script, div, section, header, footer, nav, a, img, button, input, svg, path, ul, li, p, h1-h6, span, form, label) needs a unique id.",
+      "expected_output": "All elements in support-site/index.html have ids following the support_{context}_{purpose} pattern. IDs are readable and deduplicated.",
+      "files": ["support-site/index.html"]
+    },
+    {
+      "id": 1,
+      "prompt": "A small HTML file is missing all element IDs. Run the add-html-ids skill on this file with prefix 'landing_'. The file has a header with nav, a hero section, features section, and footer.",
+      "expected_output": "Every structural and inline element has an id following landing_{context}_{purpose} pattern.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "A complex HTML page with inline SVGs, forms, nested sections, and multiple nav lists is missing all element IDs. Run the add-html-ids skill on it with prefix 'shop_'. Verify svg child elements also get ids.",
+      "expected_output": "All elements including <path>, <circle>, <rect> inside SVGs have IDs. Nested lists and form inputs have unique, readable IDs.",
+      "files": []
+    }
+  ]
+}
