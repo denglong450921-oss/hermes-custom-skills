@@ -51,6 +51,24 @@ If imports fail, install them and retry without asking.
 3. Read `OUTPUT_FILE=...` from stdout.
 4. Reply with that `.pptx` path.
 
+## Known Issue (Fixed): Google Translate API Rate-Limiting
+
+**Problem**: The raw Google Translate API (`translate.googleapis.com`) returns HTTP 429 (rate-limited) in some environments. This caused the first run to silently return English text as "translated" (the old code returned original text on non-200 responses without raising). To verify output is truly translated, always sample-check text after the run.
+
+**Fix applied in scripts/translate_pptx.py**: The `_gt_direct_api()` function now:
+1. Tries deep-translator's `GoogleTranslator` class first (different endpoint, handles rate limits better)
+2. Falls back to the raw API only if deep-translator fails
+3. Verifies the returned text differs from the input (catches stub responses)
+4. Raises on failure so `translate_with_retry`'s outer retry loop kicks in properly
+5. Sleeps 2s between API calls (was 0.5s) to reduce request rate
+
+If you encounter "WARNING: failed to translate one text block after 4 retries" in the logs, the text either:
+- Is already in the target language (auto-detect skips PT→PT)
+- Is a mathematical/formula expression (no translation needed)
+- Contains only company names and symbols
+
+These blocks are preserved as-is, which is the correct behaviour.
+
 ## Output Contract
 
 The deliverable is always a new `.pptx` file. Do not overwrite the source file unless the user explicitly requests it.

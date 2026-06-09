@@ -81,20 +81,43 @@ _SKIP_PATTERNS = [
 _GT_URL = "https://translate.googleapis.com/translate_a/single"
 
 def _gt_direct_api(text, target_lang, retries=3):
-    """Translate using raw Google Translate API. Supports languages deep-translator doesn't list."""
+    """Translate using deep-translator's GoogleTranslator (primary), with raw API fallback."""
     import requests as _req, urllib.parse as _up
+
+    # Primary: deep-translator's GoogleTranslator (handles rate limits better)
+    for i in range(retries):
+        try:
+            from deep_translator import GoogleTranslator
+            result = GoogleTranslator(source='auto', target=target_lang).translate(text)
+            if result and result.strip().lower() != text.strip().lower():
+                return result
+        except Exception:
+            if i < retries - 1:
+                time.sleep(3)
+            continue
+
+    # Fallback: raw Google Translate API
     for i in range(retries):
         try:
             r = _req.get(
                 f"{_GT_URL}?client=gtx&sl=auto&tl={target_lang}&dt=t&q={_up.quote(text)}",
-                timeout=10,
+                timeout=15,
                 headers={"User-Agent": "Mozilla/5.0"}
             )
             if r.status_code == 200:
-                return "".join(part[0] for part in r.json()[0] if part[0])
+                result = "".join(part[0] for part in r.json()[0] if part[0])
+                if result and result.strip().lower() != text.strip().lower():
+                    return result
+            elif r.status_code == 429:
+                wait = 5 * (i + 1)
+                log(f"Rate limited (429), waiting {wait}s before retry {i+1}/{retries}")
+                time.sleep(wait)
+                continue
         except Exception:
-            time.sleep(2)
-    return text
+            if i < retries - 1:
+                time.sleep(3)
+            continue
+    raise RuntimeError(f"Translation failed after all retries and fallbacks for: {text[:60]}...")
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 CACHE_DIR = Path.home() / ".cache" / "ppt-translator"
@@ -164,6 +187,9 @@ LANGUAGE_ALIASES = {
     "portuguese": "pt",
     "pt": "pt",
     "葡萄牙语": "pt",
+    "巴西葡萄牙语": "pt",
+    "brazilian portuguese": "pt",
+    "pt-br": "pt",
     "russian": "ru",
     "ru": "ru",
     "俄语": "ru",
@@ -244,7 +270,7 @@ def translate_with_retry(text, target_lang, retries=4):
     for i in range(retries):
         try:
             translated = _gt_direct_api(protected_text, target_lang, retries=1)
-            time.sleep(0.5) 
+            time.sleep(2.0) 
             final_text = restore_terms(translated, term_map)
             translation_cache[cache_key] = final_text
             RUNTIME_STATS["translated_blocks"] += 1
