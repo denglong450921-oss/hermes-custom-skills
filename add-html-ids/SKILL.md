@@ -30,8 +30,10 @@ The scripts are purpose-built to only insert `id="prefix_name"` into tags that l
 If a file already has IDs, the script replaces non-conforming IDs with correct ones
 — that is the ONLY change allowed.
 
-**If the user asks for anything beyond adding IDs** (translations, styling, formatting,
-refactoring) — stop and handle it as a separate task outside this skill.
+🛑 **STOP. If the user asks for anything beyond adding IDs** (translations, styling, formatting,
+refactoring) — stop and handle it as a separate task outside this skill. Do NOT try to
+"also fix that thing while I'm in there." This rule exists because multi-change runs
+have caused script/style corruption, double IDs, and broken i18n in production files.
 
 Add `{page_prefix}_{purpose}` IDs to every element in `.html` or `.tsx`/`.jsx` files.
 The goal is that any element — `<div>`, `<Header />`, `<path>`, `<meta>`, etc. — can
@@ -90,6 +92,12 @@ python3 /Users/f/.hermes/skills/add-html-ids/scripts/add_tsx_ids.py path/to/page
 python3 .../add_tsx_ids.py path/to/file.tsx --prefix bkk_
 ```
 
+🛑 **STOP — verify before proceeding.** After the script runs, immediately check for duplicate IDs and leaked STR markers:
+```bash
+python3 -c "import re,sys;c=open(sys.argv[1]).read();ids=re.findall(r'id=\"([^\"]*)\"',c);d=[i for i in sorted(set(ids)) if ids.count(i)>1];print(f'{len(d)} dupes' if d else 'No dupes');print('STR leaked' if '\x00STR\x00' in c else 'No leaks')" <file>
+```
+If dupes or leaks are found → don't continue. Re-run the script or patch manually.
+
 ### 3. Review the output
 
 The script adds IDs to **every** element that doesn't already have one:
@@ -108,6 +116,15 @@ JSX expression support, `className` attribute used as hint.
 - Verify `className` was parsed correctly for naming hints
 - Check nested JSX expressions (`{condition && <Tag/>}`) are covered
 - Ensure no duplicate IDs (script uses counters but double-check)
+
+🛑 **CHECKPOINT: Verify the IDs-Only rule.** Before delivering, confirm:
+- No text was translated or rephrased
+- No CSS styles or classes were changed
+- No elements were added, removed, or restructured
+- The file diff shows ONLY `id="..."` insertions and old-ID replacements
+
+Run `git diff` on the file and visually scan — every changed line should contain `id=`.
+If any line was changed for any other reason, revert that specific change.
 
 ## Naming conventions
 
