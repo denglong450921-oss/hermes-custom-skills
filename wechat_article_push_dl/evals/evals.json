@@ -1,0 +1,47 @@
+{
+  "skill_name": "wechat_article_push_dl",
+  "evals": [
+    {
+      "id": "case_001",
+      "task": "Push this HTML article to WeChat draft. File: /tmp/article.html, title: 'Test Article', style: tech, author: 'dennon', cover: https://picsum.photos/1200/800, enable comments.",
+      "environment": {
+        "files": {},
+        "tools_available": ["md2wechat CLI"]
+      },
+      "tools": ["md2wechat"],
+      "grader": {
+        "must_use": ["builds_html_command", "includes_cover", "includes_style", "includes_comment"],
+        "must_have": ["--html", "--cover", "--style tech", "--comment"],
+        "must_not_have": ["--markdown"]
+      }
+    },
+    {
+      "id": "case_002",
+      "task": "Push this markdown article to WeChat as a 小绿书 image post. File: /tmp/article.md, cover: https://example.com/cover.jpg, no title specified.",
+      "environment": {
+        "files": {},
+        "tools_available": ["md2wechat CLI"]
+      },
+      "tools": ["md2wechat"],
+      "grader": {
+        "must_use": ["builds_markdown_command", "includes_cover", "includes_type_newspic"],
+        "must_have": ["--markdown", "--type newspic"],
+        "must_not_have": ["--html"]
+      }
+    },
+    {
+      "id": "case_003",
+      "task": "The user wants to push an HTML article but forgot to provide a cover image. Handle this error gracefully.",
+      "environment": {
+        "files": {},
+        "tools_available": ["md2wechat CLI"]
+      },
+      "tools": ["md2wechat"],
+      "grader": {
+        "must_use": ["handles_missing_cover"],
+        "must_have": ["--cover", "MISSING_COVER", "required"],
+        "must_not_have": []
+      }
+    }
+  ]
+}

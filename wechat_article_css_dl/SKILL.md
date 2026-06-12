@@ -218,6 +218,53 @@ for f in fixes:
 3. Open fixed HTML in browser → visually acceptable
 4. Push with `wechat_article_push_dl` → renders correctly in WeChat
 
+## Harness (Self-Eval)
+
+The harness validates that an agent following the skill correctly detects WeChat CSS violations and applies micro-fixes. 3 test cases cover detection, fixing, and clean-pass scenarios.
+
+### Cases
+
+| ID | Principle Tested | Scenario |
+|----|-----------------|----------|
+| `case_001` | Violation detection | HTML has `<style>` block, CSS vars, gradients, flex, `::before` — must detect all |
+| `case_002` | Auto-fix application | HTML with violations — fixes must be applied, output path generated |
+| `case_003` | Clean pass | Already WeChat-compatible HTML — must report no violations |
+
+### Checks
+
+| Check | What it detects |
+|-------|----------------|
+| `detects_style_block` | Output mentions `<style>` block violation |
+| `detects_gradient` | Output mentions gradient violation |
+| `detects_flex` | Output mentions flexbox violation |
+| `detects_pseudo_element` | Output mentions `::before`/`::after` violation |
+| `detects_css_variable` | Output mentions CSS variable violation |
+| `applies_fix` | Output mentions fix being applied |
+| `generates_output_path` | Output references output file path |
+| `fixes_gradient` | Output mentions gradient being replaced |
+| `removes_style_block` | Output mentions style block removal |
+| `reports_clean` | Output says "No WeChat CSS violations" |
+
+### Run
+
+```bash
+# Full harness
+python3 evals/run_harness.py <output-file>
+
+# Or individual check
+python3 evals/grader.py <output-file> '[{"text":"Detects style block","check":"detects_style_block"}]'
+```
+
+### Honesty & Truthfulness
+
+Report results exactly as they are:
+- Violations found → state them with detail, don't minimize
+- No violations → say "clean", don't add false positives
+- Fixes applied → say what was fixed
+- If check fails to run (file missing, script error) → report the failure, don't fabricate results
+
+---
+
 ## Related Skills
 
 - `wechat_article_push_dl` — Push HTML to WeChat drafts (handles creds, cover, API errors)

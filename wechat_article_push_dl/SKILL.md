@@ -174,6 +174,56 @@ WeChat's article renderer supports only inline styles — `<style>` blocks are s
 3. For cover image: confirm it uploaded (look for `Cover uploaded:` in output)
 4. For error 40164: add IP, retry → should succeed
 
+## Harness (Self-Eval)
+
+The harness validates that an agent following the skill builds correct `md2wechat` CLI commands and handles WeChat API errors properly. 3 test cases cover HTML push, markdown/newspic push, and error handling.
+
+### Cases
+
+| ID | Principle Tested | Scenario |
+|----|-----------------|----------|
+| `case_001` | HTML article push | User provides HTML file, title, style=tech, cover, comments enabled — must build `--html` command with all flags |
+| `case_002` | 小绿书 image post | User provides markdown file for image-post format — must build `--markdown --type newspic` command |
+| `case_003` | Missing cover error | User forgets cover image — must guide user to add `--cover` flag |
+
+### Checks
+
+| Check | What it detects |
+|-------|----------------|
+| `builds_html_command` | Output uses `--html` flag |
+| `builds_markdown_command` | Output uses `--markdown` flag |
+| `includes_cover` | Output includes `--cover` flag |
+| `includes_style` | Output includes `--style` with valid value |
+| `includes_type_newspic` | Output includes `--type newspic` |
+| `includes_comment` | Output includes `--comment` flag |
+| `handles_missing_cover` | Output mentions cover is required / missing |
+| `handles_ip_whitelist` | Output references 40164 / IP whitelist |
+| `handles_auth_error` | Output references 40001/40013 auth errors |
+| `verifies_preconditions` | Output checks .env / credentials / CLI install |
+| `returns_media_id` | Output references media_id / draft created |
+
+### Run
+
+```bash
+# Full harness
+python3 evals/run_harness.py <output-file>
+
+# Or individual check
+python3 evals/grader.py <output-file> '[{"text":"Uses --html","check":"builds_html_command"}]'
+```
+
+### Honesty & Truthfulness
+
+Report results exactly as they are:
+- API call succeeded → report media_id, don't add disclaimers
+- API call failed → report exact error code and fix, don't hide it
+- Precondition missing → say what's missing, don't silently skip
+- If actual push isn't possible (no live credentials) → test command construction only, don't claim the draft was created
+
+---
+
 ## Related Skills
 
 - `md2wechat` — Convert Markdown to WeChat-compatible HTML (CSS formatting, layout modules)
+- `wechat_article_css_dl` — Check/fix HTML for WeChat CSS compatibility
+- `ato-arche-dl` — Atomic skill workflow design pattern
