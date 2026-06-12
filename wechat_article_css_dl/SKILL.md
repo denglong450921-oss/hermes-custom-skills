@@ -8,6 +8,19 @@ contract_version: "1.0"
 
 Micro-tune HTML to follow WeChat article CSS rules. This skill detects violations, reports them, and applies targeted fixes — no full rewrite, no markdown conversion.
 
+## ⚠️ Why CSS Violations Matter
+
+WeChat strips modern CSS from raw `--html` uploads. If a user's article
+looks broken in WeChat (cards invisible, gradients gone, layout collapsed),
+the root cause is almost always CSS features that WeChat doesn't support.
+This skill finds those violations before the article hits WeChat.
+
+See `references/wechat-html-css-stripped.md` for the full diagnosis
+(fix pattern, symptom table, why-it's-confusing explanation).
+
+**Rule: If the article feels like it needs a lot of fixes, recommend the
+user convert to Markdown and use `wechat_article_push_dl --markdown` instead.**
+
 ## Quick Reference
 
 Check an HTML file for WeChat CSS violations:
@@ -99,9 +112,22 @@ else:
 1. **Read** the HTML file.
 2. **Scan** for all WeChat violations.
 3. **Report** all violations found, grouped by type.
-4. **If fix mode** — apply automated micro-fixes per violation.
-5. **Write** fixed HTML to a new file (never overwrite source).
-6. **Return** status summary.
+4. 🔴 **STOP — Present violations to the user and ask: proceed with fixes?** Do NOT apply fixes without user approval. Show the violation list and explain what each fix will change.
+5. **If fix mode** (only after user confirms) — apply automated micro-fixes per violation.
+6. **Write** fixed HTML to a new file (never overwrite source).
+7. **Return** status summary.
+
+## Failure Handling
+
+| 触发条件 | 一线修复 | 仍失败兜底 |
+|-----------|---------|-----------|
+| HTML file not found / unreadable | Verify the path exists: `ls -la <path>` | Ask user for correct file path |
+| Python 3 not available | Check `which python3` | Install Python 3 or use `wechat_article_push_dl --markdown` instead |
+| No violations found (check mode) | Report "No WeChat CSS violations found" | Ask if user wants to push with `wechat_article_push_dl` |
+| Violations found (check mode) | List all violations with fix suggestions | Ask if user wants to run fix mode |
+| User rejects fix mode (after 🔴 STOP) | Report violations only, don't fix | Suggest converting to Markdown and using `wechat_article_push_dl --markdown` |
+| Fix script errors on malformed HTML | Fix script uses regex — malformed tags may break matching | Validate HTML first with a parser, then rerun fix |
+| Output path not writable | Check directory permissions: `ls -la <dir>` | Save to `/tmp/` as fallback |
 
 ## Micro-Fixes Applied
 
@@ -184,32 +210,23 @@ for f in fixes:
 
 ## WeChat CSS Compatibility Reference
 
-### ✅ Works (inline only)
-- `color`, `background-color`, `font-size`, `font-weight`, `font-style`, `font-family`
-- `text-align`, `text-decoration`, `line-height`
-- `margin`, `padding`, `border`, `border-collapse`, `border-left`, `border-top`, `border-bottom`
-- `width`, `height`, `max-width`
-- `display: block`, `display: inline-block`, `display: inline`
-- `position: relative`, `position: absolute`, `top`, `left`
-- `vertical-align`, `list-style`
-- `border-radius` (simple uniform)
-- `background` (solid colors only)
+WeChat's article renderer supports only inline styles. The tables below clarify what works and what doesn't.
 
-### ❌ Stripped / Broken
-| Feature | Replacement |
-|---------|-------------|
-| `<style>` block | Inline `style=""` on each element |
-| CSS vars `--var` | Hardcode hex colors |
-| `linear-gradient` | Solid `background-color` |
-| `-webkit-background-clip: text` | Solid `color` |
-| `display: flex` / `grid` | `<table>` or stacked `<div>` |
-| `::before` / `::after` | Literal `<span>▸</span>` |
-| `counter-increment` | Manual 1, 2, 3... |
-| `:hover` / `:nth-child` | Apply to every element |
-| `@media` | Single mobile layout |
-| `box-shadow` | Remove or use `border` |
-| `transform` / `transition` / `animation` | Remove entirely |
-| `opacity` | Remove (unreliable) |
+> See `references/wechat-css-compatibility.md` for the full ✅ works / ❌ stripped tables with examples. Load this file when checking a user's HTML against WeChat rules.
+
+**Quick rule of thumb:** If an element uses `<style>` blocks, CSS variables, gradients, flex/grid, `::before`/`::after`, counters, `@media`, `box-shadow`, `transform`, or `opacity` — it will break in WeChat. Apply the micro-fixes in this skill to make it compatible.
+
+## Anti-Patterns & What NOT to Do
+
+| # | Anti-Pattern | Why It Fails | Correct Approach |
+|---|-------------|--------------|------------------|
+| 1 | Pushing HTML to WeChat without checking CSS first | WeChat strips modern CSS → broken article layout | Always run this skill's check first, or use `--markdown` instead |
+| 2 | Applying fixes without showing the user what changed | User may not expect automated modification | 🔴 STOP and present violation list before fixing |
+| 3 | Fixing HTML that should be converted to Markdown | Regex fixes are lossy — can't reconstruct semantics | If >3 violations, recommend `wechat_article_push_dl --markdown` |
+| 4 | Relying solely on automated fixes for complex HTML | Gradients → solid color loses visual information | Manual review: verify output looks acceptable in browser |
+| 5 | Overwriting the source HTML file | User loses original formatting | Always save fixed output to a new file (e.g. `*-wechat.html`) |
+| 6 | Claiming "WeChat-ready" without verifying in browser | Regex can't detect visual breakage | Open fixed HTML in browser and verify before pushing |
+| 7 | Fixing `<style>` blocks inline instead of extracting | WeChat strips `<style>` entirely — inline is required | Move ALL styles to `style=""` attributes. No `<style>` tags at all |
 
 ## Verification
 
