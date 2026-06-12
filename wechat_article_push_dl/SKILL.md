@@ -8,6 +8,20 @@ contract_version: "1.0"
 
 Push content to WeChat Official Account drafts. This skill handles ALL WeChat API interactions: auth, cover upload, content image processing, draft creation, error handling. It does NOT convert modern CSS to WeChat-compatible styles — input HTML must already be WeChat-compatible (inline styles only).
 
+## ⚠️ Critical Pitfall: `--html` Strips Modern CSS
+
+This is the #1 failure mode. **If you push raw HTML via `--html` and the CSS
+looks broken in WeChat, the fix is to use `--markdown` instead.**
+
+Read `references/wechat-html-css-stripped.md` for full diagnosis + fix.
+Symptom: "my card's CSS is not working", "backgrounds disappeared",
+"gradients are gone", "layout collapsed" — always check whether the user
+used `--html` vs `--markdown`.
+
+**Rule of thumb: Always prefer `--markdown`. Only use `--html` when the
+HTML is already minimal inline-style (no style blocks, no CSS vars, no
+gradients, no flex/grid).**
+
 ## Quick Reference
 
 ```bash
@@ -93,8 +107,9 @@ Every draft requires a cover. Provide via `--cover <url_or_path>`. Accepts remot
    - No `<style>` blocks, no CSS vars, no gradients/flex/grid/pseudo-elements
    - See `WeChat CSS → works/doesn't work` tables below
 3. **Build command** with appropriate flags.
-4. **Execute** `md2wechat` command.
-5. **Check result:**
+4. 🔴 **STOP — Show user the exact command and wait for confirmation.** Do NOT execute without user approval. Present the full command in a code block and explain what it will do.
+5. **Execute** `md2wechat` command (only after user confirms).
+6. **Check result:**
    - `"success": true` → return media_id
    - Error → decode error code, report fix to user.
 
@@ -115,57 +130,30 @@ On success, the draft is saved to WeChat 草稿箱 (drafts). It does NOT auto-pu
 
 ## Failure Handling
 
-| Error Code | Signal | Root Cause | Fix Action |
-|------------|--------|------------|------------|
-| `40001` | invalid AppSecret | Secret wrong or regenerated | Reset secret at mp.weixin.qq.com, update .env |
-| `40013` | invalid AppID | AppID doesn't start with `wx` | Check AppID, should be `wx...` format |
-| `40164` | IP not in whitelist | Outbound IP unknown | Read `<ACTUAL_IP>` from error, add to whitelist |
-| `MISSING_COVER_IMAGE` | Cover required | `--cover` not provided | Pass `--cover <url_or_path>` |
-| `45004` | Body too long | Content exceeds limit | Check digest/summary/description length |
-| `404` | API unavailable | Account not verified (认证号) | Account must be verified to use drafts |
-| `45166` | Content violation | HTML format error | Use markdown path instead (MD2WeChat converter auto-fixes) |
-| CLI not found | command not found | md2wechat not installed | `pip3 install md2wechat` |
-| CLI error | unrecognized arguments | Wrong flag syntax | Run `md2wechat --help` to verify |
+| 触发条件 | 一线修复 | 仍失败兜底 |
+|-----------|---------|-----------|
+| `40001` — invalid AppSecret | Regenerate at mp.weixin.qq.com, update .env | Report to user: check AppSecret matches exactly |
+| `40013` — invalid AppID | Verify AppID starts with `wx` | Report to user: check mp.weixin.qq.com settings |
+| `40164` — IP not whitelisted | Read `<ACTUAL_IP>` from error, add to whitelist | Ask user to add IP at mp.weixin.qq.com |
+| `MISSING_COVER_IMAGE` — no cover | Pass `--cover <url_or_path>` | Check if cover URL is accessible |
+| `45004` — body too long | Check digest/summary/description length | Shorten article or split into multiple drafts |
+| `404` — API unavailable | Must be verified (认证号) account | Tell user to verify their WeChat account |
+| `45166` — content violation | HTML format error | Convert to Markdown and retry with `--markdown` |
+| CLI not found | `pip3 install md2wechat` | Add to PATH: `export PATH="$HOME/Library/Python/3.9/bin:$PATH"` |
+| CLI error | Run `md2wechat --help` to verify flags | Correct the flag syntax and retry |
 
 **First response:** Retry with corrected input.
 **Final fallback:** Report the exact error code and fix to the user.
 
 ## WeChat HTML Compatibility
 
-WeChat's article renderer supports only inline styles — `<style>` blocks are stripped.
+WeChat's article renderer supports only inline styles. `<style>` blocks, CSS variables, gradients, flex/grid, `::before`/`::after`, counters, `@media`, `box-shadow`, `transform`, and `opacity` are all **stripped or broken**.
 
-### ✅ Works in WeChat (inline styles)
+> See `references/wechat-css-compatibility.md` for the full ✅ works / ❌ doesn't-work tables and HTML strategy guide. Load this file when the user's HTML has formatting issues in WeChat.
 
-- `color`, `background-color`, `font-size`, `font-weight`, `font-style`, `font-family`
-- `text-align`, `text-decoration`, `line-height`
-- `margin`, `padding`, `border`, `border-collapse`, `border-left`, `border-top`, `border-bottom`
-- `width`, `height`, `max-width`
-- `display: block`, `display: inline-block`, `display: inline`
-- `position: relative`, `position: absolute`, `top`, `left`
-- `vertical-align`, `list-style`
-- `border-radius` (simple uniform values)
-- `background` (solid colors only)
+### Quick rule of thumb
 
-### ❌ Does NOT work in WeChat
-
-| Feature | Replacement |
-|---------|-------------|
-| `<style>` block | Inline `style=""` on each element |
-| CSS variables (`--var`) | Hardcode hex colors |
-| `linear-gradient` / `radial-gradient` | Solid `background-color` |
-| `-webkit-background-clip: text` | Solid `color` |
-| `display: flex` / `display: grid` | `<table>` or stacked `<div>` blocks |
-| `::before` / `::after` | Write literal characters: `▸`, `•`, `①` |
-| `counter-increment` / `counter-reset` | Manual numbering |
-| `:hover`, `:nth-child`, `:last-child` | Inline style on every element |
-| `@media` queries | Single layout works on mobile |
-| `box-shadow` | Remove (unreliable) |
-| `transform`, `transition`, `animation` | Remove |
-| `opacity` | Remove (unreliable) |
-
-### Recommended approach
-
-**Prefer `--markdown` over `--html`.** The MD2WeChat converter built into the CLI generates proper WeChat-compatible HTML from Markdown. Only use `--html` when you have pre-formatted HTML that already follows the rules above.
+**Prefer `--markdown` over `--html`.** The MD2WeChat converter built into the CLI generates proper WeChat-compatible HTML from Markdown. Only use `--html` when you have pre-formatted HTML that already uses only inline styles.
 
 ## Verification
 
@@ -219,6 +207,20 @@ Report results exactly as they are:
 - API call failed → report exact error code and fix, don't hide it
 - Precondition missing → say what's missing, don't silently skip
 - If actual push isn't possible (no live credentials) → test command construction only, don't claim the draft was created
+
+---
+
+## Anti-Patterns & What NOT to Do
+
+| # | Anti-Pattern | Why It Fails | Correct Approach |
+|---|-------------|--------------|------------------|
+| 1 | Pushing raw HTML with `<style>` blocks | WeChat strips all `<style>` — content becomes unformatted | Convert to Markdown and use `--markdown`, or rewrite with inline styles only |
+| 2 | Pushing without a cover | API returns `MISSING_COVER_IMAGE` | Always provide `--cover <url_or_path>` |
+| 3 | Forgetting IP whitelist | API returns `40164` — outbound IP not recognized | Run once, read the actual IP from error, add to WeChat whitelist |
+| 4 | Using `--html` when source is Markdown | Misses MD2WeChat's automatic CSS conversion | Always prefer `--markdown` over `--html` |
+| 5 | Silently executing the push without showing the user | User may not expect a real API call creating a draft | 🔴 STOP and show command before executing |
+| 6 | Claiming "draft created" when you only tested command construction | Without live credentials, no draft was actually created | Report honestly: "command built correctly" not "draft published" |
+| 7 | Passing a local image path that doesn't exist | CLI will error trying to upload | Verify the path exists, or use a remote URL |
 
 ---
 
