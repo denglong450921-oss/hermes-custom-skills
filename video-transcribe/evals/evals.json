@@ -1,0 +1,47 @@
+{
+  "skill_name": "video-transcribe",
+  "evals": [
+    {
+      "id": "case_001",
+      "task": "帮我提取这个视频里的文字，输出带时间戳的转录文本\n视频文件: evals/files/chinese_clip.mp4",
+      "environment": {
+        "files": {"input": "evals/files/chinese_clip.mp4"},
+        "tools_available": ["transcribe.py", "ffmpeg"]
+      },
+      "tools": ["transcribe.py"],
+      "grader": {
+        "must_use": ["has_timestamp_format", "has_chinese_keywords", "covers_duration", "no_crash"],
+        "must_have": ["timestamped segments", "Chinese text"],
+        "must_not_have": ["Traceback", "Error"]
+      }
+    },
+    {
+      "id": "case_002",
+      "task": "transcribe this audio file for me, show timestamps\nAudio: evals/files/english_sample.mp3",
+      "environment": {
+        "files": {"input": "evals/files/english_sample.mp3"},
+        "tools_available": ["transcribe.py", "ffmpeg"]
+      },
+      "tools": ["transcribe.py"],
+      "grader": {
+        "must_use": ["has_timestamp_format", "has_english_words", "language_detected_en", "no_crash"],
+        "must_have": ["timestamped segments", "English text"],
+        "must_not_have": ["Traceback", "Error"]
+      }
+    },
+    {
+      "id": "case_003",
+      "task": "将这段英文音频转写为中文文字\nAudio: evals/files/english_sample.mp3\n请使用 --model tiny --language en 参数",
+      "environment": {
+        "files": {"input": "evals/files/english_sample.mp3"},
+        "tools_available": ["transcribe.py", "ffmpeg"]
+      },
+      "tools": ["transcribe.py"],
+      "grader": {
+        "must_use": ["has_timestamp_format", "has_english_words", "no_crash"],
+        "must_have": ["timestamped segments"],
+        "must_not_have": ["Traceback", "Error"]
+      }
+    }
+  ]
+}
