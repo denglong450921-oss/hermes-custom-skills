@@ -1,0 +1,179 @@
+---
+name: wechat_article_push_dl
+description: Push pre-formatted HTML or Markdown content to WeChat Official Account drafts via the WeChat API. Use whenever the user wants to create WeChat article drafts (standard article or 小绿书 image post) from HTML or Markdown. Handles credentials, cover image upload, draft creation, and all WeChat API error codes.
+contract_version: "1.0"
+---
+
+# wechat_article_push_dl
+
+Push content to WeChat Official Account drafts. This skill handles ALL WeChat API interactions: auth, cover upload, content image processing, draft creation, error handling. It does NOT convert modern CSS to WeChat-compatible styles — input HTML must already be WeChat-compatible (inline styles only).
+
+## Quick Reference
+
+```bash
+# Push HTML file
+md2wechat --html article.html --title "Title" --style tech --author "Name" --cover <url>
+
+# Push Markdown file (MD2WeChat converter auto-generates WeChat-compatible HTML)
+md2wechat --markdown article.md --style tech --author "Name" --cover <url>
+
+# Push as 小绿书 (image post)
+md2wechat --markdown article.md --type newspic --cover <url>
+```
+
+## Input Contract
+
+| Field | CLI Flag | Required | Default | Max |
+|-------|----------|----------|---------|-----|
+| HTML file path | `--html` | Yes (or `--markdown` / `--content`) | - | - |
+| Markdown file path | `--markdown` | Yes (or `--html` / `--content`) | - | - |
+| Content string | `--content` | Yes (or `--html` / `--markdown`) | - | - |
+| Title | `--title` | No (extracted from frontmatter or filename) | Filename | 64 chars |
+| Summary | `--summary` | No | Auto | 120 chars |
+| Cover | `--cover` | **YES — REQUIRED** | - | URL or local path |
+| Author | `--author` | No | - | - |
+| Style | `--style` | No | `academic_gray` | One of: academic_gray, festival, tech, announcement |
+| Type | `--type` | No | `news` | `news` or `newspic` |
+| Comments | `--comment` | No (flag) | Disabled | - |
+| Fans-only comments | `--fans-only-comment` | No (requires `--comment`) | Everyone can comment | - |
+
+At least one of `--html`, `--markdown`, or `--content` is required.
+
+## Preconditions
+
+### 1. Credentials — `.env` file in CWD
+
+```
+WECHAT_APPID=wx...
+WECHAT_APP_SECRET=***
+```
+
+The CLI reads `.env` from the current working directory, not home. If credentials are missing or wrong, the API returns:
+
+| Error | Meaning |
+|-------|---------|
+| `40001` | AppSecret invalid — regenerate at mp.weixin.qq.com |
+| `40013` | AppID invalid — should start with `wx` |
+
+**To set up credentials:**
+```bash
+cat > .env << EOF
+WECHAT_APPID=your_appid
+WECHAT_APP_SECRET=your_appsecret
+EOF
+```
+
+### 2. IP Whitelist
+
+WeChat requires your outbound IP to be whitelisted. The actual IP can differ from `api.ipify.org` due to VPN/proxy. Run the push command once — if it fails with `40164`, the error message contains the real IP:
+
+```
+Error code: 40164, message: invalid ip <ACTUAL_IP>, not in whitelist
+```
+
+Add that IP at [mp.weixin.qq.com](https://mp.weixin.qq.com) → Settings → Development → Basic Configuration → IP Whitelist.
+
+### 3. md2wechat CLI installed
+
+```bash
+pip3 install md2wechat
+# If not on PATH:
+export PATH="$HOME/Library/Python/3.9/bin:$PATH"
+```
+
+### 4. Cover image
+
+Every draft requires a cover. Provide via `--cover <url_or_path>`. Accepts remote URLs or local file paths.
+
+## Process
+
+1. **Verify preconditions** — check CLI available, .env exists, cover provided.
+2. **Verify HTML is WeChat-compatible** (if using `--html`):
+   - All styles must be inline (`style=""`)
+   - No `<style>` blocks, no CSS vars, no gradients/flex/grid/pseudo-elements
+   - See `WeChat CSS → works/doesn't work` tables below
+3. **Build command** with appropriate flags.
+4. **Execute** `md2wechat` command.
+5. **Check result:**
+   - `"success": true` → return media_id
+   - Error → decode error code, report fix to user.
+
+## Output Contract
+
+```json
+{
+  "success": true,
+  "data": {
+    "media_id": "kJHuVqQ0oAIrl9gfF0SY...",
+    "status": "published",
+    "message": "文章已成功发布到公众号草稿箱"
+  }
+}
+```
+
+On success, the draft is saved to WeChat 草稿箱 (drafts). It does NOT auto-publish. The user must review and publish manually at mp.weixin.qq.com.
+
+## Failure Handling
+
+| Error Code | Signal | Root Cause | Fix Action |
+|------------|--------|------------|------------|
+| `40001` | invalid AppSecret | Secret wrong or regenerated | Reset secret at mp.weixin.qq.com, update .env |
+| `40013` | invalid AppID | AppID doesn't start with `wx` | Check AppID, should be `wx...` format |
+| `40164` | IP not in whitelist | Outbound IP unknown | Read `<ACTUAL_IP>` from error, add to whitelist |
+| `MISSING_COVER_IMAGE` | Cover required | `--cover` not provided | Pass `--cover <url_or_path>` |
+| `45004` | Body too long | Content exceeds limit | Check digest/summary/description length |
+| `404` | API unavailable | Account not verified (认证号) | Account must be verified to use drafts |
+| `45166` | Content violation | HTML format error | Use markdown path instead (MD2WeChat converter auto-fixes) |
+| CLI not found | command not found | md2wechat not installed | `pip3 install md2wechat` |
+| CLI error | unrecognized arguments | Wrong flag syntax | Run `md2wechat --help` to verify |
+
+**First response:** Retry with corrected input.
+**Final fallback:** Report the exact error code and fix to the user.
+
+## WeChat HTML Compatibility
+
+WeChat's article renderer supports only inline styles — `<style>` blocks are stripped.
+
+### ✅ Works in WeChat (inline styles)
+
+- `color`, `background-color`, `font-size`, `font-weight`, `font-style`, `font-family`
+- `text-align`, `text-decoration`, `line-height`
+- `margin`, `padding`, `border`, `border-collapse`, `border-left`, `border-top`, `border-bottom`
+- `width`, `height`, `max-width`
+- `display: block`, `display: inline-block`, `display: inline`
+- `position: relative`, `position: absolute`, `top`, `left`
+- `vertical-align`, `list-style`
+- `border-radius` (simple uniform values)
+- `background` (solid colors only)
+
+### ❌ Does NOT work in WeChat
+
+| Feature | Replacement |
+|---------|-------------|
+| `<style>` block | Inline `style=""` on each element |
+| CSS variables (`--var`) | Hardcode hex colors |
+| `linear-gradient` / `radial-gradient` | Solid `background-color` |
+| `-webkit-background-clip: text` | Solid `color` |
+| `display: flex` / `display: grid` | `<table>` or stacked `<div>` blocks |
+| `::before` / `::after` | Write literal characters: `▸`, `•`, `①` |
+| `counter-increment` / `counter-reset` | Manual numbering |
+| `:hover`, `:nth-child`, `:last-child` | Inline style on every element |
+| `@media` queries | Single layout works on mobile |
+| `box-shadow` | Remove (unreliable) |
+| `transform`, `transition`, `animation` | Remove |
+| `opacity` | Remove (unreliable) |
+
+### Recommended approach
+
+**Prefer `--markdown` over `--html`.** The MD2WeChat converter built into the CLI generates proper WeChat-compatible HTML from Markdown. Only use `--html` when you have pre-formatted HTML that already follows the rules above.
+
+## Verification
+
+1. Run a push with `--markdown` on a test article → confirm `"success": true` with `media_id`
+2. Check mp.weixin.qq.com → 草稿箱 → article appears with correct title, cover, content
+3. For cover image: confirm it uploaded (look for `Cover uploaded:` in output)
+4. For error 40164: add IP, retry → should succeed
+
+## Related Skills
+
+- `md2wechat` — Convert Markdown to WeChat-compatible HTML (CSS formatting, layout modules)
