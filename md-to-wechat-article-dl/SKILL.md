@@ -1,7 +1,6 @@
 ---
-name: md_to_wechat_article_dl
+name: md-to-wechat-article-dl
 description: Convert Markdown files to beautifully formatted, WeChat-compatible HTML articles. Follows Chinese typography best practices for WeChat Official Account articles. Use when you have a Markdown file (especially long-form Chinese content) that needs to become a WeChat article with professional formatting. Handles YAML frontmatter, headings, lists, blockquotes, code blocks, tables, images, and bold/italic text. Output is pure inline CSS — ready for wechat_article_push_dl.
-contract_version: "1.0"
 ---
 
 # md_to_wechat_article_dl
