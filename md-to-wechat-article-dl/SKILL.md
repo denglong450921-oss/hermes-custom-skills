@@ -18,7 +18,8 @@ whitespace, consistency, and hierarchy. Decoration must support comprehension.
 5. Treat any quality dimension below 90 as a failed layout.
 6. Let the converter rerender in strict mode, then inspect the second report.
 7. Run the official structure verifier only when the user explicitly requests it.
-8. Return the HTML path, selected theme, five scores, official validation status,
+8. **Open** the generated HTML in browser for visual inspection: `open <output-path>`
+9. Return the HTML path, selected theme, five scores, official validation status,
    automated warnings, and image-related manual review items.
 
 Do not manually recreate the template when the bundled converter can perform the
