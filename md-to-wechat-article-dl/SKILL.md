@@ -1,231 +1,231 @@
 ---
 name: md-to-wechat-article-dl
-description: Convert Markdown files to beautifully formatted, WeChat-compatible HTML articles. Follows Chinese typography best practices for WeChat Official Account articles. Use when you have a Markdown file (especially long-form Chinese content) that needs to become a WeChat article with professional formatting. Handles YAML frontmatter, headings, lists, blockquotes, code blocks, tables, images, and bold/italic text. Output is pure inline CSS — ready for wechat_article_push_dl.
+description: Convert Chinese or English Markdown into restrained, premium, mobile-first HTML for WeChat Official Accounts, then audit, automatically repair, and optionally validate it against WeChat's official editor structure API. Use this skill whenever a user asks to format, beautify, typeset, convert, restyle, validate, or prepare Markdown/HTML for a WeChat article, especially when they mention advanced CSS, magazine style, card layout, inline CSS, mobile readability, Dark Mode, editor plugin compatibility, technical articles, cognition essays, business/wealth content, or health education.
+compatibility: Python 3.10+ with markdown, PyYAML, beautifulsoup4, and bleach.
 ---
 
-# md_to_wechat_article_dl
+# Markdown to WeChat Article
 
-Convert Markdown → WeChat-compatible HTML with professional Chinese typography. This skill automates the formatting principles described in the reference article (6000-char WeChat formatting guide).
+Create WeChat-ready HTML whose polish comes from design order: restraint, clarity,
+whitespace, consistency, and hierarchy. Decoration must support comprehension.
 
-## Quick Start
+## Default workflow
+
+1. Inspect the Markdown structure and frontmatter.
+2. Select a theme from `minimal`, `tech`, `cognition`, `wealth`, or `health`.
+3. Convert Markdown with `scripts/convert.py`.
+4. Read the generated quality report.
+5. Treat any quality dimension below 90 as a failed layout.
+6. Let the converter rerender in strict mode, then inspect the second report.
+7. Run the official structure verifier only when the user explicitly requests it.
+8. Return the HTML path, selected theme, five scores, official validation status,
+   automated warnings, and image-related manual review items.
+
+Do not manually recreate the template when the bundled converter can perform the
+transformation. The script makes output deterministic and keeps future runs consistent.
+
+## Quick start
 
 ```bash
-# Convert a markdown file to WeChat HTML
-python3 scripts/convert.py /path/to/article.md -o /path/to/output.html
-
-# Convert and show the output path
-python3 scripts/convert.py article.md -o article.html
-echo "Output: article.html"
+python3 scripts/convert.py article.md \
+  --output article.wechat.html \
+  --theme auto
 ```
 
-## Design Principles (from reference article)
+Choose a theme explicitly when the article domain is known:
 
-This skill follows the WeChat typography rules from the 6000-char guide:
-
-| Principle | Implementation |
-|-----------|---------------|
-| Body font size | 15px (comfortable reading) |
-| Body text color | #595959 (soft black, not pure #000) |
-| Line height | 1.75 (breathing room) |
-| Letter spacing | 0.5px (not too dense) |
-| Side margins | 16px padding on mobile |
-| Section spacing | 24px between sections |
-| Heading color | #1a1a2e (dark, distinct from body) |
-| Accent color | #e8633a (for emphasis) |
-| Image spacing | 12px margin top/bottom |
-| Blockquote style | Left border accent + light background |
-| Code blocks | Monospace + light gray background |
-| Max width | 680px centered |
-
-## Input Contract
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| Markdown file path | `string` | Yes | Path to .md file |
-| Output path | `string` | Yes | Where to save the .html file |
-| Title/override | `string` | No | Override YAML frontmatter title |
-| Cover image | `string` | No | Auto-extract first image as cover hint |
-
-## Preconditions
-
-- Python 3 available with `markdown` library:
-  ```bash
-  pip3 install markdown
-  ```
-- Input .md file exists and is readable
-- Output directory exists
-
-## Process
-
-1. **Read** the markdown file and parse YAML frontmatter (title, author, date, tags).
-2. **Convert** markdown body to HTML using the Python markdown library with `fenced_code` and `tables` extensions.
-3. **Wrap** the HTML in a WeChat-compatible template with inline CSS (never `<style>` blocks).
-4. **Apply** Chinese typography: proper font sizes, colors, spacing per the reference article.
-5. **Save** the output to the specified path.
-6. **Report** the output path and extracted metadata.
-
-## Bundled Script
-
-The `scripts/convert.py` script handles the deterministic conversion:
-
-```python
-# Usage: python3 scripts/convert.py <input.md> -o <output.html> [--title TITLE]
-
-import re, json, sys, os
-from markdown import markdown as md_convert
-
-def parse_frontmatter(text):
-    \"\"\"Extract YAML frontmatter and body.\"\"\"
-    m = re.match(r'^---\\s*\\n(.*?)\\n---\\s*\\n(.*)', text, re.DOTALL)
-    if not m:
-        return {}, text
-    yaml_text, body = m.group(1), m.group(2)
-    meta = {}
-    for line in yaml_text.split('\\n'):
-        kv = re.match(r'^(\\w+):\\s*(.+)$', line)
-        if kv:
-            meta[kv.group(1)] = kv.group(2).strip('\\"\\'')
-    return meta, body
-
-def wechat_html(body_html, meta, title_override=None):
-    \"\"\"Wrap HTML body in WeChat-compatible template with inline CSS.\"\"\"
-    title = title_override or meta.get('title', 'Article')
-    author = meta.get('author', '')
-    date = meta.get('date', '')
-    
-    return f'''<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{title}</title>
-</head>
-<body style="margin:0;padding:0;font-family:-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei','Noto Sans SC',sans-serif;background:#f8f6f3;color:#595959;line-height:1.75;font-size:15px;letter-spacing:0.5px;">
-
-<div style="max-width:680px;margin:0 auto;padding:24px 16px;background:#fff;">
-
-<!-- Header -->
-<div style="margin-bottom:24px;">
-  <h1 style="font-size:22px;font-weight:700;color:#1a1a2e;margin:0 0 8px 0;line-height:1.4;">{title}</h1>
-  {('<p style="color:#999;font-size:13px;margin:0;">' + author + (' · ' + date if date else '') + '</p>') if author else ''}
-</div>
-
-<!-- Body -->
-{body_html}
-
-<!-- Footer -->
-<p style="text-align:center;color:#ccc;font-size:12px;margin-top:32px;padding-top:16px;border-top:1px solid #eee;">
-  {'© ' + author if author else ''}
-</p>
-
-</div>
-</body>
-</html>'''
-
-def convert_markdown_to_wechat(md_text):
-    \"\"\"Convert markdown to WeChat-safe HTML.\"\"\"
-    # Markdown extensions
-    extensions = ['fenced_code', 'tables', 'codehilite', 'nl2br']
-    
-    # Convert
-    html = md_convert(md_text, extensions=extensions)
-    
-    # Post-process: ensure all styles are inline-safe
-    # Replace any <style> tags with inline alternatives
-    html = re.sub(r'<style[^>]*>.*?</style>', '', html, flags=re.DOTALL)
-    
-    # Style tags inline
-    style_map = {
-        'h1': 'font-size:22px;font-weight:700;color:#1a1a2e;margin:20px 0 12px 0;line-height:1.4;',
-        'h2': 'font-size:18px;font-weight:700;color:#1a1a2e;margin:24px 0 12px 0;line-height:1.4;',
-        'h3': 'font-size:16px;font-weight:600;color:#333;margin:18px 0 8px 0;',
-        'p': 'margin:0 0 12px 0;color:#595959;',
-        'strong': 'font-weight:700;color:#1a1a2e;',
-        'em': 'font-style:italic;',
-        'ul': 'padding-left:20px;margin:0 0 12px 0;',
-        'ol': 'padding-left:20px;margin:0 0 12px 0;',
-        'li': 'margin-bottom:6px;color:#595959;line-height:1.6;',
-        'blockquote': 'margin:12px 0;padding:12px 16px;background:#f8f6f3;border-left:4px solid #e8633a;color:#666;font-size:14px;line-height:1.6;',
-        'code': 'font-family:"SF Mono","Fira Code","Consolas",monospace;background:#f0eee8;padding:2px 6px;border-radius:3px;font-size:13px;color:#c8406a;',
-        'pre': 'margin:12px 0;padding:14px 16px;background:#f8f6f3;border-radius:6px;overflow-x:auto;font-size:13px;line-height:1.5;',
-        'pre code': 'background:none;padding:0;border-radius:0;color:#333;font-size:13px;',
-        'img': 'max-width:100%;height:auto;display:block;margin:16px auto;border-radius:6px;',
-        'table': 'width:100%;border-collapse:collapse;margin:12px 0;font-size:14px;',
-        'th': 'background:#f0eee8;padding:8px 10px;text-align:left;font-weight:600;color:#1a1a2e;border-bottom:2px solid #e0ddd8;',
-        'td': 'padding:8px 10px;border-bottom:1px solid #e0ddd8;color:#595959;',
-        'hr': 'border:none;border-top:1px solid #e0ddd8;margin:24px 0;',
-        'a': 'color:#e8633a;text-decoration:none;',
-    }
-    
-    for tag, style in style_map.items():
-        # Apply to opening tags without existing style
-        html = re.sub(
-            f'<{tag}(\\s[^>]*?)?>',
-            lambda m: f'<{tag}{m.group(1) or ""} style="{style}">',
-            html
-        )
-    
-    return html
-
-if __name__ == '__main__':
-    import argparse
-    parser = argparse.ArgumentParser()
-    parser.add_argument('input', help='Input markdown file')
-    parser.add_argument('-o', '--output', required=True, help='Output HTML file')
-    parser.add_argument('--title', help='Override title')
-    args = parser.parse_args()
-    
-    with open(args.input) as f:
-        text = f.read()
-    
-    meta, body = parse_frontmatter(text)
-    body_html = convert_markdown_to_wechat(body)
-    output_html = wechat_html(body_html, meta, args.title)
-    
-    with open(args.output, 'w') as f:
-        f.write(output_html)
-    
-    result = {
-        'status': 'success',
-        'output': args.output,
-        'title': args.title or meta.get('title', ''),
-        'author': meta.get('author', ''),
-        'char_count': len(body)
-    }
-    print(json.dumps(result, ensure_ascii=False))
+```bash
+python3 scripts/convert.py article.md \
+  --output article.wechat.html \
+  --theme health \
+  --quality-threshold 90
 ```
 
-## Output Contract
+Audit existing HTML without converting Markdown:
+
+```bash
+python3 scripts/audit.py article.wechat.html \
+  --report article.audit.json \
+  --threshold 90
+```
+
+Explicitly send the final HTML to WeChat's official structure verifier:
+
+```bash
+python3 scripts/convert.py article.md \
+  --output article.wechat.html \
+  --theme auto \
+  --official-check
+```
+
+`--official-check` transmits the complete generated HTML to
+`mp.weixin.qq.com`. It is opt-in because drafts may contain private or
+unpublished content.
+
+## Input contract
+
+| Field | Required | Notes |
+|---|---:|---|
+| Markdown path | Yes | UTF-8 `.md` file |
+| Output path | Yes | HTML fragment suitable for WeChat |
+| `--theme` | No | `auto`, `minimal`, `tech`, `cognition`, `wealth`, `health` |
+| `--title` | No | Overrides frontmatter title |
+| `--quality-threshold` | No | Defaults to 90 for every quality dimension |
+| `--report` | No | Defaults to `<output>.report.json` |
+| `--official-check` | No | Opt-in upload to WeChat's official structure verifier |
+| `--official-timeout` | No | Official verifier timeout in seconds; defaults to 15 |
+
+Supported frontmatter keys include `title`, `author`, `date`, `summary`,
+`description`, `type`, `category`, and `tags`.
+
+## Output contract
+
+The command prints JSON and writes the same audit data to the report:
 
 ```json
 {
-  "status": "success",
-  "output": "/path/to/output.html",
-  "title": "Article Title",
-  "author": "Author Name",
-  "char_count": 6000
+  "status": "passed",
+  "output": "/absolute/path/article.wechat.html",
+  "report": "/absolute/path/article.wechat.html.report.json",
+  "theme": "tech",
+  "auto_repaired": false,
+  "scores": {
+    "visual_hierarchy": 100,
+    "readability": 100,
+    "restraint": 100,
+    "consistency": 100,
+    "wechat_compatibility": 100
+  },
+  "official_validation": {
+    "status": "skipped",
+    "is_valid": null,
+    "reason": "not_requested",
+    "violations": [],
+    "violation_count": 0,
+    "transport": null
+  },
+  "manual_review": []
 }
 ```
 
-## Failure Handling
+## Design rules
 
-| 触发条件 | 一线修复 | 仍失败兜底 |
-|-----------|---------|-----------|
-| Input file not found | Check path: `ls -la <path>` | Ask user for correct path |
-| `markdown` library not installed | `pip3 install markdown` | Use `python3 -c` with regex fallback |
-| YAML frontmatter parsing error | Ignore frontmatter, use file title | Use filename as title |
-| Output directory not writable | Save to `/tmp/<basename>.html` | Ask user for writable path |
-| No content in file | Report empty file | Create minimal HTML with title only |
+- Use one accent color and a small neutral palette.
+- Keep body text at 15–16px with 1.75–1.9 line height.
+- Keep article padding at 16–20px and section spacing at 24–36px.
+- Use light borders and restrained radius; avoid loud gradients and heavy shadows.
+- Emphasize only genuine judgments, not every sentence.
+- Prefer structural modules: conclusion, problem, comparison, framework, checklist,
+  resources, and synthesis.
+- Give the reader a ten-second path through title, summary, key judgment, and sections.
+- Use inline CSS only. Avoid external CSS, `<style>`, scripts, event handlers, layout
+  systems that WeChat may strip, and unsafe URL schemes.
+- Do not set `font-family`; preserve the platform's default font.
+- Do not use fixed `width` or `height`, zero line height, `text-align:start/end`,
+  `position:absolute/fixed`, transforms, or `!important`.
+- Render fenced code as a wrapping `section > code` block, not `<pre>`.
+- Keep same-tag nesting at 15 levels or fewer.
+- Favor solid container backgrounds and moderate contrast for Dark Mode. Decorative
+  gradients without text are allowed; text-on-gradient is not.
+- Keep shared backgrounds on a structural container rather than repeating them on
+  each text node.
+- Treat `data-no-dark` as applying only to the marked node. Inline styles on its
+  descendants are still transformed.
+- Use SVG `currentColor` for black or text-like line art that must adapt to Dark Mode.
+- Put images containing text, transparent images, and text over background images
+  through manual light/dark review because HTML inspection cannot prove legibility.
+
+Read [references/design-system.md](references/design-system.md) when changing themes,
+spacing, typography, cards, or article-type behavior.
+Read [references/wechat-editor-plugin-spec.md](references/wechat-editor-plugin-spec.md)
+when changing tags, CSS compatibility checks, Dark Mode behavior, or official validation.
+
+## Theme selection
+
+| Theme | Best for | Visual direction |
+|---|---|---|
+| `minimal` | General and mixed topics | White, graphite, quiet gray |
+| `tech` | AI, software, architecture | Deep blue-gray with cool blue accent |
+| `cognition` | Essays, learning, self-development | Warm paper, ink, muted brown |
+| `wealth` | Business, finance, strategy | Ivory, deep green, restrained gold |
+| `health` | Health education and wellness | Soft green-gray, calm blue-green |
+
+With `--theme auto`, the converter uses frontmatter first and article vocabulary second.
+If the signal is ambiguous, use `minimal`.
+
+## Source structure guidance
+
+The converter does not invent claims. Improve the ten-second reading path by providing:
+
+```markdown
+---
+title: Article title
+summary: One sentence explaining the reader value
+type: tech
+---
+
+> The single most important judgment.
+
+## First major question
+
+...
+```
+
+When at least two level-two headings exist, the converter creates a restrained section
+map from their labels. It does not fabricate an executive summary.
+
+## Quality gate
+
+The audit produces five scores:
+
+1. `visual_hierarchy`: title, heading, body, and spacing hierarchy.
+2. `readability`: mobile font size, line height, width, paragraph rhythm, and contrast.
+3. `restraint`: controlled colors, borders, radius, shadows, and emphasis.
+4. `consistency`: repeated elements share the same visual language.
+5. `wechat_compatibility`: inline CSS, safe tags and URLs, official editor constraints,
+   Dark Mode safety, adaptive SVG, scoped opt-outs, and no fragile features.
+
+Every score must meet the threshold. A low score means the output is not ready merely
+because it looks plausible in a desktop browser.
+
+## Failure handling
+
+| Failure | Response |
+|---|---|
+| Missing dependency | Report the exact package; do not silently use a weaker parser |
+| Invalid or empty Markdown | Stop with structured JSON and a nonzero exit code |
+| Unsafe raw HTML | Strip unsafe tags, event attributes, classes, IDs, and URL schemes |
+| First audit below threshold | Rerender using strict mode and audit again |
+| Second audit below threshold | Return `blocked` with failed dimensions and report path |
+| Official verifier rejects HTML | Return `blocked` with `invalid_info`; repair locally and retry |
+| Official verifier unavailable | Return `blocked` with status `error`; keep the local report |
+| Image or background-image uncertainty | Keep the automated score and add a `manual_review` item |
+| Unknown theme | Stop and list supported themes |
 
 ## Verification
 
-1. Run `python3 scripts/convert.py sample.md -o sample.html`
-2. Open `sample.html` in browser → verify typography matches reference
-3. Inspect HTML → confirm no `<style>` blocks, all inline styles
-4. Push with `wechat_article_push_dl` → confirm renders correctly in WeChat
+Run:
 
-## Related Skills
+```bash
+python3 -m unittest discover -s tests
+python3 scripts/convert.py evals/files/technical.md \
+  --output /tmp/technical.wechat.html \
+  --theme tech
+python3 scripts/audit.py /tmp/technical.wechat.html \
+  --report /tmp/technical.audit.json
+python3 scripts/audit.py /tmp/technical.wechat.html \
+  --report /tmp/technical.official.json \
+  --official-check
+```
 
-- `wechat_article_push_dl` — Push formatted HTML to WeChat drafts
-- `wechat_article_css_dl` — Check/fix HTML for WeChat CSS compatibility
-- `md2wechat` — Alternative: MD2WeChat converter (built into CLI)
+Before claiming completion, confirm:
+
+- all five scores are at least 90;
+- no `<style>`, `<script>`, `class`, `id`, or event attributes remain;
+- no `font-family`, `<pre>`, fixed dimensions, zero line height, fragile positioning,
+  transforms, or `!important` remain;
+- dangerous links and embedded raw HTML were removed;
+- the output preserves headings, lists, blockquotes, code, tables, images, and links;
+- `manual_review` has been completed when images or background images are present;
+- the official verifier passes when the user authorized `--official-check`;
+- the result remains readable at a narrow mobile width.
