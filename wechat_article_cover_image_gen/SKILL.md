@@ -124,6 +124,14 @@ The layout adapts to text length automatically:
 Short text gets wide margins (breathing room). Long text fills more of the canvas.
 The font size is interpolated to hit the target width as closely as possible.
 
+**Multi-line wrapping:** If even at minimum font size (45px) the title exceeds
+the canvas width, it is automatically wrapped across two lines:
+- English text wraps at word boundaries (spaces preserved)
+- Chinese/other text splits at a character midpoint balanced across lines
+- Each wrapped line is independently centered with full outline
+- Coverage reports the longest single line, not the total text
+- 30+ character titles render cleanly without overflow
+
 **Vertical:**
 - Dense content (title + subtitle + tagline) → compact gaps (28/18/16/16px)
 - Sparse content (title only, or missing subtitle) → wider gaps (36/24/22/20px)
@@ -152,7 +160,7 @@ Background image always has at least 15% breathing room on top and bottom.
 | Stock image download fails | Retries with Unsplash fallback URLs (5 total) | Creates a solid dark gradient background |
 | Invalid output path | Verify the parent directory exists: `ls -la <parent>` | Use `/tmp/cover.png` as fallback path |
 | Pillow / numpy missing | `pip3 install Pillow numpy` | Use system Python with `python3 -m venv venv && source venv/bin/activate && pip install` |
-| Title text is extremely long (>25 chars) | Script auto-reduces font size to fit canvas | If still clipped, manually shorten the title or use a 2-line subtitle |
+| Title text is extremely long (>25 chars) | Script auto-wraps to 2 lines (word-wrap for English, balanced split for Chinese) | If even wrapped text looks cramped, manually shorten title or move extra info to subtitle |
 | Output PNG looks dim | Overlay alpha may be too high | No fix needed — uniform `rgba(5,8,15,165)` is intentional for Dark Mode readability |
 
 ## Verification
@@ -173,7 +181,7 @@ Confirm:
 | 跳过 `--output` 参数不指定路径 | 脚本不知道写到哪里，报错退出 | 始终指定完整路径，如 `--output ~/Desktop/cover.png` |
 | 用随机网络图片当封面 | 版权风险 + 图片比例不匹配 900×383 | 使用 Unsplash 免费图片或脚本默认自动下载 |
 | 在图片上手动叠加文字 | 文字可能被 WeChat 裁剪或遮挡 | 脚本自动在底部留安全区域 + 居中布局 |
-| 封面文字过多（>50 个字符） | 视觉拥挤，在 WeChat 缩略图中看不清 | 标题保持在 20 字符以内，多余信息放 subtitle/tagline |
+| 封面文字过多（>50 个字符） | 视觉拥挤，在 WeChat 缩略图中看不清 | 脚本自动换行处理，但仍建议标题保持在 20 字符以内 |
 | 纯英文标题过长 | 英文字符窄，长句在 125px 字重下超长溢出 | 保持在 15 个英文单词以内，或用缩写 |
 
 ## Harness (Self-Eval)
