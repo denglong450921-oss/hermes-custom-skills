@@ -38,8 +38,21 @@ Extract from the article's title, subtitle/summary, and tagline.
 | `--tagline` | Key concept / tagline | `"决策者 + AI 工具链 · 可验证需求 · 商业闭环"` |
 | `--label` | Top category label | `"AI ERA  ·  ONE PERSON COMPANY"` |
 
-The label is an English descriptive tag. If the user doesn't specify one,
-derive it from the article topic.
+**Real article → parameters example:**
+```
+Article title:  "AI 时代的 OPC"
+Article summary: "一个人如何用最小成本跑通自己的商业闭环"
+Key concept:   "决策者 + AI 工具链 · 可验证需求 · 商业闭环"
+Topic category: "AI · Business"
+
+→ --title "AI 时代的 OPC"
+→ --subtitle "一个人如何用最小成本跑通自己的商业闭环"
+→ --tagline "决策者 + AI 工具链 · 可验证需求 · 商业闭环"
+→ --label "AI ERA  ·  ONE PERSON COMPANY"
+```
+
+If no explicit subtitle/tagline exists in the article, derive from the
+article's summary and key takeaway. Keep `--label` under 30 chars.
 
 🔴 **CHECKPOINT: Verify you have all 4 metadata fields filled before proceeding.
 Missing `--title` or `--output` will cause the script to fail.**
@@ -74,16 +87,24 @@ python3 <skill_dir>/scripts/gen_cover.py \
 
 ### 3. Present result
 
-Open the generated PNG and show the user where it was saved:
+Open the generated PNG and report the cover metadata to the user:
 
 ```bash
 open /path/to/cover.png
 ```
 
-Report the cover metadata:
-- Output path
-- Title font size and width coverage
-- Canvas dimensions (900×383)
+**Output report template:**
+```
+Cover generated: /path/to/cover.png
+  Canvas: 900x383
+  Title: AI 时代的 OPC
+  Title font: 125px
+  Title width coverage: 93%
+  Vertical offset: 66px
+```
+
+If the cover text appears clipped or off-centre, offer to regenerate with
+adjusted parameters (shorter title, different `--outline-width`).
 
 ## Design rules
 
