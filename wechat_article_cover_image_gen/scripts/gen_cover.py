@@ -74,15 +74,20 @@ def _center_x(text: str, font: ImageFont.FreeTypeFont) -> int:
 
 
 def _pick_title_font(text: str) -> ImageFont.FreeTypeFont:
-    """Pick the largest font size that keeps the title within ~92-94% width."""
+    """Pick the largest font size that keeps the title within canvas width
+    (target ~92-94%). Falls back to min size if even the smallest overflows."""
     target = int(CANVAS_W * 0.92)
     font_path = _resolve_font()
     best = 60
     for fs in range(60, 200, 5):
         ft = ImageFont.truetype(font_path, fs)
         w = _get_bounds(text, ft)[1] - _get_bounds(text, ft)[0] + 1
-        best = fs
-        if w >= target:
+        if w <= target:
+            best = fs  # fits within target — keep increasing
+        elif w <= CANVAS_W:
+            best = fs  # fits within canvas but exceeds target — keep going
+        else:
+            # Exceeds canvas — stop; use the previous size that fit
             break
     return ImageFont.truetype(font_path, best)
 

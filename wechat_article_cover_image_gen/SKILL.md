@@ -44,6 +44,11 @@ derive it from the article topic.
 🔴 **CHECKPOINT: Verify you have all 4 metadata fields filled before proceeding.
 Missing `--title` or `--output` will cause the script to fail.**
 
+🛑 **STOP: Show the user the exact command before running.**
+Present the full `python3 gen_cover.py` command with all arguments and
+the expected output path. Wait for explicit confirmation before executing.
+This prevents accidentally overwriting an existing file or using wrong text.
+
 ### 2. Run the script
 
 ```bash
