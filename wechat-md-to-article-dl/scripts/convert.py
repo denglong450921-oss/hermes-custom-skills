@@ -239,52 +239,45 @@ def safe_markdown(body: str) -> BeautifulSoup:
 
 def normalize_lists(soup: BeautifulSoup, theme: dict[str, str], *,
                     card_padding: int = 14) -> None:
-    """Replace <ol>/<ul>/<li> with inline card-style div blocks.
+    """Replace <ol>/<ul>/<li> with CSS counter-style div blocks (Option 1).
 
-    WeChat's rich-text engine breaks native list rendering. Uses a
-    hybrid of Option 2 + Option 3: card border/radius/background with
-    marker and content side by side (flex row) for compact height.
+    WeChat's rich-text engine breaks native list rendering. Uses flex
+    row layout with `align-items:flex-start` and fixed-width numbered
+    markers. CSS `counter-reset` is set on the container for semantics
+    even if WeChat does not fully support dynamic counters — the actual
+    number text is rendered statically as fallback.
 
-    Ordered: 01 Item  02 Item  03 Item
+    Ordered: 1. Item  2. Item  3. Item
     Unordered: • Item  • Item  • Item
     """
     for list_tag in soup.find_all(["ol", "ul"]):
         container = soup.new_tag("div")
-        container["style"] = "margin:0;"
+        container["style"] = "counter-reset:item;"
 
         is_ordered = list_tag.name == "ol"
         counter = 1
         accent = theme["accent"]
         text_color = theme["text"]
-        border_color = theme["border"]
-        card_radius = "8px"
 
         items = list_tag.find_all("li", recursive=False)
         for idx, li in enumerate(items):
             is_last = idx == len(items) - 1
 
-            # Card wrapper — padding + border + background
-            card = soup.new_tag("div")
-            card_gap = "" if is_last else f"margin-bottom:{card_padding}px;"
-            card["style"] = (
-                f"padding:{card_padding}px;border:1px solid {border_color};"
-                f"border-radius:{card_radius};{card_gap}"
-                f"background:{theme['page']};"
-            )
-
-            # Inner flex row: marker + content side by side
+            # Flex row: marker + content
             row = soup.new_tag("div")
-            row["style"] = "display:flex;gap:8px;"
+            gap = "" if is_last else "margin-bottom:10px;"
+            row["style"] = f"display:flex;align-items:flex-start;{gap}"
 
-            # Number or bullet marker (inline, no own line)
+            # Number or bullet marker — fixed width, accent color
             marker = soup.new_tag("div")
             if is_ordered:
-                marker.string = f"{counter:02d}"
+                marker.string = f"{counter}."
                 counter += 1
             else:
                 marker.string = "•"
             marker["style"] = (
-                f"font-weight:700;color:{accent};flex-shrink:0;"
+                f"min-width:22px;font-weight:700;color:{accent};"
+                "flex-shrink:0;"
             )
 
             # Content — flex:1 takes remaining width
@@ -295,8 +288,7 @@ def normalize_lists(soup: BeautifulSoup, theme: dict[str, str], *,
 
             row.append(marker)
             row.append(content)
-            card.append(row)
-            container.append(card)
+            container.append(row)
 
         list_tag.replace_with(container)
 

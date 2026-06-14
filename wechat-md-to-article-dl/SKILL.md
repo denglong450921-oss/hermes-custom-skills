@@ -197,11 +197,11 @@ The command prints JSON and writes the same audit data to the report:
   `position:absolute/fixed`, transforms, or `!important`.
 - Render fenced code as a wrapping `section > code` block, not `<pre>`.
 - **Do NOT use `<ol>`, `<ul>`, or `<li>` — WeChat breaks them all.**
-  The converter auto-replaces every list with inline card-style div
-  blocks: each item has a card border + radius + background, with the
-  marker (`01`, `02` or `•`) and content side by side in a flex row.
-  Use `--card-padding 6` for compact cards (~40% height) or
-  `--card-padding 14` for the original card size.
+  The converter auto-replaces every list with CSS counter-style div
+  blocks (Option 1): flex row with `align-items:flex-start`, the marker
+  has a fixed `min-width:22px` in the theme accent color, and content
+  takes the remaining space. Ordered lists show `1.`, `2.`, `3.`;
+  unordered show `•`. No card borders or backgrounds — clean and stable.
 - Keep same-tag nesting at 15 levels or fewer.
 - Favor solid container backgrounds and moderate contrast for Dark Mode. Decorative
 - Keep shared backgrounds on a structural container rather than repeating them on
