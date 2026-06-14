@@ -239,11 +239,11 @@ def safe_markdown(body: str) -> BeautifulSoup:
 
 def normalize_lists(soup: BeautifulSoup, theme: dict[str, str], *,
                     card_padding: int = 14) -> None:
-    """Replace <ol>/<ul>/<li> with clean minimal div list blocks.
+    """Replace <ol>/<ul>/<li> with span-based inline list blocks.
 
-    Each item: padding:14px 0 (vertical only), flex row with 26px
-    accent marker, zero-margin content paragraphs. No borders,
-    no card backgrounds — clean and stable.
+    Each item: div wrapper (last has no margin), single span for the
+    entire text line with nested accent-colored marker span. No flex,
+    no borders, no card backgrounds — clean and stable.
     """
     for list_tag in soup.find_all(["ol", "ul"]):
         container = soup.new_tag("div")
@@ -254,40 +254,44 @@ def normalize_lists(soup: BeautifulSoup, theme: dict[str, str], *,
         accent = theme["accent"]
         text_color = theme["text"]
 
-        for li in list_tag.find_all("li", recursive=False):
-            # Flex row with vertical padding
-            row = soup.new_tag("div")
-            row["style"] = (
-                "display:flex;align-items:flex-start;"
-                "padding:0px 0px;"
+        items = list_tag.find_all("li", recursive=False)
+        for idx, li in enumerate(items):
+            is_last = idx == len(items) - 1
+
+            # Item wrapper
+            item = soup.new_tag("div")
+            if not is_last:
+                item["style"] = "margin-bottom:14px;"
+
+            # Text line span
+            line = soup.new_tag("span")
+            line["style"] = (
+                f"font-size:16px;line-height:1.85;"
+                f"color:{text_color};letter-spacing:0.02em;"
             )
 
-            # Number or bullet — larger, accent color
-            marker = soup.new_tag("div")
+            # Marker span — accent color, margin-right for spacing
+            marker = soup.new_tag("span")
             if is_ordered:
                 marker.string = f"{counter}."
                 counter += 1
             else:
                 marker.string = "•"
             marker["style"] = (
-                f"min-width:26px;font-weight:700;color:{accent};"
-                "font-size:18px;line-height:1.6;flex-shrink:0;"
+                f"color:{accent};font-weight:700;margin-right:6px;"
             )
+            line.append(marker)
 
-            # Content — flex:1
-            content = soup.new_tag("div")
-            content["style"] = "flex:1;"
+            # Content — unwrap <p> tags, preserve inline formatting
             for child in list(li.children):
-                content.append(child)
+                if child.name == "p":
+                    for grandchild in list(child.children):
+                        line.append(grandchild)
+                else:
+                    line.append(child)
 
-            # Unwrap paragraphs inside list items — avoids style conflicts
-            # with regular paragraphs while preserving inline formatting
-            for p in content.find_all("p"):
-                p.unwrap()
-
-            row.append(marker)
-            row.append(content)
-            container.append(row)
+            item.append(line)
+            container.append(item)
 
         list_tag.replace_with(container)
 
