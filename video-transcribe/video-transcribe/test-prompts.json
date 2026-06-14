@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "prompt": "帮我提取这个视频里的文字，输出带时间戳的转录文本\n视频: ~/Downloads/sports_height.mp4",
+    "expected": "Timestamped Chinese transcript covering the full video duration"
+  },
+  {
+    "id": 2,
+    "prompt": "transcribe this audio file for me, show timestamps\nAudio: ~/Downloads/english_podcast.mp3",
+    "expected": "Timestamped English transcript with correct language detection"
+  },
+  {
+    "id": 3,
+    "prompt": "将这段英文音频转写为文字，用 medium 模型\nAudio: ~/Downloads/interview.mp3",
+    "expected": "Timestamped English transcript using --model medium --language en"
+  }
+]
