@@ -234,7 +234,27 @@ def safe_markdown(body: str) -> BeautifulSoup:
         code.extract()
         container.append(code)
         pre.replace_with(container)
+    normalize_lists(soup)
     return soup
+
+
+def normalize_lists(soup: BeautifulSoup) -> None:
+    """Flatten list items for WeChat compatibility.
+
+    WeChat editor breaks when <li> contains <p> wrappers, causing
+    blank lines and duplicated items. This unwraps all <p> from inside
+    <li>, moving content directly into the list item.
+
+    Before: <li><p>text</p></li>  ->  After: <li>text</li>
+    """
+    for li in soup.find_all("li"):
+        for p in li.find_all("p"):
+            # Only unwrap if no attributes WeChat would lose
+            p.unwrap()
+    # Remove empty <p> left orphans
+    for p in soup.find_all("p"):
+        if not p.get_text(strip=True) and not p.find_all("img"):
+            p.decompose()
 
 
 def style_map(theme: dict[str, str], *, strict: bool) -> dict[str, str]:

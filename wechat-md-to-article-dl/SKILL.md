@@ -195,6 +195,9 @@ The command prints JSON and writes the same audit data to the report:
 - Do not use fixed `width` or `height`, zero line height, `text-align:start/end`,
   `position:absolute/fixed`, transforms, or `!important`.
 - Render fenced code as a wrapping `section > code` block, not `<pre>`.
+- **Keep `<li>` flat — NO `<p>` inside `<li>`.** WeChat editor breaks
+  `<li><p>text</p></li>` into blank line + duplicated item. Content must
+  be a direct text node inside `<li>`. The converter auto-normalizes this.
 - Keep same-tag nesting at 15 levels or fewer.
 - Favor solid container backgrounds and moderate contrast for Dark Mode. Decorative
   gradients without text are allowed; text-on-gradient is not.
