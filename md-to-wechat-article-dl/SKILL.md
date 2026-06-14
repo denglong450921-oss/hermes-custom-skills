@@ -76,6 +76,55 @@ unpublished content.
 | `--official-check` | No | Opt-in upload to WeChat's official structure verifier |
 | `--official-timeout` | No | Official verifier timeout in seconds; defaults to 15 |
 
+## Highlight and callout syntax
+
+Mark key content types with special markers for sophisticated visual emphasis.
+
+### Inline highlights
+
+Wrap text with one of these marker pairs to add a coloured background pill:
+
+| Marker | Purpose | Visual |
+|---|---|---|
+| `==text==` | Core concept, key definition | Accent-tinted background, semi-bold |
+| `^^text^^` | Key viewpoint, argument | Subtle tinted background |
+| `!!text!!` | Emphasis, important point | Warm highlight background |
+
+Example:
+```markdown
+The core idea is ==OPC = decision-maker + AI tool chain==.
+^^This changes how individuals approach business.^^
+!!Always validate demand before building a product!!
+```
+
+### Callout blocks
+
+Fence a block with `:::type` / `:::` to get a coloured left-border card:
+
+| Type | Purpose | Border colour |
+|---|---|---|
+| `:::problem` | Problem statement or challenge | Red/muted red |
+| `:::strategy` | Strategy or approach | Green/teal |
+| `:::thinking` | Thinking method or mental model | Blue/purple |
+| `:::key` | Core insight or takeaway | Theme accent |
+
+Optionally add a title on the same line as the `:::` marker:
+
+```markdown
+:::problem 需求验证的陷阱
+很多创业者跳过需求直接做产品。
+而市场的反应往往与预期完全不同。
+:::
+
+:::strategy
+Start with an MVP and test willingness to pay.
+:::
+
+:::thinking 最小可行性思维
+MVP 的关键不是"完整"，而是"能否换取真实支付"。
+:::
+```
+
 Supported frontmatter keys include `title`, `author`, `date`, `summary`,
 `description`, `type`, `category`, and `tags`.
 

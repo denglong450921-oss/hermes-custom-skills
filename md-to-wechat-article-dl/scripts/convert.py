@@ -31,6 +31,12 @@ except ImportError as error:  # pragma: no cover - exercised by CLI environments
 
 from quality import audit_html
 from official_verify import verify_article_structure
+from highlighting import (
+    HIGHLIGHT_TOKENS,
+    preprocess_callouts,
+    preprocess_inline_highlights,
+    apply_highlight_styles,
+)
 
 
 THEMES: dict[str, dict[str, str]] = {
@@ -104,6 +110,7 @@ ALLOWED_TAGS = [
     "code",
     "a",
     "img",
+    "span",
     "table",
     "thead",
     "tbody",
@@ -173,6 +180,8 @@ def infer_theme(metadata: dict[str, Any], body: str) -> str:
 
 
 def safe_markdown(body: str) -> BeautifulSoup:
+    body = preprocess_callouts(body)
+    body = preprocess_inline_highlights(body)
     raw_html = markdown(
         body,
         extensions=["extra", "sane_lists", "nl2br"],
@@ -184,6 +193,8 @@ def safe_markdown(body: str) -> BeautifulSoup:
         attributes={
             "a": ["href", "title"],
             "img": ["src", "alt", "title"],
+            "span": ["data-hl"],
+            "section": ["data-callout"],
             "th": ["colspan", "rowspan"],
             "td": ["colspan", "rowspan"],
         },
@@ -334,6 +345,7 @@ def render(
     summary = normalize_text(metadata.get("summary") or metadata.get("description"))
     soup = safe_markdown(body)
     apply_styles(soup, palette, strict=strict)
+    apply_highlight_styles(soup, theme_name)
 
     meta_parts = [part for part in (author, date_value) if part]
     meta_line = " · ".join(meta_parts)

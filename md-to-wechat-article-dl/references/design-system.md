@@ -31,6 +31,14 @@ Design should make the argument easier to understand, not advertise the designer
   oversized radius.
 - Limit high-emphasis treatments to the few judgments that define the article.
 - Reuse spacing and component styles rather than styling each module independently.
+- Highlighted content (`==`, `^^`, `!!`) adds coloured background pills. Use them
+  sparingly — aim for at most 10–15% of prose blocks.
+- Callout cards (`:::problem`, `:::strategy`, `:::thinking`, `:::key`) use
+  coloured left borders and tinted backgrounds. The visual difference comes
+  from the border colour; card layout (padding, radius, margin) stays
+  consistent across all types so the reader learns the pattern once.
+- Limit callout blocks to 1–2 per section. Too many callouts in a row
+  devalue the visual signal.
 
 ## Ten-second reading path
 
