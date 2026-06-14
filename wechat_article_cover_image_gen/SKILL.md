@@ -1,211 +1,326 @@
 ---
 name: wechat_article_cover_image_gen
 description: >
-  Generate a WeChat Official Account cover image (900x383 PNG) from article
-  metadata. Downloads a free stock photo, applies a uniform dark overlay, and
-  draws centred, outlined text (title + subtitle + tagline) with a gold accent
-  bar. Use this skill whenever the user needs a cover image for a WeChat
-  article push — they'll mention "cover image", "封面", "cover", or want to
-  push an article and need a cover. It handles the full pipeline: stock photo
-  download (with multiple fallbacks), Chinese/English font rendering with text
-  outline, and automatic vertical/horizontal centering.
+  Generate a high-end, editorial-quality WeChat Official Account cover image
+  (900×383 PNG) from article metadata. Downloads a free stock photo, applies a
+  uniform overlay, and renders text with professional hierarchy (BIG title →
+  SMALL subtitle → MICRO tagline). Supports left-aligned (premium editorial) and
+  center-aligned (modern tech) layouts, plus themed style kits (tech, insight,
+  business, auto). Use this skill whenever the user needs a cover image for a
+  WeChat article push — they'll mention "cover image", "封面", "thumbnail",
+  "banner", or want to push an article and need a clickable cover. It handles
+  the full pipeline: stock photo download (with fallbacks), Chinese/English font
+  rendering with text outline, safe-zone compliance, and TDD-style quality
+  checklist. Always prefer this over manual design tools.
 ---
 
 # WeChat Article Cover Image Generator
 
-Generate a polished **900×383 PNG cover image** for WeChat Official Account
-articles. The script handles stock photo download (with auto-fallback), text
-layout, and rendering.
+Generate a **high-end 900×383 cover image** for WeChat Official Accounts.
+Professional editorial design principles: single focal idea, strong contrast,
+minimal text, clear hierarchy, breathing space.
+
+## 🔑 First Principle: What a WeChat Cover Really Is
+
+A WeChat cover is NOT decoration, background art, poster, or branding wallpaper.
+
+It IS: **a clickable thumbnail + information signal + attention hook**.
+
+Its job:
+```
+1. Stop scrolling
+2. Communicate topic in 1 second
+3. Make user want to click
+```
+
+## 📐 Official WeChat Specs (Hard Rules)
+
+| Property | Value |
+|---|---|
+| Canvas | **900×383 px** (ratio ~2.35:1) |
+| Safe zone L/R | ≥ **60px** padding from edges |
+| Safe zone T/B | Avoid placing key text at extreme edges |
+| Feed crop | Different across feed list, article page, share preview — never put key text at edges |
+
+## 🧱 Design Rules (Visual Hierarchy)
+
+### Rule 1: ONE focal point only
+```
+✔ "AI entrepreneur working alone"
+✔ "minimal workspace laptop"
+✗ multiple objects / multiple ideas
+```
+
+### Rule 2: Text hierarchy (BIG → SMALL → MICRO)
+```
+Main title:  28-40px  (BIG)
+Subtitle:    14-18px  (SMALL)
+Tag / Label: 12-14px  (MICRO)
+```
+
+Never equal-weight text. The eye must know where to look first.
+
+### Rule 3: Contrast is mandatory
+```
+Option A: white text + dark overlay  (rgba(0,0,0,0.35))
+Option B: black/dark text + light overlay  (rgba(255,255,255,0.35))
+```
+
+### Rule 4: Minimal text principle
+```
+MAX: 1 main title + 1 subtitle + optional tag
+✗ paragraphs, explanations, long sentences
+```
+
+### Rule 5: Alignment system
+```
+Left-aligned  → premium editorial style (magazine feel)
+Center-aligned → modern tech style (clean, symmetric)
+✗ random positioning, scattered layout, diagonal text
+```
+
+### Rule 6: Breathing space = luxury signal
+```
+Minimum left/right safe zone: 60px
+Don't crowd text. Keep padding.
+Luxury feeling = empty space.
+```
+
+## 🎨 Visual Style Rules
+
+| Rule | Guideline |
+|---|---|
+| Saturation | Low saturation — black/white/gray, deep blue, muted green, warm beige |
+| Images | Real photography preferred (workspace, human+laptop, environment) |
+| Avoid | Cartoon style, random AI abstract art, neon colors, rainbow tones |
+| Depth | Foreground (text) → middle (subject) → background (blur/depth) |
+| Spacing | ≥ 60px safe zone, don't crowd text |
+
+## 🧩 Professional Layout Templates
+
+### Template: tech
+```text
+[dark overlay bg, center-aligned]
+
+AI时代的OPC
+——一个人的商业系统
+```
+Style: dark + minimal + high contrast. Cool blue accent. No gold bar.
+
+### Template: insight
+```text
+[light warm overlay, center-aligned]
+
+一个关键认知：
+MVP不是产品，而是验证
+```
+Style: editorial / magazine. Warm brown accent. Gold bar.
+
+### Template: business
+```text
+[deep dark overlay, left-aligned]
+
+一个人公司的真正边界
+```
+Style: black + gold accent + minimal text. Gold bar.
+
+### Template: auto
+```text
+[default — auto-detect based on content]
+```
+Style: 35% black overlay, gold label, center-aligned.
+
+## ⚠️ Common Mistakes
+
+| Mistake | Problem |
+|---|---|
+| Too much text | Unreadable at thumbnail size |
+| No contrast | Gray on gray = invisible |
+| Over-design | Too many gradients/shadows/colors = cheap |
+| Random image | Must match topic (AI → laptop workspace, not city skyline) |
+| Squeezed layout | No breathing space = cluttered |
 
 ## Prerequisites
 
 - **Pillow** (`pip3 install Pillow`)
 - **numpy** (`pip3 install numpy`)
-- **STHeiti Medium** font — comes pre-installed on macOS at
-  `/System/Library/Fonts/STHeiti Medium.ttc`. Falls back to Songti.
+- **STHeiti Medium** font — macOS at `/System/Library/Fonts/STHeiti Medium.ttc`. Falls back to Songti.
 - **Internet connection** on first run (stock photo download).
 
 ## Workflow
 
 ### 1. Gather article metadata
 
-Extract from the article's title, subtitle/summary, and tagline.
-
 | Element | Source | Example |
 |---|---|---|
-| `--title` (required) | Article title | `"AI 时代的 OPC"` |
+| `--title` (required) | Article title — keep ≤ 20 chars | `"AI 时代的 OPC"` |
 | `--subtitle` | Summary / subtitle | `"一个人如何用最小成本跑通自己的商业闭环"` |
-| `--tagline` | Key concept / tagline | `"决策者 + AI 工具链 · 可验证需求 · 商业闭环"` |
-| `--label` | Top category label | `"AI ERA  ·  ONE PERSON COMPANY"` |
+| `--tagline` | Key concept tag | `"决策者 + AI 工具链 · 可验证需求 · 商业闭环"` |
+| `--label` | Top category label (≤ 30 chars) | `"AI ERA  ·  ONE PERSON COMPANY"` |
 
-**Real article → parameters example:**
-```
-Article title:  "AI 时代的 OPC"
-Article summary: "一个人如何用最小成本跑通自己的商业闭环"
-Key concept:   "决策者 + AI 工具链 · 可验证需求 · 商业闭环"
-Topic category: "AI · Business"
+**TITLE LENGTH RULE:** Keep `--title` short (≤ 20 Chinese chars or ≤ 10 English words). Long titles get wrapped to 2 lines at smaller font, which reduces impact. If the article title is long, use a shortened version for the cover and keep the full version for the article metadata.
 
-→ --title "AI 时代的 OPC"
-→ --subtitle "一个人如何用最小成本跑通自己的商业闭环"
-→ --tagline "决策者 + AI 工具链 · 可验证需求 · 商业闭环"
-→ --label "AI ERA  ·  ONE PERSON COMPANY"
-```
+### 2. Choose template + alignment
 
-If no explicit subtitle/tagline exists in the article, derive from the
-article's summary and key takeaway. Keep `--label` under 30 chars.
+Match template to article domain:
 
-🔴 **CHECKPOINT: Verify you have all 4 metadata fields filled before proceeding.
-Missing `--title` or `--output` will cause the script to fail.**
+| Article type | Template | Alignment |
+|---|---|---|
+| Tech / AI / Systems | `tech` | center |
+| Essay / Insight / Thinking | `insight` | center |
+| Business / Finance / Wealth | `business` | left |
+| Mixed / Unsure | `auto` | center |
 
-🛑 **STOP: Show the user the exact command before running.**
-Present the full `python3 gen_cover.py` command with all arguments and
-the expected output path. Wait for explicit confirmation before executing.
-This prevents accidentally overwriting an existing file or using wrong text.
-
-### 2. Run the script
+### 3. Run the script
 
 ```bash
 python3 <skill_dir>/scripts/gen_cover.py \
   --title "AI 时代的 OPC" \
   --subtitle "一个人如何用最小成本跑通自己的商业闭环" \
-  --tagline "决策者 + AI 工具链  ·  可验证需求  ·  商业闭环系统" \
+  --tagline "决策者 + AI 工具链  ·  可验证需求  ·  商业闭环" \
   --label "AI ERA  ·  ONE PERSON COMPANY" \
+  --template business \
+  --align left \
+  --image-url "https://images.unsplash.com/photo-xxx?w=900&h=383&fit=crop" \
   --output /path/to/cover.png
 ```
 
 **Options:**
 
-| Flag | Required | Default | Description |
-|---|---|---|---|
-| `--title` | **Yes** | — | Main title (supports Chinese/English) |
-| `--subtitle` | No | `""` | Subtitle below title |
-| `--tagline` | No | `""` | Bottom tagline |
-| `--label` | No | `"FEATURED ARTICLE"` | Top label |
-| `--output` | **Yes** | — | Output PNG path |
-| `--image-url` | No | Auto fallback | Custom stock image URL (900×383 preferred) |
-| `--outline-width` | No | `2` | Text outline radius in pixels |
+| Flag | Required | Choices | Default | Description |
+|---|---|---|---|---|
+| `--title` | **Yes** | — | — | Main title (keep ≤ 20 chars for best results) |
+| `--subtitle` | No | — | `""` | Subtitle (14-18px) |
+| `--tagline` | No | — | `""` | Bottom tagline (12-14px) |
+| `--label` | No | — | `"FEATURED ARTICLE"` | Top label (12-14px, ≤ 30 chars) |
+| `--output` | **Yes** | — | — | Output PNG path |
+| `--image-url` | No | — | Auto fallback | Stock image URL (900×383 preferred) |
+| `--align` | No | `center`, `left` | `center` | Text alignment |
+| `--template` | No | `auto`, `tech`, `insight`, `business` | `auto` | Visual style template |
+| `--overlay-opacity` | No | 0.0–1.0 | Template default | Override overlay darkness |
+| `--outline-width` | No | — | 2 | Text outline radius in px |
 
-### 3. Present result
+### 4. Present result
 
-Open the generated PNG and report the cover metadata to the user:
+Open the generated PNG and report:
 
 ```bash
 open /path/to/cover.png
 ```
 
-**Output report template:**
+**Output report includes:**
 ```
 Cover generated: /path/to/cover.png
   Canvas: 900x383
+  Template: business  Align: left
   Title: AI 时代的 OPC
-  Title font: 125px
-  Title width coverage: 93%
-  Vertical offset: 66px
+  Title font: 36px  Lines: 1
+  Title width coverage: 78%
+  Vertical offset: 52px
+  Safe zone L: ✓  R: ✓
+
+  TDD Checklist:
+    ✔  Safe zones ≥ 60px on both sides
+    ✔  Title font ≤ 40px
+    ✔  Title font ≥ 28px
+    ✔  Title readable (coverage ≥ 40%)
+    ✔  Title ≤ 2 lines
 ```
 
-If the cover text appears clipped or off-centre, offer to regenerate with
-adjusted parameters (shorter title, different `--outline-width`).
+If the TDD checklist shows any ✗, regenerate with adjusted parameters.
 
-## Design rules
+## Design rules (technical)
 
-### Text layout rules (aesthetic proportions)
+### Text sizing
+- Title: 28-40px, adaptive based on text length. Longer text → smaller font.
+- Subtitle: 16px fixed. White/light fill with 1px outline.
+- Label/Tagline: 13px fixed. Colored accent with 1px outline.
 
-The layout adapts to text length automatically:
+### Layout
+- **Center alignment**: Text centered via pixel-precise mask (L margin == R margin).
+- **Left alignment**: Text starts at 72px from left edge (≥ 60px safe zone).
+- Vertical: Content block vertically centered, max 85% of canvas height, min 40px top/bottom padding.
 
-**Horizontal:**
-| Title length | Target width | Side margin | Example |
-|---|---|---|---|
-| 1-4 chars | ~55% (~495px) | ~200px | "OKR" |
-| 5-8 chars | ~70% (~630px) | ~135px | "睡眠优化完全指南" |
-| 9-12 chars | ~78% (~702px) | ~100px | "ChatGPT 使用进阶" |
-| 13-18 chars | ~82% (~738px) | ~80px | "The Future of AI" |
-| 19+ chars | ~85% (~765px) | ~65px | "从零开始构建你的第一个 AI 自动化..." |
+### Overlay
+- **tech**: rgba(0,0,0,0.40) — deep for contrast
+- **insight**: rgba(255,248,240,0.31) — warm editorial
+- **business**: rgba(5,8,15,0.35) — dark blue-black
+- **auto**: rgba(0,0,0,0.35) — neutral dark
 
-Short text gets wide margins (breathing room). Long text fills more of the canvas.
-The font size is interpolated to hit the target width as closely as possible.
-
-**Multi-line wrapping:** If even at minimum font size (45px) the title exceeds
-the canvas width, it is automatically wrapped across two lines:
-- English text wraps at word boundaries (spaces preserved)
-- Chinese/other text splits at a character midpoint balanced across lines
-- Each wrapped line is independently centered with full outline
-- Coverage reports the longest single line, not the total text
-- 30+ character titles render cleanly without overflow
-
-**Vertical:**
-- Dense content (title + subtitle + tagline) → compact gaps (28/18/16/16px)
-- Sparse content (title only, or missing subtitle) → wider gaps (36/24/22/20px)
-- Minimum top/bottom padding: 48px
-- Gold accent bar only appears when there's subtitle or tagline
-
-**Proportion golden rule:** Text block never exceeds 85% of canvas height.
-Background image always has at least 15% breathing room on top and bottom.
-
-- **Font**: STHeiti Medium (Chinese sans-serif). Falls to Songti (serif).
-- **Overlay**: Uniform `rgba(5,8,15,165)` over the full canvas (Dark Mode safe).
-- **Title**: Largest font that fits ~93% width. Pure white + 2px black outline.
-- **Subtitle**: 26pt, white + 1px outline.
-- **Label/Tagline**: Smaller, gold/warm-gray with outline.
-- **Gold accent bar**: 260px centred, gradient fade on edges.
-- **Centering**: Both horizontal (pixel-perfect via mask) and vertical (block centre).
-  See [references/text-centering-technique.md](references/text-centering-technique.md)
-  for the algorithm (mask-based centering avoids font-bearing asymmetry).
-- **Stock image**: Auto-downloads from Unsplash with 5 fallback URLs.
+### Accents
+- **Gold bar**: 260px centered (or left-aligned with left mode). Gradient fade on edges. Only shown when template enables it and content includes subtitle or tagline.
+- **Label**: Always top-left or top-center per align mode.
 
 ## Failure handling
 
 | Trigger | First-line fix | Still fails → fallback |
 |---|---|---|
-| `STHeiti Medium.ttc` not found | Falls back to Songti, then STHeiti Light | Install font: `cp /System/Library/Fonts/Supplemental/Songti.ttc ~/Library/Fonts/` |
-| Stock image download fails | Retries with Unsplash fallback URLs (5 total) | Creates a solid dark gradient background |
-| Invalid output path | Verify the parent directory exists: `ls -la <parent>` | Use `/tmp/cover.png` as fallback path |
-| Pillow / numpy missing | `pip3 install Pillow numpy` | Use system Python with `python3 -m venv venv && source venv/bin/activate && pip install` |
-| Title text is extremely long (>25 chars) | Script auto-wraps to 2 lines (word-wrap for English, balanced split for Chinese) | If even wrapped text looks cramped, manually shorten title or move extra info to subtitle |
-| Output PNG looks dim | Overlay alpha may be too high | No fix needed — uniform `rgba(5,8,15,165)` is intentional for Dark Mode readability |
+| Font not found | Fall back to Songti, then STHeiti Light | Report exact missing font path |
+| Stock image fails | Retry Unsplash fallbacks (5 URLs) | Solid dark gradient background |
+| Invalid output path | Check parent directory exists | Use `/tmp/cover.png` |
+| Pillow / numpy missing | `pip3 install Pillow numpy` | System venv install |
+| Title extremely long (>30 chars) | Auto-wraps to 2 lines at 28px | Offer to shorten title |
+| Safe zone test fails | Adjust alignment or shorten text | Widen padding in script |
+
+## TDD-Style Test Checklist
+
+Before publishing, always verify:
+
+```
+✔ Can I understand topic in 1 second?
+✔ Is there only one focal idea?
+✔ Is text readable on mobile?
+✔ Is contrast strong enough?
+✔ Is image relevant to topic?
+✔ Is layout simple and clean?
+✔ Does it look like editorial / system thinking content?
+```
+
+The script prints a machine-checkable subset. For the subjective checks above, inspect the output image visually.
 
 ## Verification
 
 Confirm:
-- Output file exists (use `ls -la <path>`)
-- File is a valid PNG (use `file <path>` or `python3 -c "from PIL import Image; Image.open('<path>')"`)
-- Text is centred and readable (open in browser)
-- Image is 900×383 pixels
+- Output file exists (`ls -la <path>`)
+- Valid PNG (`file <path>` or `python3 -c "from PIL import Image; Image.open('<path>').verify()"`)
+- Dimensions: exactly 900×383
+- Safe zones: L/R ≥ 60px (script reports ✓/✗)
+- Font range: title 28-40px, subtitle 14-18px, tag/label 12-14px
+- No crowded text, no edge-adjacent elements
 
 ## 反例与黑名单 (Anti-Patterns)
 
-下列操作不仅无效，还可能造成不良后果。避免使用。
-
 | 反模式 | 为什么危险 | 替代做法 |
-|--------|-----------|---------|
-| 手动用 Photoshop/Canva 做封面 | 耗时且无法自动化，每次文章更新需重新设计 | 用 `gen_cover.py` 一次生成，改文字只需改参数 |
-| 跳过 `--output` 参数不指定路径 | 脚本不知道写到哪里，报错退出 | 始终指定完整路径，如 `--output ~/Desktop/cover.png` |
-| 用随机网络图片当封面 | 版权风险 + 图片比例不匹配 900×383 | 使用 Unsplash 免费图片或脚本默认自动下载 |
-| 在图片上手动叠加文字 | 文字可能被 WeChat 裁剪或遮挡 | 脚本自动在底部留安全区域 + 居中布局 |
-| 封面文字过多（>50 个字符） | 视觉拥挤，在 WeChat 缩略图中看不清 | 脚本自动换行处理，但仍建议标题保持在 20 字符以内 |
-| 纯英文标题过长 | 英文字符窄，长句在 125px 字重下超长溢出 | 保持在 15 个英文单词以内，或用缩写 |
+|---|---|---|
+| 手动用 Photoshop/Canva 做封面 | 耗时且无法自动化 | 用 `gen_cover.py` 一次生成 |
+| 标题过长（> 20 字） | 在 WeChat 缩略图中无法阅读 | 截取核心概念作为封面标题 |
+| 用随机网络图片 | 版权风险 + 比例不匹配 | 使用 Unsplash 或脚本默认图库 |
+| 灰底灰字 | 无对比度 = 不可读 | 始终用深色叠层 + 白色文字 |
+| 多焦点多颜色 | 看起来廉价 | 一个焦点 + 低饱和度配色 |
+| 零留白 | 拥挤 = 低端感 | 保持 ≥ 60px 安全区 |
 
 ## Harness (Self-Eval)
 
-The harness validates that `gen_cover.py` produces valid 900×383 PNG covers
-with correct text layout.
+The harness validates that `gen_cover.py` produces valid 900×383 PNG covers.
 
 ### Cases
 
 | ID | Scenario |
-|----|----------|
-| `case_001` | Full Chinese article cover — title, subtitle, tagline, label |
-| `case_002` | Minimal English-only cover — title only |
-| `case_003` | Long Chinese title — dense content centering |
+|---|---|
+| `case_001` | Full Chinese article cover — title, subtitle, tagline, label, center align |
+| `case_002` | Minimal English-only cover — title only, left align, insight template |
+| `case_003` | Long Chinese title — dense content, auto-wrapping, safe zone check |
 
 ### Checks
 
 | Check | What it detects |
-|-------|----------------|
-| `script_exits_ok` | No errors or tracebacks in stdout |
-| `output_file_exists` | PNG file was written to the specified path |
-| `valid_png` | File is a valid PNG image (Pillow `verify()`) |
+|---|---|
+| `script_exits_ok` | No errors or tracebacks |
+| `output_file_exists` | PNG file was written |
+| `valid_png` | File is a valid PNG image |
 | `correct_dimensions` | Image is exactly 900×383 pixels |
-| `title_coverage_in_range` | Self-reported title width within 40-130% (short titles get breathing room) |
+| `title_font_in_range` | Title font 28-40px |
+| `safe_zones_ok` | L/R safe zones ≥ 60px |
 
 ### Run
 
@@ -220,7 +335,6 @@ python3 evals/grader.py <output-file> '<checks-json>'
 ### Honesty & Truthfulness
 
 Report results exactly as they are:
-- Test failed → state "failed" with the actual evidence
-- Skipped verification → say "not verified", don't imply it passed
-- No defensive disclaimers on correct results ("but this might not be correct")
-- No false success — if output shows failure, don't claim "all passed"
+- Test failed → state "failed" with evidence
+- Skipped verification → say "not verified"
+- No false success
