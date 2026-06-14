@@ -539,8 +539,8 @@ def main() -> int:
         help="Overlay opacity 0.0-1.0. Overrides template default if set.",
     )
     parser.add_argument(
-        "--outline-width", type=int, default=2,
-        help="Text outline radius in px (default: 2)",
+        "--outline-width", type=int, default=1,
+        help="Text outline radius in px (default: 1)",
     )
     args = parser.parse_args()
 
