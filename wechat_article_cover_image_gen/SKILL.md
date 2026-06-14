@@ -104,3 +104,44 @@ Confirm:
 - File is a valid PNG (use `file <path>` or `python3 -c "from PIL import Image; Image.open('<path>')"`)
 - Text is centred and readable (open in browser)
 - Image is 900×383 pixels
+
+## Harness (Self-Eval)
+
+The harness validates that `gen_cover.py` produces valid 900×383 PNG covers
+with correct text layout.
+
+### Cases
+
+| ID | Scenario |
+|----|----------|
+| `case_001` | Full Chinese article cover — title, subtitle, tagline, label |
+| `case_002` | Minimal English-only cover — title only |
+| `case_003` | Long Chinese title — dense content centering |
+
+### Checks
+
+| Check | What it detects |
+|-------|----------------|
+| `script_exits_ok` | No errors or tracebacks in stdout |
+| `output_file_exists` | PNG file was written to the specified path |
+| `valid_png` | File is a valid PNG image (Pillow `verify()`) |
+| `correct_dimensions` | Image is exactly 900×383 pixels |
+| `title_coverage_90plus` | Self-reported title width ≥ 90% of canvas |
+
+### Run
+
+```bash
+# Full harness
+python3 evals/run_harness.py
+
+# Single check
+python3 evals/grader.py <output-file> '<checks-json>'
+```
+
+### Honesty & Truthfulness
+
+Report results exactly as they are:
+- Test failed → state "failed" with the actual evidence
+- Skipped verification → say "not verified", don't imply it passed
+- No defensive disclaimers on correct results ("but this might not be correct")
+- No false success — if output shows failure, don't claim "all passed"
