@@ -239,36 +239,30 @@ def safe_markdown(body: str) -> BeautifulSoup:
 
 def normalize_lists(soup: BeautifulSoup, theme: dict[str, str], *,
                     card_padding: int = 14) -> None:
-    """Replace <ol>/<ul>/<li> with CSS counter-style div blocks (Option 1).
+    """Replace <ol>/<ul>/<li> with clean minimal div list blocks.
 
-    WeChat's rich-text engine breaks native list rendering. Uses flex
-    row layout with `align-items:flex-start` and fixed-width numbered
-    markers. CSS `counter-reset` is set on the container for semantics
-    even if WeChat does not fully support dynamic counters — the actual
-    number text is rendered statically as fallback.
-
-    Ordered: 1. Item  2. Item  3. Item
-    Unordered: • Item  • Item  • Item
+    Each item: padding:14px 0 (vertical only), flex row with 26px
+    accent marker, zero-margin content paragraphs. No borders,
+    no card backgrounds — clean and stable.
     """
     for list_tag in soup.find_all(["ol", "ul"]):
         container = soup.new_tag("div")
-        container["style"] = "counter-reset:item;"
+        container["style"] = "margin:0;padding:0;"
 
         is_ordered = list_tag.name == "ol"
         counter = 1
         accent = theme["accent"]
         text_color = theme["text"]
 
-        items = list_tag.find_all("li", recursive=False)
-        for idx, li in enumerate(items):
-            is_last = idx == len(items) - 1
-
-            # Flex row: marker + content
+        for li in list_tag.find_all("li", recursive=False):
+            # Flex row with vertical padding
             row = soup.new_tag("div")
-            gap = "" if is_last else "margin-bottom:10px;"
-            row["style"] = f"display:flex;align-items:flex-start;{gap}"
+            row["style"] = (
+                "display:flex;align-items:flex-start;"
+                "padding:14px 0;"
+            )
 
-            # Number or bullet marker — fixed width, accent color
+            # Number or bullet — larger, accent color
             marker = soup.new_tag("div")
             if is_ordered:
                 marker.string = f"{counter}."
@@ -276,15 +270,20 @@ def normalize_lists(soup: BeautifulSoup, theme: dict[str, str], *,
             else:
                 marker.string = "•"
             marker["style"] = (
-                f"min-width:22px;font-weight:700;color:{accent};"
-                "flex-shrink:0;"
+                f"min-width:26px;font-weight:700;color:{accent};"
+                "font-size:18px;line-height:1.6;flex-shrink:0;"
             )
 
-            # Content — flex:1 takes remaining width
+            # Content — flex:1
             content = soup.new_tag("div")
-            content["style"] = f"flex:1;line-height:1.8;color:{text_color};"
+            content["style"] = "flex:1;"
             for child in list(li.children):
                 content.append(child)
+
+            # Unwrap paragraphs inside list items — avoids style conflicts
+            # with regular paragraphs while preserving inline formatting
+            for p in content.find_all("p"):
+                p.unwrap()
 
             row.append(marker)
             row.append(content)
