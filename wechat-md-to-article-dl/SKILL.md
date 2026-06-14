@@ -195,12 +195,13 @@ The command prints JSON and writes the same audit data to the report:
 - Do not use fixed `width` or `height`, zero line height, `text-align:start/end`,
   `position:absolute/fixed`, transforms, or `!important`.
 - Render fenced code as a wrapping `section > code` block, not `<pre>`.
-- **Keep `<li>` flat — NO `<p>` inside `<li>`.** WeChat editor breaks
-  `<li><p>text</p></li>` into blank line + duplicated item. Content must
-  be a direct text node inside `<li>`. The converter auto-normalizes this.
+- **Do NOT use `<ol>`, `<ul>`, or `<li>` — WeChat breaks them.** The
+  converter auto-replaces all lists with div-based flex blocks (Option 2):
+  `<div style="display:flex;gap:10px;">` with a themed marker + content.
+  Ordered lists get numbered markers; unordered get `•`. This is the
+  only production-safe list rendering for WeChat.
 - Keep same-tag nesting at 15 levels or fewer.
 - Favor solid container backgrounds and moderate contrast for Dark Mode. Decorative
-  gradients without text are allowed; text-on-gradient is not.
 - Keep shared backgrounds on a structural container rather than repeating them on
   each text node.
 - Treat `data-no-dark` as applying only to the marked node. Inline styles on its

@@ -234,24 +234,59 @@ def safe_markdown(body: str) -> BeautifulSoup:
         code.extract()
         container.append(code)
         pre.replace_with(container)
-    normalize_lists(soup)
     return soup
 
 
-def normalize_lists(soup: BeautifulSoup) -> None:
-    """Flatten list items for WeChat compatibility.
+def normalize_lists(soup: BeautifulSoup, theme: dict[str, str]) -> None:
+    """Replace <ol>/<ul>/<li> with div-based flex list blocks.
 
-    WeChat editor breaks when <li> contains <p> wrappers, causing
-    blank lines and duplicated items. This unwraps all <p> from inside
-    <li>, moving content directly into the list item.
+    WeChat's rich-text engine breaks native list rendering (blank
+    lines, duplicated items). The stable solution is pure div-based
+    structured blocks.
 
-    Before: <li><p>text</p></li>  ->  After: <li>text</li>
+    Option 2 (flex div list) — production-safe, no semantic HTML lists.
+
+    Ordered:  1. Item  2. Item  3. Item
+    Unordered: • Item  • Item  • Item
     """
-    for li in soup.find_all("li"):
-        for p in li.find_all("p"):
-            # Only unwrap if no attributes WeChat would lose
-            p.unwrap()
-    # Remove empty <p> left orphans
+    for list_tag in soup.find_all(["ol", "ul"]):
+        container = soup.new_tag("div")
+        container["style"] = "margin:0;padding:0;"
+
+        is_ordered = list_tag.name == "ol"
+        counter = 1
+        accent = theme["accent"]
+        text_color = theme["text"]
+
+        for li in list_tag.find_all("li", recursive=False):
+            row = soup.new_tag("div")
+            row["style"] = "display:flex;gap:10px;margin-bottom:12px;"
+
+            # Number or bullet marker
+            marker = soup.new_tag("div")
+            if is_ordered:
+                marker.string = str(counter)
+                counter += 1
+            else:
+                marker.string = "•"
+            marker["style"] = (
+                f"min-width:22px;font-weight:700;color:{accent};"
+                "flex-shrink:0;"
+            )
+
+            # Content — preserve inline formatting (bold, links, code, etc.)
+            content = soup.new_tag("div")
+            content["style"] = f"flex:1;line-height:1.8;color:{text_color};"
+            for child in list(li.children):
+                content.append(child)
+
+            row.append(marker)
+            row.append(content)
+            container.append(row)
+
+        list_tag.replace_with(container)
+
+    # Remove empty <p> orphans (from previous unwrap logic)
     for p in soup.find_all("p"):
         if not p.get_text(strip=True) and not p.find_all("img"):
             p.decompose()
@@ -380,6 +415,7 @@ def render(
     soup = safe_markdown(body)
     apply_styles(soup, palette, strict=strict)
     apply_highlight_styles(soup, palette)
+    normalize_lists(soup, palette)
 
     meta_parts = [part for part in (author, date_value) if part]
     meta_line = " · ".join(meta_parts)
