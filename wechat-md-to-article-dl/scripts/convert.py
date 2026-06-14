@@ -238,51 +238,62 @@ def safe_markdown(body: str) -> BeautifulSoup:
 
 
 def normalize_lists(soup: BeautifulSoup, theme: dict[str, str]) -> None:
-    """Replace <ol>/<ul>/<li> with div-based flex list blocks.
+    """Replace <ol>/<ul>/<li> with card-style div blocks (Option 3).
 
-    WeChat's rich-text engine breaks native list rendering (blank
-    lines, duplicated items). The stable solution is pure div-based
-    structured blocks.
+    WeChat's rich-text engine breaks native list rendering. The
+    production-safe solution is card-style div blocks with numbered
+    markers, borders, rounded corners, and themed colors.
 
-    Option 2 (flex div list) — production-safe, no semantic HTML lists.
+    Option 3 (high-end card list) — consulting report style.
 
-    Ordered:  1. Item  2. Item  3. Item
+    Ordered: 01 Item  02 Item  03 Item
     Unordered: • Item  • Item  • Item
     """
     for list_tag in soup.find_all(["ol", "ul"]):
         container = soup.new_tag("div")
-        container["style"] = "margin:0;padding:0;"
+        container["style"] = "margin:0;"
 
         is_ordered = list_tag.name == "ol"
         counter = 1
         accent = theme["accent"]
         text_color = theme["text"]
+        border_color = theme["border"]
+        card_radius = "12px"
 
-        for li in list_tag.find_all("li", recursive=False):
-            row = soup.new_tag("div")
-            row["style"] = "display:flex;gap:10px;margin-bottom:12px;"
+        items = list_tag.find_all("li", recursive=False)
+        for idx, li in enumerate(items):
+            is_last = idx == len(items) - 1
+
+            # Card wrapper
+            card = soup.new_tag("div")
+            card_margin = "" if is_last else "margin-bottom:12px;"
+            card["style"] = (
+                f"padding:14px;border:1px solid {border_color};"
+                f"border-radius:{card_radius};{card_margin}"
+                f"background:{theme['page']};"
+            )
 
             # Number or bullet marker
             marker = soup.new_tag("div")
             if is_ordered:
-                marker.string = str(counter)
+                marker.string = f"{counter:02d}"
                 counter += 1
             else:
                 marker.string = "•"
             marker["style"] = (
-                f"min-width:22px;font-weight:700;color:{accent};"
-                "flex-shrink:0;"
+                f"font-weight:700;color:{accent};"
+                "margin-bottom:6px;"
             )
 
             # Content — preserve inline formatting (bold, links, code, etc.)
             content = soup.new_tag("div")
-            content["style"] = f"flex:1;line-height:1.8;color:{text_color};"
+            content["style"] = f"line-height:1.8;color:{text_color};"
             for child in list(li.children):
                 content.append(child)
 
-            row.append(marker)
-            row.append(content)
-            container.append(row)
+            card.append(marker)
+            card.append(content)
+            container.append(card)
 
         list_tag.replace_with(container)
 
