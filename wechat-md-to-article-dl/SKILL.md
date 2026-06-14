@@ -1,5 +1,5 @@
 ---
-name: wechat_md-to-article-dl
+name: wechat-md-to-article-dl
 description: Convert Chinese or English Markdown into restrained, premium, mobile-first HTML for WeChat Official Accounts, then audit, automatically repair, and optionally validate it against WeChat's official editor structure API. Use this skill whenever a user asks to format, beautify, typeset, convert, restyle, validate, or prepare Markdown/HTML for a WeChat article, especially when they mention advanced CSS, magazine style, card layout, inline CSS, mobile readability, Dark Mode, editor plugin compatibility, technical articles, cognition essays, business/wealth content, or health education.
 compatibility: Python 3.10+ with markdown, PyYAML, beautifulsoup4, and bleach.
 ---
