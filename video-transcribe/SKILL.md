@@ -37,9 +37,12 @@ Always quote paths — filenames may contain Chinese, `#`, `[]`, spaces.
 python3 <skill_dir>/scripts/transcribe.py "<file_path>" [options]
 ```
 
+The script prints timestamped segments to stdout AND auto-saves a formatted `.md` file to `~/Downloads/`.
+
 **Options:**
 - `--model tiny|base|small|medium|large-v3` — size vs accuracy (default: small)
 - `--language en|zh|auto` — force language or auto-detect (default: auto)
+- `--output-dir DIR` — custom output directory (default: ~/Downloads/)
 
 **Recommendations:**
 - Quick draft / short clips → `small` (default, good balance)
@@ -57,6 +60,9 @@ python3 <skill_dir>/scripts/transcribe.py "podcast.mp3" --model medium --languag
 
 # Quick test with tiny model
 python3 <skill_dir>/scripts/transcribe.py "clip.mp4" --model tiny
+
+# Custom output directory
+python3 <skill_dir>/scripts/transcribe.py "lesson.mp4" --output-dir "~/Desktop/transcripts"
 ```
 
 🔴 CHECKPOINT: If the script exits with code 124 (timeout) or shows a `Traceback`, consult the Error handling & fallback table below. Do not present the user with a truncated or failed output.
@@ -70,13 +76,40 @@ The script prints timestamped segments directly to stdout:
 [3.6s -> 6.6s] 运动到底是如何刺激骨头长高的
 ```
 
-Present this output to the user as-is. The timestamps let them jump to specific parts. If the transcript is long (>100 lines), offer to save it instead (Step 4).
+It also auto-saves a formatted markdown file to the Downloads directory (or `--output-dir`), with metadata header, blockquote timestamps, and clean paragraph spacing.
+
+**Auto-saved .md file format:**
+```markdown
+# 视频转录 — lecture.mp4
+
+- **文件**: `/Users/f/Downloads/lecture.mp4`
+- **语言**: zh (置信度 99%)
+- **时长**: 03m47.7s
+- **模型**: small
+- **转录时间**: 2026-06-14 10:30:00
+
+---
+
+> **00:00.70 — 00:01.40**
+
+哈喽各位家长
+
+---
+
+> **00:01.40 — 00:03.60**
+
+又到了我们10分钟长科普的环节
+
+---
+```
+
+Tell the user the transcript was saved (include the full path). If it's short (<30 lines), also show the text inline for immediate reading.
 
 🔴 CHECKPOINT: Review the output before presenting. If it contains only silence/garble or a crash traceback, consult the Error handling & fallback table. Never deliver a failed transcript to the user.
 
-### 4. (Optional) Save transcript
+### 4. Transcript file location
 
-If user wants the transcript saved, write as `.txt` next to the video file.
+The script always auto-saves the `.md` file. Default: `~/Downloads/<video_name>_transcript.md`. Override with `--output-dir`. No need to ask the user — the file is saved automatically on every run.
 
 ## Performance reference (M3 Pro, CPU int8)
 
