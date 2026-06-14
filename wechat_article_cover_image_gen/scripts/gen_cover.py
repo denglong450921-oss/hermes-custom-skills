@@ -116,13 +116,16 @@ def _vertical_gaps(char_count: int, has_sub: bool, has_tag: bool) -> dict[str, i
     return g
 
 
-def _pick_title_font(text: str) -> ImageFont.FreeTypeFont:
-    """Pick the font size whose rendered width is CLOSEST to the target width,
-    without exceeding the canvas edge."""
+def _pick_title_font(text: str) -> tuple[ImageFont.FreeTypeFont, list[str]]:
+    """Pick the font size closest to target width and wrap text if needed.
+    
+    Returns (font, lines) where lines has 1+ strings.
+    If the text overflows canvas at minimum font, it's wrapped across lines.
+    """
     target = _title_target_width(text)
     font_path = _resolve_font()
     
-    # Start at minimum size
+    # Find best font size for single-line rendering
     best = 45
     ft = ImageFont.truetype(font_path, best)
     best_dist = abs(_get_bounds(text, ft)[1] - _get_bounds(text, ft)[0] + 1 - target)
@@ -131,15 +134,64 @@ def _pick_title_font(text: str) -> ImageFont.FreeTypeFont:
         ft = ImageFont.truetype(font_path, fs)
         w = _get_bounds(text, ft)[1] - _get_bounds(text, ft)[0] + 1
         if w > CANVAS_W:
-            break  # exceeded canvas — stop
+            break
         dist = abs(w - target)
         if dist < best_dist:
             best = fs
             best_dist = dist
         elif dist > best_dist and w > target:
-            # Past the target and diverging — stop (monotonic after target crossing)
             break
-    return ImageFont.truetype(font_path, best)
+    
+    # Check if text fits on one line at the chosen font
+    ft_best = ImageFont.truetype(font_path, best)
+    single_w = _get_bounds(text, ft_best)[1] - _get_bounds(text, ft_best)[0] + 1
+    
+    if single_w <= CANVAS_W:
+        return ft_best, [text]  # single line — no wrapping needed
+    
+    # Wrap across two lines
+    lines = _wrap_text(text, ft_best, CANVAS_W - 60)
+    return ft_best, lines
+
+
+def _wrap_text(text: str, font: ImageFont.FreeTypeFont, max_width: int) -> list[str]:
+    """Split text so each line fits within max_width. Returns 2+ lines."""
+    # For English text with spaces, split at spaces
+    if " " in text:
+        words = text.split(" ")
+        lines: list[str] = []
+        current = ""
+        for w in words:
+            test = (current + " " + w).strip()
+            tw = _get_bounds(test, font)[1] - _get_bounds(test, font)[0] + 1
+            if tw <= max_width:
+                current = test
+            else:
+                if current:
+                    lines.append(current)
+                current = w
+        if current:
+            lines.append(current)
+        return lines if lines else [text]
+    
+    # Chinese/other text — split by character count
+    # Find the largest first-line length that fits
+    n = len(text)
+    best_split = n // 2  # start at midpoint
+    best_width = _get_bounds(text[:best_split], font)[1] - _get_bounds(text[:best_split], font)[0] + 1
+    
+    # Try splits around the midpoint
+    for split_at in range(max(1, n // 2 - 5), min(n - 1, n // 2 + 5)):
+        if split_at <= 0 or split_at >= n:
+            continue
+        w = _get_bounds(text[:split_at], font)[1] - _get_bounds(text[:split_at], font)[0] + 1
+        if w <= max_width and abs(w - max_width / 2) < abs(best_width - max_width / 2):
+            best_split = split_at
+            best_width = w
+    
+    line1 = text[:best_split]
+    line2 = text[best_split:]
+    return [line1, line2]
 
 
 def _download_image(url: str | None) -> Image.Image:
@@ -191,12 +243,16 @@ def render(
     draw.rectangle([0, 0, CANVAS_W, CANVAS_H], fill=(5, 8, 15, 150))
 
     # 3. Fonts
-    ft_title = _pick_title_font(title)
+    ft_title, title_lines = _pick_title_font(title)
     ft_label = ImageFont.truetype(font_path, 14)
     ft_sub = ImageFont.truetype(font_path, 24) if subtitle else None
     ft_tag = ImageFont.truetype(font_path, 13) if tagline else None
 
-    _, _, th = _get_bounds(title, ft_title)
+    # Multi-line title support
+    num_title_lines = len(title_lines)
+    line_h = _get_bounds(title_lines[0], ft_title)[2]  # height of one line
+    title_gap = max(4, line_h // 5)  # gap between wrapped lines
+    th = line_h * num_title_lines + title_gap * (num_title_lines - 1)
     sub_h = _get_bounds(subtitle, ft_sub)[2] if ft_sub else 0
     tag_h = 14 if tagline else 0
 
@@ -234,15 +290,17 @@ def render(
             draw.text((lx + ox, ly + oy), label, fill=(0, 0, 0, 160), font=ft_label)
     draw.text((lx, ly), label, fill=(196, 156, 82, 220), font=ft_label)
 
-    # 6. Draw title (outline + white fill)
-    tx = _center_x(title, ft_title)
+    # 6. Draw title (outline + white fill) — supports multi-line
     o = outline_width
-    for ox in range(-o, o + 1):
-        for oy in range(-o, o + 1):
-            if ox == 0 and oy == 0:
-                continue
-            draw.text((tx + ox, ty + oy), title, fill=(0, 0, 0, 200), font=ft_title)
-    draw.text((tx, ty), title, fill=(255, 255, 255, 255), font=ft_title)
+    for li, line in enumerate(title_lines):
+        tl = ty + li * (line_h + title_gap)
+        tx = _center_x(line, ft_title)
+        for ox in range(-o, o + 1):
+            for oy in range(-o, o + 1):
+                if ox == 0 and oy == 0:
+                    continue
+                draw.text((tx + ox, tl + oy), line, fill=(0, 0, 0, 200), font=ft_title)
+        draw.text((tx, tl), line, fill=(255, 255, 255, 255), font=ft_title)
 
     # 7. Draw subtitle (outline + white fill) — only if provided
     if ft_sub and subtitle:
@@ -276,7 +334,9 @@ def render(
     result = Image.alpha_composite(bg, overlay).convert("RGB")
     result.save(output, "PNG")
 
-    tw = _get_bounds(title, ft_title)[1] - _get_bounds(title, ft_title)[0] + 1
+    # Coverage based on longest line
+    longest_line = max(title_lines, key=lambda l: _get_bounds(l, ft_title)[1] - _get_bounds(l, ft_title)[0] + 1)
+    tw = _get_bounds(longest_line, ft_title)[1] - _get_bounds(longest_line, ft_title)[0] + 1
     return {
         "output": str(Path(output).resolve()),
         "canvas": f"{CANVAS_W}x{CANVAS_H}",
