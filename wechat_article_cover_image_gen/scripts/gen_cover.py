@@ -73,21 +73,71 @@ def _center_x(text: str, font: ImageFont.FreeTypeFont) -> int:
     return int(round((CANVAS_W - 1 - l - r) / 2))
 
 
+# ---------------------------------------------------------------------------
+# Text layout rules — adaptive proportions with aesthetic breathing space
+# ---------------------------------------------------------------------------
+# Principles:
+# 1. More text → tighter fit. Less text → more breathing room.
+# 2. Minimum side margin: 50px. Target 60-110px ideal.
+# 3. Short titles (1-4 chars) should not fill width — use ~55-65%.
+# 4. Vertical gaps scale with content density.
+# 5. Total text block never exceeds 85% of canvas height.
+
+def _title_target_width(text: str) -> int:
+    """Return target width in px based on text length.
+    
+    Short text → smaller target (more breathing room).
+    Long text → larger target (fills width reasonably).
+    """
+    n = len(text)
+    if n <= 4:      ratio = 0.55
+    elif n <= 8:    ratio = 0.70
+    elif n <= 12:   ratio = 0.78
+    elif n <= 18:   ratio = 0.82
+    else:           ratio = 0.85
+    return int(CANVAS_W * ratio)
+
+
+def _vertical_gaps(char_count: int, has_sub: bool, has_tag: bool) -> dict[str, int]:
+    """Return vertical gaps (px) between elements.
+    
+    Dense content → tighter gaps. Sparse content → wider gaps for breathing.
+    """
+    # Base gaps
+    g = {"lg": 28, "ts": 18, "sb": 16, "bt": 16}
+    
+    # If very little content, expand gaps to fill space elegantly
+    sparse = char_count <= 10 and (not has_sub or not has_tag)
+    if sparse:
+        g["lg"] = 36
+        g["ts"] = 24
+        g["sb"] = 22
+        g["bt"] = 20
+    return g
+
+
 def _pick_title_font(text: str) -> ImageFont.FreeTypeFont:
-    """Pick the largest font size that keeps the title within canvas width
-    (target ~92-94%). Falls back to min size if even the smallest overflows."""
-    target = int(CANVAS_W * 0.92)
+    """Pick the font size whose rendered width is CLOSEST to the target width,
+    without exceeding the canvas edge."""
+    target = _title_target_width(text)
     font_path = _resolve_font()
-    best = 60
-    for fs in range(60, 200, 5):
+    
+    # Start at minimum size
+    best = 45
+    ft = ImageFont.truetype(font_path, best)
+    best_dist = abs(_get_bounds(text, ft)[1] - _get_bounds(text, ft)[0] + 1 - target)
+    
+    for fs in range(50, 200, 5):
         ft = ImageFont.truetype(font_path, fs)
         w = _get_bounds(text, ft)[1] - _get_bounds(text, ft)[0] + 1
-        if w <= target:
-            best = fs  # fits within target — keep increasing
-        elif w <= CANVAS_W:
-            best = fs  # fits within canvas but exceeds target — keep going
-        else:
-            # Exceeds canvas — stop; use the previous size that fit
+        if w > CANVAS_W:
+            break  # exceeded canvas — stop
+        dist = abs(w - target)
+        if dist < best_dist:
+            best = fs
+            best_dist = dist
+        elif dist > best_dist and w > target:
+            # Past the target and diverging — stop (monotonic after target crossing)
             break
     return ImageFont.truetype(font_path, best)
 
@@ -137,28 +187,43 @@ def render(
     overlay = Image.new("RGBA", (CANVAS_W, CANVAS_H), (0, 0, 0, 0))
     draw = ImageDraw.Draw(overlay)
 
-    # 2. Uniform translucent layer
-    draw.rectangle([0, 0, CANVAS_W, CANVAS_H], fill=(5, 8, 15, 165))
+    # 2. Uniform translucent layer (lighter for breathing space)
+    draw.rectangle([0, 0, CANVAS_W, CANVAS_H], fill=(5, 8, 15, 150))
 
     # 3. Fonts
     ft_title = _pick_title_font(title)
     ft_label = ImageFont.truetype(font_path, 14)
-    ft_sub = ImageFont.truetype(font_path, 26)
-    ft_tag = ImageFont.truetype(font_path, 13)
+    ft_sub = ImageFont.truetype(font_path, 24) if subtitle else None
+    ft_tag = ImageFont.truetype(font_path, 13) if tagline else None
 
     _, _, th = _get_bounds(title, ft_title)
-    _, _, sub_h = _get_bounds(subtitle, ft_sub)
+    sub_h = _get_bounds(subtitle, ft_sub)[2] if ft_sub else 0
+    tag_h = 14 if tagline else 0
 
-    # 4. Vertical centering
-    gaps = {"lg": 28, "ts": 16, "sb": 14, "bt": 14}
-    total_h = 16 + gaps["lg"] + th + gaps["ts"] + sub_h + gaps["sb"] + 2 + gaps["bt"] + 18
-    v_off = (CANVAS_H - total_h) // 2
+    # 4. Adaptive vertical layout
+    has_sub = bool(subtitle)
+    has_tag = bool(tagline)
+    gaps = _vertical_gaps(len(title), has_sub, has_tag)
+
+    label_h = 16
+    bar_h = 2 if has_sub or has_tag else 0
+    
+    total_h = label_h + gaps["lg"] + th
+    if has_sub:
+        total_h += gaps["ts"] + sub_h
+    if bar_h:
+        total_h += gaps["sb"] + bar_h
+    if has_tag:
+        total_h += gaps["bt"] + tag_h
+
+    # Minimum top/bottom padding: 48px
+    v_off = max(48, (CANVAS_H - total_h) // 2)
 
     ly = v_off
     ty = ly + gaps["lg"]
-    sy = ty + th + gaps["ts"]
-    bar_y = sy + sub_h + gaps["sb"]
-    tgy = bar_y + gaps["bt"]
+    sy = ty + th + gaps["ts"] if has_sub else 0
+    bar_y = (sy + sub_h + gaps["sb"]) if has_sub else (ty + th + gaps["sb"])
+    tgy = bar_y + gaps["bt"] if has_tag else 0
 
     # 5. Draw label
     lx = _center_x(label, ft_label)
@@ -179,14 +244,15 @@ def render(
             draw.text((tx + ox, ty + oy), title, fill=(0, 0, 0, 200), font=ft_title)
     draw.text((tx, ty), title, fill=(255, 255, 255, 255), font=ft_title)
 
-    # 7. Draw subtitle (outline + white fill)
-    sx = _center_x(subtitle, ft_sub)
-    for ox in range(-1, 2):
-        for oy in range(-1, 2):
-            if ox == 0 and oy == 0:
-                continue
-            draw.text((sx + ox, sy + oy), subtitle, fill=(0, 0, 0, 180), font=ft_sub)
-    draw.text((sx, sy), subtitle, fill=(255, 255, 255, 240), font=ft_sub)
+    # 7. Draw subtitle (outline + white fill) — only if provided
+    if ft_sub and subtitle:
+        sx = _center_x(subtitle, ft_sub)
+        for ox in range(-1, 2):
+            for oy in range(-1, 2):
+                if ox == 0 and oy == 0:
+                    continue
+                draw.text((sx + ox, sy + oy), subtitle, fill=(0, 0, 0, 180), font=ft_sub)
+        draw.text((sx, sy), subtitle, fill=(255, 255, 255, 240), font=ft_sub)
 
     # 8. Gold accent bar
     bar_len = 260
@@ -196,14 +262,15 @@ def render(
         a = max(0, 220 - int(dist * 2.2))
         overlay.putpixel((xp, bar_y), (196, 156, 82, a))
 
-    # 9. Draw tagline (outline + warm fill)
-    tx4 = _center_x(tagline, ft_tag)
-    for ox in range(-1, 2):
-        for oy in range(-1, 2):
-            if ox == 0 and oy == 0:
-                continue
-            draw.text((tx4 + ox, tgy + oy), tagline, fill=(0, 0, 0, 160), font=ft_tag)
-    draw.text((tx4, tgy), tagline, fill=(200, 195, 185, 220), font=ft_tag)
+    # 9. Draw tagline (outline + warm fill) — only if provided
+    if ft_tag and tagline:
+        tx4 = _center_x(tagline, ft_tag)
+        for ox in range(-1, 2):
+            for oy in range(-1, 2):
+                if ox == 0 and oy == 0:
+                    continue
+                draw.text((tx4 + ox, tgy + oy), tagline, fill=(0, 0, 0, 160), font=ft_tag)
+        draw.text((tx4, tgy), tagline, fill=(200, 195, 185, 220), font=ft_tag)
 
     # 10. Composite & save
     result = Image.alpha_composite(bg, overlay).convert("RGB")

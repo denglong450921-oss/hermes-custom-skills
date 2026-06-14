@@ -4,7 +4,7 @@
     {
       "id": "case_001",
       "task": "Generate a WeChat cover for a Chinese business article titled 'AI 时代的 OPC' with subtitle '一个人如何用最小成本跑通自己的商业闭环' and tagline '决策者 + AI 工具链 · 可验证需求 · 商业闭环系统'",
-      "expected_output": "A 900x383 PNG cover image with centred, outlined title text, stock photo background, dark overlay, and gold accent bar",
+      "expected_output": "A 900x383 PNG cover with centred outlined title text stock photo background dark overlay and gold accent bar",
       "files": [],
       "args": {
         "title": "AI 时代的 OPC",
@@ -18,16 +18,18 @@
           "output_file_exists",
           "valid_png",
           "correct_dimensions",
-          "title_coverage_90plus"
+          "title_coverage_in_range"
         ],
         "must_have": [],
-        "must_not_have": ["ERROR"]
+        "must_not_have": [
+          "ERROR"
+        ]
       }
     },
     {
       "id": "case_002",
       "task": "Generate a WeChat cover for an English-only article titled 'The Future of AI' with no subtitle or tagline",
-      "expected_output": "A 900x383 PNG cover image with just a title, minimal layout",
+      "expected_output": "A 900x383 PNG cover image with just a title minimal layout",
       "files": [],
       "args": {
         "title": "The Future of AI",
@@ -39,10 +41,12 @@
           "output_file_exists",
           "valid_png",
           "correct_dimensions",
-          "title_coverage_90plus"
+          "title_coverage_in_range"
         ],
         "must_have": [],
-        "must_not_have": ["ERROR"]
+        "must_not_have": [
+          "ERROR"
+        ]
       }
     },
     {
@@ -52,7 +56,7 @@
       "files": [],
       "args": {
         "title": "从零开始构建你的第一个 AI 自动化工作流：完整入门指南",
-        "subtitle": "无需编程基础，利用现成工具组合出高效的自动化系统，大幅提升个人生产力",
+        "subtitle": "无需编程基础，利用现成工具组合出高效的自动化系统大幅提升个人生产力",
         "tagline": "自动化 · AI 工具 · 工作流设计 · 效率提升",
         "label": "TUTORIAL  ·  AI"
       },
@@ -62,10 +66,12 @@
           "output_file_exists",
           "valid_png",
           "correct_dimensions",
-          "title_coverage_90plus"
+          "title_coverage_in_range"
         ],
         "must_have": [],
-        "must_not_have": ["ERROR"]
+        "must_not_have": [
+          "ERROR"
+        ]
       }
     }
   ]

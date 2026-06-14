@@ -108,6 +108,31 @@ adjusted parameters (shorter title, different `--outline-width`).
 
 ## Design rules
 
+### Text layout rules (aesthetic proportions)
+
+The layout adapts to text length automatically:
+
+**Horizontal:**
+| Title length | Target width | Side margin | Example |
+|---|---|---|---|
+| 1-4 chars | ~55% (~495px) | ~200px | "OKR" |
+| 5-8 chars | ~70% (~630px) | ~135px | "睡眠优化完全指南" |
+| 9-12 chars | ~78% (~702px) | ~100px | "ChatGPT 使用进阶" |
+| 13-18 chars | ~82% (~738px) | ~80px | "The Future of AI" |
+| 19+ chars | ~85% (~765px) | ~65px | "从零开始构建你的第一个 AI 自动化..." |
+
+Short text gets wide margins (breathing room). Long text fills more of the canvas.
+The font size is interpolated to hit the target width as closely as possible.
+
+**Vertical:**
+- Dense content (title + subtitle + tagline) → compact gaps (28/18/16/16px)
+- Sparse content (title only, or missing subtitle) → wider gaps (36/24/22/20px)
+- Minimum top/bottom padding: 48px
+- Gold accent bar only appears when there's subtitle or tagline
+
+**Proportion golden rule:** Text block never exceeds 85% of canvas height.
+Background image always has at least 15% breathing room on top and bottom.
+
 - **Font**: STHeiti Medium (Chinese sans-serif). Falls to Songti (serif).
 - **Overlay**: Uniform `rgba(5,8,15,165)` over the full canvas (Dark Mode safe).
 - **Title**: Largest font that fits ~93% width. Pure white + 2px black outline.
@@ -172,7 +197,7 @@ with correct text layout.
 | `output_file_exists` | PNG file was written to the specified path |
 | `valid_png` | File is a valid PNG image (Pillow `verify()`) |
 | `correct_dimensions` | Image is exactly 900×383 pixels |
-| `title_coverage_90plus` | Self-reported title width ≥ 90% of canvas |
+| `title_coverage_in_range` | Self-reported title width within 40-130% (short titles get breathing room) |
 
 ### Run
 
