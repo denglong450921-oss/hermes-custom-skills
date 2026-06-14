@@ -352,6 +352,10 @@ def audit_html(content: str, *, threshold: int = 90) -> dict[str, Any]:
         if ratio is not None and ratio < 3:
             low_contrast_elements.append(f"{tag.name}:{ratio:.2f}")
     content_lower = content.lower()
+    # Count box-shadow inside code blocks separately
+    shadow_in_code = 0
+    for code_tag in soup.find_all("code"):
+        shadow_in_code += code_tag.get_text().lower().count("box-shadow")
     radius_values = [
         pixel_value(value)
         for tag in all_tags
@@ -363,7 +367,7 @@ def audit_html(content: str, *, threshold: int = 90) -> dict[str, Any]:
         checks,
         "restraint",
         "controlled_palette",
-        len(colors) <= 18,
+        len(colors) <= 12,
         30,
         f"unique_hex_colors={len(colors)} ({sorted(colors)})",
     )
@@ -382,8 +386,11 @@ def audit_html(content: str, *, threshold: int = 90) -> dict[str, Any]:
         checks,
         "restraint",
         "no_heavy_shadows",
-        content_lower.count("box-shadow") <= 1
-        and not re.search(r"box-shadow:[^;]*(?:0\.[1-9]|rgba\([^)]*,\s*[1-9])", content_lower),
+        content_lower.count("box-shadow") - shadow_in_code <= 1
+        and not re.search(
+            r"box-shadow:[^;]*(?:0\.[1-9]|rgba\([^)]*,\s*[1-9])",
+            content_lower,
+        ),
         20,
         f"box_shadow_count={content_lower.count('box-shadow')}",
     )
@@ -484,6 +491,7 @@ def audit_html(content: str, *, threshold: int = 90) -> dict[str, Any]:
         >= 1.75
         and tag.parent
         and tag.parent.name != "blockquote"
+        and tag.parent.name != "li"
         and not (
             tag.parent.name == "section"
             and tag.parent.get("style", "").find("margin:28") != -1

@@ -82,13 +82,13 @@ Mark key content types with special markers for sophisticated visual emphasis.
 
 ### Inline highlights
 
-Wrap text with one of these marker pairs to add a coloured background pill:
+Wrap text with one of these marker pairs to add bold or coloured emphasis:
 
 | Marker | Purpose | Visual |
 |---|---|---|
-| `==text==` | Core concept, key definition | Accent-tinted background, semi-bold |
-| `^^text^^` | Key viewpoint, argument | Subtle tinted background |
-| `!!text!!` | Emphasis, important point | Warm highlight background |
+| `==text==` | Core concept, key definition | **Bold + accent colour** |
+| `^^text^^` | Key viewpoint, argument | **Bold + title colour** |
+| `!!text!!` | Emphasis, important point | **Bold** only |
 
 Example:
 ```markdown

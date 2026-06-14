@@ -32,7 +32,6 @@ except ImportError as error:  # pragma: no cover - exercised by CLI environments
 from quality import audit_html
 from official_verify import verify_article_structure
 from highlighting import (
-    HIGHLIGHT_TOKENS,
     preprocess_callouts,
     preprocess_inline_highlights,
     apply_highlight_styles,
@@ -49,6 +48,9 @@ THEMES: dict[str, dict[str, str]] = {
         "border": "#E5E7EB",
         "accent": "#2563EB",
         "code": "#F3F4F6",
+        "callout_problem": "#E53E3E",
+        "callout_strategy": "#3182CE",
+        "callout_thinking": "#805AD5",
     },
     "tech": {
         "page": "#FFFFFF",
@@ -59,6 +61,9 @@ THEMES: dict[str, dict[str, str]] = {
         "border": "#E2E8F0",
         "accent": "#2563EB",
         "code": "#F1F5F9",
+        "callout_problem": "#DC2626",
+        "callout_strategy": "#2563EB",
+        "callout_thinking": "#7C3AED",
     },
     "cognition": {
         "page": "#FFFDF8",
@@ -69,6 +74,9 @@ THEMES: dict[str, dict[str, str]] = {
         "border": "#E7E1D5",
         "accent": "#9A6B3F",
         "code": "#F4EFE5",
+        "callout_problem": "#B91C1C",
+        "callout_strategy": "#6B8F5E",
+        "callout_thinking": "#6366F1",
     },
     "wealth": {
         "page": "#FFFEF8",
@@ -79,6 +87,9 @@ THEMES: dict[str, dict[str, str]] = {
         "border": "#E2DDCE",
         "accent": "#A47C42",
         "code": "#F3F0E6",
+        "callout_problem": "#B85450",
+        "callout_strategy": "#5B8C6F",
+        "callout_thinking": "#5B7FAF",
     },
     "health": {
         "page": "#FFFFFF",
@@ -89,6 +100,9 @@ THEMES: dict[str, dict[str, str]] = {
         "border": "#DDE9E5",
         "accent": "#3F7D78",
         "code": "#EEF5F2",
+        "callout_problem": "#C62828",
+        "callout_strategy": "#3F7D78",
+        "callout_thinking": "#1565C0",
     },
 }
 
@@ -345,7 +359,7 @@ def render(
     summary = normalize_text(metadata.get("summary") or metadata.get("description"))
     soup = safe_markdown(body)
     apply_styles(soup, palette, strict=strict)
-    apply_highlight_styles(soup, theme_name)
+    apply_highlight_styles(soup, palette)
 
     meta_parts = [part for part in (author, date_value) if part]
     meta_line = " · ".join(meta_parts)
