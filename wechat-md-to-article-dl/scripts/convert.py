@@ -239,11 +239,10 @@ def safe_markdown(body: str) -> BeautifulSoup:
 
 def normalize_lists(soup: BeautifulSoup, theme: dict[str, str], *,
                     card_padding: int = 14) -> None:
-    """Replace <ol>/<ul>/<li> with span-based inline list blocks.
+    """Replace <ol>/<ul>/<li> with insight-style span list blocks.
 
-    Each item: div wrapper (last has no margin), single span for the
-    entire text line with nested accent-colored marker span. No flex,
-    no borders, no card backgrounds — clean and stable.
+    Bold+italic text in #3B3B98 (deep cognitive blue) with accent
+    marker. Last item has margin-bottom:18px.
     """
     for list_tag in soup.find_all(["ol", "ul"]):
         container = soup.new_tag("div")
@@ -252,22 +251,23 @@ def normalize_lists(soup: BeautifulSoup, theme: dict[str, str], *,
         is_ordered = list_tag.name == "ol"
         counter = 1
         accent = theme["accent"]
-        text_color = theme["text"]
 
         items = list_tag.find_all("li", recursive=False)
         for idx, li in enumerate(items):
             is_last = idx == len(items) - 1
 
-            # Item wrapper
+            # Item wrapper — all items get margin (last gets 18px)
             item = soup.new_tag("div")
-            if not is_last:
+            if is_last:
+                item["style"] = "margin-bottom:18px;"
+            else:
                 item["style"] = "margin-bottom:14px;"
 
-            # Text line span
+            # Text line span — deep cognitive blue-purple
             line = soup.new_tag("span")
             line["style"] = (
-                f"font-size:16px;line-height:1.85;"
-                f"color:{text_color};letter-spacing:0.02em;"
+                "font-size:16px;line-height:1.85;"
+                "color:#3B3B98;letter-spacing:0.02em;"
             )
 
             # Marker span — accent color, margin-right for spacing
@@ -282,14 +282,19 @@ def normalize_lists(soup: BeautifulSoup, theme: dict[str, str], *,
             )
             line.append(marker)
 
-            # Content — unwrap <p> tags, preserve inline formatting
+            # Content wrapped in <b><i> for bold+italic emphasis
+            emphasis = soup.new_tag("b")
+            i_tag = soup.new_tag("i")
+
             for child in list(li.children):
                 if child.name == "p":
                     for grandchild in list(child.children):
-                        line.append(grandchild)
+                        i_tag.append(grandchild)
                 else:
-                    line.append(child)
+                    i_tag.append(child)
 
+            emphasis.append(i_tag)
+            line.append(emphasis)
             item.append(line)
             container.append(item)
 

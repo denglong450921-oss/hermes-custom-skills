@@ -197,11 +197,10 @@ The command prints JSON and writes the same audit data to the report:
   `position:absolute/fixed`, transforms, or `!important`.
 - Render fenced code as a wrapping `section > code` block, not `<pre>`.
 - **Do NOT use `<ol>`, `<ul>`, or `<li>` — WeChat breaks them all.**
-  The converter auto-replaces every list with span-based inline blocks:
-  each item is a `div` wrapper (last has no margin) containing a single
-  `span` for the text line with a nested accent-colored marker `span`
-  (`color:{accent};font-weight:700;margin-right:6px;`). Ordered lists
-  show `1.`, `2.`, `3.`; unordered show `•`. No flex, no borders.
+  The converter auto-replaces every list with insight-style span
+  blocks: bold+italic text in `#3B3B98` (deep cognitive blue) with an
+  accent-colored marker. Last item has `margin-bottom:18px`; others
+  have `14px`. No flex, no borders, no card backgrounds.
 - Keep same-tag nesting at 15 levels or fewer.
 - Favor solid container backgrounds and moderate contrast for Dark Mode. Decorative
 - Keep shared backgrounds on a structural container rather than repeating them on
