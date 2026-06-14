@@ -93,6 +93,7 @@ unpublished content.
 | `--report` | No | Defaults to `<output>.report.json` |
 | `--official-check` | No | Opt-in upload to WeChat's official structure verifier |
 | `--official-timeout` | No | Official verifier timeout in seconds; defaults to 15 |
+| `--card-padding` | No | Card padding in px for list items (default: `14`, compact: `6`) |
 
 ## Highlight and callout syntax
 

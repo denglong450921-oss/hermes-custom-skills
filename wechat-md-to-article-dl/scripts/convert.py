@@ -237,7 +237,8 @@ def safe_markdown(body: str) -> BeautifulSoup:
     return soup
 
 
-def normalize_lists(soup: BeautifulSoup, theme: dict[str, str]) -> None:
+def normalize_lists(soup: BeautifulSoup, theme: dict[str, str], *,
+                    card_padding: int = 14) -> None:
     """Replace <ol>/<ul>/<li> with card-style div blocks (Option 3).
 
     WeChat's rich-text engine breaks native list rendering. The
@@ -268,7 +269,7 @@ def normalize_lists(soup: BeautifulSoup, theme: dict[str, str]) -> None:
             card = soup.new_tag("div")
             card_margin = "" if is_last else "margin-bottom:12px;"
             card["style"] = (
-                f"padding:14px;border:1px solid {border_color};"
+                f"padding:{card_padding}px;border:1px solid {border_color};"
                 f"border-radius:{card_radius};{card_margin}"
                 f"background:{theme['page']};"
             )
@@ -417,6 +418,7 @@ def render(
     title_override: str | None,
     theme_name: str,
     strict: bool,
+    card_padding: int = 14,
 ) -> str:
     palette = THEMES[theme_name]
     title = title_override or normalize_text(metadata.get("title")) or "未命名文章"
@@ -426,7 +428,7 @@ def render(
     soup = safe_markdown(body)
     apply_styles(soup, palette, strict=strict)
     apply_highlight_styles(soup, palette)
-    normalize_lists(soup, palette)
+    normalize_lists(soup, palette, card_padding=card_padding)
 
     meta_parts = [part for part in (author, date_value) if part]
     meta_line = " · ".join(meta_parts)
@@ -479,6 +481,7 @@ def convert(
     report_path: Path,
     official_check: bool = False,
     official_timeout: float = 15.0,
+    card_padding: int = 14,
 ) -> dict[str, Any]:
     if not input_path.is_file():
         raise ValueError(f"Input file not found: {input_path}")
@@ -498,6 +501,7 @@ def convert(
         title_override=title,
         theme_name=selected_theme,
         strict=False,
+        card_padding=card_padding,
     )
     audit = audit_html(output_html, threshold=threshold)
     auto_repaired = False
@@ -509,6 +513,7 @@ def convert(
             title_override=title,
             theme_name=selected_theme,
             strict=True,
+            card_padding=card_padding,
         )
         audit = audit_html(output_html, threshold=threshold)
     official_validation = {
@@ -582,6 +587,10 @@ def main() -> int:
         help="Explicitly transmit final HTML to WeChat's official structure verifier.",
     )
     parser.add_argument("--official-timeout", type=float, default=15.0)
+    parser.add_argument(
+        "--card-padding", type=int, default=14,
+        help="Card padding in px for list items (default: 14, compact: 6)",
+    )
     args = parser.parse_args()
     report_path = args.report or Path(str(args.output) + ".report.json")
     try:
@@ -594,6 +603,7 @@ def main() -> int:
             report_path=report_path,
             official_check=args.official_check,
             official_timeout=args.official_timeout,
+            card_padding=args.card_padding,
         )
     except (OSError, UnicodeError, ValueError) as error:
         print(json.dumps({"status": "error", "message": str(error)}, ensure_ascii=False))
