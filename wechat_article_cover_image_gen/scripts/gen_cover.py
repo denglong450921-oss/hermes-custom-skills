@@ -327,7 +327,7 @@ def render(
     # 1. Font sizes (capped per design rules)
     ft_title, title_lines = _prepare_title(title, align)
     ft_label = ImageFont.truetype(font_path, 13)   # 12-14px
-    ft_sub = ImageFont.truetype(font_path, 16) if subtitle else None  # 14-18px
+    ft_sub = ImageFont.truetype(font_path, 18) if subtitle else None  # 14-18px
     ft_tag = ImageFont.truetype(font_path, 13) if tagline else None  # 12-14px
 
     # Title block height (multi-line support)
@@ -539,8 +539,8 @@ def main() -> int:
         help="Overlay opacity 0.0-1.0. Overrides template default if set.",
     )
     parser.add_argument(
-        "--outline-width", type=int, default=1,
-        help="Text outline radius in px (default: 1)",
+        "--outline-width", type=int, default=2,
+        help="Text outline radius in px (default: 2)",
     )
     args = parser.parse_args()
 
