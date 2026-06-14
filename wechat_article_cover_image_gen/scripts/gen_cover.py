@@ -77,8 +77,8 @@ def _pick_title_font(text: str) -> ImageFont.FreeTypeFont:
     """Pick the largest font size that keeps the title within ~92-94% width."""
     target = int(CANVAS_W * 0.92)
     font_path = _resolve_font()
-    best = 100
-    for fs in range(100, 200, 5):
+    best = 60
+    for fs in range(60, 200, 5):
         ft = ImageFont.truetype(font_path, fs)
         w = _get_bounds(text, ft)[1] - _get_bounds(text, ft)[0] + 1
         best = fs
