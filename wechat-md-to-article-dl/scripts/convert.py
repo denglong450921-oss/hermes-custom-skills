@@ -259,7 +259,7 @@ def normalize_lists(soup: BeautifulSoup, theme: dict[str, str], *,
             row = soup.new_tag("div")
             row["style"] = (
                 "display:flex;align-items:flex-start;"
-                "padding:14px 0;"
+                "padding:0px 0px;"
             )
 
             # Number or bullet — larger, accent color
