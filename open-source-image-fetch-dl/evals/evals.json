@@ -1,0 +1,74 @@
+{
+  "skill_name": "open-source-image-fetch-dl",
+  "evals": [
+    {
+      "id": "case_001",
+      "task": "Fetch a landscape tech workspace image for WeChat cover",
+      "prompt": "python3 scripts/fetch_image.py --query \"AI workspace laptop tech\" --min-width 1200",
+      "expected_output": "JSON with image_url, author, license, width >= 1200, relevance_score",
+      "files": [],
+      "grader": {
+        "must_use": [
+          "script_exit_ok",
+          "output_is_json",
+          "has_image_url",
+          "has_author",
+          "has_width_ge_1200",
+          "has_license"
+        ],
+        "must_have": [
+          "image_url",
+          "relevance_score"
+        ],
+        "must_not_have": [
+          "Traceback",
+          "Error"
+        ]
+      }
+    },
+    {
+      "id": "case_002",
+      "task": "Fetch a business/OFC entrepreneur image",
+      "prompt": "python3 scripts/fetch_image.py --query \"entrepreneur startup business office\" --min-width 1200",
+      "expected_output": "JSON with image URL, width >= 1200",
+      "files": [],
+      "grader": {
+        "must_use": [
+          "script_exit_ok",
+          "output_is_json",
+          "has_image_url",
+          "has_width_ge_1200"
+        ],
+        "must_have": [
+          "image_url"
+        ],
+        "must_not_have": [
+          "Traceback",
+          "Error"
+        ]
+      }
+    },
+    {
+      "id": "case_003",
+      "task": "Fetch an abstract background image with 1800px minimum",
+      "prompt": "python3 scripts/fetch_image.py --query \"abstract pattern landscape\" --min-width 1800",
+      "expected_output": "JSON with image URL, width >= 1800",
+      "files": [],
+      "grader": {
+        "must_use": [
+          "script_exit_ok",
+          "output_is_json",
+          "has_image_url",
+          "has_width_ge_1800"
+        ],
+        "must_have": [
+          "image_url"
+        ],
+        "must_not_have": [
+          "Traceback",
+          "Error"
+        ]
+      }
+    }
+  ]
+}

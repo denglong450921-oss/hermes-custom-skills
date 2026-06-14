@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "prompt": "帮我找一张科技主题的背景图做公众号封面，横向构图，清晰度要高",
+    "expected": "返回图片 URL、作者、授权信息、分辨率（宽≥1200px）、相关性评分"
+  },
+  {
+    "id": 2,
+    "prompt": "I need a landscape business meeting image for a WeChat cover. Keywords: \"startup entrepreneur office strategy\", min width 1200px",
+    "expected": "JSON with image_url from business category, width >= 1200px, relevance_score >= 0.5"
+  },
+  {
+    "id": 3,
+    "prompt": "找一张适合做公众号封面的抽象渐变背景图，最低宽度1800像素",
+    "expected": "JSON with image URL, width >= 1800, relevance_score present"
+  }
+]

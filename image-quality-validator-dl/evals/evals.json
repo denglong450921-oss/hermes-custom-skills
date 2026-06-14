@@ -1,0 +1,76 @@
+{
+  "skill_name": "image-quality-validator-dl",
+  "evals": [
+    {
+      "id": "case_001",
+      "task": "Validate image quality with minimal query",
+      "prompt": "python3 scripts/validate_image.py --image-url \"https://images.unsplash.com/photo-1677442136019-21780ecad995\" --query \"tech AI\" --min-width 1200",
+      "expected_output": "JSON dict with status, relevance, clarity, resolution_px, and 5 check objects",
+      "files": [],
+      "grader": {
+        "must_use": [
+          "script_exit_ok",
+          "output_is_json",
+          "has_status",
+          "has_relevance_score",
+          "has_clarity_score",
+          "has_resolution"
+        ],
+        "must_have": [
+          "status",
+          "relevance",
+          "clarity"
+        ],
+        "must_not_have": [
+          "Traceback",
+          "Error"
+        ]
+      }
+    },
+    {
+      "id": "case_002",
+      "task": "Validate image from a different Unsplash URL, business query",
+      "prompt": "python3 scripts/validate_image.py --image-url \"https://images.unsplash.com/photo-1552664730-d307ca884978\" --query \"business meeting\" --min-width 1200",
+      "expected_output": "JSON dict with pass/fail status and quality scores",
+      "files": [],
+      "grader": {
+        "must_use": [
+          "script_exit_ok",
+          "output_is_json",
+          "has_status",
+          "has_clarity_score",
+          "has_crop_check"
+        ],
+        "must_have": [
+          "status",
+          "clarity"
+        ],
+        "must_not_have": [
+          "Traceback",
+          "Error"
+        ]
+      }
+    },
+    {
+      "id": "case_003",
+      "task": "Validate with higher min-width requirement",
+      "prompt": "python3 scripts/validate_image.py --image-url \"https://images.unsplash.com/photo-1504639725590-34d0984388bd\" --query \"technology data\" --min-width 1800",
+      "expected_output": "JSON dict with pass/fail and resolution check",
+      "files": [],
+      "grader": {
+        "must_use": [
+          "script_exit_ok",
+          "output_is_json",
+          "has_resolution"
+        ],
+        "must_have": [
+          "status"
+        ],
+        "must_not_have": [
+          "Traceback",
+          "Error"
+        ]
+      }
+    }
+  ]
+}

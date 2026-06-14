@@ -1,0 +1,84 @@
+{
+  "skill_name": "wechat-title-generator-dl",
+  "evals": [
+    {
+      "id": "case_001",
+      "task": "Generate title for OPC / AI / personal business system article, professional style",
+      "prompt": "Generate a WeChat article title. Topic: \"OPC / AI / personal business system\", style: \"professional\"",
+      "expected_output": "Markdown file with # title, ## subtitle, ## tags, ## original title",
+      "files": [],
+      "grader": {
+        "must_use": [
+          "has_markdown_title",
+          "has_subtitle",
+          "has_tags",
+          "no_clickbait",
+          "has_structure"
+        ],
+        "must_have": [
+          "#",
+          "##"
+        ],
+        "must_not_have": [
+          "震惊",
+          "99%",
+          "再不",
+          "晚了"
+        ]
+      }
+    },
+    {
+      "id": "case_002",
+      "task": "Generate high-level title for cognitive writing article",
+      "prompt": "Generate a WeChat article title. Topic: \"cognitive writing / structured thinking / methodology\", style: \"high-level\"",
+      "expected_output": "Markdown file with structured title showing methodology",
+      "files": [],
+      "grader": {
+        "must_use": [
+          "has_markdown_title",
+          "has_subtitle",
+          "has_tags",
+          "no_clickbait"
+        ],
+        "must_have": [
+          "#",
+          "##"
+        ],
+        "must_not_have": [
+          "震惊",
+          "99%",
+          "再不",
+          "晚了",
+          "所有人都"
+        ]
+      }
+    },
+    {
+      "id": "case_003",
+      "task": "Generate cognitive-style title for learning methodologies",
+      "prompt": "Generate a WeChat article title. Topic: \"learning methods / knowledge management / second brain\", style: \"cognitive\"",
+      "expected_output": "Markdown file with thoughtful, analytical title and subtitle",
+      "files": [],
+      "grader": {
+        "must_use": [
+          "has_markdown_title",
+          "has_subtitle",
+          "has_tags",
+          "no_clickbait",
+          "has_structure"
+        ],
+        "must_have": [
+          "#",
+          "##"
+        ],
+        "must_not_have": [
+          "震惊",
+          "99%",
+          "再不",
+          "晚了",
+          "全网"
+        ]
+      }
+    }
+  ]
+}
