@@ -267,7 +267,7 @@ def normalize_lists(soup: BeautifulSoup, theme: dict[str, str], *,
             line = soup.new_tag("span")
             line["style"] = (
                 "font-size:16px;line-height:1.85;"
-                "color:#3B3B98;letter-spacing:0.02em;"
+                "color:#A47C42;letter-spacing:0.02em;"
             )
 
             # Marker span — accent color, margin-right for spacing
