@@ -1,0 +1,8 @@
+# Used cover images — add new IDs here to avoid reuse
+# Format: photo_id (unsplash-photo-XXXXXX) — description
+1552664730-d307ca884978  # tech workspace (OPC, behavior change, health myths)
+1456513080510-7bf3a84b82f8  # education child (6 education articles)
+1506126613408-eca07ce68773  # wellness calm (motion sickness, elderly, medical)
+1541701494587-cb58502866ab  # abstract colorful (inflammation)
+1677442136019-21780ecad995  # tech AI workspace (behavior change, health myths)
+1477959858617-67f85cf4f1df  # sleep bed rest night (sleep article)
