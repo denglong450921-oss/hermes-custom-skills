@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""Fetch free-license image by keyword matching against curated Unsplash URLs.
+"""Fetch free-license image by keyword — live Unsplash search + curated fallback.
 
-No API keys needed. Uses pre-curated photo URLs organised by topic category.
+Queries Unsplash's public napi endpoint for fresh results by keyword,
+then falls back to curated category photos if the API fails.
 Returns JSON with image_url, author, license, dimensions, relevance_score.
 
 Usage:
-  python3 fetch_image.py --query "AI workspace laptop" --min-width 1200
+  python3 fetch_image.py --query "AI workspace laptop" --min-width 800
 """
 
 from __future__ import annotations
@@ -15,6 +16,7 @@ import json
 import os
 import sys
 import tempfile
+import urllib.parse
 import urllib.request
 from pathlib import Path
 
@@ -22,9 +24,7 @@ from PIL import Image
 
 
 # ---------------------------------------------------------------------------
-# Curated Unsplash photos by category
-# Each entry: (url, width, height)
-# These are hand-picked for landscape orientation + 1200px+ min dimension.
+# Curated Unsplash photos by category (fallback when API is unavailable)
 # ---------------------------------------------------------------------------
 
 PHOTO_CATEGORIES: dict[str, list[tuple[str, int, int, str]]] = {
@@ -98,6 +98,23 @@ GENERAL_FALLBACKS = [
 ]
 
 
+def _search_unsplash_api(query: str, per_page: int = 10) -> list[dict]:
+    """Search Unsplash via the public napi endpoint (no API key needed).
+
+    Returns list of result dicts with 'id', 'slug', 'urls' (raw, regular, small).
+    Empty list if the API call fails.
+    """
+    encoded = urllib.parse.quote(query)
+    url = f"https://unsplash.com/napi/search/photos?query={encoded}&per_page={per_page}&xp="
+    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+    try:
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            data = json.loads(resp.read().decode())
+        return data.get("results", [])
+    except Exception:
+        return []
+
+
 def _score_query(query: str) -> dict[str, float]:
     """Score each category against the query keywords."""
     query_lower = query.lower()
@@ -105,7 +122,6 @@ def _score_query(query: str) -> dict[str, float]:
     scores: dict[str, float] = {}
     for cat, kw in CATEGORY_KEYWORDS.items():
         matches = sum(1 for k in kw if k in query_lower or any(k in w for w in query_words))
-        # Also score based on word-level matching
         word_matches = sum(1 for k in kw for w in query_words if k in w or w in k)
         scores[cat] = matches + word_matches * 0.5
     return scores
@@ -122,19 +138,21 @@ def _pick_category(query: str) -> str:
 
 def _download_image(url: str, timeout: int = 15) -> Image.Image | None:
     """Download an image from URL. Returns PIL Image or None."""
+    tmp = None
     try:
         tmp = tempfile.NamedTemporaryFile(suffix=".jpg", delete=False)
         urllib.request.urlretrieve(url, tmp.name)
         img = Image.open(tmp.name)
         img.load()  # force load to catch corrupt images
-        os.unlink(tmp.name)
         return img
     except Exception:
-        try:
-            os.unlink(tmp.name)
-        except Exception:
-            pass
         return None
+    finally:
+        if tmp is not None:
+            try:
+                os.unlink(tmp.name)
+            except Exception:
+                pass
 
 
 def fetch_image(
@@ -143,44 +161,59 @@ def fetch_image(
 ) -> dict:
     """Fetch the best-matching image for the query.
 
+    Tries live Unsplash API search first, then falls back to curated
+    category photos if the API is unreachable.
+
     Returns dict with image metadata.
     """
     query = query.strip() or "workspace"
 
-    # 1. Pick best category
+    # --- 1. Try live Unsplash API search ---
+    results = _search_unsplash_api(query, per_page=10)
+    for r in results:
+        rid = r.get("id", "")
+        raw_url = r.get("urls", {}).get("raw", "")
+        if not raw_url:
+            continue
+        # Build crop URL at 900×383
+        crop_url = f"{raw_url}&w=900&h=383&fit=crop" if "?" in raw_url else f"{raw_url}?w=900&h=383&fit=crop"
+        img = _download_image(crop_url)
+        if img is None:
+            continue
+        actual_w, actual_h = img.size
+        if actual_w < min_width:
+            continue
+        return {
+            "image_url": raw_url,
+            "author": "Unsplash",
+            "license": "Free to use under the Unsplash License",
+            "width": actual_w,
+            "height": actual_h,
+            "relevance_score": round(0.85, 2),
+        }
+
+    # --- 2. Fallback: curated category photos ---
     cat = _pick_category(query)
     cat_photos = PHOTO_CATEGORIES.get(cat, GENERAL_FALLBACKS)
-
-    # 2. Try category photos first
     relevance_base = 0.85 if cat != list(PHOTO_CATEGORIES.keys())[0] else 0.70
     all_photos = list(cat_photos) + GENERAL_FALLBACKS
 
     for i, (url, w, h, author) in enumerate(all_photos):
-        # Check KNOWN curated dimensions against min_width first.
-        # This avoids a false-negative when the crop-param download
-        # (e.g. ?w=900&h=383) shrinks the image below min_width even
-        # though the full-resolution source is well above it.
         if w >= min_width:
-            # Known dimensions satisfy min_width — try crop version for speed.
             dl_url = f"{url}?w=900&h=383&fit=crop"
             img = _download_image(dl_url)
             if img is None:
                 img = _download_image(url)
         else:
-            # Known dimensions don't meet min_width — try the original.
             img = _download_image(url)
         if img is None:
             continue
 
         actual_w, actual_h = img.size if img else (w, h)
-
-        # Check min_width against actual downloaded dimensions
         if actual_w < min_width:
             continue
 
-        # Calculate relevance score
         rela = relevance_base * (1.0 - (i / max(len(all_photos), 1)) * 0.3)
-
         return {
             "image_url": url,
             "author": author,
@@ -190,7 +223,7 @@ def fetch_image(
             "relevance_score": round(rela, 2),
         }
 
-    # 3. Pure fallback: return first general fallback URL anyway
+    # --- 3. Pure fallback ---
     url, w, h, author = GENERAL_FALLBACKS[0]
     return {
         "image_url": url,
