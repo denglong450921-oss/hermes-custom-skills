@@ -73,6 +73,11 @@ The orchestration runs 4 steps in sequence:
 
 **Output:** JSON with image URL, author, license, dimensions.
 
+> ⚠️ **Image reuse prevention:** Before fetching, check
+> `references/used-images.txt` for already-used photo IDs. If the
+> returned image's ID (the hash in the Unsplash URL) is in that file,
+> retry with a completely different keyword angle. After a successful
+> cover render, append the new image ID to `used-images.txt`.
 
 🔴 **CHECKPOINT: Review the output before proceeding.** If results are unexpected, go back and retry with different parameters.
 
