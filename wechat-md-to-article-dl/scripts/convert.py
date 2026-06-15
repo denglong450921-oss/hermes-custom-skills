@@ -392,7 +392,7 @@ def apply_styles(soup: BeautifulSoup, theme: dict[str, str], *, strict: bool) ->
 
 def section_map(soup: BeautifulSoup, theme: dict[str, str]) -> str:
     headings = [heading.get_text(" ", strip=True) for heading in soup.find_all("h2")]
-    headings = [heading for heading in headings if heading][:4]
+    headings = [heading for heading in headings if heading]
     if len(headings) < 2:
         return ""
     items = "".join(
