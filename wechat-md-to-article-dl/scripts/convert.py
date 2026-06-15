@@ -241,8 +241,8 @@ def normalize_lists(soup: BeautifulSoup, theme: dict[str, str], *,
                     card_padding: int = 14) -> None:
     """Replace <ol>/<ul>/<li> with insight-style span list blocks.
 
-    Bold+italic text in #3B3B98 (deep cognitive blue) with accent
-    marker. Last item has margin-bottom:18px.
+    Bold+italic text in gold #A47C42 with accent marker.
+    Last item has margin-bottom:18px.
     """
     for list_tag in soup.find_all(["ol", "ul"]):
         container = soup.new_tag("div")
