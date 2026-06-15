@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Fetch free-license image by keyword — live Unsplash search + curated fallback.
+"""Fetch free-license image by keyword — live picsum search + curated fallback.
 
-Queries Unsplash's public napi endpoint for fresh results by keyword,
-then falls back to curated category photos if the API fails.
+Tries picsum.photos (powered by Unsplash, no auth, always fresh images) first,
+then falls back to curated Unsplash category photos.
 Returns JSON with image_url, author, license, dimensions, relevance_score.
 
 Usage:
@@ -16,7 +16,6 @@ import json
 import os
 import sys
 import tempfile
-import urllib.parse
 import urllib.request
 from pathlib import Path
 
@@ -24,7 +23,7 @@ from PIL import Image
 
 
 # ---------------------------------------------------------------------------
-# Curated Unsplash photos by category (fallback when API is unavailable)
+# Curated Unsplash photos by category (fallback when live sources unavailable)
 # ---------------------------------------------------------------------------
 
 PHOTO_CATEGORIES: dict[str, list[tuple[str, int, int, str]]] = {
@@ -33,48 +32,64 @@ PHOTO_CATEGORIES: dict[str, list[tuple[str, int, int, str]]] = {
         ("https://images.unsplash.com/photo-1504639725590-34d0984388bd", 2400, 1600, "Unsplash"),
         ("https://images.unsplash.com/photo-1451187580459-43490279c0fa", 2400, 1600, "Unsplash"),
         ("https://images.unsplash.com/photo-1555066931-4365d14bab8c", 2400, 1600, "Unsplash"),
+        ("https://images.unsplash.com/photo-1518770660439-4636190af475", 2400, 1600, "Unsplash"),
+        ("https://images.unsplash.com/photo-1550751827-4bd374c3f58b", 2400, 1600, "Unsplash"),
     ],
     "business": [
         ("https://images.unsplash.com/photo-1552664730-d307ca884978", 2400, 1600, "Unsplash"),
         ("https://images.unsplash.com/photo-1664575602554-2087b04935a5", 2400, 1600, "Unsplash"),
         ("https://images.unsplash.com/photo-1664575198263-269a022d6e14", 2400, 1600, "Unsplash"),
         ("https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d", 2400, 1600, "Unsplash"),
+        ("https://images.unsplash.com/photo-1507679799987-c73779587ccf", 2400, 1600, "Unsplash"),
+        ("https://images.unsplash.com/photo-1559136555-9303baea8ebd", 2400, 1600, "Unsplash"),
     ],
     "nature": [
         ("https://images.unsplash.com/photo-1506905925346-21bda4d32df4", 2400, 1600, "Unsplash"),
         ("https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05", 2400, 1600, "Unsplash"),
         ("https://images.unsplash.com/photo-1441974231531-c6227db76b6e", 2400, 1600, "Unsplash"),
         ("https://images.unsplash.com/photo-1518173946687-a36f968b10fa", 2400, 1600, "Unsplash"),
+        ("https://images.unsplash.com/photo-1505144808419-1957a94ca61e", 2400, 1600, "Unsplash"),
+        ("https://images.unsplash.com/photo-1472214103451-9374bd1c798e", 2400, 1600, "Unsplash"),
     ],
     "abstract": [
         ("https://images.unsplash.com/photo-1541701494587-cb58502866ab", 2400, 1600, "Unsplash"),
         ("https://images.unsplash.com/photo-1550859492-d5da9d8e45f3", 2400, 1600, "Unsplash"),
         ("https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe", 2400, 1600, "Unsplash"),
         ("https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d", 2400, 1600, "Unsplash"),
+        ("https://images.unsplash.com/photo-1557683316-973673baf926", 2400, 1600, "Unsplash"),
+        ("https://images.unsplash.com/photo-1568209865332-a15790aed756", 2400, 1600, "Unsplash"),
     ],
     "education": [
         ("https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8", 2400, 1600, "Unsplash"),
         ("https://images.unsplash.com/photo-1491841550275-ad7854e35ca6", 2400, 1600, "Unsplash"),
         ("https://images.unsplash.com/photo-1524995997946-a1c2e315a42f", 2400, 1600, "Unsplash"),
         ("https://images.unsplash.com/photo-1503676260728-1c00da094a0b", 2400, 1600, "Unsplash"),
+        ("https://images.unsplash.com/photo-1523240795612-9a054b0db644", 2400, 1600, "Unsplash"),
+        ("https://images.unsplash.com/photo-1434030216411-0b793f4b4173", 2400, 1600, "Unsplash"),
     ],
     "health": [
         ("https://images.unsplash.com/photo-1506126613408-eca07ce68773", 2400, 1600, "Unsplash"),
         ("https://images.unsplash.com/photo-1544367567-0f2fcb009e0b", 2400, 1600, "Unsplash"),
         ("https://images.unsplash.com/photo-1504674900247-0877df9cc836", 2400, 1600, "Unsplash"),
         ("https://images.unsplash.com/photo-1512621776951-a57141f2eefd", 2400, 1600, "Unsplash"),
+        ("https://images.unsplash.com/photo-1559757175-5700dde675bc", 2400, 1600, "Unsplash"),
+        ("https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b", 2400, 1600, "Unsplash"),
     ],
     "city": [
         ("https://images.unsplash.com/photo-1477959858617-67f85cf4f1df", 2400, 1600, "Unsplash"),
         ("https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b", 2400, 1600, "Unsplash"),
         ("https://images.unsplash.com/photo-1519501025264-65ba15a82390", 2400, 1600, "Unsplash"),
         ("https://images.unsplash.com/photo-1449824913935-59a10b8d2000", 2400, 1600, "Unsplash"),
+        ("https://images.unsplash.com/photo-1444723121867-7a241cacace9", 2400, 1600, "Unsplash"),
+        ("https://images.unsplash.com/photo-1467269204594-9661b134dd2b", 2400, 1600, "Unsplash"),
     ],
     "creative": [
         ("https://images.unsplash.com/photo-1558478551-1a378f63328e", 2400, 1600, "Unsplash"),
         ("https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b", 2400, 1600, "Unsplash"),
         ("https://images.unsplash.com/photo-1513364776144-60967b0f800f", 2400, 1600, "Unsplash"),
         ("https://images.unsplash.com/photo-1513542789411-b6a5d4f31634", 2400, 1600, "Unsplash"),
+        ("https://images.unsplash.com/photo-1547891654-e66ed7ebb968", 2400, 1600, "Unsplash"),
+        ("https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d", 2400, 1600, "Unsplash"),
     ],
 }
 
@@ -95,24 +110,58 @@ GENERAL_FALLBACKS = [
     ("https://images.unsplash.com/photo-1451187580459-43490279c0fa", 2400, 1600, "Unsplash"),
     ("https://images.unsplash.com/photo-1555066931-4365d14bab8c", 2400, 1600, "Unsplash"),
     ("https://images.unsplash.com/photo-1552664730-d307ca884978", 2400, 1600, "Unsplash"),
+    ("https://images.unsplash.com/photo-1506905925346-21bda4d32df4", 2400, 1600, "Unsplash"),
 ]
 
 
-def _search_unsplash_api(query: str, per_page: int = 10) -> list[dict]:
-    """Search Unsplash via the public napi endpoint (no API key needed).
+def _fetch_random_picsum(min_width: int = 800) -> tuple[Image.Image, str] | None:
+    """Fetch a random image from picsum.photos (no auth, always fresh).
 
-    Returns list of result dicts with 'id', 'slug', 'urls' (raw, regular, small).
-    Empty list if the API call fails.
+    Returns (image, real_unsplash_url) or None.
     """
-    encoded = urllib.parse.quote(query)
-    url = f"https://unsplash.com/napi/search/photos?query={encoded}&per_page={per_page}&xp="
-    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+    for attempt in range(3):
+        tmp = None
+        try:
+            url = f"https://picsum.photos/900/383?random={attempt}"
+            req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+            resp = urllib.request.urlopen(req, timeout=15)
+            real_url = resp.geturl()  # follow redirect to real Unsplash URL
+            data = resp.read()
+            tmp = tempfile.NamedTemporaryFile(suffix=".jpg", delete=False)
+            tmp.write(data)
+            tmp.flush()
+            img = Image.open(tmp.name)
+            img.load()
+            if img.width >= min_width:
+                return (img, real_url)
+        except Exception:
+            continue
+        finally:
+            if tmp is not None:
+                try:
+                    os.unlink(tmp.name)
+                except Exception:
+                    pass
+    return None
+
+
+def _download_image(url: str, timeout: int = 15) -> Image.Image | None:
+    """Download an image from URL. Returns PIL Image or None."""
+    tmp = None
     try:
-        with urllib.request.urlopen(req, timeout=10) as resp:
-            data = json.loads(resp.read().decode())
-        return data.get("results", [])
+        tmp = tempfile.NamedTemporaryFile(suffix=".jpg", delete=False)
+        urllib.request.urlretrieve(url, tmp.name)
+        img = Image.open(tmp.name)
+        img.load()
+        return img
     except Exception:
-        return []
+        return None
+    finally:
+        if tmp is not None:
+            try:
+                os.unlink(tmp.name)
+            except Exception:
+                pass
 
 
 def _score_query(query: str) -> dict[str, float]:
@@ -131,28 +180,8 @@ def _pick_category(query: str) -> str:
     """Pick the best-matching category for the query."""
     scores = _score_query(query)
     if not scores or max(scores.values()) <= 0:
-        return list(PHOTO_CATEGORIES.keys())[0]  # default to tech
-    best = max(scores, key=scores.get)
-    return best
-
-
-def _download_image(url: str, timeout: int = 15) -> Image.Image | None:
-    """Download an image from URL. Returns PIL Image or None."""
-    tmp = None
-    try:
-        tmp = tempfile.NamedTemporaryFile(suffix=".jpg", delete=False)
-        urllib.request.urlretrieve(url, tmp.name)
-        img = Image.open(tmp.name)
-        img.load()  # force load to catch corrupt images
-        return img
-    except Exception:
-        return None
-    finally:
-        if tmp is not None:
-            try:
-                os.unlink(tmp.name)
-            except Exception:
-                pass
+        return list(PHOTO_CATEGORIES.keys())[0]
+    return max(scores, key=scores.get)
 
 
 def fetch_image(
@@ -161,35 +190,22 @@ def fetch_image(
 ) -> dict:
     """Fetch the best-matching image for the query.
 
-    Tries live Unsplash API search first, then falls back to curated
-    category photos if the API is unreachable.
-
-    Returns dict with image metadata.
+    Tries picsum.photos (random fresh images) first, then falls back
+    to curated Unsplash category photos.
     """
     query = query.strip() or "workspace"
 
-    # --- 1. Try live Unsplash API search ---
-    results = _search_unsplash_api(query, per_page=10)
-    for r in results:
-        rid = r.get("id", "")
-        raw_url = r.get("urls", {}).get("raw", "")
-        if not raw_url:
-            continue
-        # Build crop URL at 900×383
-        crop_url = f"{raw_url}&w=900&h=383&fit=crop" if "?" in raw_url else f"{raw_url}?w=900&h=383&fit=crop"
-        img = _download_image(crop_url)
-        if img is None:
-            continue
-        actual_w, actual_h = img.size
-        if actual_w < min_width:
-            continue
+    # --- 1. Try picsum.photos (always fresh, no auth) ---
+    picsum_result = _fetch_random_picsum(min_width=min_width)
+    if picsum_result is not None:
+        img, real_url = picsum_result
         return {
-            "image_url": raw_url,
-            "author": "Unsplash",
-            "license": "Free to use under the Unsplash License",
-            "width": actual_w,
-            "height": actual_h,
-            "relevance_score": round(0.85, 2),
+            "image_url": real_url,
+            "author": "Unsplash (via Picsum)",
+            "license": "Free to use (Unsplash License)",
+            "width": img.width,
+            "height": img.height,
+            "relevance_score": 0.70,
         }
 
     # --- 2. Fallback: curated category photos ---
