@@ -263,11 +263,11 @@ def normalize_lists(soup: BeautifulSoup, theme: dict[str, str], *,
             else:
                 item["style"] = "margin-bottom:14px;"
 
-            # Text line span — deep cognitive blue-purple
+            # Text line span — accent color (matches blockquote left border)
             line = soup.new_tag("span")
             line["style"] = (
                 "font-size:16px;line-height:1.85;"
-                "color:#A47C42;letter-spacing:0.02em;"
+                f"color:{accent};letter-spacing:0.02em;"
             )
 
             # Marker span — accent color, margin-right for spacing
