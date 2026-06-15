@@ -248,10 +248,13 @@ def _prepare_title(
 # Image download
 # ---------------------------------------------------------------------------
 
-def _download_image(url: str | None) -> Image.Image:
+def _download_image(url: str | None, skip_fallbacks: bool = False) -> Image.Image:
     """Download stock image or use provided URL. Fallback to solid gradient."""
-    urls = [url] if url else []
-    urls += UNSPLASH_FALLBACKS
+    if skip_fallbacks:
+        urls = [url] if url else []
+    else:
+        urls = [url] if url else []
+        urls += UNSPLASH_FALLBACKS
     for u in urls:
         try:
             tmp = tempfile.NamedTemporaryFile(suffix=".jpg", delete=False)
@@ -279,7 +282,7 @@ def _draw_text_with_outline(
     font: ImageFont.FreeTypeFont,
     fill: tuple[int, int, int, int],
     outline_color: tuple[int, int, int, int] = (0, 0, 0, 200),
-    outline_width: int = 2,
+    outline_width: int = 1,
 ) -> None:
     """Draw text with 8-direction outline + core fill."""
     x, y = xy
@@ -306,7 +309,8 @@ def render(
     align: str = "center",
     template: str = "auto",
     overlay_opacity: float | None = None,
-    outline_width: int = 2,
+    outline_width: int = 1,
+    no_image: bool = False,
 ) -> dict:
     """Generate a high-end WeChat cover (900×383) and write to ``output``.
 
@@ -410,7 +414,7 @@ def render(
         tag_x = 0
 
     # --- Render ---
-    bg = _download_image(image_url)
+    bg = _download_image(image_url, skip_fallbacks=no_image)
     overlay_layer = Image.new("RGBA", (CANVAS_W, CANVAS_H), (0, 0, 0, 0))
     draw = ImageDraw.Draw(overlay_layer)
 
@@ -527,6 +531,10 @@ def main() -> int:
         help="Stock image URL (900×383 preferred). Auto-fallback if omitted.",
     )
     parser.add_argument(
+        "--no-image", action="store_true",
+        help="Skip Unsplash fallbacks entirely. Use solid dark gradient (no reused photos).",
+    )
+    parser.add_argument(
         "--align", default="center", choices=["center", "left"],
         help="Text alignment: center (modern tech) or left (premium editorial)",
     )
@@ -556,6 +564,7 @@ def main() -> int:
             template=args.template,
             overlay_opacity=args.overlay_opacity,
             outline_width=args.outline_width,
+            no_image=args.no_image,
         )
     except Exception as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
