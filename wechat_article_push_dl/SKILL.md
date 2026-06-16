@@ -62,7 +62,7 @@ WECHAT_APPID=wx...
 WECHAT_APP_SECRET=***
 ```
 
-The CLI reads `.env` from the current working directory, not home. If credentials are missing or wrong, the API returns:
+The CLI reads `.env` from the current working directory, not home. For this user, credentials are in `~/Documents/.env` — always `cd ~/Documents` before running md2wechat. If credentials are missing or wrong, the API returns:
 
 | Error | Meaning |
 |-------|---------|
