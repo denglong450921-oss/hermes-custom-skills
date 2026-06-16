@@ -1,146 +1,219 @@
 ---
 name: wechat-cover-generator-dl
 description: >
-  Generate complete WeChat Official Account cover images from a Markdown file,
-  article topic, or title. Use when the user asks for a WeChat cover, 公众号封面,
-  thumbnail, article banner, 900x383 PNG, cover pipeline, or wants title
-  metadata plus a validated cover report. Provides a self-contained Python
-  runner that creates a deterministic 900x383 PNG and JSON report, and can also
-  orchestrate external title/image/validation/rendering skills when available.
+  Full-pipeline WeChat Official Account cover generator. Orchestrates title
+  generation, image fetching, quality validation, and cover rendering into a
+  single workflow. Requires a Markdown input file with article metadata. Use
+  this skill when the user wants a complete cover image for a WeChat article
+  push — from title to final 900x383 PNG. This is the top-level orchestration
+  skill that composes wechat-title-generator-dl, open-source-image-fetch-dl,
+  image-quality-validator-dl, and wechat_article_cover_image_gen together. Do
+  NOT use the individual sub-skills directly unless you only need one specific
+  step.
+compatibility: Python 3.10+ with Pillow, numpy; requires wechat-title-generator-dl, open-source-image-fetch-dl, image-quality-validator-dl, wechat_article_cover_image_gen
 ---
 
-# WeChat Cover Generator
+# WeChat Cover Generator (Orchestration)
 
-Generate a WeChat-ready `900x383` PNG cover and a structured pipeline report.
-Default to the bundled runner so the skill works when installed alone.
+Full-pipeline orchestration that produces a WeChat-ready 900×383 cover image
+from a Markdown input file. Composes all sub-skills automatically.
 
-## Quick Path
+## Input
 
-Use `scripts/run_pipeline.py` for most requests:
+A Markdown file with article metadata, for example:
 
-```bash
-python3 scripts/run_pipeline.py \
-  --input /path/to/article.md \
-  --style tech \
-  --output /tmp/wechat-cover.png \
-  --report /tmp/wechat-cover-report.json
+```markdown
+# OPC：AI时代的个人商业系统
+
+## Prompt
+Generate a high-level WeChat article about OPC system.
+
+## Requirements
+- Must include MVP framework
+- Must include risk analysis
+- Must include real-world validation logic
+- Must include actionable steps
 ```
 
-The runner needs Pillow to render PNG files. If the active `python3` lacks
-Pillow, it automatically retries with the Codex bundled Python runtime when
-available; otherwise install it with `python3 -m pip install pillow`.
+## Input contract
 
-If the user gives only a topic:
+| Element | Source | Example |
+|---|---|---|
+| Title (h1) | 1st `#` heading in the Markdown input | `OPC：AI时代的个人商业系统` |
+| Topic keywords | Extracted from the Markdown body | `OPC, AI, personal business system` |
+| Style hint | Section headings like `## Requirements` | `high-level`, `professional` |
 
-```bash
-python3 scripts/run_pipeline.py \
-  --topic "OPC / AI / 个人商业系统" \
-  --style high-level \
-  --output /tmp/opc-cover.png
+## Pipeline
+
+The orchestration runs 4 steps in sequence:
+
+### Step 1: Generate title metadata
+
+1. Load `wechat-title-generator-dl` skill.
+2. Extract topic and style from the Markdown input.
+3. Generate a structured title file with title, subtitle, tagline, label.
+
+**Input:**
+```json
+{
+  "topic": "extracted from Markdown h1 + body content",
+  "style": "professional / high-level / cognitive"
+}
 ```
 
-The runner writes:
+**Output:** A `.md` file with title, subtitle, tagline, label fields.
+
+### Step 2: Fetch a free-license image
+
+1. Load `open-source-image-fetch-dl` skill.
+2. Derive 3-5 English keywords from the article topic.
+3. Run the fetch script with the keywords.
+
+**Query:** Extract 3-5 English keywords from the article topic.
+
+**Output:** JSON with image URL, author, license, dimensions.
+
+> ⚠️ **Image reuse prevention:** Before fetching, check
+> `references/used-images.txt` for already-used photo IDs. If the
+> returned image's ID (the hash in the Unsplash URL) is in that file,
+> retry with a completely different keyword angle. After a successful
+> cover render, append the new image ID to `used-images.txt`.
+
+🔴 **CHECKPOINT: Review the output before proceeding.** If results are unexpected, go back and retry with different parameters.
+
+### Step 3: Validate the image (with retry)
+
+1. Load `image-quality-validator-dl` skill.
+2. Validate the fetched image against 6 quality dimensions.
+
+- If `pass` → proceed to Step 4.
+- If `fail` → increment attempt counter, go back to Step 2 with modified
+  query. Up to 3 attempts total.
+- If all 3 fail → proceed with fallback (solid dark gradient).
+
+### Step 4: Generate the cover
+
+1. Load `wechat_article_cover_image_gen` skill.
+2. Pass title metadata from Step 1 as `--title`, `--subtitle`, `--tagline`, `--label`.
+3. Pass validated image URL from Step 3 as `--image-url`.
+4. Run the cover generation script.
+
+```bash
+python3 <cover_skill_dir>/scripts/gen_cover.py \
+  --title "AI 时代的 OPC" \
+  --subtitle "一个人如何用最小成本跑通自己的商业闭环" \
+  --tagline "决策者 + AI 工具链  ·  可验证需求  ·  商业闭环" \
+  --label "AI ERA  ·  ONE PERSON COMPANY" \
+  --image-url "<validated-image-url>" \
+  --output /path/to/final-cover.png
+```
+
+
+🛑 **STOP: Present the final result to the user for confirmation** before using it in any downstream task.
+
+## Output
 
 ```json
 {
-  "cover_image_url": "/tmp/opc-cover.png",
-  "title_md_path": "/tmp/opc-cover-title.md",
+  "cover_image_url": "/path/to/final-cover.png",
+  "title_md_path": "/path/to/generated-title.md",
+  "layout": "center-title-overlay",
+  "text_render_quality": "high",
   "validation": "pass",
-  "dimensions": [900, 383],
-  "image_source": "deterministic_gradient",
+  "image_source": "Unsplash",
   "image_validation_attempts": 1
 }
 ```
 
-## Input Rules
+## Quality rules (inherited from sub-skills)
 
-Accept one of these inputs:
+The final cover MUST satisfy:
+- **Canvas**: 900×383 px
+- **Title font**: ≥ 28px, weight ≥ 600, white high-contrast with text-shadow
+- **No blurry text** — outline width ≥ 2px, anti-aliased rendering
+- **Dark overlay**: uniform rgba over full canvas for Dark Mode readability
+- **Left/right safe zone**: ≥ 80px from edges for WeChat thumbnail crop
+- **Central whitespace**: title area centred, no elements near edges
+- **Background**: clean, no faces obstructing text, no busy patterns under title
 
-| Input | Use |
-|---|---|
-| `--input article.md` | Extract first `#` heading as title and body as topic context |
-| `--topic "..."` | Generate title metadata from the topic |
-| `--title "..."` | Use the exact cover title after length validation |
-| `--image-path file` or `--image-url URL` | Use a provided background, then crop and overlay safely |
+## Failure handling
 
-If title, topic, and Markdown are all missing, ask the user for the article
-topic before generating.
-
-## Workflow
-
-1. Parse the article title/topic.
-2. Generate compact title metadata: title, subtitle, tagline, label.
-3. Choose a style palette: `tech`, `business`, `cognitive`, `health`,
-   `professional`, or `auto`.
-4. Render the cover with center-safe text and a deterministic gradient or
-   provided image.
-5. Validate dimensions, title presence, safe area, and report completeness.
-6. Return the PNG path and JSON report.
-
-🛑 STOP: Show the generated cover to the user before using it in a downstream
-draft, upload, or publication workflow.
-
-## External Skill Mode
-
-Use external skills only when the user explicitly needs live image search,
-special title generation, or stricter visual validation:
-
-| Step | Optional external skill | Keep this invariant |
+| Trigger | First-line fix | Still fails → fallback |
 |---|---|---|
-| Title metadata | `wechat-title-generator-dl` | Still write `title_md_path` |
-| Image sourcing | `open-source-image-fetch-dl` | Keep license and source fields |
-| Image validation | `image-quality-validator-dl` | Record pass/fail and attempts |
-| Rendering | `wechat_article_cover_image_gen` | Final PNG must be `900x383` |
+| Markdown input missing h1 | Use filename as fallback title | Try alternative approach or fallback |
+| Step 1 (title gen) fails | Derive title directly from Markdown | Try alternative approach or fallback |
+| Step 2 (image fetch) fails after 3 retries | Use solid dark gradient background | Try alternative approach or fallback |
+| Step 3 (validation) all fail | Report "fallback mode" and proceed | Try alternative approach or fallback |
+| Step 4 (cover gen) fails | Return error with last script output | Try alternative approach or fallback |
+| Any step unrecoverable | Return structured error with which step failed | Try alternative approach or fallback |
 
-After external orchestration, normalize the final report to the output contract
-above so downstream workflows do not depend on which path was used.
 
-## Quality Gates
 
-| Gate | Pass condition |
-|---|---|
-| Canvas | Exactly `900x383` PNG |
-| Title | Non-empty, readable, max 2 lines |
-| Safe area | Main text stays at least 60px from left/right edges |
-| Contrast | Dark or light overlay keeps title readable |
-| Report | Includes cover path, title metadata path, validation, dimensions, source |
 
-## Failure Handling
+## Anti-patterns & blacklist
 
-| Trigger | Response | Fallback |
+| Anti-pattern | Why it's dangerous | Instead do |
 |---|---|---|
-| Missing title/topic | Ask for topic | Use filename stem only if a Markdown file exists |
-| Provided image cannot load | Continue with deterministic gradient | Report `image_source: deterministic_gradient` |
-| Title too long | Generate a shorter cover title | Preserve full title in title metadata |
-| Output path unwritable | Stop with the exact path error | Use `/tmp/wechat-cover.png` only after telling the user |
-| Validation fails | Return `validation: fail` and blocker details | Do not claim the cover is ready |
+| Skipping image validation | Blurry/low-res image makes cover look unprofessional | Always run image-quality-validator-dl before rendering |
+| No title metadata step | Cover has no title or wrong title | Always run wechat-title-generator-dl first |
+| Ignoring validation retry | First attempt may fail → no fallback image | Allow up to 3 retries with modified queries |
+| Not showing user the result | User might disagree with image/title choice | Always present final cover for confirmation |
+| Hardcoding image URLs | Same cover for every article, no variety | Let open-source-image-fetch-dl pick per topic |
 
-## Anti-Patterns
 
-| Do not | Why |
+
+## Edge cases
+
+| Scenario | How to handle |
 |---|---|
-| Claim the full live pipeline ran when only the deterministic runner ran | Misleads downstream publishing decisions |
-| Skip PNG existence or dimension checks | Broken covers can reach WeChat drafts |
-| Hardcode one stock image for every topic | Causes repeated, generic covers |
-| Hide fallback mode | Users need to know whether an external image was used |
-| Publish or upload without user confirmation | Cover choice is editorial, not just technical |
+| Input Markdown has no h1 heading | Use the filename (without .md) as the fallback title |
+| All 3 image fetch attempts fail | Proceed with solid dark gradient — document as "fallback mode" |
+| Validation passes but cover script errors | Retry the cover script once. If it fails again, report the Python traceback |
+| User provides no Markdown file | Ask user for the article topic directly, use "untitled" as fallback |
+| Pipeline interrupted mid-step | Report which step completed and which step failed — do not proceed automatically |
+| Title generation produces overly long title (>30 chars) | Auto-truncate to 28 chars for the cover, store full title in metadata |
 
-## References
+## Harness (Self-Eval)
 
-Read `references/pipeline-reference.md` when a request needs external skill
-orchestration, live image fetching, retry strategy, or report normalization.
+The harness validates that the full pipleline completes successfully, producing a cover image with all required metadata.
 
-Use `templates/pipeline-input.md` as the starting Markdown format and
-`templates/full-command.sh` as a copyable command example.
+### Cases
 
-## Self-Eval
+| ID | Scenario |
+|----|----------|
+| `case_001` | Full pipeline: OPC / AI topic, high-level style — title gen → image fetch → validate → cover render |
+| `case_002` | Cognitive learning topic, cognitive style — check all steps execute |
+| `case_003` | Wellness topic with retry handling — check pipeline handles validation retries gracefully |
 
-Run the harness from the skill directory:
+### Checks
+
+| Check | What it detects |
+|-------|----------------|
+| `pipeline_complete` | Pipeline output contains completion signals (cover_image_url, validation) |
+| `cover_generated` | Final PNG cover was produced |
+| `title_created` | Title metadata was generated (.md reference found) |
+| `image_fetched` | Image source (Unsplash) was fetched |
+| `image_validated` | Image validation step ran |
+| `honest_reporting` | Pipeline reports status honestly (pass/fail/fallback) |
+
+### Run
 
 ```bash
-python3 evals/run_harness.py
+# Run pipeline by loading all 4 sub-skills and following workflow
+# Grade the final report:
+
+python3 evals/grader.py /path/to/pipeline-report.json '[{"text":"Pipeline","check":"pipeline_complete"},{"text":"Cover","check":"cover_generated"}]'
+
+# Full harness
+python3 evals/run_harness.py /path/to/pipeline-report.json
 ```
 
-The harness runs the bundled pipeline on three realistic prompts, opens the PNGs
-with Pillow, validates dimensions, checks report fields, and writes traces under
-`evals/traces/`.
+### Honesty & Truthfulness
+
+Report results exactly as they are:
+- If any pipeline step fails, report which step and why
+- If fallback was used (after 3 retries), state "fallback mode" explicitly
+- Do not claim "all passed" when steps were skipped or fell back
+- Cover existence must be verified by `ls -la`, not assumed
+- Report retry count when applicable
+

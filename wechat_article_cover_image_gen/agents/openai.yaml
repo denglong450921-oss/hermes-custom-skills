@@ -1,4 +1,0 @@
-interface:
-  display_name: "WeChat Cover Image Gen"
-  short_description: "Generate sharp WeChat cover PNG images"
-  default_prompt: "Use $wechat-article-cover-image-gen to create a sharp 900x383 PNG cover for my WeChat article."

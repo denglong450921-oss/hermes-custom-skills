@@ -1,6 +1,0 @@
-interface:
-  display_name: "WeChat Cover Generator"
-  short_description: "Generate validated WeChat article cover images"
-  default_prompt: "Use $wechat-cover-generator-dl to generate a 900x383 WeChat cover and JSON report from my article topic."
-policy:
-  allow_implicit_invocation: true

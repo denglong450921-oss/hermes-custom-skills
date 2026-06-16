@@ -1,52 +1,66 @@
 ---
 name: wechat-md-to-article-dl
-description: >
-  Transform Markdown drafts into focused, public-account-ready WeChat articles
-  and audited inline-CSS HTML. Use when the user asks to rewrite, polish,
-  typeset, convert, beautify, style, validate, or prepare Markdown or HTML for a
-  WeChat Official Account article, especially for 公众号文章, copywriting,
-  public-account style, style variations, article tone, titles, openings,
-  mobile readability, magazine-style layouts, technical essays, cognition
-  columns, business analysis, health education, Dark Mode, or WeChat editor
-  compatibility.
+description: Convert Chinese or English Markdown into restrained, premium, mobile-first HTML for WeChat Official Accounts, then audit, automatically repair, and optionally validate it against WeChat's official editor structure API. Use this skill whenever a user asks to format, beautify, typeset, convert, restyle, validate, or prepare Markdown/HTML for a WeChat article, especially when they mention advanced CSS, magazine style, card layout, inline CSS, mobile readability, Dark Mode, editor plugin compatibility, technical articles, cognition essays, business/wealth content, or health education.
+compatibility: Python 3.10+ with markdown, PyYAML, beautifulsoup4, and bleach.
 ---
 
 # Markdown to WeChat Article
 
-Create WeChat-ready articles in two passes:
+Create WeChat-ready HTML whose polish comes from design order: restraint, clarity,
+whitespace, consistency, and hierarchy. Decoration must support comprehension.
 
-1. **Editorial pass:** make the article sharper, more focused, and better matched
-   to a public-account style profile.
-2. **Production pass:** convert the final Markdown to restrained, mobile-first
-   inline-CSS HTML and audit it against WeChat constraints.
+## Default workflow
 
-Do not jump straight to HTML when the user asks for "更像公众号文章", "更有风格",
-"更聚焦", "文案更好", or "适合公众阅读". Run the editorial pass first.
+1. Inspect the Markdown structure and frontmatter.
+2. Select a theme from `minimal`, `tech`, `cognition`, `wealth`, or `health`.
+3. Convert Markdown with `scripts/convert.py`.
+4. Read the generated quality report.
+5. Treat any quality dimension below 90 as a failed layout.
+6. Let the converter rerender in strict mode, then inspect the second report.
+7. Run the official structure verifier only when the user explicitly requests it.
+8. **Open** the generated HTML in browser for visual inspection: `open <output-path>`
+9. Return the HTML path, selected theme, five scores, official validation status,
+   automated warnings, and image-related manual review items.
 
-## Quick Workflow
+Do not manually recreate the template when the bundled converter can perform the
+transformation. The script makes output deterministic and keeps future runs consistent.
 
-Generate a writing brief:
+## Quick start
 
 ```bash
-python3 scripts/style_brief.py article.md \
-  --profile auto \
-  --output article.style.json \
-  --md-output article.style.md
+python3 scripts/convert.py article.md \
+  --output article.wechat.html \
+  --theme auto
 ```
 
-Revise the Markdown according to the brief and, when needed, read
-`references/article-style-playbook.md`.
+### Cover image generation
 
-Convert the revised Markdown:
+After converting, generate a social-media-ready cover for the article:
 
 ```bash
-python3 scripts/convert.py article.revised.md \
+python3 scripts/draw_cover.py \
+  --image /tmp/photo.jpg \
+  --title "Article Title" \
+  --subtitle "Subtitle text" \
+  --tagline "Tagline" \
+  --output /path/to/cover.png
+```
+
+See `scripts/draw_cover.py --help` for all options.
+Read `references/image-text-rendering.md` for font selection, centering,
+shadow/outline, and platform-specific pitfalls (macOS STHeiti vs Songti,
+PingFang TTC limitation).
+
+Choose a theme explicitly when the article domain is known:
+
+```bash
+python3 scripts/convert.py article.md \
   --output article.wechat.html \
-  --theme auto \
+  --theme health \
   --quality-threshold 90
 ```
 
-Audit existing HTML:
+Audit existing HTML without converting Markdown:
 
 ```bash
 python3 scripts/audit.py article.wechat.html \
@@ -54,87 +68,88 @@ python3 scripts/audit.py article.wechat.html \
   --threshold 90
 ```
 
-Use `--official-check` only when the user explicitly authorizes sending the
-generated HTML to WeChat's official verifier.
+Explicitly send the final HTML to WeChat's official structure verifier:
 
-## Editorial Pass
+```bash
+python3 scripts/convert.py article.md \
+  --output article.wechat.html \
+  --theme auto \
+  --official-check
+```
 
-Use `scripts/style_brief.py` to choose or force a writing profile:
+`--official-check` transmits the complete generated HTML to
+`mp.weixin.qq.com`. It is opt-in because drafts may contain private or
+unpublished content.
 
-| Profile | Best for | WeChat theme |
-|---|---|---|
-| `explainer` | General public explanation and concept clarification | `minimal` |
-| `opinion` | Cognition columns, trends, contrarian judgments | `cognition` |
-| `story` | Cases, memoirs, founder stories, brand narratives | `minimal` |
-| `framework` | How-to, productivity, learning methods, playbooks | `cognition` |
-| `business` | Strategy, growth, wealth, organization, execution | `wealth` |
-| `technical` | AI, software, architecture, engineering practice | `tech` |
-| `health` | Health, wellness, psychology, sleep, exercise, nutrition | `health` |
-
-For style variation requests, produce 2-3 variants by changing the profile, not
-just the visual theme. Each variant should differ in title logic, opening move,
-section order, tone, and ending.
-
-## Public-Account Writing Standard
-
-Before conversion, make the copy pass these checks:
-
-- One core promise: the reader knows what they gain by finishing.
-- First screen works: title, summary, first paragraph, and first H2 create a
-  ten-second reading path.
-- Opening is specific: question, scene, contrarian judgment, result promise, or
-  misconception correction.
-- Each H2 advances one reader question or argument step.
-- Paragraphs are mobile-friendly: usually 1-3 sentences and one beat each.
-- Key claims have support: example, data, mechanism, contrast, or scene.
-- Tone matches the topic: health is calm, business names risks, technical explains
-  mechanisms, opinion earns its sharpness.
-- Ending gives a checklist, decision rule, next action, or reusable mental model.
-- Remove generic filler, motivational slogans, repeated setup, and AI-like summary
-  phrases.
-
-The converter does not invent claims. If the source lacks evidence, examples, or
-reader value, improve the Markdown first and clearly preserve uncertainty.
-
-## Markdown Enhancements
-
-Use these markers sparingly before conversion:
-
-| Marker | Use |
-|---|---|
-| `==text==` | Core concept or key definition |
-| `^^text^^` | Key judgment or argument |
-| `!!text!!` | Important point without color |
-| `:::problem` | Problem or risk callout |
-| `:::strategy` | Strategy or approach callout |
-| `:::thinking` | Mental model callout |
-| `:::key` | Core insight callout |
-
-Do not highlight more than 10-15% of the prose. Too much emphasis makes the
-article feel promotional and harder to scan.
-
-Supported frontmatter keys include `title`, `author`, `date`, `summary`,
-`description`, `type`, `category`, and `tags`.
-
-## Production Pass
-
-Use `scripts/convert.py` for deterministic HTML generation. Do not recreate the
-template manually when the converter can do the work.
-
-Input contract:
+## Input contract
 
 | Field | Required | Notes |
 |---|---:|---|
 | Markdown path | Yes | UTF-8 `.md` file |
-| `--output` | Yes | WeChat-compatible HTML fragment |
+| Output path | Yes | HTML fragment suitable for WeChat |
 | `--theme` | No | `auto`, `minimal`, `tech`, `cognition`, `wealth`, `health` |
 | `--title` | No | Overrides frontmatter title |
-| `--quality-threshold` | No | Defaults to 90 |
+| `--quality-threshold` | No | Defaults to 90 for every quality dimension |
 | `--report` | No | Defaults to `<output>.report.json` |
-| `--official-check` | No | Opt-in upload to WeChat verifier |
-| `--card-padding` | No | List item padding in px |
+| `--official-check` | No | Opt-in upload to WeChat's official structure verifier |
+| `--official-timeout` | No | Official verifier timeout in seconds; defaults to 15 |
+| `--card-padding` | No | Card padding in px for list items (default: `14`, compact: `6`) |
 
-Output JSON includes:
+## Highlight and callout syntax
+
+Mark key content types with special markers for sophisticated visual emphasis.
+
+### Inline highlights
+
+Wrap text with one of these marker pairs to add bold or coloured emphasis:
+
+| Marker | Purpose | Visual |
+|---|---|---|
+| `==text==` | Core concept, key definition | **Bold + accent colour** |
+| `^^text^^` | Key viewpoint, argument | **Bold + title colour** |
+| `!!text!!` | Emphasis, important point | **Bold** only |
+
+Example:
+```markdown
+The core idea is ==OPC = decision-maker + AI tool chain==.
+^^This changes how individuals approach business.^^
+!!Always validate demand before building a product!!
+```
+
+### Callout blocks
+
+Fence a block with `:::type` / `:::` to get a coloured left-border card:
+
+| Type | Purpose | Border colour |
+|---|---|---|
+| `:::problem` | Problem statement or challenge | Red/muted red |
+| `:::strategy` | Strategy or approach | Green/teal |
+| `:::thinking` | Thinking method or mental model | Blue/purple |
+| `:::key` | Core insight or takeaway | Theme accent |
+
+Optionally add a title on the same line as the `:::` marker:
+
+```markdown
+:::problem 需求验证的陷阱
+很多创业者跳过需求直接做产品。
+而市场的反应往往与预期完全不同。
+:::
+
+:::strategy
+Start with an MVP and test willingness to pay.
+:::
+
+:::thinking 最小可行性思维
+MVP 的关键不是"完整"，而是"能否换取真实支付"。
+:::
+```
+
+Supported frontmatter keys include `title`, `author`, `date`, `summary`,
+`description`, `type`, `category`, and `tags`.
+
+## Output contract
+
+The command prints JSON and writes the same audit data to the report:
 
 ```json
 {
@@ -152,58 +167,119 @@ Output JSON includes:
   },
   "official_validation": {
     "status": "skipped",
-    "reason": "not_requested"
+    "is_valid": null,
+    "reason": "not_requested",
+    "violations": [],
+    "violation_count": 0,
+    "transport": null
   },
   "manual_review": []
 }
 ```
 
-Treat any score below the threshold as not ready.
+## Design rules
 
-## Visual and WeChat Rules
-
-- Use one accent color and a compact neutral palette.
-- Keep body text at 15-16px with 1.75-1.9 line height.
-- Keep article padding at 16-20px and section spacing at 24-36px.
-- Use inline CSS only. Avoid external CSS, `<style>`, scripts, event handlers,
-  classes, IDs, unsafe URL schemes, and layout features WeChat may strip.
-- Do not set `font-family`; preserve the platform default font.
-- Do not use fixed dimensions, zero line height, `text-align:start/end`,
-  fragile positioning, transforms, CSS variables, or `!important`.
-- Do not emit `<pre>`; fenced code must become wrapping `section > code`.
-- Do not rely on `<ol>`, `<ul>`, or `<li>` in the final HTML; the converter
-  normalizes lists into WeChat-stable blocks.
+- Use one accent color and a small neutral palette.
+- Keep body text at 15–16px with 1.75–1.9 line height.
+- Keep article padding at 16–20px and section spacing at 24–36px.
+- Use light borders and restrained radius; avoid loud gradients and heavy shadows.
+- For inline emphasis, always prefer the simplest treatment: bold weight and/or
+  colour changes. Background pills, tinted highlights, and other visual effects
+  add palette complexity and harm Dark Mode stability without improving readability.
+- Emphasize only genuine judgments, not every sentence.
+- Prefer structural modules: conclusion, problem, comparison, framework, checklist,
+  resources, and synthesis.
+- Give the reader a ten-second path through title, summary, key judgment, and sections.
+- Use inline CSS only. Avoid external CSS, `<style>`, scripts, event handlers, layout
+  systems that WeChat may strip, and unsafe URL schemes.
+- Do not set `font-family`; preserve the platform's default font.
+- Do not use fixed `width` or `height`, zero line height, `text-align:start/end`,
+  `position:absolute/fixed`, transforms, or `!important`.
+- Render fenced code as a wrapping `section > code` block, not `<pre>`.
+- **Do NOT use `<ol>`, `<ul>`, or `<li>` — WeChat breaks them all.**
+  The converter auto-replaces every list with insight-style span
+  blocks: bold+italic text in `#3B3B98` (deep cognitive blue) with an
+  accent-colored marker. Last item has `margin-bottom:18px`; others
+  have `14px`. No flex, no borders, no card backgrounds.
 - Keep same-tag nesting at 15 levels or fewer.
-- Treat images containing text, transparent images, and text over background
-  images as manual light/dark review items.
+- Favor solid container backgrounds and moderate contrast for Dark Mode. Decorative
+- Keep shared backgrounds on a structural container rather than repeating them on
+  each text node.
+- Treat `data-no-dark` as applying only to the marked node. Inline styles on its
+  descendants are still transformed.
+- Use SVG `currentColor` for black or text-like line art that must adapt to Dark Mode.
+- Put images containing text, transparent images, and text over background images
+  through manual light/dark review because HTML inspection cannot prove legibility.
 
-## References
+Read [references/design-system.md](references/design-system.md) when changing themes,
+spacing, typography, cards, or article-type behavior.
+Read [references/wechat-editor-plugin-spec.md](references/wechat-editor-plugin-spec.md)
+when changing tags, CSS compatibility checks, Dark Mode behavior, or official validation.
+Read [references/wechat-highlighting-strategy.md](references/wechat-highlighting-strategy.md)
+for the full WeChat CSS compatibility table and highlight technique guide — consult
+when tuning emphasis styles or debugging highlight rendering in WeChat.
 
-- Read `references/article-style-playbook.md` when rewriting copy, creating
-  style variations, title/opening variants, or public-account voice guidance.
-- Read `references/design-system.md` when changing themes, spacing, typography,
-  cards, or article-type behavior.
-- Read `references/wechat-editor-plugin-spec.md` when changing tags, CSS
-  compatibility checks, Dark Mode behavior, or official validation.
-- Read `references/wechat-highlighting-strategy.md` when tuning emphasis styles
-  or debugging highlight rendering.
-- Read `references/image-text-rendering.md` before changing cover image text
-  rendering.
+## Theme selection
 
-## Failure Handling
+| Theme | Best for | Visual direction |
+|---|---|---|
+| `minimal` | General and mixed topics | White, graphite, quiet gray |
+| `tech` | AI, software, architecture | Deep blue-gray with cool blue accent |
+| `cognition` | Essays, learning, self-development | Warm paper, ink, muted brown |
+| `wealth` | Business, finance, strategy | Ivory, deep green, restrained gold |
+| `health` | Health education and wellness | Soft green-gray, calm blue-green |
+
+With `--theme auto`, the converter uses frontmatter first and article vocabulary second.
+If the signal is ambiguous, use `minimal`.
+
+## Source structure guidance
+
+The converter does not invent claims. Improve the ten-second reading path by providing:
+
+```markdown
+---
+title: Article title
+summary: One sentence explaining the reader value
+type: tech
+---
+
+> The single most important judgment.
+
+## First major question
+
+...
+```
+
+When at least two level-two headings exist, the converter creates a restrained section
+map from their labels. It does not fabricate an executive summary.
+
+## Quality gate
+
+The audit produces five scores:
+
+1. `visual_hierarchy`: title, heading, body, and spacing hierarchy.
+2. `readability`: mobile font size, line height, width, paragraph rhythm, and contrast.
+3. `restraint`: controlled colors, borders, radius, shadows, and emphasis.
+4. `consistency`: repeated elements share the same visual language.
+5. `wechat_compatibility`: inline CSS, safe tags and URLs, official editor constraints,
+   Dark Mode safety, adaptive SVG, scoped opt-outs, and no fragile features.
+
+Every score must meet the threshold. A low score means the output is not ready merely
+because it looks plausible in a desktop browser.
+
+## Failure handling
 
 | Failure | Response |
 |---|---|
 | Missing dependency | Report the exact package; do not silently use a weaker parser |
-| Invalid or empty Markdown | Stop with structured JSON and nonzero exit code |
-| Weak article focus | Generate style brief and revise Markdown before conversion |
+| Invalid or empty Markdown | Stop with structured JSON and a nonzero exit code |
 | Unsafe raw HTML | Strip unsafe tags, event attributes, classes, IDs, and URL schemes |
-| First audit below threshold | Rerender in strict mode, then inspect the second report |
+| First audit below threshold | Rerender using strict mode and audit again |
 | Second audit below threshold | Return `blocked` with failed dimensions and report path |
-| Official verifier rejects HTML | Return `blocked` with `invalid_info`; repair locally and retry only if authorized |
+| Official verifier rejects HTML | Return `blocked` with `invalid_info`; repair locally and retry |
 | Official verifier unavailable | Return `blocked` with status `error`; keep the local report |
-| Image uncertainty | Keep automated score and add a `manual_review` item |
-| Unknown theme or profile | Stop and list supported values |
+| Image or background-image uncertainty | Keep the automated score and add a `manual_review` item |
+| Unknown theme | Stop and list supported themes |
 
 ## Verification
 
@@ -211,24 +287,24 @@ Run:
 
 ```bash
 python3 -m unittest discover -s tests
-python3 scripts/style_brief.py evals/files/cognition.md \
-  --output /tmp/cognition.style.json \
-  --md-output /tmp/cognition.style.md
 python3 scripts/convert.py evals/files/technical.md \
   --output /tmp/technical.wechat.html \
   --theme tech
 python3 scripts/audit.py /tmp/technical.wechat.html \
   --report /tmp/technical.audit.json
+python3 scripts/audit.py /tmp/technical.wechat.html \
+  --report /tmp/technical.official.json \
+  --official-check
 ```
 
 Before claiming completion, confirm:
 
-- the style brief has a profile, reader promise, title options, outline, and
-  quality findings;
-- all converter scores are at least 90;
-- no `<style>`, `<script>`, `class`, `id`, event attributes, `font-family`,
-  fixed dimensions, `<pre>`, transforms, or `!important` remain;
-- headings, lists, blockquotes, code, tables, images, and links are preserved;
-- manual image review is completed when images are present;
-- official verification passes only when the user authorized `--official-check`;
+- all five scores are at least 90;
+- no `<style>`, `<script>`, `class`, `id`, or event attributes remain;
+- no `font-family`, `<pre>`, fixed dimensions, zero line height, fragile positioning,
+  transforms, or `!important` remain;
+- dangerous links and embedded raw HTML were removed;
+- the output preserves headings, lists, blockquotes, code, tables, images, and links;
+- `manual_review` has been completed when images or background images are present;
+- the official verifier passes when the user authorized `--official-check`;
 - the result remains readable at a narrow mobile width.

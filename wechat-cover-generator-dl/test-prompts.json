@@ -11,7 +11,7 @@
   },
   {
     "id": 3,
-    "prompt": "生成一张关于健康冥想主题的公众号封面，风格 professional，并在报告里说明图片来源和验证状态",
-    "expected": "Cover PNG + pipeline report with image source, attempt count, final validation status"
+    "prompt": "生成一篇关于健康冥想主题的公众号封面，风格 professional。如果图片验证不通过要自动重试",
+    "expected": "Cover PNG + pipeline report with retry count, final validation status"
   }
 ]

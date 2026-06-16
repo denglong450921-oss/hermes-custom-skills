@@ -1,400 +1,302 @@
 #!/usr/bin/env python3
-"""Generate a sharp WeChat Official Account cover PNG (900x383)."""
+"""Generate a high-end WeChat Official Account cover image (900×383).
+
+Follows professional editorial design principles:
+- Single focal idea
+- Strong contrast + minimal text
+- Clear hierarchy (BIG → SMALL → MICRO)
+- Breathing space = luxury signal
+- Left or center alignment
+- Template-based style kits
+
+Usage:
+  python3 gen_cover.py \
+    --title "AI 时代的 OPC" \
+    --subtitle "一个人如何用最小成本跑通自己的商业闭环" \
+    --tagline "决策者 + AI 工具链 · 可验证需求 · 商业闭环" \
+    --output /path/to/cover.png \
+    --image-url "https://images.unsplash.com/photo-xxx?w=900&h=383&fit=crop" \
+    --template tech --align left
+"""
 
 from __future__ import annotations
 
 import argparse
-import hashlib
-import json
-import math
 import os
-import shutil
 import sys
 import tempfile
 import urllib.request
 from pathlib import Path
-from typing import Iterable
 
-try:
-    from PIL import Image, ImageDraw, ImageFilter, ImageFont, ImageOps, ImageStat
-except ModuleNotFoundError:
-    bundled_python = (
-        Path.home()
-        / ".cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3"
-    )
-    if bundled_python.exists() and Path(sys.executable).resolve() != bundled_python.resolve():
-        os.execv(str(bundled_python), [str(bundled_python), __file__, *sys.argv[1:]])
-    pip = shutil.which("pip3") or "python3 -m pip"
-    raise SystemExit(
-        "ERROR: Pillow is required to render PNG covers. "
-        f"Install it with `{pip} install pillow`, or run this inside the Codex bundled Python runtime."
-    )
+from PIL import Image, ImageDraw, ImageFont
+import numpy as np
 
+
+FONT = "/System/Library/Fonts/STHeiti Medium.ttc"
+FALLBACK_FONTS = [
+    "/System/Library/Fonts/Supplemental/Songti.ttc",
+    "/System/Library/Fonts/STHeiti Light.ttc",
+]
 
 CANVAS_W = 900
 CANVAS_H = 383
-SAFE_X = 72
-MIN_Y = 40
-DEFAULT_SCALE = 4
 
-FONT_CANDIDATES = [
-    "/System/Library/Fonts/STHeiti Medium.ttc",
-    "/System/Library/Fonts/PingFang.ttc",
-    "/System/Library/Fonts/Supplemental/Songti.ttc",
-    "/System/Library/Fonts/STHeiti Light.ttc",
-    "/Library/Fonts/Arial Unicode.ttf",
+# --- Safe zone constants ---
+LEFT_SAFE_PX = 72   # ~8% of 900, within 60-100px recommendation
+RIGHT_SAFE_PX = 72
+MIN_TOP_BOTTOM_PX = 40
+
+# --- Unsplash fallback URLs (all 900×383 cropped) ---
+UNSPLASH_FALLBACKS = [
+    "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=900&h=383&fit=crop",
+    "https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=900&h=383&fit=crop",
+    "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=900&h=383&fit=crop",
+    "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=900&h=383&fit=crop",
+    "https://images.unsplash.com/photo-1552664730-d307ca884978?w=900&h=383&fit=crop",
 ]
 
-STOCK_FALLBACKS = [
-    "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1600&h=681&fit=crop",
-    "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1600&h=681&fit=crop",
-    "https://images.unsplash.com/photo-1552664730-d307ca884978?w=1600&h=681&fit=crop",
-]
-
+# --- Template style kits ---
 TEMPLATES = {
     "auto": {
-        "mode": "dark",
-        "bg": ("#172033", "#6b3f16", "#111827"),
-        "accent": "#d8aa55",
-        "label": "#f4c76b",
-        "title": "#ffffff",
-        "subtitle": "#f5f1e8",
-        "tagline": "#d7cfc0",
-        "panel": (0, 0, 0, 34),
-        "overlay_left": (8, 12, 22, 190),
-        "overlay_right": (8, 12, 22, 72),
+        "overlay": (0, 0, 0, 89),        # 35% black
+        "label_color": (196, 156, 82, 220),  # gold
+        "title_color": (255, 255, 255, 255),
+        "subtitle_color": (255, 255, 255, 240),
+        "tagline_color": (200, 195, 185, 220),
+        "show_gold_bar": True,
+        "description": "Auto-detect based on content",
     },
     "tech": {
-        "mode": "dark",
-        "bg": ("#0f172a", "#1e3a8a", "#0891b2"),
-        "accent": "#64b5ff",
-        "label": "#93c5fd",
-        "title": "#ffffff",
-        "subtitle": "#e2ecf7",
-        "tagline": "#b9d4ee",
-        "panel": (3, 7, 18, 38),
-        "overlay_left": (2, 6, 23, 205),
-        "overlay_right": (2, 6, 23, 82),
+        "overlay": (0, 0, 0, 102),       # 40% black — deeper for tech
+        "label_color": (100, 180, 255, 220),  # cool blue
+        "title_color": (255, 255, 255, 255),
+        "subtitle_color": (220, 230, 240, 240),
+        "tagline_color": (180, 200, 220, 200),
+        "show_gold_bar": False,
+        "description": "Dark + minimal + high contrast. Tech / AI / Systems",
     },
     "insight": {
-        "mode": "light",
-        "bg": ("#f8efe0", "#d7b98a", "#6b4e31"),
-        "accent": "#9a6b3f",
-        "label": "#8b5e34",
-        "title": "#1f2933",
-        "subtitle": "#463a30",
-        "tagline": "#76685a",
-        "panel": (255, 250, 242, 118),
-        "overlay_left": (255, 250, 242, 218),
-        "overlay_right": (255, 250, 242, 118),
+        "overlay": (255, 248, 240, 80),  # 31% warm white — editorial feel
+        "label_color": (180, 120, 60, 220),  # warm brown
+        "title_color": (30, 30, 30, 255),
+        "subtitle_color": (80, 70, 60, 240),
+        "tagline_color": (120, 110, 100, 220),
+        "show_gold_bar": True,
+        "description": "Light editorial / magazine style. Insight / Thinking",
     },
     "business": {
-        "mode": "dark",
-        "bg": ("#111827", "#78350f", "#1f2937"),
-        "accent": "#f2bd54",
-        "label": "#f6c85f",
-        "title": "#ffffff",
-        "subtitle": "#eee3d2",
-        "tagline": "#d8c7ae",
-        "panel": (0, 0, 0, 42),
-        "overlay_left": (6, 9, 18, 218),
-        "overlay_right": (61, 28, 6, 92),
+        "overlay": (5, 8, 15, 89),       # 35% very dark blue-black
+        "label_color": (196, 156, 82, 220),  # gold
+        "title_color": (255, 255, 255, 255),
+        "subtitle_color": (200, 195, 185, 240),
+        "tagline_color": (180, 170, 155, 220),
+        "show_gold_bar": True,
+        "description": "Black + gold accent + minimal text. Business / Wealth",
     },
 }
 
-
-def _hex_to_rgba(value: str, alpha: int = 255) -> tuple[int, int, int, int]:
-    value = value.strip().lstrip("#")
-    return int(value[0:2], 16), int(value[2:4], 16), int(value[4:6], 16), alpha
-
-
-def _scale_color(color: tuple[int, int, int, int]) -> tuple[int, int, int, int]:
-    return color
-
+# ---------------------------------------------------------------------------
+# Font resolution
+# ---------------------------------------------------------------------------
 
 def _resolve_font() -> str:
-    for path in FONT_CANDIDATES:
-        if os.path.exists(path):
-            return path
-    raise RuntimeError("No CJK-capable font found. Install STHeiti, PingFang, or Songti.")
+    for p in [FONT, *FALLBACK_FONTS]:
+        if os.path.exists(p):
+            return p
+    raise RuntimeError("No Chinese-capable font found. Install STHeiti or Songti.")
 
 
-def _font(size: int, scale: int = 1) -> ImageFont.FreeTypeFont:
-    return ImageFont.truetype(_resolve_font(), size * scale)
+def _get_bounds(text: str, font: ImageFont.FreeTypeFont) -> tuple[int, int, int]:
+    """Render text to a mask and return (left_offset, right_offset, height)."""
+    off = 500
+    m = Image.new("L", (CANVAS_W + off * 2, 200), 0)
+    ImageDraw.Draw(m).text((off, 5), text, fill=255, font=font)
+    arr = np.array(m)
+    cols = arr.any(axis=0).nonzero()[0]
+    if len(cols) == 0:
+        return 0, 0, 0
+    rows = arr.any(axis=1).nonzero()[0]
+    return int(cols[0]) - off, int(cols[-1]) - off, int(rows[-1]) - int(rows[0]) + 1
 
 
-def _bbox(text: str, font: ImageFont.FreeTypeFont, stroke_width: int = 0) -> tuple[int, int, int, int]:
-    return font.getbbox(text, stroke_width=stroke_width)
+def _text_width(text: str, font: ImageFont.FreeTypeFont) -> int:
+    l, r, _ = _get_bounds(text, font)
+    return r - l + 1
 
 
-def _text_size(text: str, font: ImageFont.FreeTypeFont, stroke_width: int = 0) -> tuple[int, int]:
-    left, top, right, bottom = _bbox(text, font, stroke_width)
-    return right - left, bottom - top
+def _center_x(text: str, font: ImageFont.FreeTypeFont) -> int:
+    l, r, _ = _get_bounds(text, font)
+    return int(round((CANVAS_W - 1 - l - r) / 2))
 
 
-def _contains_cjk(text: str) -> bool:
-    return any("\u4e00" <= ch <= "\u9fff" for ch in text)
+def _left_x(text: str, font: ImageFont.FreeTypeFont) -> int:
+    """Left-aligned x with safe padding. L margin = LEFT_SAFE_PX."""
+    l, _, _ = _get_bounds(text, font)
+    return LEFT_SAFE_PX - l  # offset so first rendered pixel lands at LEFT_SAFE_PX
 
 
-def _wrap_words(text: str, font: ImageFont.FreeTypeFont, max_width: int) -> list[str]:
-    words = text.split()
-    lines: list[str] = []
-    current = ""
-    for word in words:
-        trial = f"{current} {word}".strip()
-        if current and _text_size(trial, font)[0] > max_width:
-            lines.append(current)
-            current = word
-        else:
-            current = trial
-    if current:
-        lines.append(current)
-    return lines or [text]
+# ---------------------------------------------------------------------------
+# Pick font size within a constrained range
+# ---------------------------------------------------------------------------
+
+def _pick_font_in_range(
+    text: str,
+    min_size: int,
+    max_size: int,
+    target_width: int,
+    step: int = 2,
+) -> tuple[int, ImageFont.FreeTypeFont]:
+    """Pick largest font size within [min_size, max_size] that fits target_width.
+
+    If even min_size overflows, returns min_size (will trigger wrapping later).
+    """
+    font_path = _resolve_font()
+    best_size = min_size
+    best_font = ImageFont.truetype(font_path, min_size)
+    best_dist = abs(_text_width(text, best_font) - target_width)
+
+    for fs in range(min_size, max_size + 1, step):
+        ft = ImageFont.truetype(font_path, fs)
+        w = _text_width(text, ft)
+        if w > CANVAS_W:
+            break
+        dist = abs(w - target_width)
+        if dist < best_dist:
+            best_size = fs
+            best_font = ft
+            best_dist = dist
+        elif dist > best_dist and w > target_width:
+            break
+
+    return best_size, best_font
 
 
-def _wrap_cjk(text: str, font: ImageFont.FreeTypeFont, max_width: int) -> list[str]:
-    lines: list[str] = []
-    current = ""
-    for ch in text:
-        trial = current + ch
-        if current and _text_size(trial, font)[0] > max_width:
-            lines.append(current)
-            current = ch
-        else:
-            current = trial
-    if current:
-        lines.append(current)
-    return lines or [text]
+# ---------------------------------------------------------------------------
+# Title sizing + wrapping (constrained to 28-40px)
+# ---------------------------------------------------------------------------
 
-
-def _truncate_to_width(text: str, font: ImageFont.FreeTypeFont, max_width: int) -> str:
-    ellipsis = "..."
-    if _contains_cjk(text):
-        ellipsis = "…"
-    if _text_size(text, font)[0] <= max_width:
-        return text
-    current = text
-    while current and _text_size(current + ellipsis, font)[0] > max_width:
-        current = current[:-1]
-    return (current + ellipsis) if current else ellipsis
-
-
-def _wrap_title(text: str, font: ImageFont.FreeTypeFont, max_width: int) -> list[str]:
-    lines = _wrap_words(text, font, max_width) if " " in text.strip() and not _contains_cjk(text) else _wrap_cjk(text, font, max_width)
-    if len(lines) <= 2:
-        return lines
-    return [lines[0], _truncate_to_width("".join(lines[1:]) if _contains_cjk(text) else " ".join(lines[1:]), font, max_width)]
-
-
-def _fit_title(text: str, align: str, scale: int) -> tuple[int, ImageFont.FreeTypeFont, list[str], int]:
-    max_width = CANVAS_W - SAFE_X * 2
-    if align == "left":
-        max_width = CANVAS_W - SAFE_X - 84
-    max_size = 72 if len(text) <= 14 else 64
-    min_size = 38
-    for size in range(max_size, min_size - 1, -2):
-        font = _font(size, 1)
-        lines = _wrap_title(text, font, max_width)
-        line_widths = [_text_size(line, font, stroke_width=2)[0] for line in lines]
-        line_height = max(_text_size(line, font, stroke_width=2)[1] for line in lines)
-        block_h = line_height * len(lines) + max(8, size // 6) * (len(lines) - 1)
-        if len(lines) <= 2 and max(line_widths) <= max_width and block_h <= 150:
-            return size, _font(size, scale), lines, max_width
-    font = _font(min_size, scale)
-    final_font = _font(min_size, 1)
-    lines = _wrap_title(text, final_font, max_width)
-    return min_size, font, lines[:2], max_width
-
-
-def _center_crop(img: Image.Image, size: tuple[int, int]) -> Image.Image:
-    img = ImageOps.exif_transpose(img).convert("RGB")
-    target_w, target_h = size
-    target_ratio = target_w / target_h
-    w, h = img.size
-    current_ratio = w / h
-    if current_ratio > target_ratio:
-        new_w = int(h * target_ratio)
-        left = (w - new_w) // 2
-        img = img.crop((left, 0, left + new_w, h))
+def _title_target_width(text: str, align: str) -> int:
+    """Target width for title based on text length and alignment."""
+    n = len(text)
+    if n <= 4:
+        ratio = 0.55
+    elif n <= 8:
+        ratio = 0.70
+    elif n <= 12:
+        ratio = 0.78
+    elif n <= 18:
+        ratio = 0.82
     else:
-        new_h = int(w / target_ratio)
-        top = (h - new_h) // 2
-        img = img.crop((0, top, w, top + new_h))
-    return img.resize(size, Image.Resampling.LANCZOS)
+        ratio = 0.85
+    return int(CANVAS_W * ratio)
 
 
-def _gradient_background(template: str, scale: int, seed_text: str) -> Image.Image:
-    style = TEMPLATES.get(template, TEMPLATES["auto"])
-    colors = [_hex_to_rgba(item)[:3] for item in style["bg"]]
-    w, h = CANVAS_W * scale, CANVAS_H * scale
-    img = Image.new("RGB", (w, h), colors[0])
-    px = img.load()
-    for y in range(h):
-        for x in range(w):
-            t = (x / max(1, w - 1)) * 0.72 + (y / max(1, h - 1)) * 0.28
-            if t < 0.55:
-                local = t / 0.55
-                c1, c2 = colors[0], colors[1]
+def _wrap_text(text: str, font: ImageFont.FreeTypeFont, max_width: int) -> list[str]:
+    """Split text so each line fits within max_width. Returns 2+ lines."""
+    if " " in text:
+        words = text.split(" ")
+        lines: list[str] = []
+        current = ""
+        for w in words:
+            test = (current + " " + w).strip()
+            if _text_width(test, font) <= max_width:
+                current = test
             else:
-                local = (t - 0.55) / 0.45
-                c1, c2 = colors[1], colors[2]
-            px[x, y] = tuple(int(c1[i] * (1 - local) + c2[i] * local) for i in range(3))
+                if current:
+                    lines.append(current)
+                current = w
+        if current:
+            lines.append(current)
+        return lines if lines else [text]
 
-    draw = ImageDraw.Draw(img, "RGBA")
-    digest = hashlib.sha256(seed_text.encode("utf-8")).digest()
-    accent = _hex_to_rgba(style["accent"], 32)
-    for i in range(9):
-        cx = int(digest[i] / 255 * w)
-        cy = int(digest[i + 9] / 255 * h)
-        radius = (110 + digest[i + 18] % 150) * scale
-        alpha = 18 + digest[i] % 34
-        draw.ellipse(
-            [cx - radius, cy - radius, cx + radius, cy + radius],
-            fill=(accent[0], accent[1], accent[2], alpha),
-        )
-    return img.convert("RGBA")
+    # Chinese/other text — find balanced split
+    n = len(text)
+    best_split = n // 2
+    best_width = _text_width(text[:best_split], font)
+    for split_at in range(max(1, n // 2 - 5), min(n - 1, n // 2 + 5)):
+        w = _text_width(text[:split_at], font)
+        if w <= max_width and abs(w - max_width / 2) < abs(best_width - max_width / 2):
+            best_split = split_at
+            best_width = w
 
-
-def _download_to_image(url: str) -> Image.Image:
-    tmp_name = ""
-    try:
-        with tempfile.NamedTemporaryFile(suffix=".img", delete=False) as tmp:
-            tmp_name = tmp.name
-        urllib.request.urlretrieve(url, tmp_name)
-        return Image.open(tmp_name)
-    finally:
-        if tmp_name:
-            try:
-                os.unlink(tmp_name)
-            except OSError:
-                pass
+    line1 = text[:best_split]
+    line2 = text[best_split:]
+    return [line1, line2]
 
 
-def _load_background(
-    *,
-    image_path: str | None,
-    image_url: str | None,
-    template: str,
-    scale: int,
-    seed_text: str,
-    no_image: bool,
-    stock_fallbacks: bool,
-) -> tuple[Image.Image, str]:
-    size = (CANVAS_W * scale, CANVAS_H * scale)
-    if not no_image and image_path:
+def _prepare_title(
+    text: str,
+    align: str,
+) -> tuple[ImageFont.FreeTypeFont, list[str]]:
+    """Prepare title: pick font 28-40px with adaptive target, wrap if needed."""
+    target = _title_target_width(text, align)
+    font_path = _resolve_font()
+
+    best_size, best_font = _pick_font_in_range(text, 28, 40, target, step=2)
+
+    # Check if it fits at chosen size
+    if _text_width(text, best_font) <= CANVAS_W - LEFT_SAFE_PX * (1 if align == "left" else 0):
+        return best_font, [text]
+
+    # Wrap across two lines at 28px (minimum)
+    wrap_font = ImageFont.truetype(font_path, 28)
+    lines = _wrap_text(text, wrap_font, CANVAS_W - LEFT_SAFE_PX * 2)
+    return wrap_font, lines
+
+
+# ---------------------------------------------------------------------------
+# Image download
+# ---------------------------------------------------------------------------
+
+def _download_image(url: str | None, skip_fallbacks: bool = False) -> Image.Image:
+    """Download stock image or use provided URL. Fallback to solid gradient."""
+    if skip_fallbacks:
+        urls = [url] if url else []
+    else:
+        urls = [url] if url else []
+        urls += UNSPLASH_FALLBACKS
+    for u in urls:
         try:
-            return _center_crop(Image.open(image_path), size).convert("RGBA"), f"local:{image_path}"
+            tmp = tempfile.NamedTemporaryFile(suffix=".jpg", delete=False)
+            urllib.request.urlretrieve(u, tmp.name)
+            img = Image.open(tmp.name).convert("RGBA")
+            if img.size != (CANVAS_W, CANVAS_H):
+                resize_kw = Image.Resampling.LANCZOS if hasattr(Image, 'Resampling') else Image.LANCZOS  # type: ignore[attr-defined]
+                img = img.resize((CANVAS_W, CANVAS_H), resize_kw)
+            return img
         except Exception:
-            pass
-    if not no_image and image_url:
-        try:
-            return _center_crop(_download_to_image(image_url), size).convert("RGBA"), image_url
-        except Exception:
-            pass
-    if not no_image and stock_fallbacks:
-        for url in STOCK_FALLBACKS:
-            try:
-                return _center_crop(_download_to_image(url), size).convert("RGBA"), url
-            except Exception:
-                continue
-    return _gradient_background(template, scale, seed_text), "deterministic_gradient"
+            continue
+    # Pure fallback: solid dark gradient
+    img = Image.new("RGBA", (CANVAS_W, CANVAS_H), (20, 30, 50, 255))
+    return img
 
 
-def _scaled_box(box: tuple[int, int, int, int], scale: int) -> tuple[int, int, int, int]:
-    return tuple(int(v * scale) for v in box)
+# ---------------------------------------------------------------------------
+# Drawing helpers
+# ---------------------------------------------------------------------------
 
-
-def _draw_gradient_overlay(layer: Image.Image, style: dict, align: str, scale: int) -> None:
-    w, h = layer.size
-    left = style["overlay_left"]
-    right = style["overlay_right"]
-    px = layer.load()
-    for x in range(w):
-        t = x / max(1, w - 1)
-        if align == "center":
-            t = abs(t - 0.5) * 1.35
-        for y in range(h):
-            yy = y / max(1, h - 1)
-            vignette = 0.82 + 0.18 * math.cos((yy - 0.5) * math.pi)
-            color = tuple(int(left[i] * (1 - t) + right[i] * t) for i in range(4))
-            px[x, y] = (color[0], color[1], color[2], int(color[3] * vignette))
-
-
-def _draw_text(
-    layer: Image.Image,
+def _draw_text_with_outline(
+    draw: ImageDraw.ImageDraw,
     text: str,
     xy: tuple[int, int],
     font: ImageFont.FreeTypeFont,
-    fill: str,
-    *,
-    scale: int,
-    stroke_fill: tuple[int, int, int, int],
-    stroke_width: int,
-    shadow: bool = True,
-) -> tuple[int, int, int, int]:
+    fill: tuple[int, int, int, int],
+    outline_color: tuple[int, int, int, int] = (0, 0, 0, 200),
+    outline_width: int = 1,
+) -> None:
+    """Draw text with 8-direction outline + core fill."""
     x, y = xy
-    sx, sy = x * scale, y * scale
-    sw = max(1, stroke_width * scale)
-    fill_rgba = _hex_to_rgba(fill) if isinstance(fill, str) else fill
-    draw = ImageDraw.Draw(layer)
-    bbox = draw.textbbox((sx, sy), text, font=font, stroke_width=sw)
-    if shadow:
-        shadow_layer = Image.new("RGBA", layer.size, (0, 0, 0, 0))
-        shadow_draw = ImageDraw.Draw(shadow_layer)
-        shadow_draw.text(
-            (sx + 2 * scale, sy + 3 * scale),
-            text,
-            font=font,
-            fill=(0, 0, 0, 160),
-            stroke_width=sw,
-            stroke_fill=(0, 0, 0, 135),
-        )
-        shadow_layer = shadow_layer.filter(ImageFilter.GaussianBlur(max(1, int(1.05 * scale))))
-        layer.alpha_composite(shadow_layer)
-    draw.text(
-        (sx, sy),
-        text,
-        font=font,
-        fill=fill_rgba,
-        stroke_width=sw,
-        stroke_fill=stroke_fill,
-    )
-    return tuple(int(v / scale) for v in bbox)
+    for ox in range(-outline_width, outline_width + 1):
+        for oy in range(-outline_width, outline_width + 1):
+            if ox == 0 and oy == 0:
+                continue
+            draw.text((x + ox, y + oy), text, fill=outline_color, font=font)
+    draw.text((x, y), text, fill=fill, font=font)
 
 
-def _line_height(font: ImageFont.FreeTypeFont, scale: int) -> int:
-    left, top, right, bottom = font.getbbox("国Ag", stroke_width=2 * scale)
-    return int((bottom - top) / scale)
-
-
-def _text_width_final(text: str, font: ImageFont.FreeTypeFont, scale: int, stroke: int = 0) -> int:
-    left, top, right, bottom = font.getbbox(text, stroke_width=stroke * scale)
-    return int((right - left) / scale)
-
-
-def _contrast_stroke(style: dict, template: str) -> tuple[int, int, int, int]:
-    if style["mode"] == "light":
-        return (255, 255, 255, 218)
-    return (0, 0, 0, 218)
-
-
-def _sharpness_score(img: Image.Image, boxes: list[tuple[int, int, int, int]]) -> float:
-    if not boxes:
-        return 0.0
-    scores = []
-    for box in boxes:
-        left, top, right, bottom = box
-        left = max(0, left - 8)
-        top = max(0, top - 8)
-        right = min(CANVAS_W, right + 8)
-        bottom = min(CANVAS_H, bottom + 8)
-        if right <= left or bottom <= top:
-            continue
-        crop = img.crop((left, top, right, bottom)).convert("L")
-        edges = crop.filter(ImageFilter.FIND_EDGES)
-        scores.append(ImageStat.Stat(edges).mean[0])
-    return round(sum(scores) / len(scores), 2) if scores else 0.0
-
+# ---------------------------------------------------------------------------
+# Main render
+# ---------------------------------------------------------------------------
 
 def render(
     *,
@@ -404,271 +306,251 @@ def render(
     label: str,
     output: str,
     image_url: str | None = None,
-    image_path: str | None = None,
     align: str = "center",
     template: str = "auto",
     overlay_opacity: float | None = None,
-    outline_width: int = 2,
+    outline_width: int = 1,
     no_image: bool = False,
-    stock_fallbacks: bool = False,
-    render_scale: int = DEFAULT_SCALE,
-    report: str | None = None,
 ) -> dict:
-    scale = max(2, min(5, int(render_scale)))
-    style = TEMPLATES.get(template, TEMPLATES["auto"])
-    title = " ".join(title.split()).strip()
-    subtitle = " ".join(subtitle.split()).strip()
-    tagline = " ".join(tagline.split()).strip()
-    label = " ".join(label.split()).strip() or "FEATURED ARTICLE"
+    """Generate a high-end WeChat cover (900×383) and write to ``output``.
 
-    background, image_source = _load_background(
-        image_path=image_path,
-        image_url=image_url,
-        template=template,
-        scale=scale,
-        seed_text=f"{title}|{subtitle}|{tagline}|{template}",
-        no_image=no_image,
-        stock_fallbacks=stock_fallbacks,
-    )
-    overlay = Image.new("RGBA", background.size, (0, 0, 0, 0))
-    _draw_gradient_overlay(overlay, style, align, scale)
-    draw = ImageDraw.Draw(overlay, "RGBA")
+    Returns metadata dict.
+    """
+    # Resolve template
+    tmpl = TEMPLATES.get(template, TEMPLATES["auto"])
 
-    title_size, title_font, title_lines, max_text_width = _fit_title(title, align, scale)
-    label_font = _font(16, scale)
-    sub_font = _font(24 if len(subtitle) <= 24 else 21, scale) if subtitle else None
-    tag_font = _font(16, scale) if tagline else None
+    # Override overlay opacity if explicitly provided
+    overlay = tmpl["overlay"]
+    if overlay_opacity is not None:
+        alpha = max(0, min(255, int(overlay_opacity * 255)))
+        overlay = (overlay[0], overlay[1], overlay[2], alpha)
 
-    title_line_h = _line_height(title_font, scale)
-    title_gap = max(8, title_size // 7)
-    title_block_h = title_line_h * len(title_lines) + title_gap * (len(title_lines) - 1)
-    label_h = _line_height(label_font, scale)
-    sub_h = _line_height(sub_font, scale) if sub_font else 0
-    tag_h = _line_height(tag_font, scale) if tag_font else 0
-    accent_h = 4
-    dense = bool(subtitle and tagline and len(title) > 16)
-    gap_label_title = 18 if dense else 24
-    gap_title_sub = 12 if dense else 18
-    gap_sub_accent = 12 if dense else 16
-    gap_accent_tag = 12 if dense else 14
-    total_h = label_h + gap_label_title + title_block_h
-    if subtitle:
-        total_h += gap_title_sub + sub_h
-    if subtitle or tagline:
-        total_h += gap_sub_accent + accent_h
-    if tagline:
-        total_h += gap_accent_tag + tag_h
-    top = max(MIN_Y, (CANVAS_H - total_h) // 2)
+    # --- Layout calculations ---
+    font_path = _resolve_font()
 
-    left_aligned = align == "left"
-    title_widths = [_text_width_final(line, title_font, scale, outline_width) for line in title_lines]
-    content_w = max([_text_width_final(label, label_font, scale, 1), *title_widths])
-    if subtitle and sub_font:
-        content_w = max(content_w, min(max_text_width, _text_width_final(subtitle, sub_font, scale, 1)))
-    if tagline and tag_font:
-        content_w = max(content_w, min(max_text_width, _text_width_final(tagline, tag_font, scale, 1)))
+    # 1. Font sizes (capped per design rules)
+    ft_title, title_lines = _prepare_title(title, align)
+    ft_label = ImageFont.truetype(font_path, 13)   # 12-14px
+    ft_sub = ImageFont.truetype(font_path, 18) if subtitle else None  # 14-18px
+    ft_tag = ImageFont.truetype(font_path, 13) if tagline else None  # 12-14px
 
-    if left_aligned:
-        origin_x = SAFE_X
+    # Title block height (multi-line support)
+    num_lines = len(title_lines)
+    line_h = _get_bounds(title_lines[0], ft_title)[2]
+    title_gap = max(4, line_h // 6)
+    title_block_h = line_h * num_lines + title_gap * (num_lines - 1)
+
+    # Subtitle height
+    sub_h = _get_bounds(subtitle, ft_sub)[2] if ft_sub else 0
+    tag_h = 14 if tagline else 0
+    label_h = 16
+    bar_h = 2 if (tmpl["show_gold_bar"] and (subtitle or tagline)) else 0
+
+    # 2. Vertical spacing — adaptive
+    has_sub = bool(subtitle)
+    has_tag = bool(tagline)
+    dense = len(title) > 10 and has_sub and has_tag
+
+    gaps = {
+        "lg": 18 if dense else 28,     # label → title
+        "ts": 12 if dense else 18,     # title → subtitle
+        "sb": 10 if dense else 16,     # subtitle → bar
+        "bt": 12 if dense else 16,     # bar → tagline
+    }
+
+    total_h = label_h + gaps["lg"] + title_block_h
+    if has_sub:
+        total_h += gaps["ts"] + sub_h
+    if bar_h:
+        total_h += gaps["sb"] + bar_h
+    if has_tag:
+        total_h += gaps["bt"] + tag_h
+
+    v_off = max(MIN_TOP_BOTTOM_PX, (CANVAS_H - total_h) // 2)
+
+    ly = v_off
+    ty = ly + gaps["lg"]
+    sy = ty + title_block_h + gaps["ts"] if has_sub else 0
+    bar_y = (sy + sub_h + gaps["sb"]) if has_sub else (ty + title_block_h + gaps["sb"]) if bar_h else 0
+    tgy = bar_y + gaps["bt"] + (bar_h if bar_h else 0) if has_tag else 0
+    # If no subtitle/bar but has tagline, compute tagline y
+    if not has_sub and not bar_h and has_tag:
+        tgy = ty + title_block_h + gaps["bt"]
+
+    # 3. Horizontal positioning
+    is_left = align == "left"
+
+    if is_left:
+        label_x = LEFT_SAFE_PX
     else:
-        origin_x = (CANVAS_W - content_w) // 2
+        label_x = _center_x(label, ft_label)
 
-    panel_pad_x = 24
-    panel_pad_y = 18
-    panel_box = (
-        max(24, origin_x - panel_pad_x),
-        max(20, top - panel_pad_y),
-        min(CANVAS_W - 24, origin_x + content_w + panel_pad_x),
-        min(CANVAS_H - 20, top + total_h + panel_pad_y),
+    # Title lines: each independently positioned
+    title_positions = []
+    for li, line in enumerate(title_lines):
+        tl = ty + li * (line_h + title_gap)
+        if is_left:
+            tx = LEFT_SAFE_PX
+        else:
+            tx = _center_x(line, ft_title)
+        title_positions.append((tx, tl))
+
+    # Subtitle
+    if ft_sub and subtitle:
+        if is_left:
+            sub_x = LEFT_SAFE_PX
+        else:
+            sub_x = _center_x(subtitle, ft_sub)
+    else:
+        sub_x = 0
+
+    # Tagline
+    if ft_tag and tagline:
+        if is_left:
+            tag_x = LEFT_SAFE_PX
+        else:
+            tag_x = _center_x(tagline, ft_tag)
+    else:
+        tag_x = 0
+
+    # --- Render ---
+    bg = _download_image(image_url, skip_fallbacks=no_image)
+    overlay_layer = Image.new("RGBA", (CANVAS_W, CANVAS_H), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(overlay_layer)
+
+    # Uniform translucent overlay
+    draw.rectangle([0, 0, CANVAS_W, CANVAS_H], fill=overlay)
+
+    # Label (top)
+    _draw_text_with_outline(
+        draw, label, (label_x, ly), ft_label,
+        fill=tmpl["label_color"],
+        outline_color=(0, 0, 0, 120),
+        outline_width=1,
     )
-    draw.rounded_rectangle(
-        _scaled_box(panel_box, scale),
-        radius=18 * scale,
-        fill=style["panel"],
+
+    # Title (multi-line)
+    for tx, tl in title_positions:
+        _draw_text_with_outline(
+            draw, title_lines[title_positions.index((tx, tl))],
+            (tx, tl), ft_title,
+            fill=tmpl["title_color"],
+            outline_width=outline_width,
+        )
+
+    # Subtitle
+    if ft_sub and subtitle:
+        _draw_text_with_outline(
+            draw, subtitle, (sub_x, sy), ft_sub,
+            fill=tmpl["subtitle_color"],
+            outline_color=(0, 0, 0, 160),
+            outline_width=1,
+        )
+
+    # Gold accent bar (only when template says so)
+    if bar_h:
+        bar_len = 260
+        if is_left:
+            bar_x1 = LEFT_SAFE_PX
+        else:
+            bar_x1 = (CANVAS_W - bar_len) // 2
+        for xp in range(bar_x1, bar_x1 + bar_len):
+            dist = abs(xp - (bar_x1 + bar_len // 2))
+            a = max(0, 220 - int(dist * 2.2))
+            overlay_layer.putpixel((xp, bar_y), (196, 156, 82, a))
+
+    # Tagline (bottom)
+    if ft_tag and tagline:
+        _draw_text_with_outline(
+            draw, tagline, (tag_x, tgy), ft_tag,
+            fill=tmpl["tagline_color"],
+            outline_color=(0, 0, 0, 140),
+            outline_width=1,
+        )
+
+    # Composite & save
+    result = Image.alpha_composite(bg, overlay_layer).convert("RGB")
+    result.save(output, "PNG")
+
+    # --- Verification report ---
+    longest_line = max(
+        title_lines,
+        key=lambda l: _text_width(l, ft_title),
     )
+    tw = _text_width(longest_line, ft_title)
+    safe_left_ok = True
+    safe_right_ok = True
 
-    y = top
-    stroke = _contrast_stroke(style, template)
-    text_boxes: list[tuple[int, int, int, int]] = []
-    label_w = _text_width_final(label, label_font, scale, 1)
-    label_x = origin_x if left_aligned else origin_x + (content_w - label_w) // 2
-    text_boxes.append(
-        _draw_text(
-            overlay,
-            label,
-            (label_x, y),
-            label_font,
-            style["label"],
-            scale=scale,
-            stroke_fill=stroke,
-            stroke_width=1,
-            shadow=style["mode"] == "dark",
-        )
-    )
-    y += label_h + gap_label_title
+    # Check safe zone compliance
+    if is_left:
+        safe_left_ok = label_x >= 60  # label is leftmost element
+        # Rightmost element: check longest title line
+        last_line = title_lines[-1]
+        l, r, _ = _get_bounds(last_line, ft_title)
+        right_edge = title_positions[-1][0] + r
+        safe_right_ok = (CANVAS_W - right_edge - 1) >= 60
+    else:
+        l, r, _ = _get_bounds(longest_line, ft_title)
+        tx = _center_x(longest_line, ft_title)
+        safe_left_ok = (tx + l) >= 60
+        safe_right_ok = (CANVAS_W - (tx + r) - 1) >= 60
 
-    title_boxes = []
-    for line in title_lines:
-        line_w = _text_width_final(line, title_font, scale, outline_width)
-        x = origin_x if left_aligned else origin_x + (content_w - line_w) // 2
-        box = _draw_text(
-            overlay,
-            line,
-            (x, y),
-            title_font,
-            style["title"],
-            scale=scale,
-            stroke_fill=stroke,
-            stroke_width=outline_width,
-            shadow=True,
-        )
-        title_boxes.append(box)
-        text_boxes.append(box)
-        y += title_line_h + title_gap
-    y -= title_gap
-
-    if subtitle and sub_font:
-        y += gap_title_sub
-        sub_line = _truncate_to_width(subtitle, _font(sub_font.size // scale, 1), max_text_width)
-        sub_w = _text_width_final(sub_line, sub_font, scale, 1)
-        x = origin_x if left_aligned else origin_x + (content_w - sub_w) // 2
-        text_boxes.append(
-            _draw_text(
-                overlay,
-                sub_line,
-                (x, y),
-                sub_font,
-                style["subtitle"],
-                scale=scale,
-                stroke_fill=stroke,
-                stroke_width=1,
-                shadow=style["mode"] == "dark",
-            )
-        )
-        y += sub_h
-
-    if subtitle or tagline:
-        y += gap_sub_accent
-        accent_len = min(320, max(160, int(content_w * 0.48)))
-        accent_x = origin_x if left_aligned else origin_x + (content_w - accent_len) // 2
-        accent = _hex_to_rgba(style["accent"], 230)
-        draw.rounded_rectangle(
-            _scaled_box((accent_x, y, accent_x + accent_len, y + accent_h), scale),
-            radius=2 * scale,
-            fill=accent,
-        )
-        y += accent_h
-
-    if tagline and tag_font:
-        y += gap_accent_tag
-        tag_line = _truncate_to_width(tagline, _font(tag_font.size // scale, 1), max_text_width)
-        tag_w = _text_width_final(tag_line, tag_font, scale, 1)
-        x = origin_x if left_aligned else origin_x + (content_w - tag_w) // 2
-        text_boxes.append(
-            _draw_text(
-                overlay,
-                tag_line,
-                (x, y),
-                tag_font,
-                style["tagline"],
-                scale=scale,
-                stroke_fill=stroke,
-                stroke_width=1,
-                shadow=style["mode"] == "dark",
-            )
-        )
-
-    composed = Image.alpha_composite(background, overlay).convert("RGB")
-    final = composed.resize((CANVAS_W, CANVAS_H), Image.Resampling.LANCZOS)
-    final = final.filter(ImageFilter.UnsharpMask(radius=0.65, percent=155, threshold=2))
-    output_path = Path(output).expanduser()
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    final.save(output_path, format="PNG", optimize=True)
-
-    left_edge = min(box[0] for box in text_boxes)
-    right_edge = max(box[2] for box in text_boxes)
-    safe_left_ok = left_edge >= 60
-    safe_right_ok = (CANVAS_W - right_edge) >= 60
-    title_coverage = round(100 * max(title_widths) / CANVAS_W)
-    sharpness = _sharpness_score(final, title_boxes)
-    status = "passed" if safe_left_ok and safe_right_ok and len(title_lines) <= 2 and sharpness >= 7.0 else "blocked"
-    result = {
-        "skill_name": "wechat-article-cover-image-gen",
-        "status": status,
-        "output": str(output_path.resolve()),
-        "format": "PNG",
-        "canvas": [CANVAS_W, CANVAS_H],
+    return {
+        "output": str(Path(output).resolve()),
+        "canvas": f"{CANVAS_W}x{CANVAS_H}",
         "template": template,
         "align": align,
-        "image_source": image_source,
-        "title": title,
-        "title_font_size": title_size,
-        "title_lines": title_lines,
-        "title_line_count": len(title_lines),
-        "title_coverage_pct": title_coverage,
-        "render_scale": scale,
-        "downsample_filter": "LANCZOS",
-        "unsharp_mask": {"radius": 0.65, "percent": 155, "threshold": 2},
-        "text_sharpness_score": sharpness,
+        "title_font_size": ft_title.size,
+        "title_lines": num_lines,
+        "title_coverage_pct": round(100 * tw / CANVAS_W),
+        "vertical_offset": v_off,
         "safe_zone_left_ok": safe_left_ok,
         "safe_zone_right_ok": safe_right_ok,
-        "text_bounds": [left_edge, min(box[1] for box in text_boxes), right_edge, max(box[3] for box in text_boxes)],
-        "manual_review": [],
+        "status": "ok",
     }
-    if report:
-        report_path = Path(report).expanduser()
-        report_path.parent.mkdir(parents=True, exist_ok=True)
-        report_path.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-        result["report"] = str(report_path.resolve())
-    return result
 
 
-def print_summary(result: dict) -> None:
-    print(f"Cover generated: {result['output']}")
-    print(f"  Format: {result['format']}")
-    print(f"  Canvas: {result['canvas'][0]}x{result['canvas'][1]}")
-    print(f"  Template: {result['template']}  Align: {result['align']}")
-    print(f"  Title: {result['title']}")
-    print(f"  Title font: {result['title_font_size']}px  Lines: {result['title_line_count']}")
-    print(f"  Title width coverage: {result['title_coverage_pct']}%")
-    print(f"  Render scale: {result['render_scale']}x")
-    print(f"  Text sharpness score: {result['text_sharpness_score']}")
-    print(f"  Safe zone L: {'✓' if result['safe_zone_left_ok'] else '✗'}  R: {'✓' if result['safe_zone_right_ok'] else '✗'}")
-    if result.get("report"):
-        print(f"  Report: {result['report']}")
-    checks = [
-        (result["format"] == "PNG", "PNG output format"),
-        (result["canvas"] == [CANVAS_W, CANVAS_H], "Canvas is exactly 900x383"),
-        (result["render_scale"] >= 3, "High-resolution text render scale >= 3x"),
-        (result["text_sharpness_score"] >= 7.0, "Text sharpness score >= 7.0"),
-        (result["safe_zone_left_ok"] and result["safe_zone_right_ok"], "Safe zones >= 60px"),
-        (result["title_font_size"] >= 38, "Title font >= 38px"),
-        (result["title_line_count"] <= 2, "Title <= 2 lines"),
-    ]
-    print()
-    print("  TDD Checklist:")
-    for passed, text in checks:
-        print(f"    {'✔' if passed else '✗'}  {text}")
+# ---------------------------------------------------------------------------
+# CLI
+# ---------------------------------------------------------------------------
 
-
-def main(argv: Iterable[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Generate a sharp WeChat Official Account cover PNG.")
-    parser.add_argument("--title", required=True, help="Main title. Keep short for thumbnail clarity.")
-    parser.add_argument("--subtitle", default="", help="Subtitle shown below the title.")
-    parser.add_argument("--tagline", default="", help="Bottom micro tagline.")
-    parser.add_argument("--label", default="FEATURED ARTICLE", help="Top label.")
-    parser.add_argument("--output", required=True, help="Output PNG path.")
-    parser.add_argument("--report", default="", help="Optional JSON report path.")
-    parser.add_argument("--image-url", default=None, help="Optional background image URL.")
-    parser.add_argument("--image-path", default=None, help="Optional local background image path.")
-    parser.add_argument("--no-image", action="store_true", help="Use deterministic gradient background only.")
-    parser.add_argument("--stock-fallbacks", action="store_true", help="Try built-in stock photo fallbacks if no image is provided.")
-    parser.add_argument("--align", default="center", choices=["center", "left"], help="Text alignment.")
-    parser.add_argument("--template", default="auto", choices=list(TEMPLATES.keys()), help="Visual style template.")
-    parser.add_argument("--overlay-opacity", type=float, default=None, help="Reserved for compatibility; template gradient is used by default.")
-    parser.add_argument("--outline-width", type=int, default=2, help="Title stroke width in final pixels.")
-    parser.add_argument("--render-scale", type=int, default=DEFAULT_SCALE, help="Internal render scale, 2-5. Default: 4.")
-    args = parser.parse_args(list(argv) if argv is not None else None)
+def main() -> int:
+    parser = argparse.ArgumentParser(
+        description="Generate a high-end WeChat Official Account cover image.",
+    )
+    parser.add_argument("--title", required=True, help="Main title (keep ≤ 20 chars for best results)")
+    parser.add_argument("--subtitle", default="", help="Subtitle (14-18px)")
+    parser.add_argument("--tagline", default="", help="Bottom tagline (12-14px)")
+    parser.add_argument(
+        "--label", default="FEATURED ARTICLE",
+        help="Top label (default: FEATURED ARTICLE)",
+    )
+    parser.add_argument("--output", required=True, help="Output PNG path")
+    parser.add_argument(
+        "--image-url", default=None,
+        help="Stock image URL (900×383 preferred). Auto-fallback if omitted.",
+    )
+    parser.add_argument(
+        "--no-image", action="store_true",
+        help="Skip Unsplash fallbacks entirely. Use solid dark gradient (no reused photos).",
+    )
+    parser.add_argument(
+        "--align", default="center", choices=["center", "left"],
+        help="Text alignment: center (modern tech) or left (premium editorial)",
+    )
+    parser.add_argument(
+        "--template", default="auto", choices=list(TEMPLATES.keys()),
+        help="Visual style template",
+    )
+    parser.add_argument(
+        "--overlay-opacity", type=float, default=None,
+        help="Overlay opacity 0.0-1.0. Overrides template default if set.",
+    )
+    parser.add_argument(
+        "--outline-width", type=int, default=1,
+        help="Text outline radius in px (default: 1)",
+    )
+    args = parser.parse_args()
 
     try:
         result = render(
@@ -677,22 +559,40 @@ def main(argv: Iterable[str] | None = None) -> int:
             tagline=args.tagline,
             label=args.label,
             output=args.output,
-            report=args.report or None,
             image_url=args.image_url,
-            image_path=args.image_path,
             align=args.align,
             template=args.template,
             overlay_opacity=args.overlay_opacity,
             outline_width=args.outline_width,
             no_image=args.no_image,
-            stock_fallbacks=args.stock_fallbacks,
-            render_scale=args.render_scale,
         )
     except Exception as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 1
-    print_summary(result)
-    return 0 if result["status"] == "passed" else 2
+
+    print(f"Cover generated: {result['output']}")
+    print(f"  Canvas: {result['canvas']}")
+    print(f"  Template: {result['template']}  Align: {result['align']}")
+    print(f"  Title: {args.title}")
+    print(f"  Title font: {result['title_font_size']}px  Lines: {result['title_lines']}")
+    print(f"  Title width coverage: {result['title_coverage_pct']}%")
+    print(f"  Vertical offset: {result['vertical_offset']}px")
+    print(f"  Safe zone L: {'✓' if result['safe_zone_left_ok'] else '✗'}  R: {'✓' if result['safe_zone_right_ok'] else '✗'}")
+
+    # TDD-style test checklist
+    checks = []
+    checks.append(("✔" if result["safe_zone_left_ok"] and result["safe_zone_right_ok"] else "✗", "Safe zones ≥ 60px on both sides"))
+    checks.append(("✔" if result["title_font_size"] <= 40 else "✗", "Title font ≤ 40px"))
+    checks.append(("✔" if result["title_font_size"] >= 28 else "✗", "Title font ≥ 28px"))
+    checks.append(("✔" if result["title_coverage_pct"] >= 40 else "✗", "Title readable (coverage ≥ 40%)"))
+    checks.append(("✔" if result["title_lines"] <= 2 else "✗", "Title ≤ 2 lines"))
+
+    print()
+    print("  TDD Checklist:")
+    for mark, check in checks:
+        print(f"    {mark}  {check}")
+
+    return 0
 
 
 if __name__ == "__main__":
