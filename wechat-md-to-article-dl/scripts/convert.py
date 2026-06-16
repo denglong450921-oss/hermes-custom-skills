@@ -239,18 +239,27 @@ def safe_markdown(body: str) -> BeautifulSoup:
 
 def normalize_lists(soup: BeautifulSoup, theme: dict[str, str], *,
                     card_padding: int = 14) -> None:
-    """Replace <ol>/<ul>/<li> with insight-style span list blocks.
+    """Replace <ol>/<ul>/<li> with card-style list blocks.
 
-    Bold+italic text in gold #A47C42 with accent marker.
+    Each list becomes a card with accent left border. Items use single
+    span in accent color with bold+italic text. No bullet markers.
     Last item has margin-bottom:18px.
     """
     for list_tag in soup.find_all(["ol", "ul"]):
-        container = soup.new_tag("div")
-        container["style"] = "margin:0;padding:0;"
+        accent = theme["accent"]
+
+        # Card wrapper — border-left accent, background, radius, padding
+        card = soup.new_tag("div")
+        card["style"] = (
+            f"border-left:3px solid {accent};"
+            f"border-radius:0px 6px 6px 0px;"
+            f"background-color:{theme['surface']};"
+            f"padding:{card_padding}px;"
+            f"margin:0px 0px;"
+        )
 
         is_ordered = list_tag.name == "ol"
         counter = 1
-        accent = theme["accent"]
 
         items = list_tag.find_all("li", recursive=False)
         for idx, li in enumerate(items):
@@ -259,32 +268,25 @@ def normalize_lists(soup: BeautifulSoup, theme: dict[str, str], *,
             # Item wrapper — all items get margin (last gets 18px)
             item = soup.new_tag("div")
             if is_last:
-                item["style"] = "margin-bottom:18px;"
+                item["style"] = "margin-bottom:0px;"
             else:
                 item["style"] = "margin-bottom:14px;"
 
-            # Text line span — accent color (matches blockquote left border)
+            # Single text span — accent color, bold+italic, no marker
             line = soup.new_tag("span")
             line["style"] = (
                 "font-size:16px;line-height:1.85;"
                 f"color:{accent};letter-spacing:0.02em;"
             )
 
-            # Marker span — accent color, margin-right for spacing
-            marker = soup.new_tag("span")
-            if is_ordered:
-                marker.string = f"{counter}."
-                counter += 1
-            else:
-                marker.string = "•"
-            marker["style"] = (
-                f"color:{accent};font-weight:700;margin-right:6px;"
-            )
-            line.append(marker)
-
             # Content wrapped in <b><i> for bold+italic emphasis
             emphasis = soup.new_tag("b")
             i_tag = soup.new_tag("i")
+
+            # Include ordered number if applicable
+            if is_ordered:
+                i_tag.append(f"{counter}. ")
+                counter += 1
 
             for child in list(li.children):
                 if child.name == "p":
@@ -296,14 +298,9 @@ def normalize_lists(soup: BeautifulSoup, theme: dict[str, str], *,
             emphasis.append(i_tag)
             line.append(emphasis)
             item.append(line)
-            container.append(item)
+            card.append(item)
 
-        list_tag.replace_with(container)
-
-    # Remove empty <p> orphans (from previous unwrap logic)
-    for p in soup.find_all("p"):
-        if not p.get_text(strip=True) and not p.find_all("img"):
-            p.decompose()
+        list_tag.replace_with(card)
 
 
 def style_map(theme: dict[str, str], *, strict: bool) -> dict[str, str]:
