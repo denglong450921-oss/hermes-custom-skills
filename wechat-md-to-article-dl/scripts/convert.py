@@ -239,24 +239,15 @@ def safe_markdown(body: str) -> BeautifulSoup:
 
 def normalize_lists(soup: BeautifulSoup, theme: dict[str, str], *,
                     card_padding: int = 14) -> None:
-    """Replace <ol>/<ul>/<li> with card-style list blocks.
+    """Replace <ol>/<ul>/<li> with clean span list blocks.
 
-    Each list becomes a card with accent left border. Items use single
-    span in accent color with bold+italic text. No bullet markers.
-    Last item has margin-bottom:18px.
+    Single span in accent color with bold+italic text. No card border,
+    no background, no markers. Each item gets margin-bottom spacing.
     """
     for list_tag in soup.find_all(["ol", "ul"]):
         accent = theme["accent"]
-
-        # Card wrapper — border-left accent, background, radius, padding
-        card = soup.new_tag("div")
-        card["style"] = (
-            f"border-left:3px solid {accent};"
-            f"border-radius:0px 6px 6px 0px;"
-            f"background-color:{theme['surface']};"
-            f"padding:{card_padding}px;"
-            f"margin:0px 0px;"
-        )
+        container = soup.new_tag("div")
+        container["style"] = "margin:0px 0px;padding:0px 0px;"
 
         is_ordered = list_tag.name == "ol"
         counter = 1
@@ -265,12 +256,9 @@ def normalize_lists(soup: BeautifulSoup, theme: dict[str, str], *,
         for idx, li in enumerate(items):
             is_last = idx == len(items) - 1
 
-            # Item wrapper — all items get margin (last gets 18px)
+            # Item wrapper — all items get margin (last gets 0)
             item = soup.new_tag("div")
-            if is_last:
-                item["style"] = "margin-bottom:0px;"
-            else:
-                item["style"] = "margin-bottom:14px;"
+            item["style"] = "margin-bottom:14px;" if not is_last else "margin-bottom:0px;"
 
             # Single text span — accent color, bold+italic, no marker
             line = soup.new_tag("span")
@@ -298,9 +286,9 @@ def normalize_lists(soup: BeautifulSoup, theme: dict[str, str], *,
             emphasis.append(i_tag)
             line.append(emphasis)
             item.append(line)
-            card.append(item)
+            container.append(item)
 
-        list_tag.replace_with(card)
+        list_tag.replace_with(container)
 
 
 def style_map(theme: dict[str, str], *, strict: bool) -> dict[str, str]:
