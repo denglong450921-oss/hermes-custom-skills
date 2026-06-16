@@ -239,15 +239,15 @@ def safe_markdown(body: str) -> BeautifulSoup:
 
 def normalize_lists(soup: BeautifulSoup, theme: dict[str, str], *,
                     card_padding: int = 14) -> None:
-    """Replace <ol>/<ul>/<li> with clean span list blocks.
+    """Replace <ol>/<ul>/<li> with indented span list blocks.
 
-    Single span in accent color with bold+italic text. No card border,
-    no background, no markers. Each item gets margin-bottom spacing.
+    Single span in accent color with bold+italic text. Container has
+    left padding for visual indentation. No markers, no card styling.
     """
     for list_tag in soup.find_all(["ol", "ul"]):
         accent = theme["accent"]
         container = soup.new_tag("div")
-        container["style"] = "margin:0px 0px;padding:0px 0px;"
+        container["style"] = "margin:0px 0px;padding:0px 0px 0px 20px;"
 
         is_ordered = list_tag.name == "ol"
         counter = 1
