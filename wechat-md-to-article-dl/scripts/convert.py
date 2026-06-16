@@ -247,7 +247,7 @@ def normalize_lists(soup: BeautifulSoup, theme: dict[str, str], *,
     for list_tag in soup.find_all(["ol", "ul"]):
         accent = theme["accent"]
         container = soup.new_tag("div")
-        container["style"] = "margin:0px 0px;padding:0px 0px 0px 20px;"
+        container["style"] = "margin:0px 0px 18px 0px;padding:0px 0px 0px 20px;"
 
         is_ordered = list_tag.name == "ol"
         counter = 1
