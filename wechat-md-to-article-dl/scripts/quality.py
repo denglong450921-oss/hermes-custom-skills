@@ -190,9 +190,10 @@ def audit_html(content: str, *, threshold: int = 90) -> dict[str, Any]:
 
     h1_size = pixel_value(h1_style.get("font-size", ""))
     h2_size = pixel_value(h2_style.get("font-size", ""))
+    body_size_candidates = body_paragraphs or soup.find_all(["p", "li"])
     body_sizes = [
         pixel_value(parse_style(tag.get("style", "")).get("font-size", ""))
-        for tag in soup.find_all(["p", "li"])
+        for tag in body_size_candidates
     ]
     body_sizes = [size for size in body_sizes if size is not None and size >= 14]
     body_size = max(set(body_sizes), key=body_sizes.count) if body_sizes else None
@@ -402,9 +403,14 @@ def audit_html(content: str, *, threshold: int = 90) -> dict[str, Any]:
         15,
         f"max_radius={max(radius_values) if radius_values else 0}",
     )
-    emphasized = len(soup.find_all(["strong", "blockquote"])) + len(
-        [s for s in soup.find_all("span") if s.get("style", "").strip()]
-    )
+    semantic_spans = [
+        span
+        for span in soup.find_all("span")
+        if "font-weight" in span.get("style", "")
+        and "font-size" not in span.get("style", "")
+        and "margin-right" not in span.get("style", "")
+    ]
+    emphasized = len(soup.find_all(["strong", "blockquote"])) + len(semantic_spans)
     prose_blocks = max(1, len(soup.find_all(["p", "li"])))
     add_check(
         checks,

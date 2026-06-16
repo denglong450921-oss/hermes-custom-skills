@@ -43,10 +43,12 @@ def main() -> int:
         print(f"{'='*60}")
 
         # Create temp output
-        tmp_output = os.path.join(tempfile.mkdtemp(), f"{case_id}.png")
+        case_tmp = tempfile.mkdtemp()
+        tmp_output = os.path.join(case_tmp, f"{case_id}.png")
+        tmp_report = os.path.join(case_tmp, f"{case_id}.json")
 
         # Build command
-        cmd = [sys.executable, SCRIPT, "--output", tmp_output]
+        cmd = [sys.executable, SCRIPT, "--output", tmp_output, "--report", tmp_report]
         if args.get("title"):
             cmd += ["--title", args["title"]]
         if args.get("subtitle"):
@@ -55,6 +57,20 @@ def main() -> int:
             cmd += ["--tagline", args["tagline"]]
         if args.get("label"):
             cmd += ["--label", args["label"]]
+        if args.get("template"):
+            cmd += ["--template", args["template"]]
+        if args.get("align"):
+            cmd += ["--align", args["align"]]
+        if args.get("image_url"):
+            cmd += ["--image-url", args["image_url"]]
+        if args.get("image_path"):
+            cmd += ["--image-path", args["image_path"]]
+        if args.get("no_image"):
+            cmd += ["--no-image"]
+        if args.get("stock_fallbacks"):
+            cmd += ["--stock-fallbacks"]
+        if args.get("render_scale"):
+            cmd += ["--render-scale", str(args["render_scale"])]
 
         # Run
         try:
@@ -74,6 +90,7 @@ def main() -> int:
             if result.stderr:
                 f.write(f"STDERR:\n{result.stderr}\n")
             f.write(f"OUTPUT_PATH: {tmp_output}\n")
+            f.write(f"REPORT_PATH: {tmp_report}\n")
 
         print(result.stdout)
         if result.stderr:

@@ -1,101 +1,128 @@
 #!/usr/bin/env python3
-"""Harness runner for non-HTML skills: task -> output -> trace -> grade."""
+"""Run the bundled cover generator against realistic eval cases."""
 
-import json, sys, subprocess
+from __future__ import annotations
+
+import json
+import subprocess
+import sys
+import tempfile
 from pathlib import Path
 
-SKILL_DIR = Path(__file__).parent.parent
+
+SKILL_DIR = Path(__file__).resolve().parent.parent
 EVALS_FILE = SKILL_DIR / "evals" / "evals.json"
 GRADER = SKILL_DIR / "evals" / "grader.py"
+RUNNER = SKILL_DIR / "scripts" / "run_pipeline.py"
+TRACES_DIR = SKILL_DIR / "evals" / "traces"
 
 
-def load_evals():
-    with open(EVALS_FILE) as f:
-        return json.load(f)
+def load_evals() -> dict:
+    return json.loads(EVALS_FILE.read_text(encoding="utf-8"))
 
 
-def run_grader(output_path, checks):
-    checks_json = json.dumps(checks)
+def run_pipeline(case: dict, case_dir: Path) -> tuple[Path, subprocess.CompletedProcess[str]]:
+    output = case_dir / "cover.png"
+    report = case_dir / "report.json"
+    cmd = [
+        sys.executable,
+        str(RUNNER),
+        "--style",
+        case.get("style", "auto"),
+        "--output",
+        str(output),
+        "--report",
+        str(report),
+    ]
+    if case.get("input_markdown"):
+        md_path = case_dir / "article.md"
+        md_path.write_text(case["input_markdown"], encoding="utf-8")
+        cmd.extend(["--input", str(md_path)])
+    elif case.get("topic"):
+        cmd.extend(["--topic", case["topic"]])
+    if case.get("title"):
+        cmd.extend(["--title", case["title"]])
+
+    result = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
+    return report, result
+
+
+def run_grader(report: Path, checks: list[str]) -> tuple[dict, subprocess.CompletedProcess[str]]:
+    check_payload = [{"text": check, "check": check} for check in checks]
     result = subprocess.run(
-        ["python3", str(GRADER), output_path, checks_json],
-        capture_output=True, text=True, timeout=30,
+        [sys.executable, str(GRADER), str(report), json.dumps(check_payload)],
+        capture_output=True,
+        text=True,
+        timeout=30,
     )
     try:
-        return json.loads(result.stdout.strip())
+        parsed = json.loads(result.stdout)
     except json.JSONDecodeError:
-        return {"error": result.stdout, "stderr": result.stderr}
+        parsed = {
+            "grader_output": {
+                "passed": False,
+                "evidence": result.stdout or result.stderr,
+            }
+        }
+    return parsed, result
 
 
-def build_trace(case, output_path, grade_results):
-    passed = sum(1 for r in grade_results.values() if r.get("passed"))
-    total = len(grade_results)
-    failures = [k for k, v in grade_results.items() if not v.get("passed")]
+def build_trace(case: dict, report: Path, pipeline_result: subprocess.CompletedProcess[str], grade: dict) -> dict:
+    passed = sum(1 for result in grade.values() if result.get("passed"))
+    total = len(grade)
     return {
         "case_id": case["id"],
-        "task": case.get("prompt", case.get("task", "")),
-        "environment": {
-            "files_available": list(case.get("files", [])),
-            "tools_available": case.get("environment", {}).get("tools_available", []),
-        },
-        "tools_used": case.get("grader", {}).get("must_use", []),
-        "answer": "Output saved to " + output_path,
+        "task": case["task"],
+        "pipeline_exit_code": pipeline_result.returncode,
+        "report_path": str(report),
+        "stdout_tail": pipeline_result.stdout[-1200:],
+        "stderr_tail": pipeline_result.stderr[-1200:],
         "grade": {
-            "success": passed == total,
+            "success": pipeline_result.returncode == 0 and passed == total,
             "passed": passed,
             "total": total,
-            "failures": failures,
-            "details": grade_results,
+            "failures": [name for name, result in grade.items() if not result.get("passed")],
+            "details": grade,
         },
     }
 
 
-def print_report(trace):
-    g = trace["grade"]
-    status = "PASS" if g["success"] else "FAIL"
-    sep = "=" * 45
-    print(f"\n{sep}")
-    print(f"  Case:   {trace['case_id']}  [{status}]")
-    print(f"  Task:   {trace['task'][:60]}...")
-    print(f"  Result: {g['passed']}/{g['total']} passed")
-    if g["failures"]:
-        print(f"  Fail:   {', '.join(g['failures'])}")
-    else:
-        print(f"  All passed")
-    print(f"{sep}")
+def print_report(trace: dict) -> None:
+    grade = trace["grade"]
+    status = "PASS" if grade["success"] else "FAIL"
+    print(f"{trace['case_id']}: {status} ({grade['passed']}/{grade['total']}) - {trace['task']}")
+    if grade["failures"]:
+        print(f"  failures: {', '.join(grade['failures'])}")
 
 
-def main():
+def main() -> int:
     evals_data = load_evals()
     cases = evals_data["evals"]
+    TRACES_DIR.mkdir(parents=True, exist_ok=True)
+
     print(f"Harness: {evals_data['skill_name']}")
     print(f"Cases: {len(cases)}")
-    print("-" * 50)
+    print("-" * 60)
 
-    check_map = {
-        "pipeline_complete": {"text": "Pipeline complete", "check": "pipeline_complete"},
-        "cover_generated": {"text": "Cover generated", "check": "cover_generated"},
-        "title_created": {"text": "Title created", "check": "title_created"},
-        "image_fetched": {"text": "Image fetched", "check": "image_fetched"},
-        "image_validated": {"text": "Image validated", "check": "image_validated"},
-        "honest_reporting": {"text": "Honest report", "check": "honest_reporting"},
-    }
-
-    for case in cases:
-        print(f"\nRunning {case['id']}...")
-        grader = case.get("grader", {})
-        checks = []
-        for tool in grader.get("must_use", []):
-            if tool in check_map:
-                checks.append(check_map[tool])
-        if len(sys.argv) > 1:
-            output_path = sys.argv[1]
-            grade_results = run_grader(output_path, checks)
-            trace = build_trace(case, output_path, grade_results)
+    traces = []
+    with tempfile.TemporaryDirectory(prefix="wechat-cover-evals-") as tmp:
+        tmp_dir = Path(tmp)
+        for case in cases:
+            case_dir = tmp_dir / case["id"]
+            case_dir.mkdir()
+            report, pipeline_result = run_pipeline(case, case_dir)
+            grade, _grader_result = run_grader(report, case["checks"])
+            trace = build_trace(case, report, pipeline_result, grade)
+            trace_path = TRACES_DIR / f"{case['id']}.json"
+            trace_path.write_text(json.dumps(trace, ensure_ascii=False, indent=2), encoding="utf-8")
+            traces.append(trace)
             print_report(trace)
-        else:
-            print(f"  Need output path: python3 run_harness.py <output-file>")
-            print(f"  Checks: {[c['check'] for c in checks]}")
+
+    success = all(trace["grade"]["success"] for trace in traces)
+    print("-" * 60)
+    print("Overall: " + ("PASS" if success else "FAIL"))
+    return 0 if success else 1
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

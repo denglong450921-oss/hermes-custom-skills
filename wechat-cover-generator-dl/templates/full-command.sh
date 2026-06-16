@@ -1,18 +1,21 @@
-#!/bin/bash
-# Step 1: Generate title
-# (run wechat-title-generator-dl manually)
+#!/usr/bin/env bash
+set -euo pipefail
 
-# Step 2: Fetch image
-python3 scripts/fetch_image.py --query "topic keywords" --min-width 1200
+# Generate a complete WeChat cover package from Markdown.
+# Run this from the wechat-cover-generator-dl skill directory.
 
-# Step 3: Validate
-python3 scripts/validate_image.py --image-url "<url>" --query "topic" --min-width 1200
+ARTICLE="${1:-/path/to/article.md}"
+OUT_DIR="${2:-/tmp/wechat-cover-output}"
+STYLE="${3:-auto}"
 
-# Step 4: Render cover
-python3 gen_cover.py \
-  --title "Article Title" \
-  --subtitle "Subtitle text" \
-  --tagline "Tagline text" \
-  --label "CATEGORY" \
-  --image-url "<validated-url>" \
-  --output /path/to/cover.png
+mkdir -p "$OUT_DIR"
+
+python3 scripts/run_pipeline.py \
+  --input "$ARTICLE" \
+  --style "$STYLE" \
+  --output "$OUT_DIR/cover.png" \
+  --report "$OUT_DIR/report.json"
+
+echo "Cover:  $OUT_DIR/cover.png"
+echo "Report: $OUT_DIR/report.json"
+echo "Title:  $OUT_DIR/cover-title.md"

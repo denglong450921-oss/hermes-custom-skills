@@ -1,0 +1,4 @@
+interface:
+  display_name: "WeChat Article Styler"
+  short_description: "Polish and format focused WeChat articles"
+  default_prompt: "Use $wechat-md-to-article-dl to rewrite my Markdown into a focused public-account article, then convert it to audited WeChat HTML."

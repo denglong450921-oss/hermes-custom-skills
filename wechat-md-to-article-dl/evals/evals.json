@@ -1,13 +1,29 @@
 {
-  "skill_name": "md-to-wechat-article-dl",
+  "skill_name": "wechat-md-to-article-dl",
   "evals": [
+    {
+      "id": 0,
+      "name": "style-brief-variation",
+      "prompt": "先为 cognition.md 生成公众号写作风格 brief，再给出 3 个不同风格变体：观点专栏、方法框架、故事叙事。每个变体都要有不同标题、开头、结构和结尾方式。",
+      "expected_output": "JSON/Markdown style brief includes recommended profile, reader promise, title options, copywriting focus, quality findings, and variant guidance before HTML conversion.",
+      "files": ["evals/files/cognition.md"],
+      "expectations": [
+        "先运行 style_brief.py 或等价写作诊断",
+        "明确推荐风格 profile 与 WeChat theme",
+        "给出读者承诺和更聚焦的核心论点",
+        "至少 3 个风格变体在标题逻辑、开头方式、结构和结尾上明显不同",
+        "指出开头、段落、论证、结尾中需要加强的公众号写作问题"
+      ]
+    },
     {
       "id": 1,
       "name": "technical-structure",
-      "prompt": "把 technical.md 转成适合微信公众号的高级技术文章 HTML，使用自动主题选择并输出质量报告。",
-      "expected_output": "克制的科技蓝灰排版，代码、表格和层级保持清晰，五项质量分均不低于 90。",
+      "prompt": "把 technical.md 先改成更聚焦的技术深度公众号文章，再转成适合微信公众号的高级技术文章 HTML，使用自动主题选择并输出质量报告。",
+      "expected_output": "技术写作先说明工程问题、读者收益和边界，再生成克制的科技蓝灰排版，代码、表格和层级保持清晰，五项质量分均不低于 90。",
       "files": ["evals/files/technical.md"],
       "expectations": [
+        "先完成 technical 风格 brief 或等价写作判断",
+        "开头说明工程问题和读者收益",
         "输出 HTML 文件和 JSON 质量报告",
         "五项质量分均不低于 90",
         "代码块以可换行 code 结构保留，表格、引用和列表均被保留",
@@ -18,11 +34,13 @@
     {
       "id": 2,
       "name": "health-restraint",
-      "prompt": "把 health.md 排成可信、舒适、不制造焦虑的微信公众号健康科普文章，并自动选择主题。",
-      "expected_output": "低饱和健康主题，重点克制，风险边界清楚，移动端阅读舒适。",
+      "prompt": "把 health.md 改成可信、舒适、不制造焦虑的微信公众号健康科普文章，并自动选择主题后排版。",
+      "expected_output": "写作先安抚焦虑、澄清误区和适用边界；视觉使用低饱和健康主题，重点克制，移动端阅读舒适。",
       "files": ["evals/files/health.md"],
       "expectations": [
+        "先完成 health 风格 brief 或等价写作判断",
         "自动选择 health 主题",
+        "健康建议保留适用边界和风险信号",
         "五项质量分均不低于 90",
         "没有渐变和重阴影",
         "颜色数量不超过 8 种",
@@ -32,10 +50,12 @@
     {
       "id": 3,
       "name": "cognition-safety",
-      "prompt": "把 cognition.md 转成杂志专栏感的微信 HTML，同时清理来源里不安全或破坏统一视觉的原始 HTML。",
-      "expected_output": "温暖克制的认知主题，原始脚本、事件属性、危险链接和自带样式被清理。",
+      "prompt": "把 cognition.md 改成更有观点专栏感、更聚焦的公众号文章，再转成杂志专栏感的微信 HTML，同时清理来源里不安全或破坏统一视觉的原始 HTML。",
+      "expected_output": "写作有核心判断、反面误区、推理依据和迁移框架；视觉为温暖克制的认知主题，原始脚本、事件属性、危险链接和自带样式被清理。",
       "files": ["evals/files/cognition.md"],
       "expectations": [
+        "先完成 opinion 或 cognition 风格 brief",
+        "标题、开头和 H2 服务一个核心论点",
         "自动选择 cognition 主题",
         "五项质量分均不低于 90",
         "不含 script、onclick、javascript URL 或来源自带红色样式",

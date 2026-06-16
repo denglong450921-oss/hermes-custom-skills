@@ -3,71 +3,50 @@
   "evals": [
     {
       "id": "case_001",
-      "task": "Full pipeline: title gen + image fetch + validate + cover render for OPC article",
-      "prompt": "Run the full cover pipeline for topic \"OPC / AI / personal business system\" with style \"high-level\". Input Markdown is about OPC in the AI era.",
-      "expected_output": "Final 900x383 PNG cover image, JSON report with layout and validation status",
-      "files": [],
-      "grader": {
-        "must_use": [
-          "pipeline_complete",
-          "cover_generated",
-          "title_created",
-          "image_fetched",
-          "image_validated"
-        ],
-        "must_have": [
-          "cover_image_url",
-          "validation",
-          "pass"
-        ],
-        "must_not_have": [
-          "fallback",
-          "error",
-          "failed"
-        ]
-      }
+      "task": "Generate a cover package from an OPC article Markdown file.",
+      "input_markdown": "# OPC：AI时代的个人商业系统\n\n## Prompt\n这篇文章解释 OPC 如何把个人能力、AI 工具链和可验证商业闭环连接起来。\n\n## Key Ideas\n- 从需求验证开始\n- 用 MVP 验证最小商业闭环\n- 输出物必须可复用、可迭代、可发布\n",
+      "style": "high-level",
+      "checks": [
+        "pipeline_complete",
+        "cover_generated",
+        "correct_dimensions",
+        "title_created",
+        "report_validation_pass",
+        "image_source_reported",
+        "has_attempt_count",
+        "honest_reporting"
+      ]
     },
     {
       "id": "case_002",
-      "task": "Cover pipeline for cognitive learning article",
-      "prompt": "Run the full cover pipeline for topic \"learning methods / knowledge management\" with style \"cognitive\"",
-      "expected_output": "Cover image with appropriate title overlay and validated background image",
-      "files": [],
-      "grader": {
-        "must_use": [
-          "pipeline_complete",
-          "cover_generated",
-          "title_created"
-        ],
-        "must_have": [
-          "cover_image_url",
-          "validation"
-        ],
-        "must_not_have": [
-          "error",
-          "failed"
-        ]
-      }
+      "task": "Generate a cognitive learning cover from topic-only input.",
+      "topic": "learning methods / knowledge management for knowledge workers",
+      "style": "cognitive",
+      "checks": [
+        "pipeline_complete",
+        "cover_generated",
+        "correct_dimensions",
+        "title_created",
+        "report_validation_pass",
+        "image_source_reported",
+        "honest_reporting"
+      ]
     },
     {
       "id": "case_003",
-      "task": "Cover pipeline with image retry (simulate first fetch failing)",
-      "prompt": "Run the cover pipeline for topic \"wellness health meditation\" with style \"professional\". Use image-quality-validator to validate, handling retries if needed.",
-      "expected_output": "Cover image, possibly with retry count > 1 in the report",
-      "files": [],
-      "grader": {
-        "must_use": [
-          "pipeline_complete",
-          "cover_generated"
-        ],
-        "must_have": [
-          "cover_image_url"
-        ],
-        "must_not_have": [
-          "error",
-          "failed"
-        ]
-      }
+      "task": "Generate a Chinese wellness cover and preserve honest fallback reporting.",
+      "topic": "健康冥想与日常恢复：给高压工作者的稳定节律",
+      "style": "professional",
+      "checks": [
+        "pipeline_complete",
+        "cover_generated",
+        "correct_dimensions",
+        "title_created",
+        "report_validation_pass",
+        "image_source_reported",
+        "has_attempt_count",
+        "honest_reporting"
+      ]
     }
   ]
 }
