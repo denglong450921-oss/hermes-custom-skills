@@ -8,6 +8,7 @@ Personal Hermes Agent skills collection — auto-synced to GitHub every 30 min.
 |-------|-------------|
 | **html-output** | Beautiful HTML output v4.1 with harness + feedback loop + honesty constraint |
 | **clone-website-dl** | Runtime-neutral high-fidelity website cloning with extraction, specs, fallbacks, and visual QA |
+| **clone-website-dl-v2** | Fast static website replication with staged TDD gates, localized resources, reusable header/footer components, and detector-agent QA |
 | **skill-harness** | 5-module Agent Harness injector with distill/ftpr/honesty |
 | **swihub-ppt-template** | PPT template (gold #D4AF37, Playfair+Open Sans) |
 | **global-skill-deployer** | Deploy skills across Hermes, Trae, Claude Code, Cursor |
