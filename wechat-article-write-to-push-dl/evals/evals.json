@@ -1,0 +1,26 @@
+{
+  "skill_name": "wechat-article-write-to-push-dl",
+  "evals": [
+    {
+      "id": 1,
+      "name": "full-publish-from-clipping",
+      "prompt": "我刚写好一篇关于「低维努力的陷阱」的文章，剪裁件在 ~/Downloads/低维努力的陷阱学习系统的三重模型重构.md，帮我完整走一遍发布流程：转HTML、生成封面、推送到公众号草稿箱。",
+      "expected_output": "文章经cognition主题转为WeChat HTML（5项评分≥90），生成900×383封面，推送至草稿箱返回media_id",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "write-and-publish-from-topic",
+      "prompt": "用Dennon风格写一篇关于「为什么刷手机不是休息」的文章，然后帮我发布到公众号。不需要你推送，只写到生成封面那一步，让我先看封面。",
+      "expected_output": "dennon-perspective写文章保存到~/Downloads/，wechat_md-to-article-dl转换HTML通过质检，gen_cover生成并打开封面，等待用户确认",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "publish-existing-html",
+      "prompt": "我手里已经有文章了，HTML在/tmp/my-article.wechat.html，封面图在~/Downloads/my-cover.png，直接帮我推到草稿箱。作者用dennon。",
+      "expected_output": "跳过Step 1-3，展示推送命令给用户确认，确认后执行md2wechat --html --author dennon --cover并返回结果",
+      "files": []
+    }
+  ]
+}
