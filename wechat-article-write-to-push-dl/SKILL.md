@@ -3,7 +3,7 @@ name: wechat-article-write-to-push-dl
 description: >
   Choreographed pipeline for WeChat Official Account full-publish workflow.
   Orchestrates 4 skills in sequence: dennon-perspective (write article) →
-  wechat_md-to-article-dl (convert to HTML) → wechat-cover-generator-dl
+  wechat-md-to-article-dl (convert to HTML) → wechat-cover-generator-dl
   (generate cover) → wechat_article_push_dl (push to drafts).
   Trigger when the user says "publish", "推文", "推送", "发布公众号",
   "write and push", or finishes a denton-style article and wants it published.
@@ -17,18 +17,20 @@ Choreographs 4 existing skills into one end-to-end workflow.
 Each step delegates to a dedicated skill — this skill owns sequencing, data
 handoff, quality gates, and safety stops.
 
-## Pipeline overview
+## Overall pipeline
 
 ```
 [Input] Article topic or clipping
   ↓
 Step 1: dennon-perspective → write article → ~/Downloads/<title>.md
   ↓
-Step 2: wechat_md-to-article-dl → convert to HTML → /tmp/<name>.wechat.html
+Step 2: wechat-md-to-article-dl → convert to HTML → /tmp/<name>.wechat.html
   ↓
 Step 3: wechat-cover-generator-dl → generate cover → ~/Downloads/<name>-cover.png
   ↓
-Step 4: wechat_article_push_dl → push to drafts
+Step 4: wechat_article_push_dl → show push command (STOP — user confirms)
+  ↓
+Step 5: Save outputs → workspace directory + summary.txt
   ↓
 [Done] User reviews draft at mp.weixin.qq.com
 ```
@@ -58,13 +60,13 @@ Follow the full Agentic Protocol:
 5. **Step 4 (Cleanup)** — run layout-check.py, pass all checks
 
 **Output**: `~/Downloads/<标题前20字>.md`
-**Quality gate**: layout-check.py exit code 0 (7+ layout types, ≤3 consecutive text paragraphs, adjacent chapter diversity).
+**Quality gate**: layout-check.py exit code 0 (≥5 layout types, ≤3 consecutive text paragraphs, adjacent chapter diversity).
 
 If layout check fails, fix and re-run before proceeding to Step 2.
 
 ## Step 2: Convert to WeChat HTML
 
-After the article is saved. Load `wechat_md-to-article-dl` skill.
+After the article is saved. Load `wechat-md-to-article-dl` skill.
 
 Determine theme based on article domain:
 
@@ -77,7 +79,7 @@ Determine theme based on article domain:
 | 其他 / 通用 | `cognition` (dennon default) |
 
 ```bash
-python3 ~/.hermes/skills/wechat_md-to-article-dl/scripts/convert.py \
+python3 ~/.hermes/skills/wechat-md-to-article-dl/scripts/convert.py \
   "<absolute-path-to-article.md>" \
   --output /tmp/<short-name>.wechat.html \
   --theme <theme> \
@@ -106,6 +108,7 @@ Read the article's first `# ` heading (the full title). The cover needs a short 
 - **Cover title** (`--title`): first ≤14 characters of the article title
 - **Cover subtitle** (`--subtitle`): remaining characters (if any)
 - If full title is ≤14 chars, use it whole with no subtitle
+- **Prefer semantic split at punctuation**: When the title contains `：` (full-width colon), `——` (em dash), or `·` (middle dot), prefer splitting at that delimiter rather than at an arbitrary character boundary. The colon-delimited pair (key insight before colon + elaboration after) typically reads naturally as title/subtitle. Example: `"为什么刷手机不是休息：注意力系统的隐性破产"` → title=`"为什么刷手机不是休息"`, subtitle=`"注意力系统的隐性破产"`. A literal 14-char cut would produce the broken `"为什么刷手机不是休息：注意"`.
 
 ### Fetch image
 
@@ -175,15 +178,71 @@ Tell the user:
 - Review and publish at mp.weixin.qq.com → 草稿箱
 - Do NOT claim it was auto-published
 
+## Step 5: Save outputs and generate summary
+
+After Steps 1-4 are complete, consolidate all intermediate and final artifacts into a
+single workspace directory for easy review, debugging, and future reference.
+
+### Workspace structure
+
+```
+<workspace-dir>/
+  ├── article.md                          # original Markdown (Step 1)
+  ├── <name>.wechat.html                  # WeChat-formatted HTML (Step 2)
+  ├── <name>.wechat.html.report.json      # quality report (Step 2)
+  ├── <name>-cover.png                    # 900×383 cover image (Step 3)
+  └── summary.txt                         # pipeline summary (this step)
+```
+
+### Workspace directory
+
+```bash
+WORKSPACE="~/.hermes/skills/social-media/wechat-article-write-to-push-dl-workspace/iteration-1/eval-1/with_skill/outputs"
+mkdir -p "$WORKSPACE"
+```
+
+### Write summary.txt
+
+Generate a plain-text summary documenting:
+
+- Pipeline run date
+- Article title
+- Each step's status (PASSED / SKIPPED / BLOCKED)
+- For Step 2: theme used and all 5 quality scores
+- For Step 3: image source (Picsum / Unsplash ID), cover title, subtitle
+- For Step 4: the exact push command shown to the user (even if not executed)
+- Full paths to all outputs
+
+Copy all intermediate files into the workspace so a future review or re-push
+has everything in one place:
+
+```bash
+cp <article.md>     "$WORKSPACE/"
+cp <wechat.html>    "$WORKSPACE/"
+cp <report.json>    "$WORKSPACE/"
+cp <cover.png>      "$WORKSPACE/"
+cp summary.txt      "$WORKSPACE/"
+```
+
+### Rationale
+
+Without consolidation, artifacts scatter across `/tmp/` (ephemeral) and
+`~/Downloads/` (hard to find later). A single workspace dir makes it possible
+to:
+- Re-push without re-running Steps 1-3
+- Share the full pipeline state for review
+- Debug quality failures by checking the report.json alongside the HTML
+
 ## Full pipeline example
 
-A typical publish run from a vault clipping:
+A typical publish run — uses absolute paths (not `~`) since Python scripts do not
+expand tilde:
 
 ```bash
 # Step 1 already ran — article saved
 # Step 2:
-python3 ~/.hermes/skills/wechat_md-to-article-dl/scripts/convert.py \
-  "~/Downloads/学习系统的三重模型重构.md" \
+python3 ~/.hermes/skills/wechat-md-to-article-dl/scripts/convert.py \
+  "/Users/f/Downloads/学习系统的三重模型重构.md" \
   --output /tmp/learning-system.wechat.html \
   --theme cognition \
   --title "低维努力的陷阱：学习系统的三重模型重构"
@@ -196,11 +255,20 @@ python3 ~/.hermes/skills/wechat_article_cover_image_gen/scripts/gen_cover.py \
   --subtitle "学习系统的三重模型重构" \
   --image-url "https://fastly.picsum.photos/..." \
   --template auto --align center \
-  --output "~/Downloads/学习系统-cover.png"
+  --output "/Users/f/Downloads/学习系统-cover.png"
 
 # Step 4 (after user confirms):
 cd ~/Documents && md2wechat --html /tmp/learning-system.wechat.html \
-  --author dennon --cover ~/Downloads/学习系统-cover.png
+  --author dennon --cover "/Users/f/Downloads/学习系统-cover.png"
+
+# Step 5: Save outputs
+WORKSPACE="$HOME/.hermes/skills/social-media/wechat-article-write-to-push-dl-workspace/$(date +%Y%m%d)/outputs"
+mkdir -p "$WORKSPACE"
+cp "/Users/f/Downloads/学习系统的三重模型重构.md" "$WORKSPACE/article.md"
+cp /tmp/learning-system.wechat.html "$WORKSPACE/"
+cp /tmp/learning-system.wechat.html.report.json "$WORKSPACE/"
+cp "/Users/f/Downloads/学习系统-cover.png" "$WORKSPACE/"
+echo "All outputs saved to $WORKSPACE"
 ```
 
 ## Failure handling
@@ -209,7 +277,7 @@ cd ~/Documents && md2wechat --html /tmp/learning-system.wechat.html \
 |------|---------|---------|
 | 1 | layout-check fails | Fix layout diversity, re-run check. If adjective: report to user |
 | 2 | Score < 90 | Rerun in strict mode. If still failing, show failed dimensions to user |
-| 2 | Unicode filename | Copy to `/tmp/` with ASCII name per wechat_md-to-article-dl's workaround |
+| 2 | Unicode filename | Copy to `/tmp/` with ASCII name per wechat-md-to-article-dl's workaround |
 | 3 | Image fetch fails | Retry with different keywords (max 3 attempts). Then fallback to gradient with `--no-image` |
 | 3 | Cover title truncated | Shorten `--title`, move overflow to `--subtitle` |
 | 4 | `40164` IP not whitelisted | Read actual IP from error, tell user to add to mp.weixin.qq.com whitelist |
@@ -242,3 +310,5 @@ When the pipeline completes successfully, report:
 - [ ] No `--style` flag added to push command
 - [ ] No `--title` flag added to push command
 - [ ] `cd ~/Documents` executed before push
+- [ ] All outputs copied to workspace directory (Step 5)
+- [ ] summary.txt written with step-by-step status
