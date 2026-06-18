@@ -1,6 +1,6 @@
 ---
-name: clone-website-dl-v2
-description: Fast, high-fidelity static website/page cloning from live URLs or supplied HTML, also matching requests that mention clone_website_dl_v2. Use this whenever the user asks to clone, copy, replicate, recreate, reverse-engineer, or rebuild a static web page, landing page, marketing page, docs page, nav/footer, or section and wants localized assets, reusable header/footer components, TDD-style stage gates, explicit load-completion criteria for slow pages, optional Scrapling-assisted extraction, and no animation reconstruction. Prefer this skill over general frontend skills when fidelity, asset localization, and staged detection/checklists matter.
+name: clone-website-static-dl-v2
+description: Fast, high-fidelity static website/page cloning from live URLs or supplied HTML, also matching requests that mention clone_website_static_dl_v2, clone-website-static-dl-v2, clone_website_dl_v2, or clone-website-dl-v2. Use this whenever the user asks to clone, copy, replicate, recreate, reverse-engineer, or rebuild a static web page, landing page, marketing page, docs page, nav/footer, or section and wants localized assets, reusable header/footer components, TDD-style stage gates, explicit load-completion criteria for slow pages, optional Scrapling-assisted extraction, and no animation reconstruction. Prefer this skill over general frontend skills when fidelity, asset localization, and staged detection/checklists matter.
 compatibility: Browser automation or Playwright is strongly preferred. Scrapling is optional for slow/dynamic extraction fallback. Works with any web project scaffold that can serve and build static pages.
 ---
 
