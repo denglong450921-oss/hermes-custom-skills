@@ -15,6 +15,7 @@ Build from evidence, not memory. The workflow advances through stages, and each 
 Important constraints:
 
 - Prioritize static visual fidelity, responsive layout, real copy, typography, colors, spacing, and media occupancy.
+- Build the delivered page from semantic DOM and localized assets. Do not ship a page that hides the real DOM and displays a full-page screenshot/reference capture as the primary visual layer.
 - Do not reconstruct animations. Disable CSS/JS animations for deterministic screenshots and implement stable end states or static posters.
 - Localize resources. Download reachable images, fonts, SVGs, CSS, and small videos into the project. Rewrite references to local paths.
 - Enforce a 500 MB default total resource budget. If localized media would exceed the budget, use documented placeholders for images/videos instead of downloading the large files.
@@ -186,6 +187,7 @@ Wire the page together:
 - Import `Header`, ordered section components, and `Footer`.
 - Preserve top-to-bottom section order from the source of truth.
 - Use local assets only.
+- Render the semantic component tree visibly. Reference screenshots may be used only as QA inputs, not as CSS backgrounds, pseudo-element overlays, fixed image layers, or hidden-DOM screenshot shells in the delivered page.
 - Remove animation libraries, timers, scroll-trigger code, and runtime-only effects unless the user specifically requested them.
 - Keep normal links, forms, and simple CSS hover states when they are visible static page behavior.
 
@@ -203,6 +205,7 @@ Capture original and clone screenshots with the same viewport dimensions and ani
 - Missing/broken/localized asset status.
 - Header/footer reuse.
 - Mobile layout.
+- Delivered-page integrity: the clone must not use a full-page source screenshot/reference capture as the visible page. The real header, section components, and footer must be visible and inspectable.
 
 Suggested acceptance thresholds:
 
@@ -212,6 +215,7 @@ Suggested acceptance thresholds:
 - Broken localized asset references: `0`.
 - Undocumented placeholder regions: `0`.
 - Duplicated header/footer markup inside sections: `0`.
+- Screenshot/reference overlay used as delivered page: `0`.
 
 Save results under `docs/qa/<page-slug>/`.
 
@@ -248,6 +252,8 @@ When the original page uses animation or large media:
   - section/component using it
 
 Do not leave blank media boxes unless the original visually has blank space.
+
+Static replacements are allowed only for bounded media regions that correspond to real images, videos, canvases, maps, or animation slots in the source. They must not replace the whole page, the entire viewport, or ordinary text/layout sections. A full-page screenshot can live under `docs/design-references/` or `docs/qa/`, but the delivered `index.html`/route must be assembled from real DOM, CSS, text, and localized assets.
 
 ## TDD Rhythm
 

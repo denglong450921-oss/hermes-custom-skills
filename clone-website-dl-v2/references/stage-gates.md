@@ -152,6 +152,8 @@ Checklist:
 - [ ] Page imports Header and Footer exactly through reusable components.
 - [ ] Sections appear in the source-of-truth order.
 - [ ] Page uses local assets only, except documented external links.
+- [ ] Delivered page visibly renders semantic Header, section, and Footer DOM instead of hiding them behind a full-page screenshot/reference layer.
+- [ ] Reference screenshots are used only for QA evidence, not as CSS backgrounds, pseudo-element overlays, or fixed visual shells in the delivered route.
 - [ ] No animation libraries or runtime motion code were added for static clone fidelity.
 - [ ] Build/test checks pass.
 - [ ] Desktop and mobile pages render without obvious overflow or missing sections.
@@ -176,4 +178,5 @@ Checklist:
 - [ ] Broken localized assets: 0.
 - [ ] Undocumented placeholders: 0.
 - [ ] Header/footer duplicated inside sections: 0.
+- [ ] Full-page screenshot/reference overlay in delivered page: 0.
 - [ ] Known limitations are evidence-backed, not excuses for skipped work.
