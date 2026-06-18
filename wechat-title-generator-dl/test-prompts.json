@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "prompt": "帮我生成一个公众号标题。主题：OPC / AI / 个人商业系统，风格：professional",
+    "expected": "Markdown 文件包含 # 标题、## 副标题、## 标签、## 原标题，标题符合 [领域+核心概念+方法] 结构"
+  },
+  {
+    "id": 2,
+    "prompt": "Generate a WeChat article title. Topic: \"learning methods / knowledge management / second brain\", style: \"cognitive\"",
+    "expected": "Markdown file with title, subtitle, tags, original title sections; thoughtful analytical style"
+  },
+  {
+    "id": 3,
+    "prompt": "Create a WeChat title. Topic: \"startup fundraising / pitch deck / investor relations\", style: \"high-level\"",
+    "expected": "Markdown with strategic visionary title, methodology hint, no clickbait"
+  }
+]

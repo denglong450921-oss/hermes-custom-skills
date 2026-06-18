@@ -1,0 +1,53 @@
+{
+  "skill_name": "wechat_article_css_dl",
+  "evals": [
+    {
+      "id": "case_001",
+      "task": "This HTML has a <style> block with CSS variables, gradients, flexbox, and ::before pseudo-elements. Check it for WeChat CSS violations and report them.",
+      "environment": {
+        "files": {
+          "input.html": "<html><head><style>:root{--accent:#e8633a}body{display:flex}.card{background:linear-gradient(135deg,red,blue)}.card::before{content:'>'}</style></head><body><div class='card'>test</div></body></html>"
+        },
+        "tools_available": ["check script (python3 regex scanner)"]
+      },
+      "tools": ["check script"],
+      "grader": {
+        "must_use": ["detects_style_block", "detects_gradient", "detects_flex", "detects_pseudo_element", "detects_css_variable"],
+        "must_have": ["Found", "violation", "WeChat"],
+        "must_not_have": ["No WeChat CSS violations"]
+      }
+    },
+    {
+      "id": "case_002",
+      "task": "Fix this HTML for WeChat compatibility. It has <style> blocks, gradients, flexbox, box-shadow, and CSS variables that need micro-fixes applied.",
+      "environment": {
+        "files": {
+          "input.html": "<html><head><style>:root{--bg:#f8f6f3}.wrap{display:flex}.box{background:linear-gradient(135deg,#e8633a,#c8406a);box-shadow:0 2px 8px rgba(0,0,0,0.1)}</style></head><body><div class='wrap'><div class='box'>content</div></div></body></html>"
+        },
+        "tools_available": ["fix script (python3 regex replacer)"]
+      },
+      "tools": ["fix script"],
+      "grader": {
+        "must_use": ["applies_fix", "generates_output_path", "fixes_gradient", "removes_style_block"],
+        "must_have": ["fix", "output", "applied"],
+        "must_not_have": []
+      }
+    },
+    {
+      "id": "case_003",
+      "task": "This HTML is already WeChat-compatible — all styles are inline, no <style> blocks, no gradients, no flex/grid. Check it and confirm no violations.",
+      "environment": {
+        "files": {
+          "input.html": "<html><body><div style='color:#333;font-size:16px;margin:8px 0;'>Clean content</div></body></html>"
+        },
+        "tools_available": ["check script (python3 regex scanner)"]
+      },
+      "tools": ["check script"],
+      "grader": {
+        "must_use": ["reports_clean"],
+        "must_have": ["No WeChat CSS violations"],
+        "must_not_have": ["Found"]
+      }
+    }
+  ]
+}

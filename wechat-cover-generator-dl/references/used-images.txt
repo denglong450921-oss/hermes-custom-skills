@@ -1,0 +1,13 @@
+# Used cover images — add new IDs here to avoid reuse
+# Format: photo-id  # description
+1552664730-d307ca884978  # tech workspace (OPC, behavior change, health myths)
+1456513080510-7bf3a84b82f8  # education child (6 education articles)
+1506126613408-eca07ce68773  # wellness calm (motion sickness, elderly, medical)
+1541701494587-cb58502866ab  # abstract colorful (inflammation)
+1677442136019-21780ecad995  # tech AI workspace (behavior change, health myths)
+1477959858617-67f85cf4f1df  # city skyline (sleep article)
+1506905925346-21bda4d32df4  # nature landscape (diastolic BP article)
+1504639725590-34d0984388bd  # brain neural network (health cognition article)
+1451187580459-43490279c0fa  # earth satellite tech (immune system article)
+1555066931-4365d14bab8c  # code screen tech (lithium battery article)
+1503676260728-1c00da094a0b  # books apple education (deliberate practice article)

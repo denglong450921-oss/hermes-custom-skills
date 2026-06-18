@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "prompt": "I need to push this article to my WeChat official account. The HTML file is at /tmp/my-article.html, the title is 'How to Deploy Next.js Apps', I want the tech style, author is 'dennon', cover is https://picsum.photos/1200/800, and I want comments enabled.",
+    "expected": "Builds correct md2wechat --html command with all flags: --html, --title, --style tech, --author, --cover, --comment. Executes the CLI and returns media_id on success."
+  },
+  {
+    "id": 2,
+    "prompt": "I wrote a markdown post about 运动长高 and want to publish it on WeChat as a 小绿书 (image post format). File is at /tmp/exercise.md. No title specified, use the one from frontmatter. Cover: https://example.com/cover.jpg",
+    "expected": "Uses md2wechat --markdown with --type newspic and --cover flags. Skips --title (reads from frontmatter). Handles the 小绿书 format correctly."
+  },
+  {
+    "id": 3,
+    "prompt": "I have an HTML article ready to push to WeChat but I don't have a cover image. File is at /tmp/article.html, title is 'My Article'.",
+    "expected": "Detects missing cover and tells user --cover is required. Does NOT attempt to push without cover. Shows the MISSING_COVER_IMAGE error guidance."
+  }
+]

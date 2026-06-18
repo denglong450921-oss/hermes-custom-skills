@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "prompt": "帮我给我的 OPC 文章生成一张公众号封面图。文章主题是 OPC / AI / 个人商业系统，风格 high-level",
+    "expected": "900x383 PNG 封面 + JSON 报告含 cover_image_url, validation: pass, title metadata"
+  },
+  {
+    "id": 2,
+    "prompt": "Run the full cover pipeline for a cognitive learning article. Topic: \"learning methods / knowledge management\", style: \"cognitive\"",
+    "expected": "Cover PNG + pipeline report with image source, validation status, title reference"
+  },
+  {
+    "id": 3,
+    "prompt": "生成一篇关于健康冥想主题的公众号封面，风格 professional。如果图片验证不通过要自动重试",
+    "expected": "Cover PNG + pipeline report with retry count, final validation status"
+  }
+]

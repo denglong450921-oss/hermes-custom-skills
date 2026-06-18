@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "prompt": "I need a WeChat cover image for my article about AI-powered business. The title is \"AI 时代的 OPC\" and the subtitle is \"一个人如何用最小成本跑通自己的商业闭环\". The tagline is \"决策者 + AI 工具链 · 可验证需求 · 商业闭环系统\". Save it to /tmp/cover_test1.png.",
+    "expected": "900x383 PNG cover with Chinese article title, subtitle, tagline and gold accent bar. Text should be centred and clearly readable."
+  },
+  {
+    "id": 2,
+    "prompt": "Generate a simple WeChat cover image with just the title \"Weekly Tech Review\" and label \"TECH · DIGEST\". Output to /tmp/cover_test2.png.",
+    "expected": "900x383 PNG cover with English-only title, no subtitle or tagline. Clean minimal layout."
+  },
+  {
+    "id": 3,
+    "prompt": "Make a WeChat cover for this tutorial article: title \"从零开始搭建你的第一个自动化工作流\" with subtitle \"无需编程基础，利用现成工具组合出高效系统\" and tagline \"自动化 · AI 工具 · 效率提升\". Save to /tmp/cover_test3.png. Use a different image style if possible.",
+    "expected": "900x383 PNG cover with long Chinese title fitting within the canvas, all text elements centred and readable."
+  }
+]

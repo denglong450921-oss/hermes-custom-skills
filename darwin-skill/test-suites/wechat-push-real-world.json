@@ -1,0 +1,234 @@
+{
+  "suite_name": "wechat-push-real-world",
+  "description": "20 real-world test scenarios covering wechat_article_css_dl and wechat_article_push_dl",
+  "skills": ["wechat_article_css_dl", "wechat_article_push_dl"],
+  "tests": [
+    {
+      "id": "css-001",
+      "skill": "wechat_article_css_dl",
+      "scenario": "技术博客 — 含<style>块、渐变色、flex布局",
+      "prompt": "I exported a tech blog post as HTML from Notion. The CSS has a style block with dark theme gradients and flexbox cards. Before I push this to WeChat, check if it's compatible. File: /tmp/notion-tech-blog.html",
+      "html_file": "notion-tech-blog.html",
+      "html_content": "<html><head><style>body{background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);color:#fff}.card{display:flex;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:12px;padding:20px;margin:10px 0;box-shadow:0 4px 15px rgba(0,0,0,0.3)}</style></head><body><div class='card'><h2>How AI Works</h2><p>Deep learning explained simply.</p></div></body></html>",
+      "expected_violations": ["style block", "gradient", "flex", "box-shadow"],
+      "expected_fixes": ["gradient→solid", "flex→block", "remove box-shadow"]
+    },
+    {
+      "id": "css-002",
+      "skill": "wechat_article_css_dl",
+      "scenario": "电商产品页 — CSS变量 + grid布局",
+      "prompt": "Our product team sent me an HTML product page with CSS grid and custom properties for the brand colors. Need to make it WeChat-compatible. File: /tmp/product-page.html",
+      "html_file": "product-page.html",
+      "html_content": "<html><head><style>:root{--primary:#e8633a;--secondary:#3a86c8}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.item{background:var(--primary);color:#fff;padding:12px;border-radius:8px}</style></head><body><div class='grid'><div class='item'>Product A</div><div class='item'>Product B</div></div></body></html>",
+      "expected_violations": ["CSS variable", "grid", "style block"],
+      "expected_fixes": ["var→hardcode", "grid→block"]
+    },
+    {
+      "id": "css-003",
+      "skill": "wechat_article_css_dl",
+      "scenario": "邮件通讯稿 — 含@media响应式查询",
+      "prompt": "This is a newsletter HTML from Mailchimp export. It has responsive media queries for mobile. I want to publish it on WeChat but worried about the @media rules. File: /tmp/newsletter.html",
+      "html_file": "newsletter.html",
+      "html_content": "<html><head><style>.container{max-width:600px;margin:auto}@media(max-width:480px){.container{padding:10px}.hide-mobile{display:none}}@media(min-width:768px){.two-col{display:flex;gap:20px}}</style></head><body><div class='container'>Newsletter content</div></body></html>",
+      "expected_violations": ["@media", "style block", "flex"],
+      "expected_fixes": ["remove @media", "flex→block"]
+    },
+    {
+      "id": "css-004",
+      "skill": "wechat_article_css_dl",
+      "scenario": "纯内联样式文章 — 已兼容，应报告clean",
+      "prompt": "I wrote an article with only inline styles — no style blocks, no fancy CSS. Just colors, fonts, and spacing. Check if it's WeChat-ready. File: /tmp/clean-article.html",
+      "html_file": "clean-article.html",
+      "html_content": "<html><body><div style='color:#333;font-size:16px;line-height:1.8;margin:0 auto;max-width:700px;padding:20px;background:#fff'><h1 style='font-size:24px;color:#1a1a2e;margin-bottom:16px'>Hello World</h1><p style='margin-bottom:12px'>This article uses only inline styles and is fully WeChat compatible.</p></div></body></html>",
+      "expected_violations": [],
+      "expected_fixes": []
+    },
+    {
+      "id": "css-005",
+      "skill": "wechat_article_css_dl",
+      "scenario": "列表文章 — ::before做自定义bullet",
+      "prompt": "This article uses ::before pseudo-elements for custom bullet points in lists. Will WeChat render them? File: /tmp/bullet-list.html",
+      "html_file": "bullet-list.html",
+      "html_content": "<html><head><style>ul{list-style:none;padding:0}li::before{content:'▸';color:#e8633a;font-weight:bold;margin-right:8px}li{padding:6px 0;border-bottom:1px solid #eee}</style></head><body><ul><li>First item</li><li>Second item</li><li>Third item</li></ul></body></html>",
+      "expected_violations": ["::before", "style block"],
+      "expected_fixes": ["::before→literal ▸"]
+    },
+    {
+      "id": "css-006",
+      "skill": "wechat_article_css_dl",
+      "scenario": "卡片设计 — box-shadow + hover效果",
+      "prompt": "We have cards with hover effects and box-shadows in our article. Need to check WeChat compatibility. File: /tmp/cards-hover.html",
+      "html_file": "cards-hover.html",
+      "html_content": "<html><head><style>.card{background:#fff;border-radius:10px;padding:20px;box-shadow:0 4px 12px rgba(0,0,0,0.1);transition:transform 0.3s}.card:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,0.15)}</style></head><body><div class='card'>Hover card content</div></body></html>",
+      "expected_violations": ["box-shadow", "style block", "transition", "transform", ":hover"],
+      "expected_fixes": ["remove box-shadow", "remove :hover", "remove transition"]
+    },
+    {
+      "id": "css-007",
+      "skill": "wechat_article_css_dl",
+      "scenario": "渐变文字标题 — -webkit-background-clip",
+      "prompt": "My article title uses gradient text with -webkit-background-clip. Will WeChat show the gradient? File: /tmp/gradient-title.html",
+      "html_file": "gradient-title.html",
+      "html_content": "<html><head><style>h1{font-size:36px;font-weight:800;background:linear-gradient(135deg,#e8633a,#c8406a);-webkit-background-clip:text;-webkit-text-fill-color:transparent}</style></head><body><h1>Gradient Title Here</h1></body></html>",
+      "expected_violations": ["-webkit-background-clip", "gradient", "style block"],
+      "expected_fixes": ["remove webkit-clip", "gradient→solid"]
+    },
+    {
+      "id": "css-008",
+      "skill": "wechat_article_css_dl",
+      "scenario": "步骤列表 — CSS counter自动编号",
+      "prompt": "I have a numbered step-by-step guide using CSS counters. Need to check if it works in WeChat. File: /tmp/steps-counter.html",
+      "html_file": "steps-counter.html",
+      "html_content": "<html><head><style>ol{list-style:none;counter-reset:step;padding:0}li{counter-increment:step;padding:10px 0 10px 36px;position:relative;border-left:2px solid #e8633a}li::before{content:counter(step);position:absolute;left:-10px;top:10px;width:24px;height:24px;background:#e8633a;color:#fff;border-radius:50%;text-align:center}</style></head><body><ol><li>Step one</li><li>Step two</li><li>Step three</li></ol></body></html>",
+      "expected_violations": ["counter", "::before", "style block"],
+      "expected_fixes": ["counter→manual numbers", "::before→literal"]
+    },
+    {
+      "id": "css-009",
+      "skill": "wechat_article_css_dl",
+      "scenario": "动画内容 — opacity过度+动画",
+      "prompt": "This article has fade-in animations using opacity and CSS transitions. Will they work in WeChat's reader? File: /tmp/animated.html",
+      "html_file": "animated.html",
+      "html_content": "<html><head><style>.fade-in{opacity:0;animation:fadeIn 1s ease forwards}@keyframes fadeIn{to{opacity:1}}@media(prefers-reduced-motion){.fade-in{opacity:1}}</style></head><body><div class='fade-in' style='opacity:1'>Animated content</div></body></html>",
+      "expected_violations": ["opacity", "animation", "@media", "style block"],
+      "expected_fixes": ["remove opacity", "remove animation", "remove @media"]
+    },
+    {
+      "id": "css-010",
+      "skill": "wechat_article_css_dl",
+      "scenario": "复杂混合页面 — 所有违规模板",
+      "prompt": "This HTML has everything: style block, CSS variables, gradients, flex, grid, ::before, counters, @media, box-shadow, and hover effects. Check all violations at once. File: /tmp/all-violations.html",
+      "html_file": "all-violations.html",
+      "html_content": "<html><head><style>:root{--bg:#f8f6f3}.wrap{display:flex;display:grid;gap:10px}.item{background:linear-gradient(135deg,var(--bg),#fff);box-shadow:0 2px 8px rgba(0,0,0,0.1);border-radius:8px;padding:16px}.item::before{content:'#'}@media(max-width:640px){.wrap{flex-direction:column}}li{counter-increment:step}.item:hover{opacity:0.8}</style></head><body><div class='wrap'><div class='item'>Content</div></div><ol><li>Item</li></ol></body></html>",
+      "expected_violations": ["style block", "CSS variable", "gradient", "flex", "grid", "::before", "@media", "box-shadow", ":hover", "counter", "opacity"],
+      "expected_fixes": ["var→hardcode", "gradient→solid", "flex/grid→block", "remove ::before", "remove @media", "remove box-shadow", "remove counter"]
+    },
+    {
+      "id": "push-011",
+      "skill": "wechat_article_push_dl",
+      "scenario": "标准HTML推文 — 全部参数齐全",
+      "prompt": "Push this HTML article to WeChat: file is /tmp/tech-article.html, title is 'Understanding Transformers', style tech, author 'dennon', cover https://picsum.photos/1200/800, enable comments.",
+      "user_input": {
+        "file": "/tmp/tech-article.html",
+        "title": "Understanding Transformers",
+        "style": "tech",
+        "author": "dennon",
+        "cover": "https://picsum.photos/1200/800",
+        "comment": true
+      },
+      "expected_command_flags": ["--html", "--title", "--style tech", "--author", "--cover", "--comment"]
+    },
+    {
+      "id": "push-012",
+      "skill": "wechat_article_push_dl",
+      "scenario": "Markdown→小绿书 — 图片帖子",
+      "prompt": "Publish this markdown as a 小绿书 image post: /tmp/travel-diary.md, cover https://images.unsplash.com/photo-1, no title needed (it's in frontmatter).",
+      "user_input": {
+        "file": "/tmp/travel-diary.md",
+        "type": "newspic",
+        "cover": "https://images.unsplash.com/photo-1"
+      },
+      "expected_command_flags": ["--markdown", "--type newspic", "--cover"]
+    },
+    {
+      "id": "push-013",
+      "skill": "wechat_article_push_dl",
+      "scenario": "缺少封面图 — 错误处理",
+      "prompt": "I want to push this HTML article but I don't have a cover image. File: /tmp/no-cover.html, title: 'My Article'.",
+      "user_input": {
+        "file": "/tmp/no-cover.html",
+        "title": "My Article"
+      },
+      "expected_behavior": "block_push_missing_cover"
+    },
+    {
+      "id": "push-014",
+      "skill": "wechat_article_push_dl",
+      "scenario": "IP白名单错误 — 错误处理",
+      "prompt": "I tried pushing but got error 40164 saying my IP is not whitelisted. My WeChat backend is at mp.weixin.qq.com. What do I do?",
+      "user_input": {
+        "error": "40164",
+        "ip": "116.30.136.44"
+      },
+      "expected_behavior": "guide_ip_whitelist"
+    },
+    {
+      "id": "push-015",
+      "skill": "wechat_article_push_dl",
+      "scenario": "粉丝评论 + 节日风格",
+      "prompt": "Push this markdown to WeChat with festival style, enable comments but only fans can comment. File: /tmp/lunar-new-year.md, cover https://example.com/red-envelope.jpg, author '小红'.",
+      "user_input": {
+        "file": "/tmp/lunar-new-year.md",
+        "style": "festival",
+        "author": "小红",
+        "cover": "https://example.com/red-envelope.jpg",
+        "comment": true,
+        "fans_only": true
+      },
+      "expected_command_flags": ["--markdown", "--style festival", "--author", "--cover", "--comment", "--fans-only-comment"]
+    },
+    {
+      "id": "push-016",
+      "skill": "wechat_article_push_dl",
+      "scenario": "学术灰风格 — 标准新闻稿",
+      "prompt": "Push this academic paper summary to WeChat. Markdown at /tmp/paper-summary.md, title 'Attention Is All You Need: A Summary', style academic_gray, author 'Research Team', cover https://example.com/paper-cover.jpg.",
+      "user_input": {
+        "file": "/tmp/paper-summary.md",
+        "title": "Attention Is All You Need: A Summary",
+        "style": "academic_gray",
+        "author": "Research Team",
+        "cover": "https://example.com/paper-cover.jpg"
+      },
+      "expected_command_flags": ["--markdown", "--style academic_gray", "--title", "--author", "--cover"]
+    },
+    {
+      "id": "push-017",
+      "skill": "wechat_article_push_dl",
+      "scenario": "自定义摘要 + 公告风格",
+      "prompt": "Push an urgent announcement to WeChat. HTML at /tmp/urgent-announcement.html, title 'System Maintenance Tonight', style announcement, summary 'Important: downtime from 2-4 AM', author 'IT Team', cover https://example.com/warning.jpg.",
+      "user_input": {
+        "file": "/tmp/urgent-announcement.html",
+        "title": "System Maintenance Tonight",
+        "style": "announcement",
+        "summary": "Important: downtime from 2-4 AM",
+        "author": "IT Team",
+        "cover": "https://example.com/warning.jpg"
+      },
+      "expected_command_flags": ["--html", "--style announcement", "--summary", "--author", "--cover"]
+    },
+    {
+      "id": "push-018",
+      "skill": "wechat_article_push_dl",
+      "scenario": "直接传内容串 — 不用文件",
+      "prompt": "Push this short HTML directly: content is '<p>Hello WeChat</p>', title 'Quick Post', cover https://example.com/quick.jpg, no author.",
+      "user_input": {
+        "content": "<p>Hello WeChat</p>",
+        "title": "Quick Post",
+        "cover": "https://example.com/quick.jpg"
+      },
+      "expected_command_flags": ["--content", "--title", "--cover"]
+    },
+    {
+      "id": "push-019",
+      "skill": "wechat_article_push_dl",
+      "scenario": "长文章 — 内容超过限制",
+      "prompt": "I'm getting error 45004 when trying to push my article. It's a very long guide with lots of sections. File: /tmp/long-guide.md, title 'Complete Guide', cover https://example.com/guide.jpg. What's wrong?",
+      "user_input": {
+        "error": "45004",
+        "file": "/tmp/long-guide.md"
+      },
+      "expected_behavior": "guide_body_too_long"
+    },
+    {
+      "id": "push-020",
+      "skill": "wechat_article_push_dl",
+      "scenario": "认证号检查 — 404错误",
+      "prompt": "I tried pushing to WeChat but got a 404 error. My account is a basic subscription account, not verified. File: /tmp/article.html, title 'Test'.",
+      "user_input": {
+        "error": "404",
+        "account_type": "unverified"
+      },
+      "expected_behavior": "guide_account_verification"
+    }
+  ]
+}

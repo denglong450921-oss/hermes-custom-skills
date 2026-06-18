@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "prompt": "检查这张图片是否适合做公众号封面：https://images.unsplash.com/photo-1677442136019-21780ecad995 ，主题是\"tech AI\"",
+    "expected": "返回 JSON 包含 status、relevance、clarity、resolution_px、5 个检查项"
+  },
+  {
+    "id": 2,
+    "prompt": "Verify this image for WeChat cover quality: https://images.unsplash.com/photo-1552664730-d307ca884978 , query: \"business meeting\", min width: 1800",
+    "expected": "JSON with pass/fail status, all 6 dimension checks, reason_if_fail if applicable"
+  },
+  {
+    "id": 3,
+    "prompt": "Validate image quality: https://images.unsplash.com/photo-1504639725590-34d0984388bd , query: \"technology data\", min width: 1200",
+    "expected": "JSON validation report with resolution, clarity, crop check scores"
+  }
+]

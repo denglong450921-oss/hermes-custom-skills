@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "prompt": "I have this HTML that I want to push to WeChat but I'm worried the CSS won't render. Can you check it for WeChat compatibility issues? The file is at /tmp/test-card.html with a <style> block, CSS variables, gradients, and flexbox.",
+    "expected": "Reads /tmp/test-card.html, scans for all WeChat CSS violations, returns a list of what's broken (style block, CSS vars, gradients, flex) with fix suggestions."
+  },
+  {
+    "id": 2,
+    "prompt": "This HTML has some WeChat compatibility issues — can you auto-fix them? File at /tmp/broken.html has linear-gradient backgrounds, box-shadow, and ::before pseudo-elements. Save the fixed version.",
+    "expected": "Applies automated micro-fixes: replaces gradients with solid colors, removes box-shadow, removes ::before blocks. Reports what was fixed and saves to output path."
+  },
+  {
+    "id": 3,
+    "prompt": "I already wrote my article using only inline styles like <div style='color:#333;font-size:16px'>. Can you check if it's WeChat-compatible? File at /tmp/clean.html.",
+    "expected": "Scans /tmp/clean.html, finds no violations, reports 'No WeChat CSS violations found'."
+  }
+]

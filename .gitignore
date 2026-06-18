@@ -1,16 +1,4 @@
-# Ignore virtual environments
-venv/
-.venv/
-__pycache__/
-*.pyc
-*.pyo
-.DS_Store
-
-# Next.js and Node
-node_modules
-.next
-.env
-
-# QA artifacts
-docs/qa/clone
-docs/qa/diff
+# Local symlinks for Hermes skill loading (not part of repo)
+/SKILL.md
+/references
+/scripts
