@@ -214,6 +214,28 @@ description: >
 | 冲击力 | 吸引力 | 开头是否有力？结尾是否令人记住？ |
 |  polish | 准确性 | 是否有错别字？格式是否一致？ |
 
+**第四阶段：布局多样性检查（Layout Diversity Check）**
+
+在输出之前，逐一扫描全文，逐章确认布局类型分布：
+
+```
+□ 全文使用布局种类 ≥ 5 种（表格/引用块/列表/编号列表/###子标题/加粗锚点/粗斜体卡片/ASCII决策树/彩色强调/短段落/对照结构）
+□ 没有连续 3 段以上纯文字段落
+□ 每章至少使用 1 种不同于相邻章节的布局类型
+□ 每个布局选择服务于强调关键信息（不是装饰）
+```
+
+**检查方法**：逐段扫描全文，标记每段的布局类型。如果发现连续 3+ 纯文字段落，回到对应章节插入表格/列表/引用块/###子标题/短段落等元素中断纯文字流。如果全文使用布局种类 < 5，替换或重构一个章节的布局方式增加多样性。如果某章布局与相邻章完全相同，修改其中一章引入新布局。
+
+**自动化辅助检查**（推荐）：使用 `scripts/layout-check.py` 进行确定性扫描：
+
+```bash
+python3 scripts/layout-check.py ~/Downloads/<文章文件名>.md
+```
+
+脚本检查三项硬约束：全文布局类型数 ≥ 5、最大连续纯文段数 ≤ 3、相邻章节布局差异化。退出码 0 表示全部通过，1 表示有失败项。脚本检出失败后仍需人工介入判断具体修复方案。
+
+**未通过检查时，修改后重新扫描，通过后再进入输出步骤。**
 **文章完成后：**
 1. 保存到 `~/Downloads/<标题前20字>.md`
 2. 运行 `open ~/Downloads/<文件名>.md` 自动打开
@@ -223,6 +245,8 @@ description: >
 | 引用文件 | 何时加载 |
 |------|---------|
 | `references/wechat-publish-workflow.md` | 需要将文章转为 WeChat HTML、生成封面、推送到草稿箱时 |
+
+> **搭配技能**：`thinking-models-dl`（思维模型工具箱）与此技能互补使用。当需要为文章选择匹配的思维模型作为分析骨架时，同时加载 `thinking-models-dl`——此技能负责文章结构和表达，`thinking-models-dl` 负责话题→模型匹配。
 
 > ⚠️ **重要**：完整的端到端发布流程（写文→转HTML→封面→推草稿箱）记录在 `references/wechat-publish-workflow.md` 中。当用户要求从写作到推送的完整流程时，**必须**先加载该文件再执行各步骤。不要仅凭记忆执行多步骤流水线——该文件包含每步命令、凭证目录、质量门和陷阱清单。
 
@@ -244,7 +268,14 @@ description: >
 
 ```bash
 cd ~/.hermes/skills/dennon-perspective
-git add -A
+
+# 🔴 先检查是否有意外删除的文件被暂存
+git status
+# 如果看到 deleted: 指向 nested sub-skill 目录（如 html-output/SKILL.md），
+# 用 git restore --staged <path> 逐个恢复，不要用 git add -A
+# 安全写法（只提交关键变更）：
+git add SKILL.md references/ scripts/
+
 git commit -m "<type>: <简短描述>"
 git push
 ```
@@ -498,6 +529,21 @@ git push
 调研过程详见 `references/research/` 和 `references/sources.md`。
 
 ---
+
+### ⚠️ Nested Skill Directory Pitfall
+
+This skill's directory doubles as a project workspace (src/, package.json, next.config.ts). Sub-skill directories inside it (html-output/, wechat-md-to-article-dl/, goal-dl/, etc.) create **duplicate skill names** with the root-level copies in `~/.hermes/skills/`, causing "Failed to load skill" and "Ambiguous skill name" errors.
+
+**If a user reports that a skill fails to load**, a nested copy in this directory is likely the culprit. Fix: `rm -rf ~/.hermes/skills/dennon-perspective/<duplicate-name>/`.
+
+**Prevention:** When adding code to this workspace, ensure new subdirectories do not contain SKILL.md files that duplicate names at `~/.hermes/skills/` root level.
+
+**🚨 Git commit danger:** `git add -A` stages ALL changes in the working tree — including deletions of nested sub-skill directories. If you removed a nested sub-skill (e.g. `rm -rf html-output/`), `git add -A` will stage that deletion and the next commit + push will **delete that skill from the remote repo**. To avoid this:
+
+1. Always use `git add SKILL.md` (stages only the skill file) instead of `git add -A` when the workspace has file deletions you don't want to propagate.
+2. Before every `git push`, check what's staged: `git status` — look for `deleted:` lines pointing at files in nested sub-skill directories.
+3. If deletions are staged by accident, unstage specific paths: `git restore --staged <path-to-deleted-sub-skill>`.
+4. If the damage already reached the remote (skills deleted from GitHub), use `git revert` on the commit that deleted them, or `git push origin <good-commit>:main --force` to reset remote.
 
 > 本Skill由 [女娲 · Skill造人术](https://github.com/alchaincyf/nuwa-skill) 生成
 > 创建者：[花叔](https://x.com/AlchainHust)
