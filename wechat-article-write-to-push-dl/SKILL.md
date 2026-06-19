@@ -6,7 +6,12 @@ description: >
   wechat-md-to-article-dl (convert to HTML) → wechat-cover-generator-dl
   (generate cover) → wechat_article_push_dl (push to drafts).
   Trigger when the user says "publish", "推文", "推送", "发布公众号",
-  "write and push", or finishes a denton-style article and wants it published.
+  "write and push", "coverOK", "封面OK", "推", or finishes a dennon-style
+  article and wants it published. Also triggers on any clipping path from
+  the Obsidian vault or Auto Article directory when the user wants the
+  full write-to-publish flow, not just transcription.
+  During the push safety step, the user approves with "confirm", "推", or
+  "go ahead" — treat any of these as explicit confirmation to execute.
   This skill is the single entry point — do NOT ask the user to run each
   sub-skill manually.
 ---
@@ -37,7 +42,26 @@ Step 5: Save outputs → workspace directory + summary.txt
 
 ## Before starting
 
-Assess input type:
+### Resume detection
+
+If the user invokes this skill with the same source file as a previous interrupted run,
+check for existing artifacts before re-running Steps 1-3:
+
+```bash
+ls -la "/Users/f/Downloads/<title-first-chars>*.md" 2>/dev/null && echo "article exists"
+ls /tmp/<short-name>.wechat.html 2>/dev/null && echo "HTML exists"
+ls "/Users/f/Downloads/<short-name>-cover.png" 2>/dev/null && echo "cover exists"
+```
+
+- **All three exist** → Resume at Step 4 (push). Re-open the cover for user approval first, then show push command.
+- **HTML + cover exist, no article** → Start from Step 2.
+- **Nothing exists** → Full pipeline from Step 1.
+- **Article exists but no cover/HTML** → Likely user wants a different article from same source; re-run from Step 1.
+
+When resuming, open the existing cover and present the pipeline status table showing which
+steps are already done, then ask: "Cover was previously generated — still OK, or redo?"
+
+### Assess input type:
 
 | Input | Action |
 |-------|--------|
@@ -50,19 +74,28 @@ Assess input type:
 
 ## Step 1: Write article
 
-Load `dennon-perspective` with `thinking-models-dl` (the skill auto-loads it).
+**MUST load and follow `dennon-perspective` skill.** This is NOT optional. Do NOT write the article directly — always invoke dennon-perspective's Agentic Protocol:
 
-Follow the full Agentic Protocol:
-1. **Step 1 (Problem classification)** — determine if research is needed
-2. **Step 2 (Research)** — only if factual data is required
-3. **Step 2.5 (Structure architecture)** — model matching from thinking-models-dl
-4. **Step 3 (Writing)** — produce Dennon-style article
-5. **Step 4 (Cleanup)** — run layout-check.py, pass all checks
+1. Load `dennon-perspective` with `thinking-models-dl` (the skill auto-loads it)
+2. Follow the full Agentic Protocol (Problem classification → Research → Structure architecture → Writing → Cleanup)
+3. Run layout-check.py — exit code 0 required
 
 **Output**: `~/Downloads/<标题前20字>.md`
 **Quality gate**: layout-check.py exit code 0 (≥5 layout types, ≤3 consecutive text paragraphs, adjacent chapter diversity).
 
 If layout check fails, fix and re-run before proceeding to Step 2.
+
+### Step 1 in the full pipeline example
+
+```bash
+# Step 1: MUST invoke dennon-perspective skill to write the article
+# Feed the source (clipping / topic / transcript) to dennon-perspective
+# The skill produces: ~/Downloads/<标题前20字>.md
+# Then validate:
+python3 /Users/f/.hermes/skills/dennon-perspective/scripts/layout-check.py \
+  "/Users/f/Downloads/<标题前20字>.md"
+# Must exit 0 before proceeding
+```
 
 ## Step 2: Convert to WeChat HTML
 
@@ -108,7 +141,8 @@ Read the article's first `# ` heading (the full title). The cover needs a short 
 - **Cover title** (`--title`): first ≤14 characters of the article title
 - **Cover subtitle** (`--subtitle`): remaining characters (if any)
 - If full title is ≤14 chars, use it whole with no subtitle
-- **Prefer semantic split at punctuation**: When the title contains `：` (full-width colon), `——` (em dash), or `·` (middle dot), prefer splitting at that delimiter rather than at an arbitrary character boundary. The colon-delimited pair (key insight before colon + elaboration after) typically reads naturally as title/subtitle. Example: `"为什么刷手机不是休息：注意力系统的隐性破产"` → title=`"为什么刷手机不是休息"`, subtitle=`"注意力系统的隐性破产"`. A literal 14-char cut would produce the broken `"为什么刷手机不是休息：注意"`.
+- **Prefer semantic split at punctuation**: When the title contains `：` (full-width colon), `——` (em dash), or `·` (middle dot), split at that delimiter first regardless of character count. The colon-delimited pair reads naturally as title/subtitle. Example: `"为什么刷手机不是休息：注意力系统的隐性破产"` → title=`"为什么刷手机不是休息"`, subtitle=`"注意力系统的隐性破产"`.
+- **Priority when rules conflict**: Semantic split wins over char count. When pre-punctuation text exceeds 14 chars (e.g. `"Context Engineering的噪声陷阱"` = 17 chars), use it anyway — gen_cover.py auto-adjusts font size. The 14-char limit is a safe heuristic for arbitrary cuts, not a hard bound when a natural semantic boundary exists.
 
 ### Fetch image
 
@@ -154,6 +188,8 @@ Load `wechat_article_push_dl` skill.
 🔴 **STOP — Show the user the exact command and wait for confirmation.**
 Do NOT execute until the user explicitly says "go ahead" or "push it".
 
+**Session acceleration**: After the first push in a session has been seen and confirmed, "confirm" alone is sufficient for subsequent pushes — the user has already approved the pattern. Skip re-displaying the full command.
+
 ```bash
 cd ~/Documents && md2wechat \
   --html /tmp/<short-name>.wechat.html \
@@ -196,8 +232,11 @@ single workspace directory for easy review, debugging, and future reference.
 
 ### Workspace directory
 
+Use a date-stamped directory so each run gets its own folder and old runs can be revisited:
+
 ```bash
-WORKSPACE="~/.hermes/skills/social-media/wechat-article-write-to-push-dl-workspace/iteration-1/eval-1/with_skill/outputs"
+SHORT_NAME="<short-name>"  # e.g. context-engineering, education-margin
+WORKSPACE="$HOME/.hermes/skills/social-media/wechat-article-write-to-push-dl-workspace/$(date +%Y%m%d)/$SHORT_NAME"
 mkdir -p "$WORKSPACE"
 ```
 
@@ -239,7 +278,13 @@ A typical publish run — uses absolute paths (not `~`) since Python scripts do 
 expand tilde:
 
 ```bash
-# Step 1 already ran — article saved
+# Step 1: MUST use dennon-perspective skill to write the article (see Step 1 section above)
+# Load dennon-perspective → feed source → get ~/Downloads/<标题前20字>.md
+# Then validate:
+python3 /Users/f/.hermes/skills/dennon-perspective/scripts/layout-check.py \
+  "/Users/f/Downloads/<标题前20字>.md"
+# Must exit 0 before proceeding
+
 # Step 2:
 python3 ~/.hermes/skills/wechat-md-to-article-dl/scripts/convert.py \
   "/Users/f/Downloads/学习系统的三重模型重构.md" \
@@ -312,3 +357,7 @@ When the pipeline completes successfully, report:
 - [ ] `cd ~/Documents` executed before push
 - [ ] All outputs copied to workspace directory (Step 5)
 - [ ] summary.txt written with step-by-step status
+
+## Reference files
+
+- `references/eval-grading-pitfalls.md` — Workarounds for grader field-name bugs, `run-1/` directory requirement, and `passed` polarity errors discovered during this skill's test cycle.
