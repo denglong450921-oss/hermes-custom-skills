@@ -1,8 +1,8 @@
 ---
 name: add-html-ids
 description: >
-  Add meaningful, page-prefixed HTML IDs to every element in HTML and
-  TSX/JSX files.  Use whenever a user asks to "add IDs", "id every element",
+  Add meaningful, page-prefixed HTML IDs only to elements that lack IDs in HTML
+  and TSX/JSX files.  Use whenever a user asks to "add IDs", "id every element",
   "add id name for every element of html/tsx", "fix missing ids", or when a
   project has HTML/React files without consistent element IDs and the user
   needs to reference elements precisely.  Also trigger when refactoring or
@@ -26,18 +26,19 @@ This skill has ONE job: add `id` attributes to elements. Do NOT:
 - **Convert syntax** — never change HTML to JSX or vice versa
 - **Optimize** — never refactor, deduplicate, or "improve" the code in any way
 
-The scripts are purpose-built to only insert `id="prefix_name"` into tags that lack one.
-If a file already has IDs, the script replaces non-conforming IDs with correct ones
-— that is the ONLY change allowed.
+The scripts are purpose-built to only insert `id="prefix_name"` into tags that
+lack an `id` attribute. If a tag already has any `id`, preserve it byte-for-byte.
+Existing IDs are live API surface for CSS, JS, anchors, tests, and analytics.
+Never rename, normalize, replace, remove, or empty an existing `id`.
 
 🛑 **STOP. If the user asks for anything beyond adding IDs** (translations, styling, formatting,
 refactoring) — stop and handle it as a separate task outside this skill. Do NOT try to
 "also fix that thing while I'm in there." This rule exists because multi-change runs
 have caused script/style corruption, double IDs, and broken i18n in production files.
 
-Add `{page_prefix}_{purpose}` IDs to every element in `.html` or `.tsx`/`.jsx` files.
-The goal is that any element — `<div>`, `<Header />`, `<path>`, `<meta>`, etc. — can
-be uniquely addressed from CSS/JS/React without guessing.
+Add `{page_prefix}_{purpose}` IDs to every element that lacks an `id` in `.html`
+or `.tsx`/`.jsx` files. The goal is that new targetable elements can be addressed
+from CSS/JS/React without guessing, while existing page behavior remains untouched.
 
 ## When to use
 
@@ -107,12 +108,14 @@ The script adds IDs to **every** element that doesn't already have one:
 `<h1>`-`<h6>`, `<a>`, `<img>`, `<button>`, `<input>`, `<form>`, `<label>`,
 `<ul>`, `<ol>`, `<li>`, `<span>`, `<svg>`, `<path>`, `<circle>`, `<rect>`
 
-**TSX:** Same as HTML plus React component tags (`<Header />`, `<Footer />`),
-JSX expression support, `className` attribute used as hint.
+**TSX:** Same lowercase HTML elements as HTML, JSX expression support, and
+`className` attribute hints. Capitalized React component tags (`<Header />`,
+`<Footer />`) are skipped unless they already had an `id`, because many
+components do not accept an `id` prop.
 
 ### 4. Spot-check
 
-- Check that React component elements (capitalized tags) got IDs
+- Check that React component elements (capitalized tags) did not receive new IDs
 - Verify `className` was parsed correctly for naming hints
 - Check nested JSX expressions (`{condition && <Tag/>}`) are covered
 - Ensure no duplicate IDs (script uses counters but double-check)
@@ -121,10 +124,12 @@ JSX expression support, `className` attribute used as hint.
 - No text was translated or rephrased
 - No CSS styles or classes were changed
 - No elements were added, removed, or restructured
-- The file diff shows ONLY `id="..."` insertions and old-ID replacements
+- The file diff shows ONLY new `id="..."` insertions
 
 Run `git diff` on the file and visually scan — every changed line should contain `id=`.
 If any line was changed for any other reason, revert that specific change.
+For a stricter check, the before/after content should match exactly after removing
+all quoted `id` attributes from both versions.
 
 ## Naming conventions
 
@@ -145,11 +150,9 @@ produces `herosection_mobile_color_block_right`, never `herosession_mobile-color
 
 If a sibling element would get the same ID, a numeric suffix is appended (`_2`, `_3`).
 
-**After running the script, rename key structural IDs by hand** to follow the
-user's preferred convention `{prefix}_{context}_{purpose}` with shorter,
-more semantic names.  The auto-generated IDs provide a complete baseline —
-every element has one — but important wrappers, sections, and interactive
-elements should get short semantic names with context traces.
+Do not rename IDs during this skill. If a user later wants semantic ID cleanup,
+handle it as a separate refactor because changing existing IDs can break CSS,
+JavaScript, anchors, tests, or analytics.
 
 ### Why flat naming?
 
@@ -178,13 +181,11 @@ Three TSX-specific gotchas the script handles automatically:
    any tag that starts with an uppercase letter (React component convention).
    Only lowercase HTML elements (div, section, img, input) get IDs.
 
-3. **Non-conforming existing IDs are REPLACED** — any existing `id=` value
-   that doesn't start with the page prefix (e.g. `id="mobileColorBlock"` instead
-   of `herosection_mobileColorBlock`) is stripped before processing, then a
-   proper prefixed ID is generated.  IDs that already follow the convention
-   (`id="herosection_h1"`) are preserved unchanged.  This means running the
-   script on a file that already has some IDs is safe — it'll upgrade the
-   stragglers without touching the good ones.
+3. **All existing IDs are preserved** — any existing `id=` value is kept exactly,
+   even if it does not start with the page prefix (for example
+   `id="mobileColorBlock"`). Only tags that lack an `id` receive a generated
+   prefixed ID. This is required because existing IDs may be referenced by CSS,
+   JavaScript, anchors, tests, or analytics.
 
 ## String masking pitfalls (critical for maintainers)
 
@@ -206,12 +207,10 @@ it causes two subtle bugs that are easy to introduce:
 2. **`id` value extraction fails on masked content** — same reason:
    `id="mobileColorBlock"` becomes `id=\x00STR\x0043\x00`. The regex
    `id\s*=\s*["\']([^"\']+)["\']` fails because the value is a marker, not a
-   quoted string. Never try to read existing attribute values from the masked
-   content. Either:
-   - **Pre-process** the original (unmasked) content to strip non-conforming IDs
-     (v3 approach — robust, simple, recommended).
-   - **Post-process** the final unmasked output with a regex to remove non-conforming
-     IDs (v3.1+ could use this if pre-processing causes issues).
+   quoted string. Never try to read existing attribute values from masked
+   content. Scan the original unmasked content to seed the full set of existing
+   IDs, then use masked content only to detect whether a tag already has an
+   `id` attribute.
 
 3. **Position indices don't match masked vs. unmasked content** — markers are
    shorter than the original strings they replace, so a `start` index from
@@ -219,19 +218,23 @@ it causes two subtle bugs that are easy to introduce:
    original content. Never use masked-content indices to modify unmasked content.
    Only operate on the `result = list(masked)` string, then unmask at the end.
 
-4. **`seen_ids` must be seeded from pre-existing convention IDs** — when
-   re-running on an already-processed file, the `has_attr` check detects
-   convention-following IDs correctly (via the marker) but the new-ID generator
-   doesn't know about them. Initialize `seen_ids` from a regex scan of the
-   original (unmasked) content:
+4. **`seen_ids` must be seeded from all pre-existing IDs** — when re-running
+   on an already-processed file, the `has_attr` check detects existing IDs
+   correctly (via the marker) but the new-ID generator doesn't know their values.
+   Initialize `seen_ids` from a regex scan of the original (unmasked) content:
    ```python
    for m in re.finditer(r'id\s*=\s*["\']([^"\']+)["\']', content):
        existing_ids.add(m.group(1))
-   seen_ids = {id for id in existing_ids if id.startswith(prefix)}
+   seen_ids = set(existing_ids)
    ```
 
 ## Changelog
 
+- **v3.4 (2026-06-19)**: Preserve all existing IDs exactly. Scripts now only
+  insert IDs into tags that lack an `id`; they never strip, replace, normalize,
+  or rename existing IDs. Harness adds an `id_only_delta` check that compares
+  before/after content after removing quoted `id` attributes, catching any
+  non-ID text, style, layout, script, or structure changes.
 - **v3.3 (2026-06-10)**: Hyphens in class names → underscores in IDs
   (`mobile-color-block-right` → `herosection_mobile_color_block_right`).
   Aligns with user's underscore-only ID convention.  Both the `hint_from_attrs`
@@ -246,7 +249,11 @@ it causes two subtle bugs that are easy to introduce:
   Fix: replace script/style/template body with same-length spaces in a copy
   of masked content used for tag-finding, so `find_tags` never sees these `<` characters.
 - **v3.1 (2026-06-10)**: Fix pre-processing regex `\s*` → `\s+` to consume leading space before `id`, preventing double-space artifacts.  Filter out versioned/framework class names like `ecwid-v19-hero` from hint extraction.  Return `None` from `hint_from_attrs` when all classes filtered.
-- **v3 (2026-06-10)**: Non-conforming existing IDs are now REPLACED (previously they were silently skipped), so every element gets a convention-following ID even if it already had a custom one.  `hint_from_attrs` now operates on UNMASKED attribute strings so class names, aria-labels, etc. are properly readable.  `seen_ids` initialized from existing convention-following IDs so re-running on an already-processed file doesn't create duplicates.
+- **v3 (2026-06-10, historical)**: Earlier behavior replaced non-conforming
+  existing IDs. This is superseded by v3.4 because existing IDs must be
+  preserved to avoid breaking page behavior. `hint_from_attrs` now operates on
+  UNMASKED attribute strings so class names, aria-labels, etc. are properly
+  readable.
 - **v2.1 (2026-06-09)**: HTML script also switched to flat naming — was still
   using context-based chains, producing IDs like `support_svg_path_path_path_path_a_a`
   for deeply nested elements.  Now both HTML and TSX scripts use `{prefix}_{hint}`
@@ -263,12 +270,12 @@ If any issue below occurs, follow the recovery path. Don't guess — use the tab
 
 | Trigger | First response | Fallback |
 |---------|---------------|----------|
-| Duplicate IDs found after run | Script counters should prevent this. Check `seen_ids` seeding (pitfall #4). Re-create `seen_ids` from existing IDs | Manually rename duplicates with unique suffixes |
-| STR markers in output | Pre-processing regex failed to strip old IDs. Re-run script on original file | Post-processing regex on final output: `content = re.sub(r'\s+id\s*=\s*(["\x27])(?!herosection_)[^"\x27]+\1', '', content)` |
+| Duplicate IDs found after run | Check whether the duplicate was pre-existing or generated. If generated, fix `seen_ids` seeding (pitfall #4). | If duplicate was pre-existing, report it and stop; do not rename it inside this skill |
+| STR markers in output | String unmasking failed. Re-run script on the original file and inspect the failing tag/string boundary | Patch the script so markers are unmasked; do not remove or rewrite existing IDs as a workaround |
 | Script corrupts `<script>` content | `<script>` body has unescaped `</script>` or CDATA. v3.2+ space-fill should handle normal cases | Manually wrap JS in `/*<![CDATA[*/ ... /*]]>*/` or use external .js file |
 | React component gets an `id` | Component name is lowercase — script treated it as HTML. Rename component to uppercase (React convention) | Add `id` prop type to the component so TS accepts it |
 | File with `src/app/page.tsx` nested 3+ deep | Prefix derivation uses immediate parent, may collide. Check other locale folders for duplicate prefixes | Pass `--prefix` override explicitly |
-| `id=""` (empty) in source | Script preserves convention-following IDs. Empty ID doesn't start with prefix, gets replaced with proper one | Verify output: the element now has a proper prefixed ID |
+| `id=""` (empty) in source | Preserve it because it is an existing attribute. Report it as pre-existing bad markup if relevant | Ask for a separate cleanup/refactor before changing it |
 | Node.js HTTP request in script content | `http://` or `https://` in `<script>` body triggers `<` matching in old parser. v3.2+ space-fill prevents this | If using pre-v3.2, upgrade the script
 
 ## Reference examples
@@ -296,8 +303,9 @@ grep -Eo "id='[^']*'" <file> | sort | uniq -d
 python3 -c "
 import re, sys
 with open(sys.argv[1]) as f:
-    ids = re.findall(r'id=\"([^\"]*)\"', f.read())
-    ids += re.findall(r\"id='([^']*)'\", f.read())
+    content = f.read()
+ids = re.findall(r'id=\"([^\"]*)\"', content)
+ids += re.findall(r\"id='([^']*)'\", content)
 dupes = [i for i in sorted(set(ids)) if ids.count(i) > 1]
 if dupes:
     for d in dupes: print(f'DUPE: {d} (x{ids.count(d)})')
@@ -312,26 +320,27 @@ Use `grep -Eo` or the Python script instead.
 ## Harness (Self-Eval)
 
 The harness validates that the scripts correctly add IDs without corrupting
-content. 3 test cases cover the skill's core guarantees.
+content. 4 test cases cover the skill's core guarantees.
 
 ### Cases
 
 | ID | Name | Principle Tested |
 |----|------|-----------------|
-| `case_001` | basic-html-no-existing-ids | ID count, prefix convention, no dupes, text preserved |
-| `case_002` | tsx-mixed-ids | Convention IDs preserved, non-conforming replaced, React skipped |
-| `case_003` | html-with-script-style | No STR markers leaked, script/style uncorrupted, apostrophe safe |
+| `case_001` | basic-html-no-existing-ids | ID count, new-ID prefix convention, no dupes, id-only delta |
+| `case_002` | tsx-mixed-ids | Existing IDs preserved, missing lowercase JSX IDs added, React skipped |
+| `case_003` | html-with-script-style | No STR markers leaked, script/style uncorrupted, apostrophe safe, id-only delta |
+| `case_004` | html-preserve-existing-id-hooks | Existing CSS/anchor/JS ID hooks preserved, missing IDs added, id-only delta |
 
 ### Checks
 
 | Check | What it detects |
 |-------|----------------|
 | `id_count_increased` | Output has more IDs than input (IDs actually added) |
-| `all_ids_have_prefix` | Every id value starts with the expected `{prefix}_` |
+| `new_ids_have_prefix` | Generated IDs start with the expected `{prefix}_`; pre-existing IDs may use any value |
 | `no_duplicate_ids` | Zero duplicate id values in the output |
-| `convention_ids_preserved` | Existing convention-following IDs remain unchanged |
-| `nonconforming_ids_replaced` | Old non-conforming IDs (camelCase, generic) are gone |
-| `react_components_skipped` | No uppercase-prefixed IDs (React components get no id) |
+| `existing_ids_preserved` | Existing IDs remain unchanged, whether or not they match the prefix |
+| `id_only_delta` | Before/after content matches exactly after removing quoted `id` attributes |
+| `react_components_skipped` | No new `id` attributes are added to uppercase React component tags |
 | `no_str_markers_leaked` | Output contains zero `\x00STR\x00` binary markers |
 | `script_style_uncorrupted` | Script/style tag bodies have balanced braces, no markers |
 | `apostrophe_preserved` | Text apostrophes (`world's`) survive masking |
@@ -354,4 +363,3 @@ Report results exactly as they are:
 - Skipped verification → say "not verified", don't imply it passed
 - No defensive disclaimers on correct results ("but this might not be correct")
 - No false success — if output shows failure, don't claim "all passed"
-

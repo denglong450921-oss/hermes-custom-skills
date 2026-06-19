@@ -16,10 +16,10 @@ _GRADER = os.path.join(SKILL_DIR, "evals", "grader.py")
 
 check_map = {
     "id_count_increased": {"text": "IDs added", "check": "id_count_increased", "min": 1},
-    "all_ids_have_prefix": {"text": "All IDs prefixed", "check": "all_ids_have_prefix", "prefix": ""},
+    "new_ids_have_prefix": {"text": "New IDs prefixed", "check": "new_ids_have_prefix", "prefix": ""},
     "no_duplicate_ids": {"text": "No duplicate IDs", "check": "no_duplicate_ids"},
-    "convention_ids_preserved": {"text": "Convention IDs preserved", "check": "convention_ids_preserved", "must_have": []},
-    "nonconforming_ids_replaced": {"text": "Non-conforming IDs replaced", "check": "nonconforming_ids_replaced", "must_not_have": []},
+    "existing_ids_preserved": {"text": "Existing IDs preserved", "check": "existing_ids_preserved", "must_have": []},
+    "id_only_delta": {"text": "Only id attributes changed", "check": "id_only_delta", "input_path": ""},
     "react_components_skipped": {"text": "React components skipped", "check": "react_components_skipped"},
     "no_str_markers_leaked": {"text": "No STR markers leaked", "check": "no_str_markers_leaked"},
     "script_style_uncorrupted": {"text": "Script/style uncorrupted", "check": "script_style_uncorrupted"},
@@ -34,11 +34,22 @@ case_overrides = {
         "original_text_preserved": {"must_have": ["Welcome", "Click me", "Test Page", "site-header"]},
     },
     "case_002": {
-        "convention_ids_preserved": {"must_have": ["case002_h1", "case002_div"]},
-        "nonconforming_ids_replaced": {"must_not_have": ["heroCopy", "scrollSection"]},
+        "existing_ids_preserved": {"must_have": ["case002_h1", "heroCopy", "scrollSection", "case002_div"]},
     },
     "case_003": {
         "id_count_increased": {"min": 3},
+    },
+    "case_004": {
+        "id_count_increased": {"min": 14},
+        "existing_ids_preserved": {"must_have": ["navRoot", "hero-title", "ctaPrimary", "footerAnchor"]},
+        "original_text_preserved": {"must_have": [
+            "#navRoot { position: sticky; top: 0; }",
+            "#hero-title { color: #112233; }",
+            "#ctaPrimary.is-active { transform: translateY(-1px); }",
+            "href=\"#hero-title\"",
+            "document.getElementById('ctaPrimary')",
+            "document.querySelector('#navRoot')"
+        ]},
     },
 }
 
@@ -65,8 +76,14 @@ def run_case(case, output_dir):
         script = os.path.join(_SCRIPTS, "add_html_ids.py")
         prefix = "case003_"
         ext = "html"
+    elif "004" in name or "case_004" in case.get("id", ""):
+        script = os.path.join(_SCRIPTS, "add_html_ids.py")
+        prefix = "case004_"
+        ext = "html"
 
     input_file = files[0] if files else None
+    if input_file and not os.path.isabs(input_file):
+        input_file = os.path.join(SKILL_DIR, input_file)
     output_file = os.path.join(output_dir, f"output.{ext}")
 
     if not input_file or not os.path.exists(input_file):
@@ -89,6 +106,10 @@ def run_case(case, output_dir):
         check_def = dict(check_map.get(gc, {"text": gc, "check": gc}))
         if not check_def.get("prefix"):
             check_def["prefix"] = prefix
+        if "input_path" in check_def:
+            check_def["input_path"] = input_file
+        if check_def.get("check") in ("new_ids_have_prefix", "existing_ids_preserved", "react_components_skipped"):
+            check_def["input_path"] = input_file
         # Apply per-case overrides
         if gc in overrides:
             check_def.update(overrides[gc])

@@ -197,11 +197,12 @@ def process_tsx(content, prefix):
     masked, originals = mask_strings(content)
     tags = find_jsx_tags(masked)
 
-    # Initialize seen_ids with existing convention-following IDs
+    # Initialize seen_ids with every existing ID. Existing IDs are live API
+    # surface for CSS/JS/anchors/tests, so preserve them and avoid collisions.
     existing_ids = set()
     for m in re.finditer(r'id\s*=\s*["\']([^"\']+)["\']', content):
         existing_ids.add(m.group(1))
-    seen_ids = {id for id in existing_ids if id.startswith(prefix)}
+    seen_ids = set(existing_ids)
     result = list(masked)
 
     # Forward pass: find elements needing IDs
@@ -216,11 +217,9 @@ def process_tsx(content, prefix):
         if tag_name[0].isupper():
             continue
 
-        # Already has convention-following id — preserve
+        # Already has an id — preserve it byte-for-byte, even if it does not
+        # match this skill's naming convention.
         if has_attr(attrs_str, 'id'):
-            # Check if existing id follows convention (id value is masked, but
-            # we stripped non-conforming IDs in the pre-processing step, so any
-            # remaining id= must be a convention-following one)
             continue
 
         # Generate id — flat naming (no parent context chain)
@@ -271,20 +270,13 @@ def main():
     with open(args.filepath, 'r', encoding='utf-8') as f:
         content = f.read()
 
-    # Pre-process: strip non-conforming existing id attributes
-    # (id values that don't start with the prefix)
-    _nonconf_pat = re.compile(
-        r'\s+id\s*=\s*(["\'])(?!' + re.escape(prefix) + r')[^"\']+\1'
-    )
-    content = _nonconf_pat.sub('', content)
-
     result = process_tsx(content, prefix)
 
     with open(args.filepath, 'w', encoding='utf-8') as f:
         f.write(result)
 
-    count_before = content.count(' id="') + content.count(" id='")
-    count_after = result.count(' id="') + result.count(" id='")
+    count_before = len(re.findall(r'\sid\s*=\s*(["\'])[^"\']*\1', content))
+    count_after = len(re.findall(r'\sid\s*=\s*(["\'])[^"\']*\1', result))
     added = count_after - count_before
     print(f"Done. Prefix: '{prefix}', Total IDs: {count_after} ({added} added)")
 

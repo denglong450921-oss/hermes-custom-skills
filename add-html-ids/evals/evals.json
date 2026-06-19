@@ -6,9 +6,9 @@
       "name": "basic-html-no-existing-ids",
       "prompt": "Run add_html_ids.py on evals/case_001/input.html with --prefix case001_",
       "files": ["evals/case_001/input.html"],
-      "expected_output": "Every HTML element gets a unique id with prefix 'case001_', no duplicates, original content unchanged",
+      "expected_output": "Every HTML element without an id gets a unique new id with prefix 'case001_', no duplicates, original content unchanged except id insertions",
       "grader": {
-        "must_use": ["id_count_increased", "all_ids_have_prefix", "no_duplicate_ids", "original_text_preserved"]
+        "must_use": ["id_count_increased", "new_ids_have_prefix", "no_duplicate_ids", "original_text_preserved", "id_only_delta"]
       }
     },
     {
@@ -16,9 +16,9 @@
       "name": "tsx-mixed-ids",
       "prompt": "Run add_tsx_ids.py on evals/case_002/input.tsx with --prefix case002_",
       "files": ["evals/case_002/input.tsx"],
-      "expected_output": "Convention ID 'case002_h1' preserved, non-conforming 'heroCopy' replaced with proper prefix, React 'ProductCard' component skipped",
+      "expected_output": "Existing IDs 'case002_h1', 'heroCopy', 'scrollSection', and 'case002_div' preserved exactly; missing lowercase JSX elements get prefixed IDs; React 'ProductCard' component skipped",
       "grader": {
-        "must_use": ["convention_ids_preserved", "nonconforming_ids_replaced", "react_components_skipped", "no_duplicate_ids"]
+        "must_use": ["existing_ids_preserved", "new_ids_have_prefix", "react_components_skipped", "no_duplicate_ids", "id_only_delta"]
       }
     },
     {
@@ -26,9 +26,19 @@
       "name": "html-with-script-style",
       "prompt": "Run add_html_ids.py on evals/case_003/input.html with --prefix case003_",
       "files": ["evals/case_003/input.html"],
-      "expected_output": "IDs added outside script/style, no STR markers leaked, JavaScript < operators untouched, 'world's' apostrophe preserved",
+      "expected_output": "IDs added outside script/style, no STR markers leaked, JavaScript < operators untouched, 'world's' apostrophe preserved, original content unchanged except id insertions",
       "grader": {
-        "must_use": ["no_str_markers_leaked", "script_style_uncorrupted", "apostrophe_preserved", "id_count_increased"]
+        "must_use": ["no_str_markers_leaked", "script_style_uncorrupted", "apostrophe_preserved", "id_count_increased", "new_ids_have_prefix", "id_only_delta"]
+      }
+    },
+    {
+      "id": "case_004",
+      "name": "html-preserve-existing-id-hooks",
+      "prompt": "Run add_html_ids.py on evals/case_004/input.html with --prefix case004_",
+      "files": ["evals/case_004/input.html"],
+      "expected_output": "Existing IDs used by CSS, anchors, and JavaScript remain exactly unchanged; missing elements get prefixed IDs; original content is unchanged except id insertions",
+      "grader": {
+        "must_use": ["existing_ids_preserved", "new_ids_have_prefix", "no_duplicate_ids", "original_text_preserved", "id_count_increased", "id_only_delta", "script_style_uncorrupted"]
       }
     }
   ]

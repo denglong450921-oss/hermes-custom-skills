@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html id="case004_html" lang="en">
+<head id="case004_head">
+<meta id="case004_meta" charset="UTF-8">
+<title id="case004_title">ID Preservation Test</title>
+<style id="case004_style">
+  #navRoot { position: sticky; top: 0; }
+  #hero-title { color: #112233; }
+  #ctaPrimary.is-active { transform: translateY(-1px); }
+</style>
+</head>
+<body id="case004_body">
+<nav id="navRoot" class="main-nav">
+  <a id="case004_hero-title" href="#hero-title">Skip to hero</a>
+</nav>
+<main id="case004_page" class="page">
+  <section id="case004_hero_panel" class="hero-panel">
+    <h1 id="hero-title">Preserve live IDs</h1>
+    <p id="case004_lede" class="lede">Existing IDs may be CSS, JS, anchor, or analytics hooks.</p>
+    <button id="ctaPrimary" class="button" type="button">Start</button>
+  </section>
+</main>
+<footer id="case004_footer">
+  <a id="footerAnchor" href="#navRoot">Back to top</a>
+</footer>
+<script id="case004_script">
+  const cta = document.getElementById('ctaPrimary');
+  const nav = document.querySelector('#navRoot');
+  cta.addEventListener('click', () => {
+    nav.classList.toggle('is-active');
+  });
+</script>
+</body>
+</html>
