@@ -27,4 +27,3 @@ The judge has an evidence job, not a vibes job.
 Write `score.yaml` and `review.md`.
 
 `score.yaml` is intentionally small and trend-friendly. `review.md` carries evidence and diagnosis.
-

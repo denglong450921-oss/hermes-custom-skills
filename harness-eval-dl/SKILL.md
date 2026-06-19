@@ -1,7 +1,6 @@
 ---
 name: harness-eval-dl
 description: Build and run evidence-based "exam" evaluations for Harness workflows, skills, rules, agents, or prompt systems. Use this whenever the user asks whether a skill/harness/rule workflow is actually improving, wants to test a skill's harness, compare workflow revisions, create exam-style eval cases, judge transcripts with evidence, aggregate pass rates and score history, or replace subjective vibes with repeatable regression data.
-compatibility: Works with local files and any agent runner that can save transcripts. Optional subagents improve examiner/judge independence, but the artifact format and scripts also support headless/manual runs.
 ---
 
 # Harness Eval DL
@@ -157,4 +156,3 @@ When finished, tell the user:
 - whether the harness appears to be improving, regressing, or inconclusive
 - top evidence-backed fixes, grouped by `[workflow]`, `[eval]`, `[capability]`
 - where the review/benchmark artifacts are saved
-

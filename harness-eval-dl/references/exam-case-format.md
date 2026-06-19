@@ -74,4 +74,3 @@ required_artifacts:
   - score.yaml
   - review.md
 ```
-
