@@ -113,9 +113,12 @@ def _callout_inner_to_html(text: str) -> str:
             result.append(f'<div style="margin:0 0 8px;font-size:15px;line-height:1.75;">• {content}</div>')
             continue
             
-        # Plain text (including empty lines) — convert **bold**
-        line = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", line)
-        result.append(line)
+        # Plain text (including empty lines) — wrap in styled <p> for consistent sizing
+        if stripped:
+            line = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", line)
+            result.append(f'<p style="margin:0 0 10px;font-size:15px;line-height:1.75;">{line}</p>')
+        else:
+            result.append(line)
     
     return "\n".join(result)
 
