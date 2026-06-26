@@ -88,7 +88,7 @@ unpublished content.
 | Markdown path | Yes | UTF-8 `.md` file |
 | Output path | Yes | HTML fragment suitable for WeChat |
 | `--theme` | No | `auto`, `minimal`, `tech`, `cognition`, `wealth`, `health` |
-| `--title` | No | Overrides frontmatter title |
+| `--title` | No | Overrides frontmatter title. **Must be the full article title** — an abbreviated title (e.g. `--title "恒生科技"` instead of the complete 30‑char title) produces "未命名文章" or a truncated h1 in the WeChat draft. When omitted and no frontmatter `title:` exists, the h1 defaults to "未命名文章". **Always pass the exact published title as `--title`.** |
 | `--quality-threshold` | No | Defaults to 90 for every quality dimension |
 | `--report` | No | Defaults to `<output>.report.json` |
 | `--official-check` | No | Opt-in upload to WeChat's official structure verifier |
@@ -181,7 +181,6 @@ MVP 的关键不是"完整"，而是"能否换取真实支付"。
 **Always close `:::` blocks properly.** The safety net prevents total document loss but cannot fix boundary errors. Verify the output HTML contains `<h2>` tags for every section heading, not raw `##` markdown.
 
 Supported frontmatter keys include `title`, `author`, `date`, `summary`,
-Supported frontmatter keys include `title`, `author`, `date`, `summary`,
 `description`, `type`, `category`, and `tags`.
 
 ## Output contract
@@ -229,6 +228,15 @@ The command prints JSON and writes the same audit data to the report:
 - Give the reader a ten-second path through title, summary, key judgment, and sections.
 - Use inline CSS only. Avoid external CSS, `<style>`, scripts, event handlers, layout
   systems that WeChat may strip, and unsafe URL schemes.
+- Lists must use `<div>` + `•` format, NOT `<ul>`, `<ol>`, or `<li>`.
+  WeChat's editor breaks standard HTML list elements — they lose indentation, spacing,
+  and bullet markers. The converter&#x27;s `apply_highlight_styles()` post-process converts
+  every `<ul>`, `<ol>`, and `<li>` in the rendered HTML into `<div>` elements with
+  `•` bullet markers and per-item inline styles. This applies both to lists inside
+  `::: callout` blocks (handled by `_callout_inner_to_html()`) and to regular markdown
+  lists in the article body (handled by the global post-processor).
+  **Do NOT write `<ul>`/`<ol>`/`<li>` directly in source markdown** — the converter
+  already handles conversion automatically.\
 - **Long, CSS-adjusted text blocks must be visually enhanced, not simply simplified.**
   When a paragraph carries complex content (multi-clause argument, layered data,
   conditional logic) that was deliberately styled for readability, the converter
@@ -257,6 +265,13 @@ The command prints JSON and writes the same audit data to the report:
 Read [references/callout-close-bug.md](references/callout-close-bug.md) for the
 debugging transcript of unclosed `:::` blocks and reading-path cap bugs — consult
 when the output shows raw markdown despite perfect quality scores.
+Read [references/callout-list-rendering.md](references/callout-list-rendering.md)
+for the WeChat-compatible list rendering inside callout blocks (`div`+`•`+`strong`,
+no `ul`/`ol`/`li`).
+Read [references/callout-inner-lists.md](references/callout-inner-lists.md) for the
+reason raw markdown lists appear inside callout cards and the `_callout_inner_to_html`
+workaround — consult when numbered lists or bold text inside `:::thinking` blocks
+render as raw text instead of styled divs.
 Read [references/design-system.md](references/design-system.md) when changing themes,
 spacing, typography, cards, or article-type behavior.
 Read [references/wechat-editor-plugin-spec.md](references/wechat-editor-plugin-spec.md)
