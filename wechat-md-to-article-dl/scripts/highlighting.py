@@ -88,6 +88,41 @@ def _auto_close_callouts(text: str) -> str:
     return "\n".join(out)
 
 
+def _callout_inner_to_html(text: str) -> str:
+    """Convert markdown inside callout blocks to HTML.
+
+    Python-Markdown does not parse markdown inside raw HTML <section> blocks,
+    so lists and emphasis inside ::: callouts must be pre-converted.
+    """
+    lines = text.split("\n")
+    result: list[str] = []
+    for line in lines:
+        stripped = line.strip()
+        
+        # Numbered list: "1. item"
+        m = re.match(r"^(\d+)\.\s+(.*)", stripped)
+        if m:
+            content = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", m.group(2))
+            result.append(f'<div style="margin:0 0 8px;font-size:15px;line-height:1.75;">{content}</div>')
+            continue
+            
+        # Bullet list: "- item" or "* item"
+        m = re.match(r"^[-*]\s+(.*)", stripped)
+        if m:
+            content = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", m.group(1))
+            result.append(f'<div style="margin:0 0 8px;font-size:15px;line-height:1.75;">• {content}</div>')
+            continue
+            
+        # Plain text (including empty lines) — wrap in styled <p> for consistent sizing
+        if stripped:
+            line = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", line)
+            result.append(f'<p style="margin:0 0 10px;font-size:15px;line-height:1.75;">{line}</p>')
+        else:
+            result.append(line)
+    
+    return "\n".join(result)
+
+
 def preprocess_callouts(text: str) -> str:
     """Convert ``:::type ... :::`` fences into raw HTML ``<section>`` elements.
 
@@ -112,7 +147,7 @@ def preprocess_callouts(text: str) -> str:
             while i < n and lines[i].strip() != ":::":
                 content_lines.append(lines[i])
                 i += 1
-            inner = "\n".join(content_lines).strip()
+            inner = _callout_inner_to_html("\n".join(content_lines).strip())
             title_html = ""
             if title:
                 meta = CALLOUT_META.get(ctype, {"emoji": "📌", "label": ""})
@@ -133,7 +168,6 @@ def preprocess_callouts(text: str) -> str:
     return "\n".join(out)
 
 
-# ---------------------------------------------------------------------------
 # ---------------------------------------------------------------------------
 # 1b. Pre-process math formulas before markdown conversion
 # ---------------------------------------------------------------------------
@@ -202,7 +236,7 @@ def preprocess_math(text: str) -> str:
     return text
 
 
-
+# ---------------------------------------------------------------------------
 # 2. Pre-process inline highlight markers before markdown conversion
 # ---------------------------------------------------------------------------
 
@@ -275,7 +309,10 @@ def apply_highlight_styles(soup: BeautifulSoup, theme_palette: dict[str, str]) -
 
         # List items inside callouts
         for li in section.find_all("li"):
-            li["style"] = f"margin:0 0 6px;font-size:15px;line-height:1.7;
+            li["style"] = f"margin:0 0 6px;font-size:15px;line-height:1.7;"
+        # Reset ul/ol padding inside callouts
+        for ul in section.find_all(["ul", "ol"]):
+            ul["style"] = "margin:8px 0 0;padding-left:1.5em;"
 
     # --- Math formula blocks ---
     for section in list(soup.find_all("section", attrs={"data-math": True})):
@@ -285,4 +322,38 @@ def apply_highlight_styles(soup: BeautifulSoup, theme_palette: dict[str, str]) -
             "border-radius:10px;font-family:Georgia,serif;"
             "font-size:16px;line-height:1.7;text-align:center;"
         )
-        del section["data-math"]"
+        del section["data-math"]
+
+    # --- Convert ALL ul/ol/li to WeChat-compatible div+• ---
+    for list_tag in list(soup.find_all(["ul", "ol"])):
+        parent = list_tag.parent
+        div_container = soup.new_tag("div")
+        for li in list_tag.find_all("li"):
+            text = li.get_text("", strip=True)
+            marker = "• " if list_tag.name == "ul" else ""
+            new_div = soup.new_tag(
+                "div",
+                style="margin:0 0 8px;font-size:15px;line-height:1.75;",
+            )
+            # Keep any <strong> tags inside the li
+            for child in li.children:
+                if child.name == "strong":
+                    strong_tag = soup.new_tag("strong")
+                    strong_tag.string = child.get_text()
+                    new_div.append(marker)
+                    new_div.append(strong_tag)
+                    for sibling in child.next_siblings:
+                        if isinstance(sibling, str):
+                            new_div.append(sibling)
+                elif isinstance(child, str):
+                    text_content = child.strip()
+                    if text_content:
+                        if marker:
+                            new_div.append(marker)
+                            marker = ""
+                        new_div.append(text_content)
+            # If we couldn't extract structured content, use plain text
+            if not new_div.contents:
+                new_div.string = f"{marker}{text}"
+            div_container.append(new_div)
+        list_tag.replace_with(div_container)
