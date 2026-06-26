@@ -93,7 +93,6 @@ unpublished content.
 | `--report` | No | Defaults to `<output>.report.json` |
 | `--official-check` | No | Opt-in upload to WeChat's official structure verifier |
 | `--official-timeout` | No | Official verifier timeout in seconds; defaults to 15 |
-| `--card-padding` | No | Card padding in px for list items (default: `14`, compact: `6`) |
 
 ## Highlight and callout syntax
 
@@ -115,6 +114,37 @@ The core idea is ==OPC = decision-maker + AI tool chain==.
 ^^This changes how individuals approach business.^^
 !!Always validate demand before building a product!!
 ```
+
+### Math formulas
+
+Display math delimited by `$$...$$` or `\[...\]` is converted to a WeChat-stable
+styled `<section>` card with the formula rendered in readable text:
+
+```markdown
+$$
+PE = \frac{price}{earnings}
+$$
+
+\[
+ROI = \frac{gain}{cost} \times 100\%
+\]
+```
+
+Common LaTeX commands are replaced with Unicode equivalents:
+
+| Command | Rendered as |
+|---------|------------|
+| `\frac{a}{b}` | `a / b` |
+| `\times` | `×` |
+| `\approx` | `≈` |
+| `\rightarrow` | `→` |
+| `\sum` | `∑` |
+| `\text{...}` | text content only |
+
+Inline math `$...$` and `\(...\)` are NOT handled — use `$$` or `\[` for all
+formulas that need rendering.
+
+Content inside `` ``` `` code fences is protected and not converted.
 
 ### Callout blocks
 
@@ -144,6 +174,13 @@ MVP 的关键不是"完整"，而是"能否换取真实支付"。
 :::
 ```
 
+🔴 **CRITICAL — missing `:::` closing breaks all subsequent content**: Every callout block MUST end with a standalone `:::` line on its own. If the closing marker is omitted, the preprocessor in `scripts/highlighting.py` silently treats every line after the opening `:::` as callout content, consuming all remaining sections (headings, tables, lists, blockquotes) into the callout `<section>` element. These sections then render as raw markdown text in the WeChat article — `## 二、...` shows literally, not as an `<h2>` heading. **The quality score report (all 100) does NOT catch this failure.**
+
+`scripts/highlighting.py` now includes `_auto_close_callouts()` as a safety net: it scans for unclosed `:::` blocks before processing and inserts `:::` before each subsequent `:::type` opener, plus at EOF for any remaining open block. This prevents catastrophic document-wide breakage. However, the auto-close cannot reconstruct the author's intended boundary — all content from the unclosed opener to the auto-inserted closer becomes part of the callout card, which is rarely correct.
+
+**Always close `:::` blocks properly.** The safety net prevents total document loss but cannot fix boundary errors. Verify the output HTML contains `<h2>` tags for every section heading, not raw `##` markdown.
+
+Supported frontmatter keys include `title`, `author`, `date`, `summary`,
 Supported frontmatter keys include `title`, `author`, `date`, `summary`,
 `description`, `type`, `category`, and `tags`.
 
@@ -196,13 +233,9 @@ The command prints JSON and writes the same audit data to the report:
 - Do not use fixed `width` or `height`, zero line height, `text-align:start/end`,
   `position:absolute/fixed`, transforms, or `!important`.
 - Render fenced code as a wrapping `section > code` block, not `<pre>`.
-- **Do NOT use `<ol>`, `<ul>`, or `<li>` — WeChat breaks them all.**
-  The converter auto-replaces every list with insight-style span
-  blocks: bold+italic text in `#3B3B98` (deep cognitive blue) with an
-  accent-colored marker. Last item has `margin-bottom:18px`; others
-  have `14px`. No flex, no borders, no card backgrounds.
 - Keep same-tag nesting at 15 levels or fewer.
 - Favor solid container backgrounds and moderate contrast for Dark Mode. Decorative
+  gradients without text are allowed; text-on-gradient is not.
 - Keep shared backgrounds on a structural container rather than repeating them on
   each text node.
 - Treat `data-no-dark` as applying only to the marked node. Inline styles on its
@@ -211,6 +244,9 @@ The command prints JSON and writes the same audit data to the report:
 - Put images containing text, transparent images, and text over background images
   through manual light/dark review because HTML inspection cannot prove legibility.
 
+Read [references/callout-close-bug.md](references/callout-close-bug.md) for the
+debugging transcript of unclosed `:::` blocks and reading-path cap bugs — consult
+when the output shows raw markdown despite perfect quality scores.
 Read [references/design-system.md](references/design-system.md) when changing themes,
 spacing, typography, cards, or article-type behavior.
 Read [references/wechat-editor-plugin-spec.md](references/wechat-editor-plugin-spec.md)
@@ -250,8 +286,9 @@ type: tech
 ...
 ```
 
-When at least two level-two headings exist, the converter creates a restrained section
-map from their labels. It does not fabricate an executive summary.
+When at least two level-two headings exist, the converter creates a section
+map from every `##` label (no cap — all chapters appear). It does not fabricate
+an executive summary.
 
 ## Quality gate
 
