@@ -348,6 +348,25 @@ because it looks plausible in a desktop browser.
 
 ## Verification
 
+### 🔴 Title-integrity checkpoint
+
+The article title in the WeChat draft is taken from `<h1>` in the HTML. The converter uses `--title` first, then frontmatter `title:`, then defaults to "未命名文章".
+
+**Hard rule**: The `--title` value MUST equal the first `# ` heading in the source markdown verbatim. An abbreviated `--title` (e.g. `"恒生科技"` instead of the full 30‑char title) causes the WeChat draft to display a truncated or "未命名文章" title. **Always pass the exact full title as `--title`.**
+
+Safety check in code: if `--title` is < 50% the length of the actual `# ` heading, the converter prints a warning and auto‑corrects. **Do not rely on this** — it fires after the fact and the JSON report still shows the short title.
+
+Before push, run:
+```bash
+h1_html=$(grep -oP '<h1[^>]*>\K[^<]+' article.wechat.html)
+h1_src=$(grep -m1 '^# ' article.md | sed 's/^# //')
+if [ "$h1_html" != "$h1_src" ]; then
+  echo "❌ TITLE MISMATCH: h1=\"$h1_html\" vs source=\"$h1_src\""
+fi
+```
+
+### Standard verification
+
 Run:
 
 ```bash
@@ -370,6 +389,9 @@ Before claiming completion, confirm:
   transforms, or `!important` remain;
 - dangerous links and embedded raw HTML were removed;
 - the output preserves headings, lists, blockquotes, code, tables, images, and links;
+- **the `<h1>` title in the output HTML is the full article title** — verify with
+  `grep -o '<h1[^>]*>[^<]*</h1>' <output.html>`. A truncated or default title ("未命名文章")
+  means `--title` was omitted or too short; re-convert with the correct full title;
 - `manual_review` has been completed when images or background images are present;
 - the official verifier passes when the user authorized `--official-check`;
 - the result remains readable at a narrow mobile width.
