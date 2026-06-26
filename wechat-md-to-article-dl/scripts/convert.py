@@ -34,6 +34,7 @@ from official_verify import verify_article_structure
 from highlighting import (
     preprocess_callouts,
     preprocess_inline_highlights,
+    preprocess_math,
     apply_highlight_styles,
 )
 
@@ -195,6 +196,7 @@ def infer_theme(metadata: dict[str, Any], body: str) -> str:
 
 def safe_markdown(body: str) -> BeautifulSoup:
     body = preprocess_callouts(body)
+    body = preprocess_math(body)
     body = preprocess_inline_highlights(body)
     raw_html = markdown(
         body,
@@ -208,7 +210,7 @@ def safe_markdown(body: str) -> BeautifulSoup:
             "a": ["href", "title"],
             "img": ["src", "alt", "title"],
             "span": ["data-hl"],
-            "section": ["data-callout"],
+            "section": ["data-callout", "data-math"],
             "th": ["colspan", "rowspan"],
             "td": ["colspan", "rowspan"],
         },
