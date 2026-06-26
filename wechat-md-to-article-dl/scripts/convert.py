@@ -237,60 +237,6 @@ def safe_markdown(body: str) -> BeautifulSoup:
     return soup
 
 
-def normalize_lists(soup: BeautifulSoup, theme: dict[str, str], *,
-                    card_padding: int = 14) -> None:
-    """Replace <ol>/<ul>/<li> with indented span list blocks.
-
-    Single span in accent color with bold+italic text. Container has
-    left padding for visual indentation. No markers, no card styling.
-    """
-    for list_tag in soup.find_all(["ol", "ul"]):
-        accent = theme["accent"]
-        container = soup.new_tag("div")
-        container["style"] = "margin:0px 0px 18px 0px;padding:0px 0px 0px 20px;"
-
-        is_ordered = list_tag.name == "ol"
-        counter = 1
-
-        items = list_tag.find_all("li", recursive=False)
-        for idx, li in enumerate(items):
-            is_last = idx == len(items) - 1
-
-            # Item wrapper — all items get margin (last gets 0)
-            item = soup.new_tag("div")
-            item["style"] = "margin-bottom:14px;" if not is_last else "margin-bottom:0px;"
-
-            # Single text span — accent color, bold+italic, no marker
-            line = soup.new_tag("span")
-            line["style"] = (
-                "font-size:16px;line-height:1.85;"
-                f"color:{accent};letter-spacing:0.02em;"
-            )
-
-            # Content wrapped in <b><i> for bold+italic emphasis
-            emphasis = soup.new_tag("b")
-            i_tag = soup.new_tag("i")
-
-            # Include ordered number if applicable
-            if is_ordered:
-                i_tag.append(f"{counter}. ")
-                counter += 1
-
-            for child in list(li.children):
-                if child.name == "p":
-                    for grandchild in list(child.children):
-                        i_tag.append(grandchild)
-                else:
-                    i_tag.append(child)
-
-            emphasis.append(i_tag)
-            line.append(emphasis)
-            item.append(line)
-            container.append(item)
-
-        list_tag.replace_with(container)
-
-
 def style_map(theme: dict[str, str], *, strict: bool) -> dict[str, str]:
     radius = "10px" if strict else "14px"
     return {
@@ -405,7 +351,6 @@ def render(
     title_override: str | None,
     theme_name: str,
     strict: bool,
-    card_padding: int = 14,
 ) -> str:
     palette = THEMES[theme_name]
     title = title_override or normalize_text(metadata.get("title")) or "未命名文章"
@@ -415,7 +360,6 @@ def render(
     soup = safe_markdown(body)
     apply_styles(soup, palette, strict=strict)
     apply_highlight_styles(soup, palette)
-    normalize_lists(soup, palette, card_padding=card_padding)
 
     meta_parts = [part for part in (author, date_value) if part]
     meta_line = " · ".join(meta_parts)
@@ -468,7 +412,6 @@ def convert(
     report_path: Path,
     official_check: bool = False,
     official_timeout: float = 15.0,
-    card_padding: int = 14,
 ) -> dict[str, Any]:
     if not input_path.is_file():
         raise ValueError(f"Input file not found: {input_path}")
@@ -488,7 +431,6 @@ def convert(
         title_override=title,
         theme_name=selected_theme,
         strict=False,
-        card_padding=card_padding,
     )
     audit = audit_html(output_html, threshold=threshold)
     auto_repaired = False
@@ -500,7 +442,6 @@ def convert(
             title_override=title,
             theme_name=selected_theme,
             strict=True,
-            card_padding=card_padding,
         )
         audit = audit_html(output_html, threshold=threshold)
     official_validation = {
@@ -574,10 +515,6 @@ def main() -> int:
         help="Explicitly transmit final HTML to WeChat's official structure verifier.",
     )
     parser.add_argument("--official-timeout", type=float, default=15.0)
-    parser.add_argument(
-        "--card-padding", type=int, default=14,
-        help="Card padding in px for list items (default: 14, compact: 6)",
-    )
     args = parser.parse_args()
     report_path = args.report or Path(str(args.output) + ".report.json")
     try:
@@ -590,7 +527,6 @@ def main() -> int:
             report_path=report_path,
             official_check=args.official_check,
             official_timeout=args.official_timeout,
-            card_padding=args.card_padding,
         )
     except (OSError, UnicodeError, ValueError) as error:
         print(json.dumps({"status": "error", "message": str(error)}, ensure_ascii=False))
