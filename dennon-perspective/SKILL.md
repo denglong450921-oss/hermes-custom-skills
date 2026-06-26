@@ -202,9 +202,7 @@ description: >
 | **加粗锚点** | 段内强调核心概念 | `**注意力资本**是指` |
 | **粗斜体卡片** | 关键判断/方法论/策略提示用彩色左边框卡片 | `:::thinking 标题\n内容\n:::` |
 | **ASCII 决策树** | ⚠️ 移动端不友好。仅限结构极简单的分支（≤3个节点），且后续会转为WeChat HTML（code块自动换行）。复杂路径改用编号列表或项目符号 | ```` ``` \n条件 → A ──► 结果1\n       └──► 结果2\n``` ```` |
-| **彩色强调** | 核心概念用高亮色强调 | `==核心定义==`（粗+主题色）、`^^重要观点^^`（粗+标题色）、`!!强调!!`（粗体） |
-| **短段落**（1句） | 制造停顿感、强调关键结论 | 独立成段的一句话判断 |
-| **对照/对比结构** | 并置正反案例、正向vs负向路径 | 正向路径 vs 负向路径 |
+| **彩色强调** | 核心概念用高亮色强调 | `==核心定义==`（粗+主题色）、`^^重要观点^^`（粗+标题色）、`!!强调!!`（粗体） |\n| **数学公式** | 公式推导/数学表达式用 WeChat 稳定格式 | `$$...$$` 多行公式、`\[...\]` 多行公式（会被渲染为带背景色的居中展示块） |\n| **短段落**（1句） | 制造停顿感、强调关键结论 | 独立成段的一句话判断 |\n| **对照/对比结构** | 并置正反案例、正向vs负向路径 | 正向路径 vs 负向路径 |
 
 **布局即强调（Layout as Highlighting）：**
 全文的每一个布局选择都必须服务于「强调关键信息」这一目的，而非装饰。使用前先问：这个元素突出了什么核心判断？
@@ -308,6 +306,8 @@ description: >
 
 **注意**：**引言段（第一个 `##` 标题之前的内容）在布局检查中被视为独立章节**，必须与第一章保持差异化布局。例如引言段使用短段落时，第一章应改用表格、列表或 `###` 子标题开头。
 
+🔴 **PITFALL — `:::thinking` ／ `:::key` 等粗斜体卡片必须用 `:::` 闭合**：每个 `:::type` 块必须以独占一行的 `:::` 结束。缺少闭合标记会导致后续所有章节（从 `##` 标题到表格、列表、引用块）在 WeChat HTML 转换中全部渲染为原始 markdown 文本，且质量评分仍然显示 100 不报错。验证方法：转换后检查 HTML 中每一章的 `##` 是否已变为 `<h2>` 标签，而非保留 `##` 原文。写 `:::thinking` 块时养成习惯：写完内容立即补上 `:::`，再继续写后续段落。
+
 **自动化辅助检查**（推荐）：使用 `scripts/layout-check.py` 进行确定性扫描：
 
 ```bash
@@ -327,6 +327,7 @@ python3 scripts/layout-check.py ~/Downloads/<文章文件名>.md
 |------|---------|
 | `references/auto-article-clippings.md` | 素材来自 `Clippings/Auto Article/` 目录时，查看 AI 生成素材的处理规则 |
 | `references/wechat-publish-workflow.md` | 需要将文章转为 WeChat HTML、生成封面、推送到草稿箱时 |
+| `references/gh-api-safe-update.md` | 需要向 GitHub 推送 skill 更新但不想触发大规模 git push 时。包含 `gh api` 单文件安全更新全流程和 main 被覆盖的恢复方法 |
 
 > **搭配技能**：`thinking-models-dl`（思维模型工具箱）的模型匹配已整合为 Step 0（强制加载）和 Step 2.5（前置匹配）。无需单独请求——每次写作或分析时自动执行。
 
@@ -636,16 +637,17 @@ git commit -m "<type>: <简短描述>"
 git push
 ```
 
-**If you already pushed a bad commit** (deleted sibling skills from remote):
-```bash
-# Check what the commit deleted
-git show --stat <bad-commit>
-# Revert it
-git revert <bad-commit> --no-edit
-git push
-# Or force-push the known-good commit
-git push origin <good-commit>:main --force
-```
+🔴 **CRITICAL — NEVER force-push to `main`.** This repo has a flat directory structure with the user's full Hermes config at `~/.hermes/` as the git root. The `main` branch on GitHub is the canonical source for ALL skills. A force-push to `main` replaces everyone's history. If a dirty working tree is present, `git push --force origin <branch>:main` may push stale/temporary files + huge binaries (state.db etc.) and GitHub will reject the large files, leaving the branch in an unfixable state without external recovery.
+
+**Safe single-file update workflow** (prefer this over git push for small content changes) — see `references/gh-api-safe-update.md` for the exact commands. The `gh api repos/.../contents/...` approach:
+- Creates a new branch from `main` (never touches `main` directly)
+- Pushes only the file blob (no large binaries)
+- Works through slow proxies (small payloads)
+- Produces a PR-able branch
+
+**If you ALREADY force-pushed to `main`** and deleted everything:
+
+The local git history is useless because force-push replaced the entire branch. Recovery requires the old branch's tip commit hash — this may still exist on GitHub as an orphan object for ~90 days. See `references/gh-api-safe-update.md` for the full recovery procedure.
 
 > 本Skill由 [女娲 · Skill造人术](https://github.com/alchaincyf/nuwa-skill) 生成
 > 创建者：[花叔](https://x.com/AlchainHust)
