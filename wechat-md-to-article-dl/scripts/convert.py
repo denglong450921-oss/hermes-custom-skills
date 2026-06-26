@@ -357,6 +357,17 @@ def render(
 ) -> str:
     palette = THEMES[theme_name]
     title = title_override or normalize_text(metadata.get("title")) or "未命名文章"
+    
+    # Safety check: if title_override is much shorter than the actual h1 in body,
+    # use the full one from the source — prevents "恒生科技" truncated-title bugs.
+    _h1_match = re.search(r"^#\s+(.+)", body)
+    if _h1_match:
+        full_title = _h1_match.group(1).strip()
+        if title_override and len(full_title) > 15 and len(title_override) < len(full_title) * 0.5:
+            import sys as _sys
+            print(f"[WARNING] --title \"{title_override}\" is too short (<50% of actual h1). "
+                  f"Using full title: \"{full_title}\"", file=_sys.stderr)
+            title = full_title
     author = normalize_text(metadata.get("author"))
     date_value = normalize_text(metadata.get("date"))
     summary = normalize_text(metadata.get("summary") or metadata.get("description"))
