@@ -65,20 +65,39 @@ steps are already done, then ask: "Cover was previously generated — still OK, 
 
 | Input | Action |
 |-------|--------|
-| Clipping path (`Clippings/Auto Article/` or vault path) | Follow dennon-perspective's Auto Article clipping rules |
-| Raw transcript path (`.mp4` URL or file) | First transcribe with `video-transcribe` skill, then use the transcript as source |
+| Clipping path (`Clippings/Auto Article/` or vault path) | **MUST** run Step 1. Clippings always need Dennon voice transformation. Do NOT skip. |
+| Raw transcript path (`.mp4` URL or file) | First transcribe with `video-transcribe` skill, then run Step 1 with the transcript |
 | Topic phrase ("写一篇关于X的文章") | Go directly to Step 1; dennon-perspective writes from framework alone |
-| Existing `.md` file | Skip Step 1, go to Step 2 |
+| Existing `.md` file (user-provided, outside Auto Article) | Skip Step 1, go to Step 2 |
 | `--cover-only` flag | Skip Steps 1-2, go directly to Step 3 |
 | `--push-only` flag with existing HTML + cover | Skip Steps 1-3, go directly to Step 4 |
 
+🔴 **PITFALL — structural format ≠ finished article**: A file in `Clippings/Auto Article/` may have numbered sections and no AI residue, yet still lack Dennon's voice (冷静克制的高确定性语气、界定先行、破→立→重构→收束结构). Format markers check copy-paste residue; they do not check voice. **When in doubt, run Step 1.** The dennon-perspective Agentic Protocol will strip everything it doesn't need and write in Dennon's voice. Re-running Step 1 is idempotent for the user — they get a better article. Skipping Step 1 when you shouldn't leads to a voice-mismatched article that requires rework.
+
 ## Step 1: Write article
 
-**MUST load and follow `dennon-perspective` skill.** This is NOT optional. Do NOT write the article directly — always invoke dennon-perspective's Agentic Protocol:
+### 🔴 MANDATORY — trigger dennon-perspective
 
-1. Load `dennon-perspective` with `thinking-models-dl` (the skill auto-loads it)
-2. Follow the full Agentic Protocol (Problem classification → Research → Structure architecture → Writing → Cleanup)
-3. Run layout-check.py — exit code 0 required
+You MUST execute this EXACT tool call sequence. Do NOT skip, do NOT write the article directly, do NOT "follow the instructions from memory."
+
+```python
+# Tool call 1: Load dennon-perspective
+skill_view(name='dennon-perspective')
+
+# Tool call 2: Load thinking-models-dl (models for analytical framework)
+skill_view(name='thinking-models-dl')
+```
+
+After both skills are loaded, follow dennon-perspective's Agentic Protocol:
+
+1. **Problem classification** — identify input type (clipping/framework/mixed)
+2. **Dennon-style research** — if clipping: strip AI meta, keep core data/analogies
+3. **Structure architecture** — match 2-4 thinking models, bind to chapters (破/立/递进/收束)
+4. **Dennon writing** — apply Dennon voice: 不是…而是句式 ≥2次, 定义先行, 收束金句, 模块化框架
+5. **System clean-up** — delete meta-introductions, visual refs, filler
+6. **Layout check** — `python3 scripts/layout-check.py` — exit 0 required
+
+**If you're reading this instruction instead of calling skill_view()**: stop reading. Call skill_view(name='dennon-perspective') NOW. The skill's full Agentic Protocol is inside that loaded content — this summary is not a substitute.
 
 **Output**: `~/Downloads/<标题前20字>.md`
 **Quality gate**: layout-check.py exit code 0 (≥5 layout types, ≤3 consecutive text paragraphs, adjacent chapter diversity).
@@ -141,7 +160,7 @@ Read the article's first `# ` heading (the full title). The cover needs a short 
 - **Cover title** (`--title`): first ≤14 characters of the article title
 - **Cover subtitle** (`--subtitle`): remaining characters (if any)
 - If full title is ≤14 chars, use it whole with no subtitle
-- **Prefer semantic split at punctuation**: When the title contains `：` (full-width colon), `——` (em dash), or `·` (middle dot), split at that delimiter first regardless of character count. The colon-delimited pair reads naturally as title/subtitle. Example: `"为什么刷手机不是休息：注意力系统的隐性破产"` → title=`"为什么刷手机不是休息"`, subtitle=`"注意力系统的隐性破产"`.
+- **Prefer semantic split at punctuation**: When the title contains ：（full-width colon）, ——（em dash）, ·（middle dot）, or ，（Chinese comma）, split at the first-occurring delimiter first regardless of character count. The colon-delimited pair reads naturally as title/subtitle; comma-delimited splits capture the topic phrase cleanly. Example: `"为什么刷手机不是休息：注意力系统的隐性破产"` → title=`"为什么刷手机不是休息"`, subtitle=`"注意力系统的隐性破产"`. Example with comma: `"SpaceX上市之后，真正值得讨论的不是"还能涨多少"，而是如何给伟大的公司定价"` → title=`"SpaceX上市之后"`, subtitle=`"真正值得讨论的不是"还能涨多少"，而是如何给伟大的公司定价"`.
 - **Priority when rules conflict**: Semantic split wins over char count. When pre-punctuation text exceeds 14 chars (e.g. `"Context Engineering的噪声陷阱"` = 17 chars), use it anyway — gen_cover.py auto-adjusts font size. The 14-char limit is a safe heuristic for arbitrary cuts, not a hard bound when a natural semantic boundary exists.
 
 ### Fetch image
@@ -178,6 +197,15 @@ open ~/Downloads/<short-name>-cover.png
 Check `~/.hermes/skills/wechat-cover-generator-dl/references/used-images.txt` before fetching. If the fetched image's Unsplash ID is already in the file, fetch again with different keywords. Append new IDs after rendering.
 
 Picsum images (fastly.picsum.photos) have no Unsplash ID — skip the check for those.
+
+**Pitfall — fetch_image keeps returning used images**: The Unsplash search API has a small result pool at 900×383. After 3 retries with different keywords, if fetch_image still returns already-used images, skip further retries and use a Picsum URL directly:
+
+```bash
+# Pick any Picsum image ID — they're all free and never tracked
+--image-url "https://fastly.picsum.photos/id/1043/900/383.jpg"
+```
+
+Change the `id/XXXX/` segment to vary the image. See picsum.photos for available IDs.
 
 ## Step 4: Push to drafts
 
@@ -322,10 +350,10 @@ echo "All outputs saved to $WORKSPACE"
 |------|---------|---------|
 | 1 | layout-check fails | Fix layout diversity, re-run check. If adjective: report to user |
 | 2 | Score < 90 | Rerun in strict mode. If still failing, show failed dimensions to user |
-| 2 | Unicode filename | Copy to `/tmp/` with ASCII name per wechat-md-to-article-dl's workaround |
-| 3 | Image fetch fails | Retry with different keywords (max 3 attempts). Then fallback to gradient with `--no-image` |
+| 2 | Unicode filename with Chinese quotes or special chars | Copy to `/tmp/` with a clean ASCII name using glob: `cp /path/to/folder/unique-keyword*.md /tmp/clean-name.md`. The shell glob bypasses Chinese quotes (`""`, `""`) that confuse argument parsing. Then run convert.py on `/tmp/clean-name.md` |
+| 3 | Image fetch fails | Retry with different keywords (max 3 attempts). If all retries return already-used images (Unsplash pool is small at 900×383), use a direct Picsum URL instead: `--image-url "https://fastly.picsum.photos/id/XXXX/900/383.jpg"` (change `/id/XXXX/` for variety). Only fallback to `--no-image` gradient if Picsum is also unavailable |
 | 3 | Cover title truncated | Shorten `--title`, move overflow to `--subtitle` |
-| 4 | `40164` IP not whitelisted | Read actual IP from error, tell user to add to mp.weixin.qq.com whitelist |
+| 4 | `40164` IP not whitelisted | Read actual IP from error, tell user to add to mp.weixin.qq.com whitelist (开发 → 基本配置 → IP白名单). After whitelisting, re-run full push command — both cover upload and draft push will retry together. Do NOT try to push without cover |
 | 4 | `MISSING_COVER_IMAGE` | Verify cover path exists, re-run with absolute path |
 | 4 | CLI not found | `pip3 install md2wechat` |
 
