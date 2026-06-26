@@ -109,6 +109,7 @@ THEMES: dict[str, dict[str, str]] = {
 
 ALLOWED_TAGS = [
     "section",
+    "div",
     "p",
     "h1",
     "h2",

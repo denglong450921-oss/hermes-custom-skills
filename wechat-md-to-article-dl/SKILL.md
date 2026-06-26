@@ -262,6 +262,9 @@ The command prints JSON and writes the same audit data to the report:
 - Put images containing text, transparent images, and text over background images
   through manual light/dark review because HTML inspection cannot prove legibility.
 
+Read [references/list-rendering-wechat.md](references/list-rendering-wechat.md) for why
+lists use `<div>`+`•` instead of `<ul>`/`<ol>`/`<li>` and how the two conversion paths
+(callout inner lists + global body lists) work together.
 Read [references/callout-close-bug.md](references/callout-close-bug.md) for the
 debugging transcript of unclosed `:::` blocks and reading-path cap bugs — consult
 when the output shows raw markdown despite perfect quality scores.
