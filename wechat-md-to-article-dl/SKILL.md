@@ -229,6 +229,16 @@ The command prints JSON and writes the same audit data to the report:
 - Give the reader a ten-second path through title, summary, key judgment, and sections.
 - Use inline CSS only. Avoid external CSS, `<style>`, scripts, event handlers, layout
   systems that WeChat may strip, and unsafe URL schemes.
+- **Long, CSS-adjusted text blocks must be visually enhanced, not simply simplified.**
+  When a paragraph carries complex content (multi-clause argument, layered data,
+  conditional logic) that was deliberately styled for readability, the converter
+  must preserve its information density by adding visual structure: break it into
+  multiple shorter paragraphs, extract key claims into bullet lists, wrap core
+  judgments in blockquotes or callout cards, and use bold anchors for signposts.
+  Simply stripping the CSS and leaving a 500‑character wall of plain text destroys
+  the original context. If the enhanced version exceeds a 90 readability score
+  despite higher paragraph density, that is correct — the original 100‑score plain
+  wall was an artifact of aggressive simplification, not genuine readability.
 - Do not set `font-family`; preserve the platform's default font.
 - Do not use fixed `width` or `height`, zero line height, `text-align:start/end`,
   `position:absolute/fixed`, transforms, or `!important`.
