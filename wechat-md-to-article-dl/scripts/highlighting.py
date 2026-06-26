@@ -61,6 +61,33 @@ INLINE_PATTERNS: list[tuple[re.Pattern, str]] = [
 # 1. Pre-process callout blocks before markdown conversion
 # ---------------------------------------------------------------------------
 
+def _auto_close_callouts(text: str) -> str:
+    """Auto-close unclosed ::: callout fences.
+
+    Missing ``:::`` closers cause the preprocessor to consume the entire
+    rest of the document as callout content, producing broken HTML.
+    Inserts ``:::`` before each subsequent ``:::type`` opener, and at EOF.
+    """
+    lines = text.split("\n")
+    out: list[str] = []
+    open_count = 0
+    for line in lines:
+        if re.match(r"^:::(problem|strategy|thinking|key)\s", line):
+            if open_count > 0:
+                out.append(":::")
+                open_count -= 1
+            open_count += 1
+            out.append(line)
+        elif line.strip() == ":::":
+            open_count -= 1
+            out.append(line)
+        else:
+            out.append(line)
+    if open_count > 0:
+        out.append(":::")
+    return "\n".join(out)
+
+
 def preprocess_callouts(text: str) -> str:
     """Convert ``:::type ... :::`` fences into raw HTML ``<section>`` elements.
 
@@ -68,6 +95,7 @@ def preprocess_callouts(text: str) -> str:
     carries a ``data-callout`` attribute that survives bleach and is replaced
     with inline styles later.
     """
+    text = _auto_close_callouts(text)
     lines = text.split("\n")
     out: list[str] = []
     i = 0
