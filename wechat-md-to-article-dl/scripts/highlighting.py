@@ -134,6 +134,75 @@ def preprocess_callouts(text: str) -> str:
 
 
 # ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# 1b. Pre-process math formulas before markdown conversion
+# ---------------------------------------------------------------------------
+
+MATH_REPLACEMENTS: dict[str, str] = {
+    r"\\times": "×",
+    r"\\approx": "≈",
+    r"\\rightarrow": "→",
+    r"\\to": "→",
+    r"\\cdot": "·",
+    r"\\sum": "∑",
+    r"\\pi": "π",
+    r"\\infty": "∞",
+    r"\\ge": "≥",
+    r"\\le": "≤",
+    r"\\pm": "±",
+    r"\\uparrow": "↑",
+    r"\\downarrow": "↓",
+}
+
+
+def _replace_latex_commands(text: str) -> str:
+    for cmd, uni in MATH_REPLACEMENTS.items():
+        text = re.sub(cmd, uni, text)
+    text = re.sub(r"\\text\{([^}]*)\}", r"\1", text)
+    text = re.sub(r"\\frac\{([^}]*)\}\{([^}]*)\}", r"\1 / \2", text)
+    return text
+
+
+def _latex_to_readable(text: str) -> str:
+    text = _replace_latex_commands(text)
+    text = re.sub(r"\\[a-zA-Z]+\{([^}]*)\}", r"\1", text)
+    text = re.sub(r"\\[a-zA-Z]+", "", text)
+    text = text.replace("{", "").replace("}", "")
+    text = re.sub(r"\s+", " ", text).strip()
+    return text
+
+
+def preprocess_math(text: str) -> str:
+    """Convert LaTeX math blocks into WeChat-stable styled HTML.
+
+    Handles $$...$$ and \\[...\\] display math.
+    Skips content inside ```..``` code fences.
+    """
+    protected: dict[str, str] = {}
+    def _protect(m: re.Match) -> str:
+        t = f"__MATH_PROTECT_{len(protected)}__"
+        protected[t] = m.group(0)
+        return t
+
+    text = re.sub(r"```.*?```", _protect, text, flags=re.DOTALL)
+
+    for delim_open, delim_close in [
+        (re.escape("$$"), re.escape("$$")),
+        (re.escape(r"\["), re.escape(r"\]")),
+    ]:
+        text = re.sub(
+            f"{delim_open}(.+?){delim_close}",
+            lambda m: f'<section data-math="true">{_latex_to_readable(m.group(1))}</section>',
+            text,
+            flags=re.DOTALL,
+        )
+
+    for token, original in protected.items():
+        text = text.replace(token, original)
+    return text
+
+
+
 # 2. Pre-process inline highlight markers before markdown conversion
 # ---------------------------------------------------------------------------
 
@@ -206,4 +275,14 @@ def apply_highlight_styles(soup: BeautifulSoup, theme_palette: dict[str, str]) -
 
         # List items inside callouts
         for li in section.find_all("li"):
-            li["style"] = f"margin:0 0 6px;font-size:15px;line-height:1.7;"
+            li["style"] = f"margin:0 0 6px;font-size:15px;line-height:1.7;
+
+    # --- Math formula blocks ---
+    for section in list(soup.find_all("section", attrs={"data-math": True})):
+        section["style"] = (
+            "margin:20px 0;padding:14px 18px;"
+            "background:#F6F3E8;border:1px solid #E2DDCE;"
+            "border-radius:10px;font-family:Georgia,serif;"
+            "font-size:16px;line-height:1.7;text-align:center;"
+        )
+        del section["data-math"]"
