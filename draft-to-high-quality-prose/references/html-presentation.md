@@ -118,6 +118,13 @@ Target line length:
 - Chinese: about `28-38` full-width characters per line.
 - Good default: about `65` English characters or `32` Chinese characters.
 
+Article alignment:
+
+- Treat the article text column as the alignment anchor.
+- Header, subtitle, metadata, executive summary, article body, and final footer/takeaways must share the same left edge on desktop.
+- Do not center the header or summary independently when the body uses a grid or fixed side rails.
+- If a TOC or reading utility is fixed outside the article column, reserve side space for it and keep it visually independent from the article column.
+
 Desktop with sidebar:
 
 ```css
@@ -128,6 +135,59 @@ Desktop with sidebar:
   grid-template-columns: minmax(0, 740px) 240px;
   gap: 72px;
   align-items: start;
+}
+```
+
+Desktop with fixed side rails:
+
+```css
+:root {
+  --content-width: 740px;
+  --page-width: 1180px;
+  --toc-width: 248px;
+}
+
+@media (min-width: 1180px) {
+  main {
+    width: min(calc(100vw - 360px), var(--page-width));
+    margin-left: 320px;
+    margin-right: auto;
+  }
+
+  .article-header,
+  .article-summary,
+  .article-layout,
+  .article-footer {
+    margin-left: 0;
+    margin-right: auto;
+  }
+
+  .article-header,
+  .article-summary,
+  .article-content,
+  .article-footer {
+    width: min(100%, var(--content-width));
+  }
+
+  .table-of-contents {
+    position: fixed;
+    top: 104px;
+    left: 32px;
+    width: var(--toc-width);
+    max-height: calc(100vh - 128px);
+    overflow-y: auto;
+  }
+}
+
+@media (min-width: 1500px) {
+  .reading-tip {
+    position: fixed;
+    top: 104px;
+    right: 32px;
+    width: 250px;
+    max-height: calc(100vh - 128px);
+    overflow-y: auto;
+  }
 }
 ```
 
@@ -318,10 +378,12 @@ Use a table of contents when:
 
 Desktop TOC:
 
-- sticky sidebar
+- sticky or fixed sidebar depending on available viewport width
 - width `220-260px`
 - top offset `96-120px`
 - current section may be highlighted if implemented simply
+- If fixed to the left rail, position it outside the article column and verify it does not overlap the header, article body, footer, or any reading-tip card.
+- Use a single article-column anchor so the header, summary card, main text, and footer line up even when the TOC lives in a left rail.
 
 Mobile TOC:
 
@@ -448,6 +510,14 @@ A sidebar may contain:
 
 The sidebar must not contain several unrelated promotional cards, and it must not be required for understanding the article.
 
+Fixed side-rail rules:
+
+- Keep the TOC and reading-tip/utility card in separate rails or separate normal-flow blocks; never stack a sticky card under a sticky TOC in the same narrow column if their boxes can overlap while scrolling.
+- For wide desktop layouts, a safe pattern is: fixed TOC on the left, article column in the middle, fixed or normal-flow reading tip on the right.
+- If the right reading tip is fixed, give it its own width and right offset; do not place it inside the article content box.
+- At narrower desktop widths, collapse the reading tip below the article content or keep it in normal flow so it cannot collide with the fixed left TOC.
+- After generating HTML with fixed side rails, verify the rendered boxes at the top and after scrolling: TOC left of content, reading tip outside content, and no overlap between TOC, reading tip, content, header, or footer.
+
 Optional utilities:
 
 - reading progress bar
@@ -547,9 +617,11 @@ Reading quality:
 - The first screen explains the subject and value.
 - The body remains comfortable after 15-20 minutes.
 - Lines are not excessively long.
+- Header, executive summary, article body, and footer align to the same article-column left edge.
 - Paragraphs are distinguishable without huge gaps.
 - Headings create a clear argument map.
 - Highlighting is selective.
+- Fixed TOC and reading-tip/sidebar boxes do not overlap each other or the article content at top or scrolled positions.
 
 Mobile quality:
 
