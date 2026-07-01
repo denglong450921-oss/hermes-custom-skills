@@ -1,4 +1,4 @@
 interface:
   display_name: "Draft to High Quality Prose"
-  short_description: "Rewrite drafts and design article HTML"
-  default_prompt: "Use $draft-to-high-quality-prose to rewrite this draft and turn it into a premium article-style HTML reading page."
+  short_description: "Rewrite drafts and save Markdown/HTML"
+  default_prompt: "Use $draft-to-high-quality-prose to rewrite this draft, save Markdown and HTML outputs, copy the Markdown to the liuskill vault, and open the HTML preview."

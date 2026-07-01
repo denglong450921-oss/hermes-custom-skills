@@ -1,6 +1,6 @@
 ---
 name: draft-to-high-quality-prose
-description: Transform rough drafts, notes, academic prose, essays, long-form articles, speeches, scripts, reports, emails, HTML documents, or bilingual Chinese/English text into clear, fluent, high-quality prose and polished reading experiences. Use when the user asks to polish, rewrite, smooth, tighten, improve readability, remove AI-flavored or bureaucratic writing, strengthen sentence and paragraph flow, convert or enhance HTML presentation, create a premium editorial article page, modern letter-style HTML, quiet tech-style reading layout, executive summary, table of contents, key-point highlights, final takeaways, or apply Liu Junqiang's "flow" method from Writing Is a Craft.
+description: Transform rough drafts, notes, academic prose, essays, long-form articles, speeches, scripts, reports, emails, HTML documents, or bilingual Chinese/English text into clear, fluent, high-quality prose and polished reading experiences. Use when the user asks to polish, rewrite, smooth, tighten, improve readability, remove AI-flavored or bureaucratic writing, strengthen sentence and paragraph flow, convert or enhance HTML presentation, create a premium editorial article page, modern letter-style HTML, quiet tech-style reading layout, executive summary, table of contents, key-point highlights, final takeaways, save Markdown/HTML outputs, open generated HTML previews, copy Markdown outputs to the liuskill Obsidian vault, or apply Liu Junqiang's "flow" method from Writing Is a Craft.
 ---
 
 # Draft To High Quality Prose
@@ -27,6 +27,17 @@ For ordinary rewrite requests, return:
 If the user asks for only the revised text, return only the revised text. If the user asks for diagnosis, diagnose before rewriting and wait if they asked to review first.
 
 For HTML presentation requests, return or save a complete self-contained HTML document unless the user asks for a fragment. Preserve the core text and full context, but remove junk sentences, confusing phrasing, repetition, and needless complexity when it improves comprehension. Build a premium article reading page with a clear first screen, readable article column, executive summary when useful, table of contents for longer pieces, selective highlights, and final key takeaways that reflect the source without inventing new claims.
+
+## File Output Workflow
+
+When the user asks to save, export, output files, show a new HTML version, or create both Markdown and HTML:
+
+- Save generated files to `~/Downloads` unless the user gives another output folder.
+- Use a clear shared basename for paired outputs, with `.md` for the polished Markdown and `.html` for the self-contained reading page.
+- When a Markdown file is written, automatically copy it to `/Users/f/Documents/dennon_obsidian_vault_important/den-llm-wiki/liuskill/`. Create that folder if needed.
+- When an HTML file is written for preview, automatically open it unless the user explicitly says not to.
+- Report the absolute paths for the Markdown file, HTML file, and vault copy.
+- If copying or opening fails, say so plainly and keep the generated file in `~/Downloads`.
 
 ## Rewrite Harness
 
