@@ -1,13 +1,13 @@
 ---
 name: draft-to-high-quality-prose
-description: Transform rough drafts, notes, academic prose, essays, articles, speeches, scripts, reports, emails, HTML documents, or bilingual Chinese/English text into clear, fluent, high-quality prose and polished reading experiences. Use when the user asks to polish, rewrite, smooth, tighten, improve readability, remove AI-flavored or bureaucratic writing, strengthen sentence and paragraph flow, convert or enhance HTML presentation, create a modern letter-style HTML page, highlight key points, add key-takeaway summaries, or apply Liu Junqiang's "flow" method from Writing Is a Craft.
+description: Transform rough drafts, notes, academic prose, essays, long-form articles, speeches, scripts, reports, emails, HTML documents, or bilingual Chinese/English text into clear, fluent, high-quality prose and polished reading experiences. Use when the user asks to polish, rewrite, smooth, tighten, improve readability, remove AI-flavored or bureaucratic writing, strengthen sentence and paragraph flow, convert or enhance HTML presentation, create a premium editorial article page, modern letter-style HTML, quiet tech-style reading layout, executive summary, table of contents, key-point highlights, final takeaways, or apply Liu Junqiang's "flow" method from Writing Is a Craft.
 ---
 
 # Draft To High Quality Prose
 
 Rewrite drafts by rebuilding the reader's path. Do not merely beautify wording. Preserve the user's meaning, facts, stance, names, numbers, citations, and necessary terminology while improving clarity, flow, structure, and rhythm.
 
-This skill uses a harness extracted from Liu Junqiang's "flow" framework in `references/liu-flow-framework.md`. Read that reference when the request is substantial, the draft is more than a few paragraphs, the user asks for diagnosis, or the prose has academic, bureaucratic, AI-flavored, or structural problems. For converted HTML, visual enhancement, letter-style layouts, or polished reading pages, also read `references/html-presentation.md`.
+This skill uses a harness extracted from Liu Junqiang's "flow" framework in `references/liu-flow-framework.md`. Read that reference when the request is substantial, the draft is more than a few paragraphs, the user asks for diagnosis, or the prose has academic, bureaucratic, AI-flavored, or structural problems. For converted HTML, article-page design, visual enhancement, letter-style layouts, quiet tech aesthetics, or polished reading pages, also read `references/html-presentation.md`.
 
 ## Default Response Contract
 
@@ -26,7 +26,7 @@ For ordinary rewrite requests, return:
 
 If the user asks for only the revised text, return only the revised text. If the user asks for diagnosis, diagnose before rewriting and wait if they asked to review first.
 
-For HTML presentation requests, return or save a complete self-contained HTML document unless the user asks for a fragment. Preserve the core text and full context, but remove junk sentences, confusing phrasing, repetition, and needless complexity when it improves comprehension. Add a final key-takeaways summary that reflects the source content without inventing new claims.
+For HTML presentation requests, return or save a complete self-contained HTML document unless the user asks for a fragment. Preserve the core text and full context, but remove junk sentences, confusing phrasing, repetition, and needless complexity when it improves comprehension. Build a premium article reading page with a clear first screen, readable article column, executive summary when useful, table of contents for longer pieces, selective highlights, and final key takeaways that reflect the source without inventing new claims.
 
 ## Rewrite Harness
 
@@ -89,7 +89,9 @@ Load `references/liu-flow-framework.md` for:
 Load `references/html-presentation.md` for:
 
 - modern, understated tech and letter-style HTML layouts
+- premium editorial article page specifications
+- executive summaries, article-width rules, table of contents behavior, and reading rhythm
 - typography, color, spacing, and card guidelines
 - rules for preserving text while cleaning confusing phrasing
 - key-point highlighting and final takeaway summaries
-- self-contained HTML output requirements
+- accessibility, performance, responsive behavior, and self-contained HTML output requirements
