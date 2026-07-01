@@ -1,13 +1,13 @@
 ---
 name: draft-to-high-quality-prose
-description: Transform rough drafts, notes, academic prose, essays, articles, speeches, scripts, reports, emails, or bilingual Chinese/English text into clear, fluent, high-quality prose. Use when the user asks to polish, rewrite, smooth, tighten, improve readability, remove AI-flavored or bureaucratic writing, strengthen sentence and paragraph flow, diagnose why prose feels stiff or scattered, or apply Liu Junqiang's "flow" method from Writing Is a Craft.
+description: Transform rough drafts, notes, academic prose, essays, articles, speeches, scripts, reports, emails, HTML documents, or bilingual Chinese/English text into clear, fluent, high-quality prose and polished reading experiences. Use when the user asks to polish, rewrite, smooth, tighten, improve readability, remove AI-flavored or bureaucratic writing, strengthen sentence and paragraph flow, convert or enhance HTML presentation, create a modern letter-style HTML page, highlight key points, add key-takeaway summaries, or apply Liu Junqiang's "flow" method from Writing Is a Craft.
 ---
 
 # Draft To High Quality Prose
 
 Rewrite drafts by rebuilding the reader's path. Do not merely beautify wording. Preserve the user's meaning, facts, stance, names, numbers, citations, and necessary terminology while improving clarity, flow, structure, and rhythm.
 
-This skill uses a harness extracted from Liu Junqiang's "flow" framework in `references/liu-flow-framework.md`. Read that reference when the request is substantial, the draft is more than a few paragraphs, the user asks for diagnosis, or the prose has academic, bureaucratic, AI-flavored, or structural problems.
+This skill uses a harness extracted from Liu Junqiang's "flow" framework in `references/liu-flow-framework.md`. Read that reference when the request is substantial, the draft is more than a few paragraphs, the user asks for diagnosis, or the prose has academic, bureaucratic, AI-flavored, or structural problems. For converted HTML, visual enhancement, letter-style layouts, or polished reading pages, also read `references/html-presentation.md`.
 
 ## Default Response Contract
 
@@ -26,6 +26,8 @@ For ordinary rewrite requests, return:
 
 If the user asks for only the revised text, return only the revised text. If the user asks for diagnosis, diagnose before rewriting and wait if they asked to review first.
 
+For HTML presentation requests, return or save a complete self-contained HTML document unless the user asks for a fragment. Preserve the core text and full context, but remove junk sentences, confusing phrasing, repetition, and needless complexity when it improves comprehension. Add a final key-takeaways summary that reflects the source content without inventing new claims.
+
 ## Rewrite Harness
 
 Use this sequence unless the user specifies a narrower edit.
@@ -37,6 +39,7 @@ Use this sequence unless the user specifies a narrower edit.
    - `academic-clarity`: paper, proposal, literature review, research memo; preserve precision and hedging.
    - `public-essay`: newsletter, post, speech, op-ed; sharpen rhythm without sacrificing accuracy.
    - `minimal-edit`: preserve the author's voice and only fix clarity blockers.
+   - `html-presentation`: preserve and lightly clean the text, then convert it into a refined HTML reading page.
 4. **Diagnose by layer**: Check word abstraction, sentence trunk, sentence chaining, rhythm, paragraph job, section route, and layout.
 5. **Rewrite structurally**: Move, split, combine, concretize, and re-sequence before polishing word choice.
 6. **Verify**: Confirm the rewrite preserves meaning, reduces friction, and makes the reader's route visible.
@@ -57,6 +60,7 @@ Use this sequence unless the user specifies a narrower edit.
 - Do not over-polish into slogans, generic inspirational prose, or "AI essay" symmetry.
 - Do not replace domain terms that are necessary for precision; define or scaffold them instead.
 - Do not explain every micro-edit unless the user asks for an edit memo.
+- For HTML, do not use visual polish to hide weak structure. Improve structure first, then design the reading experience.
 
 ## Quick Diagnostic
 
@@ -82,3 +86,10 @@ Load `references/liu-flow-framework.md` for:
 - paragraph and section restructuring
 - a ready-to-use prompt template
 
+Load `references/html-presentation.md` for:
+
+- modern, understated tech and letter-style HTML layouts
+- typography, color, spacing, and card guidelines
+- rules for preserving text while cleaning confusing phrasing
+- key-point highlighting and final takeaway summaries
+- self-contained HTML output requirements
