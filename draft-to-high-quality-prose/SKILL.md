@@ -28,6 +28,15 @@ If the user asks for only the revised text, return only the revised text. If the
 
 For HTML presentation requests, return or save a complete self-contained HTML document unless the user asks for a fragment. Preserve the core text and full context, but remove junk sentences, confusing phrasing, repetition, and needless complexity when it improves comprehension. Build a premium article reading page with a clear first screen, readable article column, executive summary when useful, table of contents for longer pieces, selective highlights, and final key takeaways that reflect the source without inventing new claims.
 
+## HTML Layout Rules
+
+For premium article HTML outputs:
+
+- Align the article header, executive summary, main text column, and footer/takeaway text to the same article-column left edge.
+- Place `目录` as a fixed left-side rail on desktop when the viewport is wide enough; collapse it into normal flow on narrower screens.
+- Keep `阅读提示` separate from `目录`; they must never overlap each other, the article text, the header, or the footer.
+- After generating HTML with fixed side rails, verify the rendered layout at the top and after scrolling: TOC left of content, reading tip outside content, and no overlapping boxes.
+
 ## File Output Workflow
 
 When the user asks to save, export, output files, show a new HTML version, or create both Markdown and HTML:
