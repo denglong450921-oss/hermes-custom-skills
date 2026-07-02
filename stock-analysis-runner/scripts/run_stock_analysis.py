@@ -507,6 +507,19 @@ def maybe_write_journal(bundle: dict[str, Any]) -> None:
     bundle["journal_write"] = {"ok": created is not None, "created": created}
 
 
+def usability_errors(bundle: dict[str, Any]) -> list[str]:
+    errors: list[str] = []
+    if bundle.get("system_status") is None:
+        errors.append("system status endpoint failed")
+    if bundle.get("watchlist") is None:
+        errors.append("watchlist endpoint failed")
+    if bundle.get("candles") is None:
+        errors.append("symbol candles are missing")
+    if bundle.get("trade_plan") is None:
+        errors.append("symbol trade plan is missing")
+    return errors
+
+
 def collect_data(args: argparse.Namespace) -> dict[str, Any]:
     symbol = normalize_symbol(args.symbol)
     bundle: dict[str, Any] = {
@@ -557,6 +570,7 @@ def collect_data(args: argparse.Namespace) -> dict[str, Any]:
     if args.write_journal:
         maybe_write_journal(bundle)
 
+    bundle["usable"] = not usability_errors(bundle)
     return bundle
 
 
@@ -597,20 +611,25 @@ def main(argv: list[str]) -> int:
     raw_path = write_json_snapshot(path, bundle) if args.raw_json else None
 
     errors = listify(bundle.get("errors"))
+    blocking_errors = usability_errors(bundle)
     summary = textwrap.dedent(
         f"""
         Wrote analysis report: {path}
         Symbol: {args.symbol}
         Endpoint errors: {len(errors)}
+        Usable for analysis: {not blocking_errors}
         Mode: {'targeted refresh + analysis' if args.refresh else 'analysis only'}
         """
     ).strip()
     if raw_path:
         summary += f"\nWrote raw JSON snapshot: {raw_path}"
-    print(summary)
+    print(summary, flush=True)
     if bundle.get("system_status") is None:
         print("System status endpoint failed; check that the backend is running.", file=sys.stderr)
         return 1
+    if blocking_errors:
+        print("Analysis is not usable yet: " + "; ".join(blocking_errors), file=sys.stderr)
+        return 2
     return 0
 
 

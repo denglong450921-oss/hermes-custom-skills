@@ -47,6 +47,12 @@ Save raw API evidence next to the report:
 python /Users/f/.codex/skills/stock-analysis-runner/scripts/run_stock_analysis.py 600519.SH --raw-json
 ```
 
+Exit codes:
+
+- `0`: report generated and core symbol data was available.
+- `1`: backend/system status failed.
+- `2`: report was written, but core symbol data such as candles or trade plan was missing.
+
 Write the trade-plan journal draft only when explicitly requested:
 
 ```bash
