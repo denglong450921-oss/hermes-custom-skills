@@ -1,0 +1,5 @@
+interface:
+  display_name: "Stock Analysis Runner"
+  short_description: "Generate structured stock analysis from MarketForge data."
+  brand_color: "#0F766E"
+  default_prompt: "Use $stock-analysis-runner to analyze one stock with MarketForge data and update only the needed website data."
