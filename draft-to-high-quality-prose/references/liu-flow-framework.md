@@ -197,6 +197,7 @@ Avoid decorative headings that sound clever but fail to summarize.
 | Long winding sentences | Expose the subject-verb trunk, then move conditions later |
 | Choppy short sentences | Combine related sentences around cause, contrast, time, or object |
 | Paragraphs that feel scattered | Give each paragraph one job and rebuild the subject chain |
+| Paragraphs where the memorable point is buried | Extract the one valuable claim and make it the topic sentence, or tag it with a `💡 要点` callout after the paragraph |
 | Paragraphs that start with details | Put the bottom line first |
 | Abrupt transitions | Use sentence chaining: repeat, synonymize, point back, or carry a keyword forward |
 | Bureaucratic style | Replace institution-speak with people, actions, stakes, and consequences |
@@ -274,6 +275,7 @@ Revision memo:
 7. 在段落层面，一段只说一个意思，第一句尽量是主题句，段内主语或关键词形成主题链。
 8. 在篇章层面，用小标题、路标词或主题句串联，让读者不用猜结构。
 9. 删除空话、套话、AI腔、过度金句化表达。
+10. **标记段落要点**：改写后，为每段提取最有价值或最令人印象深刻的论点。优先让它成为主题句；如果要点埋在段落中，在段后用 `> 💡 **要点**: [一句话]` 标注。如果某段没有值得标记的要点，考虑删掉或合并该段。
 
 输出：
 ## 改写稿

@@ -122,8 +122,8 @@ Article alignment:
 
 - Treat the article text column as the alignment anchor.
 - Header, subtitle, metadata, executive summary, article body, and final footer/takeaways must share the same left edge on desktop.
-- Do not center the header or summary independently when the body uses a grid or fixed side rails.
-- If a TOC or reading utility is fixed outside the article column, reserve side space for it and keep it visually independent from the article column.
+- **Center the article column in the viewport.** Do not push content with a left margin to clear a fixed TOC. Instead, let the TOC float beside the centered column using `calc()` positioning.
+- If a TOC or reading utility is fixed outside the article column, position it relative to the centered column (not relative to the viewport edge).
 
 Desktop with sidebar:
 
@@ -138,28 +138,18 @@ Desktop with sidebar:
 }
 ```
 
-Desktop with fixed side rails:
+Desktop with fixed side rails (centered article column):
 
 ```css
 :root {
   --content-width: 740px;
-  --page-width: 1180px;
   --toc-width: 248px;
 }
 
 @media (min-width: 1180px) {
   main {
-    width: min(calc(100vw - 360px), var(--page-width));
-    margin-left: 320px;
-    margin-right: auto;
-  }
-
-  .article-header,
-  .article-summary,
-  .article-layout,
-  .article-footer {
-    margin-left: 0;
-    margin-right: auto;
+    max-width: var(--content-width);
+    margin-inline: auto;
   }
 
   .article-header,
@@ -167,12 +157,13 @@ Desktop with fixed side rails:
   .article-content,
   .article-footer {
     width: min(100%, var(--content-width));
+    margin-inline: auto;
   }
 
   .table-of-contents {
     position: fixed;
     top: 104px;
-    left: 32px;
+    left: calc(50% - var(--content-width) / 2 - var(--toc-width) - 44px);
     width: var(--toc-width);
     max-height: calc(100vh - 128px);
     overflow-y: auto;
@@ -183,13 +174,15 @@ Desktop with fixed side rails:
   .reading-tip {
     position: fixed;
     top: 104px;
-    right: 32px;
-    width: 250px;
+    right: calc(50% - var(--content-width) / 2 - 260px);
+    width: 220px;
     max-height: calc(100vh - 128px);
     overflow-y: auto;
   }
 }
 ```
+
+The key principle: **center the article column in the viewport, then position the TOC and reading tip relative to the centered column** using `calc()`. Do not push the main content with a `margin-left` to clear the TOC — the TOC should float beside the centered column without shifting it.
 
 Responsive padding:
 
@@ -439,6 +432,8 @@ mark {
 
 Highlight sparingly. If everything is highlighted, nothing is.
 
+**Per-paragraph key-point highlights:** For articles where the user has asked for key-point marking, use a dedicated `.key-point` class (distinct from `<mark>`) to highlight the single most valuable sentence in each paragraph. Style it with a subtle treatment — a soft left border, low-opacity background glow, or a `💡` inline marker — so it guides the skim reader without competing with the main flow. Show at most one key-point highlight per paragraph. Skip the highlight when the topic sentence already carries the point clearly.
+
 ## Figures, Quotes, Lists, Tables, and Code
 
 Images:
@@ -512,9 +507,10 @@ The sidebar must not contain several unrelated promotional cards, and it must no
 
 Fixed side-rail rules:
 
+- **Center the article column.** Position the TOC and reading tip relative to the centered column using `calc()`, not relative to viewport edges. The TOC should float beside the centered column without pushing it.
 - Keep the TOC and reading-tip/utility card in separate rails or separate normal-flow blocks; never stack a sticky card under a sticky TOC in the same narrow column if their boxes can overlap while scrolling.
-- For wide desktop layouts, a safe pattern is: fixed TOC on the left, article column in the middle, fixed or normal-flow reading tip on the right.
-- If the right reading tip is fixed, give it its own width and right offset; do not place it inside the article content box.
+- For wide desktop layouts, a safe pattern is: fixed TOC on the left (positioned relative to the centered column), article column centered in the viewport, fixed or normal-flow reading tip on the right.
+- If the right reading tip is fixed, give it its own width and right offset (relative to the centered column); do not place it inside the article content box.
 - At narrower desktop widths, collapse the reading tip below the article content or keep it in normal flow so it cannot collide with the fixed left TOC.
 - After generating HTML with fixed side rails, verify the rendered boxes at the top and after scrolling: TOC left of content, reading tip outside content, and no overlap between TOC, reading tip, content, header, or footer.
 
@@ -672,7 +668,6 @@ Use or adapt this skeleton for a self-contained article page:
       --accent-soft: #eef2ff;
       --quote-bg: #f5f6f8;
       --content-width: 720px;
-      --page-width: 1180px;
       --radius: 8px;
     }
 
@@ -710,13 +705,14 @@ Use or adapt this skeleton for a self-contained article page:
     }
 
     main {
-      width: min(100% - 40px, var(--page-width));
+      max-width: var(--content-width);
       margin-inline: auto;
       padding: 64px 0 88px;
     }
 
     .article-header,
     .article-summary,
+    .article-content,
     .article-footer {
       width: min(100%, var(--content-width));
       margin-inline: auto;
@@ -768,16 +764,11 @@ Use or adapt this skeleton for a self-contained article page:
     }
 
     .article-layout {
-      max-width: var(--page-width);
       margin: 56px auto 0;
-      display: grid;
-      grid-template-columns: minmax(0, 740px) 240px;
-      gap: 72px;
-      align-items: start;
     }
 
     .article-content {
-      width: min(100%, 740px);
+      width: 100%;
     }
 
     .article-content h2 {
@@ -851,17 +842,14 @@ Use or adapt this skeleton for a self-contained article page:
       }
 
       main {
-        width: min(100% - 36px, 720px);
         padding-top: 36px;
       }
 
       .article-layout {
-        display: block;
-        margin-top: 40px;
+        margin-top: 32px;
       }
 
       .table-of-contents {
-        position: static;
         margin-top: 32px;
       }
     }
