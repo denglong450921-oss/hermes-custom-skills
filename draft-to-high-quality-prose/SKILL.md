@@ -50,8 +50,9 @@ In every output mode, mark the most valuable and memorable key point of each par
 
 For premium article HTML outputs:
 
-- Align the article header, executive summary, main text column, and footer/takeaway text to the same article-column left edge.
-- Place `目录` as a fixed left-side rail on desktop when the viewport is wide enough; collapse it into normal flow on narrower screens.
+- **Center the article column in the viewport.** Do not push content with a left margin to clear a fixed TOC. Position the TOC and reading tip relative to the centered column using `calc()`. (See `references/html-presentation.md` for the CSS pattern.)
+- Align the article header, executive summary, main text column, and footer/takeaway text to the same article-column left edge — the centered column is the alignment anchor.
+- **TOC must always be visible.** On narrow screens, render it as a card in normal flow (below the summary, above the content). On wide screens (≥1180px), pin it as a fixed left-side rail using `calc()` relative to the centered article column. Never hide the TOC on any screen size.
 - Keep `阅读提示` separate from `目录`; they must never overlap each other, the article text, the header, or the footer.
 - After generating HTML with fixed side rails, verify the rendered layout at the top and after scrolling: TOC left of content, reading tip outside content, and no overlapping boxes.
 
@@ -77,13 +78,17 @@ When generating HTML with per-paragraph key-point highlights:
 
 ## File Output Workflow
 
-When the user asks to save, export, output files, show a new HTML version, or create both Markdown and HTML:
+**Input:** Accepts a URL (WeChat, blog, web page), a local file path (markdown, HTML, Obsidian clippings with YAML frontmatter), or inline text. Strip YAML frontmatter from Obsidian/markdown files before running the rewrite harness — the frontmatter contains metadata, not prose. Preserve source URL and author from frontmatter for attribution.
+
+**Default (paired output):** When the user invokes this skill on a file or asks to rewrite/save content without specifying an output format, produce both `.md` and `.html` by default. Do not wait for the user to ask for HTML — pair them from the start. Use `html-presentation` mode for the HTML output. Only skip the HTML when the user explicitly says "markdown only" or "text only".
+
+When producing paired output:
 
 - Save generated files to `~/Downloads` unless the user gives another output folder.
 - Use a clear shared basename for paired outputs, with `.md` for the polished Markdown and `.html` for the self-contained reading page.
 - When a Markdown file is written, automatically copy it to `/Users/f/Documents/dennon_obsidian_vault_important/den-llm-wiki/liuskill/`. Create that folder if needed.
 - When an HTML file is written for preview, automatically open it unless the user explicitly says not to.
-- Report the absolute paths for the Markdown file, HTML file, and vault copy.
+- Report the absolute paths for the Markdown file, HTML file, and vault copy (even if the vault copy path is just a note saying what was done).
 - If copying or opening fails, say so plainly and keep the generated file in `~/Downloads`.
 
 ## Rewrite Harness
@@ -156,3 +161,9 @@ Load `references/html-presentation.md` for:
 - rules for preserving text while cleaning confusing phrasing
 - key-point highlighting and final takeaway summaries
 - accessibility, performance, responsive behavior, and self-contained HTML output requirements
+
+Load `references/content-types.md` for:
+
+- handling non-prose inputs: structured lists, catalogs, mixed prose+lists, tables, code-heavy content
+- decision table for choosing rewrite depth per format
+- HTML and Markdown patterns for list/reference content
