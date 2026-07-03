@@ -369,20 +369,24 @@ Use a table of contents when:
 - the article has at least four major sections
 - readers may need to return to specific sections
 
+**TOC must always be visible on all screen sizes.** Do not hide it. On narrow screens, render it as an inline card in normal flow (below the summary, above the content). On wide screens, pin it as a fixed left-side rail.
+
 Desktop TOC:
 
-- sticky or fixed sidebar depending on available viewport width
+- fixed sidebar
 - width `220-260px`
 - top offset `96-120px`
+- position using `calc()` relative to the centered article column: `left: calc(50% - var(--content-width) / 2 - var(--toc-width) - 36px)`
 - current section may be highlighted if implemented simply
 - If fixed to the left rail, position it outside the article column and verify it does not overlap the header, article body, footer, or any reading-tip card.
 - Use a single article-column anchor so the header, summary card, main text, and footer line up even when the TOC lives in a left rail.
 
-Mobile TOC:
+Mobile/narrow TOC:
 
-- move below the summary
-- make it collapsible for long articles
-- keep it open only when navigation is essential
+- render as a bordered card in normal document flow, below the summary and above the first content section
+- inline layout: TOC links display horizontally or wrap naturally
+- always visible, never collapsed or toggled
+- keeps readers oriented without requiring a wide viewport
 
 Always use real anchor links and correct heading IDs.
 
