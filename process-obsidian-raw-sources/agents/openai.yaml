@@ -1,0 +1,4 @@
+interface:
+  display_name: "Process Obsidian Raw Sources"
+  short_description: "Distill raw Markdown into Obsidian notes"
+  default_prompt: "Use $process-obsidian-raw-sources to process unprocessed raw source Markdown into my Obsidian LLM Wiki vault."
