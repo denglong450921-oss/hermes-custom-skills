@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "prompt": "Use $analyze-ielts-sentence to analyze: Technology is good for students.",
+    "expected": "Chinese IELTS coaching that starts with a simple core meaning, then gives a short correct version, a safe IELTS upgrade, high-frequency collocations, and avoids unnecessarily long complex sentences."
+  },
+  {
+    "id": 2,
+    "prompt": "Use $analyze-ielts-sentence to analyze this long sentence: Although online learning platforms are often praised for giving students unprecedented access to educational resources, their actual impact on learning depends largely on whether students receive enough guidance to use those resources critically and consistently.",
+    "expected": "Chinese analysis that simplifies the long sentence first, breaks it into meaning chunks, identifies the learnable logic, provides a shorter IELTS version before an advanced version, and warns against memorizing the whole long sentence."
+  },
+  {
+    "id": 3,
+    "prompt": "Use $analyze-ielts-sentence to improve my sentence: Many people use phone too much so they cannot talk with family very good.",
+    "expected": "Chinese feedback that corrects grammar first, then upgrades step by step from clear learner English to Band 6.5-7 and Band 7+ versions, with a compact memorisable sentence and a learnable IELTS paragraph."
+  }
+]

@@ -1,4 +1,4 @@
 interface:
   display_name: "IELTS Sentence Coach"
-  short_description: "Analyze and upgrade IELTS sentences"
-  default_prompt: "Use $analyze-ielts-sentence to analyze this sentence in Chinese and upgrade it for IELTS writing: \"Many people think...\""
+  short_description: "Scaffold IELTS sentence upgrades"
+  default_prompt: "Use $analyze-ielts-sentence to analyze this sentence in Chinese from simple meaning to IELTS upgrade: \"Many people think...\""
