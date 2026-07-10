@@ -12,6 +12,7 @@ The page should feel like a carefully typeset publication, not a dashboard full 
 - [Recommended Structure](#recommended-structure)
 - [Layout Specifications](#layout-specifications)
 - [Typography](#typography)
+- [English Text and Long Strings](#english-text-and-long-strings)
 - [Vertical Rhythm](#vertical-rhythm)
 - [Color and Contrast](#color-and-contrast)
 - [Summary and Table of Contents](#summary-and-table-of-contents)
@@ -268,6 +269,56 @@ Use a limited weight hierarchy:
 
 Avoid bolding entire paragraphs.
 
+## English Text and Long Strings
+
+English prose should read vertically with the rest of the article. Do not place ordinary sentences, quotations, vocabulary examples, or before/after rewrites in `<pre><code>` merely to create a styled box. That treatment preserves whitespace and often forces readers to scroll sideways.
+
+Use semantic prose elements and let them wrap:
+
+```html
+<figure class="sentence-feature">
+  <figcaption>Original sentence</figcaption>
+  <blockquote class="english-text" lang="en">
+    A complete English sentence remains visible and wraps naturally at word boundaries.
+  </blockquote>
+</figure>
+```
+
+```css
+.english-text {
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: normal;
+  hyphens: none;
+}
+
+.sentence-feature,
+.comparison-grid > *,
+.bilingual-row > * {
+  min-width: 0;
+}
+
+.unbroken-token {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+```
+
+Apply `overflow-wrap: anywhere` only to strings that may have no spaces, such as URLs, hashes, filenames, or generated identifiers. Normal English prose should prefer natural word boundaries.
+
+For language-learning or bilingual pages, use the shared featured-sentence, comparison, bilingual-row, and unbroken-token patterns in `english-text-display.md`. The canonical rendered reference is `../assets/english-text-display-examples.html`.
+
+English reading-content rules:
+
+- Keep the complete sentence visible without an internal horizontal scrollbar.
+- Avoid clipping, ellipsis, fixed-height text boxes, and `white-space: nowrap`.
+- Use `<p lang="en">` for model sentences and `<blockquote lang="en">` for quotations.
+- Preserve whole words with `hyphens: none` in language-learning examples; automatic hyphenation can make spelling and phrase boundaries harder to study.
+- Add `min-width: 0` to grid and flex children that contain text.
+- Collapse two-column comparisons to one column on narrow screens.
+- Keep code behavior separate: exact source code may scroll horizontally when wrapping would damage meaning.
+
 ## Vertical Rhythm
 
 Use spacing based on 4px or 8px increments.
@@ -485,6 +536,7 @@ Code:
 - Inline code gets subtle background and `5px` radius.
 - Code blocks need horizontal scrolling, language label when known, high contrast, `14-16px` font, `1.55-1.7` line-height, and `20-24px` padding.
 - Do not force line wrapping by default in code blocks.
+- Do not use code blocks for English prose, example sentences, quotations, vocabulary definitions, or rewritten passages. Those should use the wrapping prose patterns above.
 
 ## Links, Sidebar, and Reading Utilities
 
@@ -606,6 +658,8 @@ Unless the user requests otherwise:
 - include accessible contrast and focus states
 - keep print readability reasonable
 - ensure text fits on mobile
+- keep English prose fully visible without internal horizontal scrolling
+- defensively wrap unbroken URLs and identifiers so they cannot widen the page
 - do not rely on JavaScript for core reading
 
 If saving to disk, use a clear filename and open it only when the user asks or when preview/open behavior is part of the task.
@@ -626,6 +680,9 @@ Reading quality:
 Mobile quality:
 
 - No horizontal page scrolling.
+- Long English sentences wrap at natural word boundaries and remain fully visible.
+- Sentence, quotation, and rewrite panels have no internal horizontal scrollbar, clipping, or ellipsis.
+- URLs and other unbroken strings wrap defensively without widening the document.
 - Text remains at least `16-17px`.
 - Tables and code remain usable.
 - Controls are easy to tap.

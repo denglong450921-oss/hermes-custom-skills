@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>English Text Display Examples</title>
+  <meta name="description" content="Canonical display examples for English sentences, comparisons, bilingual explanations, and long unbroken strings." />
+  <style>
+    :root {
+      --paper: #f5f6f3;
+      --surface: #ffffff;
+      --ink: #17202a;
+      --muted: #66717f;
+      --line: #dfe3e6;
+      --accent: #2457c5;
+      --accent-soft: #edf3ff;
+      --warm: #9a4d16;
+      --warm-soft: #fff4e8;
+      --code-bg: #23272f;
+      --code-ink: #f5f7fa;
+      --radius: 8px;
+      --content: 780px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: Inter, "SF Pro Text", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif;
+      font-size: 18px;
+      line-height: 1.78;
+      letter-spacing: 0;
+    }
+
+    .skip-link {
+      position: absolute;
+      top: -60px;
+      left: 20px;
+      z-index: 10;
+      padding: 10px 14px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      color: var(--ink);
+    }
+
+    .skip-link:focus { top: 20px; }
+
+    :focus-visible {
+      outline: 3px solid rgba(36, 87, 197, 0.35);
+      outline-offset: 3px;
+    }
+
+    .page-header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .header-inner,
+    main,
+    .page-footer {
+      width: min(calc(100% - 40px), var(--content));
+      margin-inline: auto;
+    }
+
+    .header-inner { padding: 64px 0 52px; }
+
+    .eyebrow,
+    .example-label,
+    figcaption {
+      margin: 0;
+      color: var(--accent);
+      font-size: 0.75rem;
+      font-weight: 750;
+      line-height: 1.4;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 720px;
+      margin: 12px 0 0;
+      font-size: 3.25rem;
+      line-height: 1.08;
+      letter-spacing: 0;
+      text-wrap: balance;
+    }
+
+    .lede {
+      max-width: 680px;
+      margin: 20px 0 0;
+      color: var(--muted);
+      font-size: 1.18rem;
+      line-height: 1.65;
+    }
+
+    .principle {
+      margin-top: 28px;
+      padding-left: 18px;
+      border-left: 3px solid var(--warm);
+      color: var(--warm);
+      font-weight: 650;
+    }
+
+    main { padding: 64px 0 88px; }
+
+    section + section {
+      margin-top: 88px;
+      padding-top: 72px;
+      border-top: 1px solid var(--line);
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 2rem;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    .section-intro {
+      max-width: 660px;
+      margin: 12px 0 30px;
+      color: var(--muted);
+    }
+
+    .english-text,
+    [lang="en"].reading-text {
+      max-width: 100%;
+      white-space: normal;
+      overflow-wrap: break-word;
+      word-break: normal;
+      hyphens: none;
+    }
+
+    .sentence-feature,
+    .comparison-item,
+    .bilingual-row > *,
+    .token-line > * {
+      min-width: 0;
+    }
+
+    .sentence-feature {
+      margin: 0;
+      padding: 22px 24px 25px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--accent);
+      border-radius: var(--radius);
+    }
+
+    .sentence-feature figcaption { margin-bottom: 12px; }
+
+    .sentence-feature blockquote {
+      margin: 0;
+      color: var(--ink);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.55rem;
+      line-height: 1.58;
+    }
+
+    .sentence-note {
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .comparison-item {
+      padding: 20px 22px 22px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+
+    .comparison-after {
+      background: var(--accent-soft);
+      border-color: #cbd9f7;
+    }
+
+    .comparison-before .example-label { color: var(--muted); }
+
+    .comparison-item .english-text {
+      margin: 10px 0 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.15rem;
+      line-height: 1.62;
+    }
+
+    .bilingual-list { margin: 0; }
+
+    .bilingual-row {
+      display: grid;
+      grid-template-columns: minmax(11rem, 0.8fr) minmax(0, 1.4fr);
+      gap: 24px;
+      padding: 18px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .bilingual-row:last-child { border-bottom: 1px solid var(--line); }
+
+    .bilingual-row dt {
+      color: var(--accent);
+      font-weight: 750;
+      overflow-wrap: break-word;
+    }
+
+    .bilingual-row dd {
+      margin: 0;
+      color: #384452;
+    }
+
+    .token-stack {
+      display: grid;
+      gap: 14px;
+    }
+
+    .token-line {
+      display: grid;
+      grid-template-columns: 112px minmax(0, 1fr);
+      gap: 16px;
+      align-items: start;
+      margin: 0;
+      padding: 18px 20px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+
+    .token-line .example-label {
+      padding-top: 4px;
+      color: var(--muted);
+    }
+
+    .unbroken-token {
+      color: var(--warm);
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-size: 0.88rem;
+      line-height: 1.65;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+
+    a.unbroken-token {
+      text-decoration-thickness: 0.08em;
+      text-underline-offset: 0.18em;
+    }
+
+    .code-contrast {
+      margin-top: 30px;
+      padding: 20px 22px;
+      background: var(--code-bg);
+      border-radius: var(--radius);
+      color: var(--code-ink);
+    }
+
+    .code-contrast .example-label { color: #a9c1ff; }
+
+    pre {
+      max-width: 100%;
+      margin: 12px 0 0;
+      overflow-x: auto;
+      color: var(--code-ink);
+      font-size: 0.84rem;
+      line-height: 1.6;
+    }
+
+    .page-footer {
+      padding: 32px 0 52px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 680px) {
+      body {
+        font-size: 17px;
+        line-height: 1.75;
+      }
+
+      .header-inner { padding: 42px 0 36px; }
+
+      h1 { font-size: 2.35rem; }
+
+      .lede { font-size: 1.06rem; }
+
+      main { padding: 44px 0 64px; }
+
+      section + section {
+        margin-top: 60px;
+        padding-top: 52px;
+      }
+
+      h2 { font-size: 1.65rem; }
+
+      .comparison-grid,
+      .bilingual-row,
+      .token-line {
+        grid-template-columns: 1fr;
+      }
+
+      .bilingual-row { gap: 4px; }
+
+      .token-line { gap: 8px; }
+
+      .sentence-feature { padding: 18px 18px 20px; }
+
+      .sentence-feature blockquote { font-size: 1.3rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    @media print {
+      body { background: #ffffff; }
+      .page-header { border-bottom-color: #b9bec5; }
+      .sentence-feature,
+      .comparison-item,
+      .token-line { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#content">跳到正文</a>
+
+  <header class="page-header">
+    <div class="header-inner">
+      <p class="eyebrow">Canonical display examples</p>
+      <h1>让英文完整地呈现，而不是藏在滚动条里</h1>
+      <p class="lede">这组组件用于英文长句、改写对比、双语解释和长字符串。共同原则是让阅读沿页面自然向下发生，只有真正的代码才保留横向滚动。</p>
+      <p class="principle">English prose is reading content, not code.</p>
+    </div>
+  </header>
+
+  <main id="content">
+    <section aria-labelledby="featured-title">
+      <h2 id="featured-title">1. 主句展示</h2>
+      <p class="section-intro">适合文章最重要的原句或范文句。英文使用语义化引用元素，在任何宽度下完整换行。</p>
+
+      <figure class="sentence-feature">
+        <figcaption>Original sentence</figcaption>
+        <blockquote class="english-text" lang="en">As far as goods transport is concerned, growth is due to a large extent to changes in the European economy and its system of production, particularly the increasingly complex movement of components between specialized factories located in different regions.</blockquote>
+      </figure>
+      <p class="sentence-note">句子超过 200 个字符，仍应自然折行；不截断、不省略，也不出现内部横向滚动条。</p>
+    </section>
+
+    <section aria-labelledby="comparison-title">
+      <h2 id="comparison-title">2. 改写对比</h2>
+      <p class="section-intro">桌面端并排比较，移动端按“原句 → 改写”顺序纵向排列。两个容器都允许文本收缩与换行。</p>
+
+      <div class="comparison-grid">
+        <section class="comparison-item comparison-before" aria-labelledby="plain-label">
+          <p class="example-label" id="plain-label">Plain</p>
+          <p class="english-text" lang="en">Freight transport has grown because the European economy and its production system have changed.</p>
+        </section>
+        <section class="comparison-item comparison-after" aria-labelledby="polished-label">
+          <p class="example-label" id="polished-label">Polished</p>
+          <p class="english-text" lang="en">The expansion of freight transport can be attributed largely to structural changes in Europe’s economy and production systems.</p>
+        </section>
+      </div>
+    </section>
+
+    <section aria-labelledby="bilingual-title">
+      <h2 id="bilingual-title">3. 双语解释</h2>
+      <p class="section-intro">短语与中文说明形成稳定的对应关系。完整句子不塞进胶囊标签，短语也不会撑破网格。</p>
+
+      <dl class="bilingual-list">
+        <div class="bilingual-row">
+          <dt lang="en">as far as X is concerned</dt>
+          <dd>就 X 而言，用来限定当前讨论的范围。</dd>
+        </div>
+        <div class="bilingual-row">
+          <dt lang="en">be due largely to</dt>
+          <dd>主要归因于，适合正式地解释某一结果的主要原因。</dd>
+        </div>
+        <div class="bilingual-row">
+          <dt lang="en">structural changes in production systems</dt>
+          <dd>生产体系中的结构性变化，强调变化持续、深层，并会影响资源与货物的组织方式。</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section aria-labelledby="token-title">
+      <h2 id="token-title">4. 无空格长字符串</h2>
+      <p class="section-intro">网址和标识符可能没有自然断点。这类内容使用防御性断行；真正的代码仍保留精确格式。</p>
+
+      <div class="token-stack">
+        <p class="token-line">
+          <span class="example-label">Reference ID</span>
+          <code class="unbroken-token">freight-transport-european-production-system-structural-change-reference-2026-extended-edition</code>
+        </p>
+        <p class="token-line">
+          <span class="example-label">Source URL</span>
+          <a class="unbroken-token" href="https://example.com/research/freight-transport/european-economy/production-system/structural-changes/extended-reference">https://example.com/research/freight-transport/european-economy/production-system/structural-changes/extended-reference</a>
+        </p>
+      </div>
+
+      <div class="code-contrast">
+        <p class="example-label">Actual code may scroll</p>
+        <pre><code>const attribution = explainGrowth({ subject: "freight transport", cause: "structural changes in Europe’s economy and production systems" });</code></pre>
+      </div>
+    </section>
+  </main>
+
+  <footer class="page-footer">
+    Shared style reference for <strong>draft-to-high-quality-prose</strong>. Adapt the pattern to the content; keep the wrapping behavior consistent.
+  </footer>
+</body>
+</html>
