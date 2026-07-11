@@ -105,6 +105,30 @@
       font-weight: 650;
     }
 
+    .reading-tip {
+      width: min(calc(100% - 40px), var(--content));
+      margin: 32px auto 0;
+      padding: 18px 20px;
+      background: var(--warm-soft);
+      border: 1px solid #ead3bc;
+      border-left: 3px solid var(--warm);
+      border-radius: var(--radius);
+    }
+
+    .reading-tip h2 {
+      margin: 0 0 7px;
+      color: var(--warm);
+      font-size: 0.95rem;
+      line-height: 1.35;
+    }
+
+    .reading-tip p {
+      margin: 0;
+      color: #5e4939;
+      font-size: 0.9rem;
+      line-height: 1.65;
+    }
+
     main { padding: 64px 0 88px; }
 
     section + section {
@@ -279,6 +303,17 @@
       font-size: 0.9rem;
     }
 
+    @media (min-width: 1360px) {
+      .reading-tip {
+        position: fixed;
+        top: 96px;
+        right: 32px;
+        width: 220px;
+        margin: 0;
+        z-index: 2;
+      }
+    }
+
     @media (max-width: 680px) {
       body {
         font-size: 17px;
@@ -346,6 +381,11 @@
       <p class="principle">English prose is reading content, not code.</p>
     </div>
   </header>
+
+  <aside class="reading-tip" aria-labelledby="reading-tip-title">
+    <h2 id="reading-tip-title">阅读提示</h2>
+    <p>先看主句如何完整换行，再比较改写和双语解释。注意：普通英文沿词边界换行，只有代码保留横向滚动。</p>
+  </aside>
 
   <main id="content">
     <section aria-labelledby="featured-title">
