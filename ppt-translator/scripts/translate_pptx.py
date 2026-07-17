@@ -69,6 +69,13 @@ TERMS = [
     "B2C",
 ]
 
+FIXED_TERM_TRANSLATIONS = {
+    "Peak Assets": {
+        "targets": {"ru", "kk", "uz", "ky", "tg", "az", "tk"},
+        "translation": "Пиковые Активы",
+    },
+}
+
 # Patterns where a whole text block should skip translation entirely
 # All-caps abbreviations with numbers (B2B, SaaS, v1.0), version strings, model codes
 _SKIP_PATTERNS = [
@@ -193,6 +200,36 @@ LANGUAGE_ALIASES = {
     "russian": "ru",
     "ru": "ru",
     "俄语": "ru",
+    "kazakh": "kk",
+    "kk": "kk",
+    "哈萨克语": "kk",
+    "哈萨克斯坦": "kk",
+    "kazakhstan": "kk",
+    "uzbek": "uz",
+    "uz": "uz",
+    "乌兹别克语": "uz",
+    "乌兹别克斯坦": "uz",
+    "uzbekistan": "uz",
+    "kyrgyz": "ky",
+    "ky": "ky",
+    "吉尔吉斯语": "ky",
+    "吉尔吉斯斯坦": "ky",
+    "kyrgyzstan": "ky",
+    "tajik": "tg",
+    "tg": "tg",
+    "塔吉克语": "tg",
+    "塔吉克斯坦": "tg",
+    "tajikistan": "tg",
+    "azerbaijani": "az",
+    "az": "az",
+    "阿塞拜疆语": "az",
+    "阿塞拜疆": "az",
+    "azerbaijan": "az",
+    "turkmen": "tk",
+    "tk": "tk",
+    "土库曼语": "tk",
+    "土库曼斯坦": "tk",
+    "turkmenistan": "tk",
     "italian": "it",
     "it": "it",
     "意大利语": "it",
@@ -234,14 +271,38 @@ def save_cache():
         json.dump(translation_cache, f, ensure_ascii=False, indent=2)
     log(f"Saved translation cache: {len(translation_cache)} entries")
 
-def protect_terms(text):
+def has_fixed_term_translation(text, target_lang):
+    """Return True when a source block needs a target-specific fixed term."""
+    for source, config in FIXED_TERM_TRANSLATIONS.items():
+        if target_lang in config["targets"]:
+            pattern = re.compile(re.escape(source), re.IGNORECASE)
+            if pattern.search(text):
+                return True
+    return False
+
+
+def protect_terms(text, target_lang=None):
     """Replace protected terms with placeholders before machine translation."""
     term_map = {}
-    for i, term in enumerate(TERMS):
-        placeholder = f"[[TERM{i}]]"
+    placeholder_index = 0
+
+    for source, config in FIXED_TERM_TRANSLATIONS.items():
+        if target_lang not in config["targets"]:
+            continue
+        pattern = re.compile(re.escape(source), re.IGNORECASE)
+        if not pattern.search(text):
+            continue
+        placeholder = f"[[TERM{placeholder_index}]]"
+        text = pattern.sub(placeholder, text)
+        term_map[placeholder] = config["translation"]
+        placeholder_index += 1
+
+    for term in TERMS:
+        placeholder = f"[[TERM{placeholder_index}]]"
         if term in text:
             text = text.replace(term, placeholder)
             term_map[placeholder] = term
+            placeholder_index += 1
     return text, term_map
 
 def restore_terms(text, term_map):
@@ -249,6 +310,12 @@ def restore_terms(text, term_map):
     for placeholder, term in term_map.items():
         text = text.replace(placeholder, term)
     return text
+
+
+def is_translation_placeholder_only(text):
+    """Check whether a block contains only protected placeholders and punctuation."""
+    remaining = re.sub(r"\[\[TERM\d+\]\]", "", text).strip()
+    return not remaining or all(not ch.isalpha() for ch in remaining)
 
 def translate_with_retry(text, target_lang, retries=4):
     """Translate one text block with cache lookup and retry-based backoff."""
@@ -261,11 +328,17 @@ def translate_with_retry(text, target_lang, retries=4):
         return text
         
     cache_key = f"{target_lang}::{text}"
-    if cache_key in translation_cache:
+    force_fixed_term_refresh = has_fixed_term_translation(text, target_lang)
+    if cache_key in translation_cache and not force_fixed_term_refresh:
         RUNTIME_STATS["cache_hits"] += 1
         return translation_cache[cache_key]
     
-    protected_text, term_map = protect_terms(text)
+    protected_text, term_map = protect_terms(text, target_lang)
+    if term_map and is_translation_placeholder_only(protected_text):
+        final_text = restore_terms(protected_text, term_map)
+        translation_cache[cache_key] = final_text
+        RUNTIME_STATS["skipped_blocks"] += 1
+        return final_text
     
     for i in range(retries):
         try:
