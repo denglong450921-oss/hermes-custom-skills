@@ -28,6 +28,7 @@ The scripts (`scripts/run_ppt_translator.py` and `scripts/translate_pptx.py`) ha
 - A simple entry command that only needs source PPT and target language.
 - Deep traversal of all slides, grouped shapes, and tables.
 - Protection of specialized company terms/proper nouns from translation.
+- Target-specific fixed terminology: when translating to Russian (`ru`), Kazakh (`kk`), Uzbek (`uz`), Kyrgyz (`ky`), Tajik (`tg`), Azerbaijani (`az`), or Turkmen (`tk`), `Peak Assets` is always rendered as `Пиковые Активы`.
 - `deep-translator` integration with retry backoff and local cache reuse in the user's writable cache directory.
 - **Frame-Level Font Fitting**: It computes a best-fit font size for each text frame using the actual frame dimensions, then preserves the original relative sizes of title/body text while shrinking the whole frame proportionally when needed.
 - Mandatory 1.0 line spacing and `word_wrap=True`.
