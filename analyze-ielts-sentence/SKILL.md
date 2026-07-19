@@ -247,3 +247,42 @@ For IELTS writing:
 - Keep paragraphs coherent: one controlling idea per paragraph.
 - Prefer learnable sentence length. Do not produce a chain of long clauses unless the task is specifically to analyze such a sentence.
 - Teach one upgrade at a time: first grammar correctness, then clarity, then IELTS logic, then optional sophistication.
+
+## Known Pitfalls
+
+### Chinese Quotes in JavaScript Strings
+
+🔴 **When building interactive HTML with embedded JavaScript, `write_file` silently converts Chinese curly quotation marks `""` (U+201C / U+201D) to ASCII double quotes `""` (U+0022).** This breaks JavaScript syntax when the converted ASCII quotes appear inside JS string literals delimited by `"`.
+
+**Symptom:** The browser refreshes on form submit instead of showing quiz results — the JS parser hits `Unexpected identifier` and the entire `<script>` block fails silently, causing the native form submission to reload the page.
+
+**Root cause trace:**
+
+1. Agent writes HTML content containing `bank = { explanation: "原句先承认"看起来不重要"，然后用..." }`  
+2. `write_file` normalizes `""` → `""` in the byte stream  
+3. The JS parser sees `explanation: "原句先承认"看起来不重要"` — the second `"` terminates the string  
+4. `看起来不重要` becomes an unexpected identifier → SyntaxError  
+5. No JS runs → form submit reloads the page  
+
+**Fix:** Replace Chinese-quoted phrases inside JavaScript strings with `「」` brackets (U+300C / U+300D):
+
+```javascript
+// BROKEN — curly quotes become ASCII, breaking the JS string
+explanation: "原句先承认"看起来不重要"，然后用条件句指出风险。",
+
+// FIXED — 「」 brackets are single-width, won't be converted
+explanation: "原句先承认「看起来不重要」，然后用条件句指出风险。",
+```
+
+**Prevention checklist for all JavaScript strings in HTML output:**
+
+- Avoid Chinese `""` inside `"..."` JS strings → use `「」` instead
+- Avoid Chinese `''` inside `'...'` JS strings → use `「」` instead
+- Template literals `` `...` `` are safer but still verify the output file
+- Always run `node -e "new Function(scriptContent)"` on the extracted JS block before delivering
+
+### Form Submission Without `preventDefault`
+
+🔴 **When a `<form>` contains a `<button type="submit">`, the browser performs a native form submission on click.** If the JavaScript event handler fails for any reason (syntax error, runtime error, missing element), the native submission proceeds, causing a full page reload that clears all quiz state.
+
+**Fix:** Add `onsubmit="return false"` to the `<form>` tag as a belt-and-suspenders guard. The `addEventListener("submit", ...)` handler still runs first and calls `event.preventDefault()`, but the inline handler catches any case where JS fails to load.
