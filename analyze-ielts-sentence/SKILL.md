@@ -1,6 +1,6 @@
 ---
 name: analyze-ielts-sentence
-description: Analyze English sentences for IELTS learning in Chinese with a clear easy-to-difficult learning progression. Use when the user provides an English sentence, claim, or draft expression and wants help understanding it, breaking down grammar and logic, upgrading it into IELTS Writing/Speaking style, learning high-frequency vocabulary and collocations, generating a learnable IELTS paragraph, transferring the pattern to more topics, building a reusable writing structure, dimension-upgrading the idea, or correcting the user's own expression. Prefer scaffolded, learnable material over unnecessarily long or complex sentences.
+description: Analyze English sentences for IELTS learning in Chinese with a clear easy-to-difficult learning progression, and create complete web-based learning workflows that combine study material, hidden-answer multiple-choice and fill-in-the-blank tests, automated scoring, dimension-level diagnosis, and retry practice. Use when the user wants to understand an English sentence, break down grammar and logic, upgrade it for IELTS Writing or Speaking, learn vocabulary and collocations, generate or transfer a model paragraph, correct their own expression, assess mastery, create a quiz, or output an interactive HTML learning page. Prefer scaffolded, learnable material over unnecessarily long or complex sentences.
 ---
 
 # Analyze IELTS Sentence
@@ -43,6 +43,53 @@ When the user's sentence is long or complex:
 - Warn the user not to memorize a long sentence wholesale; guide them to memorize the logic and a compact pattern.
 
 For self-generated examples, prefer short-to-medium sentences. Use long complex sentences only when the user's input requires analysis of one, and even then teach it by simplifying it first.
+
+## Output Modes
+
+Choose the lightest mode that satisfies the request.
+
+- **Chat analysis mode**: Use the ten-section structure below when the user wants explanation, correction, or examples in the conversation.
+- **Interactive learning mode**: Create a complete self-contained HTML page when the user asks for HTML, a webpage, a test, assessment, practice, a learning workflow, or a result analysis. Integrate the teaching material and assessment; do not output a quiz disconnected from what was taught.
+- **Hybrid mode**: If the user asks for both a concise answer and a learning page, give a short chat summary and save the complete HTML page.
+
+Before building interactive HTML, read `references/assessment-workflow.md`. Use `assets/ielts-assessment-workflow-example.html` as the canonical visual and interaction reference. Adapt its content rather than copying its sample questions blindly.
+
+## Assessment Contract
+
+Treat assessment as retrieval practice, not decoration.
+
+1. Teach first. Cover the exact meaning, structure, vocabulary, and transfer pattern that the questions will assess.
+2. Build a standard set of 8 questions: 4 multiple-choice and 4 fill-in-the-blank. Use 6-10 questions only when the material is unusually narrow or broad, while keeping both formats.
+3. Map every item to one primary dimension: `meaning`, `structure`, `vocabulary`, or `transfer`. Cover every dimension at least once and move from recognition to recall to transfer.
+4. Give multiple-choice items one defensibly correct answer and plausible distractors based on common learner errors. Avoid trick wording, double negatives, and clues from option length.
+5. Make fill-in-the-blank items constrained enough for fair automated scoring. Accept equivalent capitalization, spacing, punctuation, apostrophe variants, and explicitly listed synonymous answers when meaning is unchanged.
+6. Keep answers, correctness states, rationales, scores, and recommendations invisible and unfocusable before submission. Do not preselect options or place answer text in collapsed disclosures that can be opened before submission.
+7. Require an explicit `提交测试` action. After submission, reveal the total score, mastery label, per-dimension accuracy, item-level answer and rationale, and targeted review advice.
+8. Call the score `本页掌握度` or `learning mastery`; never present it as an estimated IELTS band score.
+9. Include `错题重测` and `重新开始`. Wrong-answer retry must clear previous wrong responses and hide their feedback again while preserving or clearly accounting for mastered items.
+10. Keep the page usable without network access: inline CSS and JavaScript, semantic HTML, keyboard-operable controls, visible focus, live status messages, and no required external libraries.
+
+## Interactive HTML Structure
+
+Follow this sequence:
+
+```text
+orientation -> study -> compact review -> test -> submit -> results -> targeted review -> retry
+```
+
+Required page regions:
+
+- A clear header with the source sentence and learning objectives.
+- A visible `阅读提示`; use a dedicated right rail on sufficiently wide screens and normal flow at narrower widths. Never hide it.
+- A real-anchor table of contents; use a left rail on wide screens and normal flow on smaller screens.
+- A study section that condenses the most useful parts of the ten-section analysis without deleting the logic progression.
+- A quiz form with labeled `fieldset` groups for multiple-choice questions and associated labels for fill-in inputs.
+- A progress indicator that reports answered questions without revealing correctness.
+- A results region with `hidden` initially and `aria-live` or focus management when revealed.
+- A per-dimension breakdown and actionable review summary generated from actual errors.
+- A footer note explaining that the result measures this lesson only, not IELTS band level.
+
+Use natural English wrapping from the prose pattern: semantic `<p lang="en">` or `<blockquote lang="en">`, `white-space: normal`, `overflow-wrap: break-word`, `hyphens: none`, and `min-width: 0` on grid or flex children. Do not put ordinary English sentences in horizontally scrollable code boxes.
 
 ## Required Output Structure
 
