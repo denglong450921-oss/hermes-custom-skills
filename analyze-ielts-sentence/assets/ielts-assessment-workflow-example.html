@@ -339,6 +339,55 @@
       line-height: 1.75;
     }
 
+    .bilingual-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1px;
+      margin-top: 18px;
+      overflow: hidden;
+      background: var(--line);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+
+    .language-panel {
+      min-width: 0;
+      padding: 20px 22px;
+      background: var(--surface);
+    }
+
+    .language-label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--muted);
+      font-size: 0.76rem;
+      font-weight: 760;
+      text-transform: uppercase;
+    }
+
+    mark {
+      padding: 0 0.12em;
+      color: inherit;
+      background: #fff0a8;
+      border-bottom: 2px solid #a76b00;
+    }
+
+    .highlight-notes { margin: 14px 0 0; }
+
+    .audio-practice {
+      margin-top: 24px;
+      padding: 18px 20px;
+      background: var(--accent-soft);
+      border-left: 3px solid var(--accent);
+    }
+
+    .audio-practice h3 { margin: 0 0 6px; }
+    .audio-practice audio { width: 100%; margin-top: 12px; }
+    .speed-controls { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .speed-controls button { min-height: 44px; margin: 0; padding: 7px 13px; }
+    .speed-controls button[aria-pressed="true"] { background: var(--accent); color: #fff; }
+    .audio-status { margin: 8px 0 0; color: var(--muted); font-size: 0.9rem; }
+
     .review-list {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -700,6 +749,7 @@
       .comparison-grid,
       .review-list,
       .result-grid,
+      .bilingual-grid,
       .bilingual-row,
       .structure-step {
         grid-template-columns: 1fr;
@@ -778,12 +828,42 @@
       <h2 id="study-title">1. 学习材料</h2>
       <p class="section-intro">学习顺序是“理解 → 拆解 → 升级 → 迁移”。复杂度逐步增加，但核心逻辑始终只有一个：某一领域的增长主要源于系统变化。</p>
 
-      <figure class="sentence-feature">
-        <figcaption>Original sentence</figcaption>
-        <blockquote class="english-text" lang="en">As far as goods transport is concerned, growth is due to a large extent to changes in the European economy and its system of production.</blockquote>
-      </figure>
+      <section aria-labelledby="source-pair-title">
+        <h3 id="source-pair-title">原句中英对照</h3>
+        <div class="bilingual-grid">
+          <div class="language-panel" lang="en">
+            <span class="language-label">English</span>
+            <p><mark>As far as goods transport is concerned</mark>, growth <mark>is due to a large extent to</mark> changes in the European economy and its system of production.</p>
+          </div>
+          <div class="language-panel" lang="zh-CN">
+            <span class="language-label">中文</span>
+            <p><mark>就货物运输而言</mark>，其增长<mark>在很大程度上是由</mark>欧洲经济及其生产体系的变化造成的。</p>
+          </div>
+        </div>
+        <ul class="highlight-notes" aria-label="重点说明">
+          <li><strong>范围：</strong><span lang="en">As far as X is concerned</span> 限定讨论对象。</li>
+          <li><strong>因果：</strong><span lang="en">be due to a large extent to</span> 表示主要原因，但不排除其他因素。</li>
+        </ul>
+      </section>
 
-      <p class="meaning-line"><strong>核心意思：</strong>就货物运输而言，其增长在很大程度上是由欧洲经济及其生产体系的变化造成的。写作功能是<strong>限定讨论范围，并解释增长原因</strong>。</p>
+      <section class="audio-practice" aria-labelledby="audio-title">
+        <h3 id="audio-title">Microsoft Edge TTS 听读训练</h3>
+        <p>播放内容：上方原句。先用 0.7x 跟读重点分块，再用 0.9x 脱离中文复述。</p>
+        <audio id="source-audio" controls preload="metadata">
+          <source src="ielts-assessment-workflow-example.mp3" type="audio/mpeg" />
+          你的浏览器不支持音频播放，请阅读上方英文文本。
+        </audio>
+        <div class="speed-controls" role="group" aria-label="播放速度">
+          <button type="button" data-speed="0.6" aria-pressed="false">0.6x</button>
+          <button type="button" data-speed="0.7" aria-pressed="true">0.7x</button>
+          <button type="button" data-speed="0.8" aria-pressed="false">0.8x</button>
+          <button type="button" data-speed="0.9" aria-pressed="false">0.9x</button>
+          <button type="button" data-speed="1" aria-pressed="false">1.0x</button>
+        </div>
+        <p class="audio-status" aria-live="polite">当前速度：0.7x</p>
+      </section>
+
+      <p class="meaning-line"><strong>核心意思：</strong>句子解释货物运输增长的系统性原因。写作功能是<strong>限定讨论范围，并解释增长原因</strong>。</p>
 
       <h3>从主干到完整句</h3>
       <div class="structure-list">
@@ -850,7 +930,11 @@
       </div>
 
       <h3>段落中的用法</h3>
-      <p class="model-paragraph english-text" lang="en">The expansion of freight transport can be attributed largely to structural changes in Europe’s economy and production systems. Modern manufacturers often divide production across several specialised locations, so components must travel repeatedly before a final product reaches consumers. For example, a vehicle may contain parts produced in several different countries. As a result, economic integration increases not only trade in finished goods but also the movement of intermediate products.</p>
+      <div class="bilingual-grid">
+        <div class="language-panel" lang="en"><span class="language-label">English</span><p class="english-text">The expansion of freight transport can be attributed largely to <mark>structural changes</mark> in Europe’s economy and production systems. Modern manufacturers often divide production across several specialised locations, so components must travel repeatedly before a final product reaches consumers. For example, a vehicle may contain parts produced in several different countries. <mark>As a result</mark>, economic integration increases not only trade in finished goods but also the movement of intermediate products.</p></div>
+        <div class="language-panel" lang="zh-CN"><span class="language-label">中文</span><p>货运扩张主要可归因于欧洲经济与生产体系的<mark>结构性变化</mark>。现代制造商常把生产分散到多个专业地点，因此零部件在成品到达消费者前需要多次运输。例如，一辆汽车的零件可能来自多个国家。<mark>因此</mark>，经济一体化既增加成品贸易，也增加中间产品流动。</p></div>
+      </div>
+      <ul class="highlight-notes"><li><strong>高层原因：</strong><span lang="en">structural changes</span> 把个别现象提升为系统解释。</li><li><strong>结果推进：</strong><span lang="en">As a result</span> 明确承接前文机制。</li></ul>
     </section>
 
     <section class="lesson-section" id="review" aria-labelledby="review-title">
@@ -886,7 +970,7 @@
         </div>
       </div>
 
-      <form id="quiz-form" novalidate>
+      <form id="quiz-form" onsubmit="return false" novalidate>
         <div class="question-list">
           <fieldset class="question" data-question="q1">
             <legend><span class="question-type">选择题 1 · 意义</span>原句最准确的中文意思是哪一项？</legend>
@@ -1308,6 +1392,24 @@
         updateProgress();
         document.getElementById("study-title").scrollIntoView({ behavior: "smooth" });
       });
+
+      const sourceAudio = document.getElementById("source-audio");
+      const speedButtons = Array.from(document.querySelectorAll("[data-speed]"));
+      const audioStatus = document.querySelector(".audio-status");
+
+      function setAudioSpeed(speed) {
+        sourceAudio.playbackRate = speed;
+        sourceAudio.defaultPlaybackRate = speed;
+        speedButtons.forEach(button => {
+          button.setAttribute("aria-pressed", String(Number(button.dataset.speed) === speed));
+        });
+        audioStatus.textContent = `当前速度：${speed.toFixed(1)}x`;
+      }
+
+      speedButtons.forEach(button => {
+        button.addEventListener("click", () => setAudioSpeed(Number(button.dataset.speed)));
+      });
+      setAudioSpeed(0.7);
 
       updateProgress();
     })();

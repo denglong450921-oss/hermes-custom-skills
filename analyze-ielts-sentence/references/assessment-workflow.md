@@ -20,6 +20,7 @@ Build one connected workflow:
 
 1. **Orientation**: Show the source sentence, Chinese core meaning, learning goals, and a content-specific reading prompt.
 2. **Study**: Teach the sentence from simple meaning to structure, vocabulary, upgrade, paragraph use, and transfer.
+   Present the English material beside its Chinese rendering, mark the key logical or lexical features, and add Edge TTS listening practice.
 3. **Compact review**: Restate only the few patterns and collocations that will be retrieved in the test.
 4. **Test**: Mix recognition and recall. Do not reveal answers or explanations yet.
 5. **Feedback**: Score only after explicit submission and explain every item.
@@ -166,6 +167,8 @@ The study section may condense the ten teaching sections into grouped modules, b
 - `运用`: sections 6-8
 - `提升`: sections 9-10
 
+Within these modules, use paired bilingual blocks for the source sentence, upgrade ladder, memorisation version, and model paragraph. Read `bilingual-audio-workflow.md` for the required markup, highlights, Microsoft Edge TTS generation, speed controls, and fallback behavior.
+
 Keep the test below the study material. Use real anchor links. Keep result content in the document flow so revealing it does not cover the quiz.
 
 ## Visual Contract
@@ -210,6 +213,15 @@ fieldset {
 
 Do not use horizontal sentence scrolling, clipping, ellipsis, fixed text heights, or `white-space: nowrap` for material the learner must read.
 
+Bilingual and audio treatment:
+
+- Every learner-facing English item is an `.english-unit`; English appears on the left and Chinese on the right at wide widths, and both stack at the mobile breakpoint.
+- Key points use semantic `mark` elements and visible labels such as `让步`, `主干`, `因果`, or `搭配`.
+- Every marked point has a short explanation; color is supplementary.
+- Every English unit has Microsoft Edge TTS audio generated before delivery and an explicit play control.
+- A shared or local player includes 0.6x, 0.7x, 0.8x, and 0.9x speed controls with an `aria-pressed` active state and a live text status.
+- The finished page references local or embedded MP3 audio and does not call online TTS from browser JavaScript.
+
 ## Interaction and Accessibility
 
 - Use a real `<form>` and `<fieldset><legend>` for each multiple-choice question.
@@ -224,6 +236,7 @@ Do not use horizontal sentence scrolling, clipping, ellipsis, fixed text heights
 - Disable or hide score controls only when their purpose is unavailable; never trap keyboard focus.
 - Honor `prefers-reduced-motion`.
 - Keep all core study, test, scoring, and retry behavior available without network access.
+- Do not autoplay audio. Keep the transcript, Chinese rendering, highlights, audio controls, and speed buttons keyboard operable.
 
 Answers are "initially hidden" only when the learner cannot see or focus answer text, rationales, correctness classes, dimension scores, or recommendations before submission. Storing keys in local JavaScript is acceptable for a learning aid; this is not a secure examination platform.
 
@@ -234,6 +247,9 @@ Before delivering the page, verify:
 - The source sentence and all English examples wrap fully at desktop and mobile widths.
 - The page has no horizontal document scroll.
 - The reading prompt is visible in the right rail on wide screens and in normal flow below the breakpoint.
+- Every learner-facing English unit, including quiz English, has paired Chinese, at least one key highlight, a visible explanation, and an Edge TTS play control.
+- Edge TTS MP3 files exist, are non-empty, and use paths that match the HTML audio sources.
+- Each audio player changes playback speed at 0.6x, 0.7x, 0.8x, and 0.9x while updating `aria-pressed` and the live status.
 - The left TOC, right prompt, article, quiz, and results never overlap at the top or after scrolling.
 - The quiz contains both multiple-choice and fill-in-the-blank items.
 - No answer, rationale, correctness state, score, or recommendation is visible before submission.

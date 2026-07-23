@@ -13,5 +13,10 @@
     "id": 3,
     "prompt": "Use $analyze-ielts-sentence to improve my sentence: Many people use phone too much so they cannot talk with family very good.",
     "expected": "Chinese feedback that corrects grammar first, then upgrades step by step from clear learner English to Band 6.5-7 and Band 7+ versions, with a compact memorisable sentence and a learnable IELTS paragraph."
+  },
+  {
+    "id": 4,
+    "prompt": "Use $analyze-ielts-sentence to turn this into an interactive HTML lesson with pronunciation practice: Although public transport is expensive to build, it can reduce congestion and air pollution.",
+    "expected": "A complete HTML lesson in which every learner-facing English item—including chunks, collocations, examples, upgrades, model text, templates, quiz English, and submitted English feedback—is an audited bilingual unit with aligned Chinese, at least one explained semantic highlight, an exact locally generated Microsoft Edge TTS track, an individual play control, and shared accessible 0.6x/0.7x/0.8x/0.9x speed controls, while preserving the hidden-answer assessment and retry workflow."
   }
 ]

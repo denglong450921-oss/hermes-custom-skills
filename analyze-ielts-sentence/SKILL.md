@@ -1,6 +1,6 @@
 ---
 name: analyze-ielts-sentence
-description: Analyze English sentences for IELTS learning in Chinese with a clear easy-to-difficult learning progression, and create complete web-based learning workflows that combine study material, hidden-answer multiple-choice and fill-in-the-blank tests, automated scoring, dimension-level diagnosis, and retry practice. Use when the user wants to understand an English sentence, break down grammar and logic, upgrade it for IELTS Writing or Speaking, learn vocabulary and collocations, generate or transfer a model paragraph, correct their own expression, assess mastery, create a quiz, or output an interactive HTML learning page. Prefer scaffolded, learnable material over unnecessarily long or complex sentences.
+description: Analyze English sentences for IELTS learning in Chinese with a clear easy-to-difficult progression, bilingual Chinese-English study displays, key-point highlighting, and Microsoft Edge TTS audio with learner-controlled playback speeds. Create complete web learning workflows that combine study material, hidden-answer tests, automated scoring, dimension-level diagnosis, retry practice, and offline-capable audio playback. Use whenever the user wants to understand or improve an English sentence, study IELTS grammar or vocabulary, generate a model paragraph, assess mastery, hear pronunciation, practise shadowing or dictation, or create an interactive IELTS HTML learning page. Prefer scaffolded, learnable material over unnecessarily long or complex sentences.
 ---
 
 # Analyze IELTS Sentence
@@ -54,6 +54,41 @@ Choose the lightest mode that satisfies the request.
 
 Before building interactive HTML, read `references/assessment-workflow.md`. Use `assets/ielts-assessment-workflow-example.html` as the canonical visual and interaction reference. Adapt its content rather than copying its sample questions blindly.
 
+For every interactive HTML page, also read `references/bilingual-audio-workflow.md`. Use `scripts/generate_edge_tts.py` to create Microsoft Edge TTS audio for every learner-facing English unit. Generate audio during page creation, then link or embed the resulting MP3 so the finished lesson remains playable without a network connection.
+
+## Bilingual Display and Key Highlights
+
+Every learner-facing piece of English should be visually paired with Chinese so learners can compare meaning without losing their place. This applies to the source sentence, sentence chunks, vocabulary and collocations, examples, upgrade ladder, model paragraph, transfer templates, memorisation version, English quiz stems, English answer options, and English text revealed in feedback.
+
+- Treat each English item as an `.english-unit`. Each unit contains: English text, aligned Chinese meaning, at least one meaningful highlight, a visible highlight note, and an Edge TTS play control.
+- Use a side-by-side Chinese-English layout for full sentences and paragraphs. For short phrases or inline collocations, use a compact English/中文 stacked pair or glossary row instead of leaving unpaired English inside Chinese prose.
+- Keep English on the left and Chinese on the right by default. Add explicit language labels and `lang="en"` / `lang="zh-CN"` attributes.
+- Align by meaningful chunks for sentence analysis. Do not force word-for-word translation when English and Chinese syntax differ.
+- Highlight only the few elements that carry the lesson: the sentence trunk, logical connector, reference word, high-value collocation, or transferable frame.
+- Use semantic `<mark>` plus a short visible callout explaining why each highlight matters. Color alone is not enough.
+- Keep highlights consistent across both languages. If English highlights a concession marker, highlight the corresponding Chinese logical cue rather than an unrelated literal word.
+- Do not highlight entire paragraphs. Usually select 2-4 key points per sentence and 3-6 per model paragraph.
+
+In chat analysis mode, use compact paired lines or a two-column Markdown table when it improves comparison. In HTML mode, bilingual treatment is required for every `.english-unit`; there should be no unpaired learner-facing English after the page audit.
+
+## Microsoft Edge TTS and Playback
+
+Audio supports pronunciation, chunking, shadowing, and dictation. Treat it as part of the lesson rather than a decorative player.
+
+- Generate audio for every `.english-unit` with Microsoft Edge TTS, not the browser `speechSynthesis` API. Prefer a clear neutral English neural voice such as `en-US-AriaNeural`; honor a requested accent or voice.
+- Use `scripts/generate_edge_tts.py --text-file ... --output ... --voice ...` or the equivalent `edge-tts` command. The generator requires network access, but the resulting MP3 must be local to or embedded in the delivered lesson.
+- Provide a native `<audio>` element plus visible speed buttons for at least `0.6x`, `0.7x`, `0.8x`, and `0.9x`. Add `1.0x` when space permits.
+- Set `audio.playbackRate` and `audio.defaultPlaybackRate` from the selected control. Mark the active speed with text/state such as `aria-pressed="true"`; do not rely on color alone.
+- Include a short instruction such as: first listen at 0.7x while reading chunks, then at 0.9x without Chinese, then shadow the sentence.
+- Give every unit a compact play button that plays its exact transcript. A page may use one shared hidden/native `<audio>` controller to avoid dozens of large player bars, but the focused unit, current speed, play/pause state, and transcript must remain clear.
+- Pair each play control with the exact English transcript and a Chinese translation. Tell the learner what is being played.
+- If Edge TTS generation fails, report the limitation and still deliver the bilingual lesson. Do not silently substitute a different TTS engine or claim that browser speech is Microsoft Edge TTS.
+- Do not autoplay. Ensure playback, speed controls, and transcript remain keyboard operable.
+
+Read `references/bilingual-audio-workflow.md` for the HTML contract, generation command, accessible control pattern, fallback behavior, and validation checklist.
+
+Before delivery, run `scripts/audit_bilingual_audio.py path/to/lesson.html`. Treat any reported unpaired English unit, missing highlight, missing Chinese, missing audio source, or absent speed setting as a build failure and fix it before handing off the page.
+
 ## Assessment Contract
 
 Treat assessment as retrieval practice, not decoration.
@@ -83,6 +118,8 @@ Required page regions:
 - A visible `阅读提示`; use a dedicated right rail on sufficiently wide screens and normal flow at narrower widths. Never hide it.
 - A real-anchor table of contents; use a left rail on wide screens and normal flow on smaller screens.
 - A study section that condenses the most useful parts of the ten-section analysis without deleting the logic progression.
+- Chinese-English treatment for every learner-facing English unit, with aligned key highlights and visible highlight explanations.
+- A Microsoft Edge TTS play control for every English unit plus shared or local speed controls for 0.6x, 0.7x, 0.8x, and 0.9x.
 - A quiz form with labeled `fieldset` groups for multiple-choice questions and associated labels for fill-in inputs.
 - A progress indicator that reports answered questions without revealing correctness.
 - A results region with `hidden` initially and `aria-live` or focus management when revealed.
