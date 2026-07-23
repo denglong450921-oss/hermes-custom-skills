@@ -238,11 +238,42 @@ Good starting voices include `en-US-AnaNeural` for young English learners. Selec
 
 Provide:
 
-- playback rates such as 0.5×, 0.7×, 0.8×, and 1.0×;
-- repeat counts such as 1, 2, 3, and 5;
+- playback rates: 0.6×, 0.7×, 0.8×, 0.9×, 1.0×, 1.1× as selectable speed buttons;
+- **repetition control**: a visible selector for audio repeat count — options 1×, 2×, 3×. When set to >1, the `play()` function replays automatically with 400ms gap between repetitions. Persists in localStorage alongside speed setting;
 - visible playing status;
 - clean cancellation when a new sound starts;
 - a specific error when a local file is missing.
+
+### Repetition implementation
+
+```js
+function play(src, cb){
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  if (!src) return;
+  const repeats = state.settings.audioRepeats || 1;
+  let count = 0;
+  function playOnce(){
+    if (count >= repeats) { if (cb) cb(); return; }
+    const a = new Audio(src);
+    a.playbackRate = state.settings.audioRate || 0.8;
+    a.onended = () => { count++; setTimeout(playOnce, 400); };
+    currentAudio = a;
+    a.play().catch(()=>{});
+  }
+  playOnce();
+}
+```
+
+The repetition UI must sit alongside the speed control in the hero section of every daily page:
+
+```html
+<div class="repeat-control">
+  <span class="repeat-label">🔁 重复:</span>
+  <button class="repeat-btn active" data-repeat="1">1×</button>
+  <button class="repeat-btn" data-repeat="2">2×</button>
+  <button class="repeat-btn" data-repeat="3">3×</button>
+</div>
+```
 
 ## Progress state
 

@@ -15,12 +15,12 @@ When building the course, never render a block as a `<div class="placeholder">` 
 
 | Block | Must contain |
 |---|---|
-| ① Previous-day retrieval | Actual quiz questions with clickable answer choices, immediate feedback, and score tracking. Not "回顾昨天学的字母" — render real letter cards the child clicks to identify. |
-| ② Micro-lesson | Animated or click-to-reveal teaching content. Show the concept visually step by step, with audio, with the child clicking to advance. Not "展示字母 A 的形状" — show a large animated A, play the sound, let the child trace or tap it. |
-| ③ Worked example | A step-by-step walkthrough where the child participates in the final step. The prompt fades: Step 1 shows the full answer, Step 2 shows partial, Step 3 lets the child complete it. |
-| ④ Game A | Full interactive game engine (see game-patterns.md). Working buttons, choices, feedback. |
-| ⑤ Game B | Second interactive game engine with a different evidence type. |
-| ⑥ Exit challenge | A real assessment task. The child must answer before seeing the result. Score is recorded. Not "家长说出字母让孩子指认" — build an actual interactive quiz the child completes independently. |
+| ① Previous-day retrieval | Actual quiz questions with clickable answer choices, immediate feedback, and score tracking. Large images (≥200px) as answer choices — the image IS the choice, text is secondary. |
+| ② Micro-lesson | Animated or click-to-reveal teaching content. A single large image (≥280px, filling ≥60% of the block width) dominates each slide, with minimal text below. The image IS the lesson. |
+| ③ Worked example | A step-by-step walkthrough where the child participates in the final step. Large central image (≥240px) with the answer revealed alongside. |
+| ④ Game A | Full interactive game engine (see game-patterns.md). Working buttons, choices, feedback. Images in game cards must be large (≥120px, filling most of the card). |
+| ⑤ Game B | Second interactive game engine. Same image-size requirements as Game A. |
+| ⑥ Exit challenge | A real assessment task. Large image choices (≥180px), the child answers before seeing the result. Score recorded. |
 
 **The test:** Open any daily page. Can a child complete every block by clicking/touching/speaking, receiving feedback, and seeing their progress? If any block requires the child (or parent) to read a description and imagine what to do, the course fails the content rule.
 
@@ -146,6 +146,17 @@ The `course-data.js` must include structured data that these renderers can use. 
 ### 4c. Visual and technical deliverables
 
 **Design requirement:** The course must have a distinctive aesthetic identity, not generic cartoon clip-art. Before writing any HTML/CSS, load `frontend-design` via `skill_view(name='openclaw-imports/frontend-design')` and commit to a bold direction: storybook-whimsical, cosmic-adventure, underwater-explorer, jungle-safari, toy-blocks, etc. The direction must be visible in typography (distinctive display font for headings), color (a dominant theme color + sharp accents, not timid even distribution), spatial composition (unexpected layouts, generous whitespace, asymmetry where appropriate), and motion (staggered reveals, scroll-triggered animations, hover surprises). The five-color palette from visual-design.md becomes a *minimum accessibility baseline*, not the ceiling.
+
+**Image-first layout (mandatory):** The course is for young children who cannot read fluently. Images are the primary communication medium — they must dominate every block. Apply these image-sizing rules across ALL blocks (review, lesson, example, games, exit):
+
+- Slide/lesson images: minimum 280px, fill ≥60% of the block's content width
+- Choice/question images: minimum 180px for answer choices, minimum 120px for game cards
+- Hero/day-card images: prominent decorative illustration (≥200px)
+- Text labels: always secondary to the image, placed below or beside at ≤60% of image size
+- Never constrain images to small thumbnails (e.g., 60px) — they must be large enough for a child to recognize without reading
+- Image-to-text ratio: the image area must be ≥2× the text area in every block
+
+**Repetition control (mandatory):** Every daily page must include a visible repetition count selector alongside the playback speed control. Audio repetition count options: 1×, 2×, 3×. When set to 2× or 3×, each `play()` call automatically replays the audio the specified number of times with a 400ms gap between repetitions. The setting persists in localStorage and applies to all audio in the course — quizzes, slideshows, games, and challenges equally.
 
 For HTML courses, deliver:
 
