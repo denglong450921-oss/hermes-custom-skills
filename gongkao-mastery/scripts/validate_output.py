@@ -17,7 +17,7 @@ def main():
       '两大核心模块视觉突出':h.count('class="core-module"') >= 2 and h.count('★ 高频迁移核心') >= 2,
       '主动提取交互存在':h.count('class="recall-reveal"') >= 4 and '想好后揭晓' in h,
       '间隔复习计划存在':all(x in h for x in ['10 分钟','1 天','3 天','7 天']),
-      'Markdown含核心结构':all(x in m for x in ['正确答案','题目设计分析','概念理解','十、这类题目的通用逻辑框架','十一、错误选项的通用类型','练习题']),
+      'Markdown含核心结构':all(x in m for x in ['正确答案','题目设计分析','概念理解','十一、这类题目的通用逻辑框架','十二、错误选项的通用类型','练习题']),
     }
     failed=[k for k,v in checks.items() if not v]
     for k,v in checks.items(): print(('PASS' if v else 'FAIL')+' '+k)
