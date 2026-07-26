@@ -1,254 +1,242 @@
 ---
 name: build-child-learning-course
-description: Develop and critique concept-only designs for child-friendly learning games and game-based courses across English, mathematics, Chinese, and other subjects. Use whenever a user asks for children's educational game ideas, an engaging learning-game concept, a playful course proposal, game mechanics children will readily accept, motivation or replayability methods, a high-level game-based learning plan, or an upgrade based on a reference proposal, inspiration, sample, or existing design. Extract and improve the useful principles in a reference rather than copying it rigidly. Return design philosophies, concepts, proposals, and methods—not courseware or product implementation. When the user explicitly requests a styled HTML proposal, template, or demo, use the bundled `demo.html` as the visual and structural basis, replacing its sample content with the new concept.
+description: Build, revise, and validate complete ready-to-teach interactive courseware for children across English, mathematics, Chinese, and other subjects. Use whenever a user asks to create, make, design, or deliver a child learning course, multi-day curriculum, lesson pages, educational games, pronunciation practice, mastery checks, or a playful learning website—even when they describe it as a plan. Unless the user explicitly asks for concepts only, deliver a working offline HTML course with real content, functional games, feedback, progress, responsive UI, and validation; do not stop at philosophies, mockups, proposals, or descriptions. Use the bundled `demo.html` as visual inspiration and improve it for the learner rather than copying it rigidly.
 ---
 
 # Build Child Learning Course
 
-Design learning games that children can understand quickly, choose willingly, and enjoy replaying. Present the thinking behind the experience rather than building the experience itself.
+Deliver **可直接上课的互动课件**: a child must be able to open the entry page and begin a complete lesson without imagining missing content or waiting for later implementation.
 
-## Scope
+## Completion standard
 
-This is a concept-design skill. Default to prose, tables, and simple text diagrams when they clarify a design relationship.
+The course is not complete until:
 
-Stay at these levels:
+- the entry HTML and every promised lesson page open successfully;
+- every lesson contains the actual teaching content, questions, answers, and feedback;
+- every described game is a working interaction rather than a card explaining future gameplay;
+- audio, images, data, styles, and scripts are available locally when they are part of the request;
+- progress, replay, reset, difficulty, responsive layout, and accessibility behavior work;
+- the course runs offline under `file://` with no runtime network dependency;
+- representative learning paths pass real-browser validation.
 
-- design philosophy and rationale;
-- learner and context assumptions;
-- game concepts, themes, mechanics, and learning actions;
-- high-level course or session proposals;
-- progression, motivation, feedback, and replayability methods;
-- accessibility, safety, and concept-validation methods;
-- tradeoffs and recommendations.
+If the user explicitly requests only a philosophy, concept, proposal, or method, provide that narrower output. Otherwise build the courseware and its files.
 
-Do not produce or modify:
+## Route the references and resources
 
-- courseware HTML, application code, or technical architecture;
-- interactive prototypes, runnable courseware, or detailed UI specifications;
-- images, audio, animation files, datasets, or other assets;
-- folder structures, ZIP packages, deployment instructions, or browser tests;
-- claims that a proposed game has been implemented or validated with children.
+- Read [references/learning-science.md](references/learning-science.md) before defining the learning loop.
+- Read [references/game-patterns.md](references/game-patterns.md) before choosing the course-level game spine.
+- Read the relevant section of [references/subject-patterns.md](references/subject-patterns.md) for the requested subject.
+- Read [references/visual-design.md](references/visual-design.md) before creating the learner-facing UI.
+- Read [references/implementation-spec.md](references/implementation-spec.md) before writing the course files.
+- Read [references/qa-checklist.md](references/qa-checklist.md) before final validation.
+- Inspect [demo.html](demo.html) for visual rhythm, hierarchy, color discipline, accessibility, and responsive behavior. Adapt its design principles to the child-facing course; do not reuse its adult proposal layout unchanged.
+- Use `scripts/scaffold_course.py` when a multi-page course needs a consistent starting structure, then replace every scaffold placeholder with real structured content and renderers.
+- Use `scripts/validate_game_diversity.py` and `scripts/validate_course_balance.py` for compatible generated courses.
 
-If the user asks for a finished digital product, provide a concept specification that another implementation workflow can use. Keep this skill's own response conceptual.
+When an applicable frontend-design skill is available, use it to choose and execute one distinctive visual direction before styling. The bundled visual reference supplies a quality floor, not a ceiling.
 
-### Presentation-only HTML exception
-
-When the user explicitly asks for an HTML proposal, design document, template, or demo, adapt [demo.html](demo.html). Treat it as the skill's canonical presentation demo and as a basis for enhancement, not a rigid page that every proposal must copy. This exception changes the presentation format, not the scope of the content.
-
-- Start from `demo.html` rather than recreating a presentation from scratch.
-- Replace all sample content with the current proposal; use the HTML comments and section anchors as editing guides.
-- Preserve the demo's clarity, visual rhythm, and information hierarchy while adapting its title, copy, accent choices, examples, and signature visual to the concept.
-- Keep it as one standalone, responsive, printable file with no external runtime dependencies.
-- Retain visible keyboard focus and reduced-motion behavior.
-- Check the result at desktop and 390px mobile widths.
-- Do not turn the presentation into an interactive learning game, product prototype, or implementation specification.
-
-## Route the references
-
-- Read [references/learning-science.md](references/learning-science.md) before proposing the learning loop.
-- Read [references/game-patterns.md](references/game-patterns.md) before selecting mechanics. Treat it as a library of learner actions and evidence types, not as a software specification.
-- Read the relevant part of [references/subject-patterns.md](references/subject-patterns.md) when the request names a school subject. Extract only the learning representations and activity ideas.
-- Do not use the implementation specification, QA checklist, visual build rules, or bundled scripts for this concept-only workflow.
-
-## Reference Design Enhancement
-
-When the user supplies a reference design, read it completely and use it as evidence and inspiration—not as a specification to follow line by line. The reference should improve the proposal without narrowing the design to its particular theme, structure, assumptions, or favorite mechanics.
-
-Extract four layers:
-
-1. **Intent:** the child need, learning purpose, emotional goal, and success condition.
-2. **Mechanisms:** the play actions, onboarding, feedback, progression, motivation, and safety ideas that may cause the intended result.
-3. **Surface expression:** the world, characters, colors, rewards, activity names, layout ideas, and story treatment.
-4. **Assumptions and gaps:** the age range, context, evidence, accessibility, feasibility, and tradeoffs the reference leaves untested.
-
-Evaluate each useful element against the actual learner, subject, play context, and learning objective. Then make one of four decisions:
-
-- **Retain** an element when its rationale and fit are already strong.
-- **Adapt** an element when the underlying idea is useful but its expression, difficulty, or context should change.
-- **Replace** an element when it creates friction, weakens the learning-play connection, or conflicts with dignity, accessibility, or safety.
-- **Add** an element when the reference overlooks a need that materially affects acceptance, enjoyment, or learning.
-
-Favor synthesis over imitation. A supplied island world, animal companion, star economy, color palette, mini-game set, session duration, or rollout plan is an option, not a default. Preserve the reason behind a strong idea while finding a better expression for the current child and context.
-
-When a reference is present, include a compact enhancement table before the final concept:
-
-| Reference signal | Decision | Enhanced direction | Why it fits better |
-|---|---|---|---|
-| [Principle or feature, paraphrased] | Retain / Adapt / Replace / Add | [Resulting design choice] | [Learner-, play-, or learning-based rationale] |
-
-Paraphrase rather than reproducing long passages. Do not borrow distinctive names, characters, worlds, or wording unless the user explicitly asks to preserve them.
-
-## 1. Frame the child and the play context
+## 1. Establish the learner contract
 
 Determine or reasonably infer:
 
-- age and developmental stage;
-- prior knowledge, language, and reading level;
-- interests, familiar play patterns, and likely sources of hesitation;
-- whether play is solo, cooperative, family-supported, classroom-based, physical, digital, or mixed;
-- session length, environment, accessibility needs, and available materials;
-- the observable learning outcome.
+- learner age and developmental stage;
+- prior knowledge, language, reading level, and likely confusions;
+- subject, scope, duration, daily study time, and mastery target;
+- learning environment, offline or device constraints, and adult support;
+- output language, pronunciation model, accessibility needs, and delivery folder;
+- whether the user needs recorded audio, a ZIP, or both.
 
-Ask only when an unknown would materially change the proposal. Otherwise state the assumption and continue.
+Ask only when an unknown would materially change the curriculum or assets. Otherwise state the assumption and continue building.
 
-Avoid treating “children” as one audience. A mechanic that delights a five-year-old may feel babyish, confusing, or socially risky to a ten-year-old.
+## 2. Design backward from observable mastery
 
-## 2. Write the fun promise
+1. Write a measurable final outcome.
+2. Decompose it into small prerequisite skills and content units.
+3. Sequence them from concrete and familiar to independent transfer.
+4. Assign each day one primary objective and a manageable new-content load.
+5. Start Day 2 onward with retrieval from the immediately previous day.
+6. Revisit older material after roughly three and seven days.
+7. Define an exit task in which the child responds before seeing the answer.
+8. Include both recognition and production evidence.
 
-Express in one sentence what the child gets to do and why that action is enjoyable.
+Keep daily volume appropriate for the age. Count real response opportunities, not merely content displayed on screen.
 
-A useful fun promise describes:
+## 3. Build the daily learning loop
 
-- an appealing role or fantasy;
-- a clear, concrete action;
-- a satisfying change caused by the child's decision;
-- a reason to try again.
+Use the 30% learning / 70% testing ratio as a working design budget:
 
-Prefer promises such as “build a creature by solving shape puzzles” over adult-facing goals such as “practice geometry through gamification.” The learning objective guides the design, but the child experiences agency, curiosity, mastery, expression, humor, discovery, or connection.
+| Order | Daily block | Mode | Share |
+|---|---|---:|---:|
+| 1 | Previous-day retrieval; prerequisites on Day 1 | Testing | 15% |
+| 2 | Concise visual, audio, movement, or concrete micro-lesson | Learning | 20% |
+| 3 | Worked example with fading support | Learning | 10% |
+| 4 | Core game round A | Testing | 20% |
+| 5 | Core game round B with production or transfer | Testing | 20% |
+| 6 | Exit challenge, correction, and mastery decision | Testing | 15% |
 
-## 3. Make the play action carry the learning
+A testing block begins with an unanswered prompt and includes the response, feedback, and optional retry. Watching an explanation does not count as testing.
 
-Choose a core game verb that exercises the target skill directly: match, sort, build, predict, explain, imitate, sequence, compare, search, or decide.
+Implement all six blocks:
 
-For each proposed mechanic, connect:
+- **Previous-day retrieval:** a real scored quiz drawn from prior content.
+- **Micro-lesson:** a short interactive sequence with relevant visual or audio models and learner-controlled navigation.
+- **Worked example:** full support → partial support → independent response.
+- **Game A and Game B:** working controls, answer checking, and observable evidence.
+- **Exit challenge:** an independent scored check saved to progress.
 
-| Design question | Required answer |
-|---|---|
-| What does the child do? | One observable play action |
-| What must the child think about? | The knowledge or strategy being retrieved |
-| What changes because of the choice? | A meaningful game consequence |
-| What shows learning? | Recognition, production, explanation, construction, or transfer evidence |
-| Why repeat it? | A new challenge, strategy, combination, story consequence, or expressive choice |
+Do not render any block as placeholder prose telling the learner or parent what they could do.
 
-If the entertaining action and the learning action are separate, redesign the loop. A quiz followed by an unrelated animation is a reward wrapper, not an integrated learning game.
+## 4. Build a coherent game system
 
-## 4. Design for ready acceptance
+For a course of 10 or more days:
 
-Reduce the distance between first contact and successful play:
+- select four to six core game engines from [references/game-patterns.md](references/game-patterns.md);
+- use each selected engine at least three times across onboarding → consolidation → transfer;
+- use only one or two focused games per day;
+- include both recognition and production actions;
+- vary content, representation, support, difficulty, and transfer context inside familiar rules;
+- avoid disconnected one-off games and cosmetic reskins.
 
-- begin with one visible goal and one obvious action;
-- demonstrate through a playable first turn rather than a long explanation;
-- use familiar interaction patterns and introduce novelty through content or consequence;
-- give an early success without making the game feel fake;
-- keep reading and working-memory demands appropriate for the age;
-- let the child make a meaningful choice within the first minute;
-- make mistakes safe, specific, and recoverable;
-- preserve dignity by avoiding babyish language, public embarrassment, and punitive failure;
-- offer accessible alternatives when speed, sound, speech, dragging, color, or fine motor control is not essential to the learning goal.
+Every game must produce evidence for the current objective. A reward animation after an unrelated quiz is not an integrated learning game.
 
-Acceptance is not the same as instant excitement. A calm puzzle, collaborative story, collecting system, or make-believe task may be more inviting than constant spectacle.
+### Flip-card game quality and difficulty
 
-## 5. Sustain enjoyment without manipulation
+Treat flip-card matching as a first-class learning engine rather than generic decoration.
 
-Build enjoyment from competence, autonomy, curiosity, and connection:
+Interaction requirements:
 
-- **Competence:** challenges are readable, feedback identifies the useful next action, and support fades as skill grows.
-- **Autonomy:** offer bounded choices of path, tool, character, order, strategy, or expression.
-- **Curiosity:** reveal consequences, patterns, story information, or new combinations through play.
-- **Connection:** use cooperative goals, teach-back, shared discoveries, or a warm guide character when socially appropriate.
-- **Meaning:** let progress change something the child cares about inside the game world.
+- start with cards covered and reshuffle on page load and every replay;
+- use stable content keys for matching, never grid positions;
+- keep the first card visible while the second is selected;
+- play the matching local audio when an audio-enabled card opens;
+- cover an incorrect pair after readable corrective feedback;
+- keep a successful pair visible while allowing it to be covered and practised again;
+- provide a matching-only reset that reshuffles without clearing unrelated course progress;
+- keep cards keyboard operable, touch friendly, and understandable without relying on 3D transforms;
+- ensure picture, word, phrase, audio, answer, and feedback all come from the same content record.
 
-Use celebration to acknowledge effort, strategy, and improvement. Do not rely on streak anxiety, loss pressure, endless variable rewards, shaming, deceptive scarcity, ads, purchases, or compulsive retention patterns.
+Scale the game by changing one main difficulty dimension at a time:
 
-Treat stars, collectibles, companions, decorations, maps, and world restoration as optional motivation patterns. Use them only when they make effort or growing competence visible; replace them when creative expression, humor, discovery, cooperation, or story consequences would be more meaningful for the child.
+| Stage | Typical load | Pair relationship | Support |
+|---|---:|---|---|
+| Onboarding | 2–3 pairs | picture ↔ picture or picture ↔ spoken word | playable demonstration; generous reveal time |
+| Early consolidation | 4 pairs | picture ↔ printed word | replayable audio; one optional location hint |
+| Retrieval | 5 pairs | sound ↔ picture or picture ↔ hidden word | no fixed zones; hints appear only after repeated mismatch |
+| Interleaving | 6 pairs | new and spaced-review items | similar but already-taught items; no answer labels on pictures |
+| Transfer | 6–8 pairs | word ↔ short phrase, sound ↔ scene, or cross-representation pair | child predicts or speaks before locking a match |
+| Mastery | 8 pairs by default | mixed cumulative relationships | independent round followed by a supported retry option |
 
-## 6. Shape the core loop and progression
+Do not use time pressure as the default difficulty control for six-year-olds. If performance falls below the chosen mastery threshold, reduce pair count or restore one useful cue. If performance is secure across repeated rounds, increase only one of pair count, representational distance, distractor similarity, delay, or production demand.
 
-Describe the shortest satisfying loop:
+## 5. Create real curriculum content
 
-1. Notice a goal or mystery.
-2. Choose or perform a learning-relevant action.
-3. See an immediate, understandable consequence.
-4. Receive a useful clue, correction, or confirmation.
-5. Decide whether to retry, vary the strategy, or advance.
+Store one structured source of truth for every learning item. Include fields appropriate to the subject, such as:
 
-Then show how the same familiar loop deepens:
+- stable key;
+- target word, symbol, character, or concept;
+- child-facing meaning;
+- short example or phrase;
+- pronunciation or audio path when relevant;
+- semantic picture or visual model;
+- mastery answer and plausible confusions;
+- first-taught day and review schedule.
 
-- **Welcome:** teach the play language with low-risk success.
-- **Explore:** introduce variation and meaningful choices.
-- **Master:** reduce support and combine known elements.
-- **Transfer:** use the skill in a new situation or representation.
-- **Revisit:** create a fresh reason to replay rather than merely increasing quantity or speed.
+For English:
 
-For a multi-session course, prefer a small, coherent family of reusable mechanics. Familiarity lowers interface effort; novelty should come from decisions, content, combinations, and consequences.
+- connect sound, print, meaning, and use;
+- pair each word with a clean picture that does not print the answer;
+- provide a short memorable phrase when requested;
+- include word and phrase pronunciation;
+- use familiar vocabulary rather than obscure words chosen only to satisfy a pattern;
+- test listening, picture recognition, spoken recall, and short-phrase use.
 
-Increase challenge legibly. Change one main difficulty dimension at a time—such as number of choices, similarity of distractors, amount of support, number of steps, or transfer distance—so the child can form a strategy and the designer can understand why performance changed. When the child struggles repeatedly, propose a recovery path that clarifies the action, restores a useful hint, reduces irrelevant load, or offers an easier rehearsal without punishment.
+Populate every promised day with its complete content. Verify requested totals programmatically when the user specifies an exact number of words, questions, lessons, or phrases.
 
-## 7. Offer a small concept portfolio
+## 6. Build the offline course system
 
-When the request is open-ended, propose two or three genuinely different concepts. Compare them by:
+For a multi-day HTML course, normally deliver:
 
-- child appeal and age fit;
-- strength of the learning-action connection;
-- ease of understanding;
-- replay potential;
-- adult support required;
-- accessibility and social-safety risks.
+- `index.html` with the course map, objectives, progress, and entry links;
+- one dedicated page per day or an equally clear offline routing structure;
+- local shared CSS, JavaScript, structured course data, images, fonts, and audio;
+- a consistent learner-facing navigation pattern on desktop and mobile;
+- actual renderers for review, micro-lesson, fading example, games, and exit challenge;
+- immediate, specific, encouraging feedback in an `aria-live` region;
+- local progress persistence with activity replay, day reset, and course reset;
+- randomized practice on every new attempt;
+- audio speed, repeat, playing-state, and cancellation controls when pronunciation matters;
+- a visible motion toggle and reduced-motion fallback;
+- usage instructions for the parent or teacher;
+- an optional ZIP after validation.
 
-Recommend one concept and explain the tradeoff in plain language. Do not inflate minor theme changes into separate concepts.
+Avoid local `fetch()` dependencies. Load course data from a local script such as `window.COURSE_DATA`. Do not use CDNs, analytics, remote images, remote fonts, or runtime TTS requests.
 
-When the user already has a clear direction, refine that direction instead of forcing alternatives.
+If recorded pronunciation is requested, generate local audio before delivery, test a sample voice, and map every file from the same content record used for the visible item and answer.
 
-## 8. Describe a concept-validation method
+## 7. Build a child-ready visual and interaction system
 
-Propose lightweight ways to test the idea before implementation:
+Choose one coherent world, mascot, map, or story motif that persists across all days.
 
-- explain the premise to a child and ask what they think they would do;
-- run a paper or verbal first-turn walkthrough;
-- observe time to first independent action;
-- note voluntary replay, strategy changes, requests for help, confusion, and emotional recovery after mistakes;
-- ask the child what they enjoyed, disliked, expected, and would change;
-- check whether the child can demonstrate the target skill without the game fiction.
+- Use large touch targets, short instructions, readable contrast, and low reading burden.
+- Let the first successful action teach the interaction instead of front-loading instructions.
+- Make learning progress visibly change something meaningful in the course world.
+- Animate semantic actions and response consequences, not answer choices during thinking.
+- Keep decorative motion subtle until the learner acts.
+- Provide visible current, correct, retry, completed, and locked states with both text and graphical cues.
+- Offer non-drag alternatives for drag interactions.
+- Preserve dignity: no punitive scoring, forced countdowns, public rankings, shame, or manipulative reward loops.
+- Test at a wide desktop viewport and at 390px without horizontal overflow.
 
-Separate evidence:
+Use [demo.html](demo.html) as a reference for polish and hierarchy, then reshape it into a simpler child-facing interface with age-appropriate navigation and content.
 
-- **acceptance:** willingness to start and clarity about what to do;
-- **enjoyment:** positive engagement, agency, curiosity, or voluntary return;
-- **learning:** improved independent performance or transfer;
-- **comfort:** absence of avoidable frustration, shame, overload, exclusion, or coercion.
+## 8. Enhance reference designs without copying them
 
-Do not claim that engagement or learning is proven until relevant children have actually been observed.
+When the user supplies a reference, read it completely and separate:
 
-## Response structure
+1. intent and success conditions;
+2. useful learning and play mechanisms;
+3. surface expression such as theme, characters, palette, rewards, and layout;
+4. assumptions, gaps, and risks.
 
-Use the user's language and adapt the length to the request.
+Retain, adapt, replace, or add elements according to the actual learner and objective. Preserve strong reasoning, not distinctive names or arbitrary details. The delivered courseware must be complete even when the reference is only a proposal.
 
-```markdown
-# [Concept title]
+## 9. Validate before delivery
 
-## Learner and context
-[Assumptions that shape the design]
+Run [references/qa-checklist.md](references/qa-checklist.md) and verify in a real browser:
 
-## Design philosophy
-[Why this approach should feel inviting and worthwhile]
+- every page and asset loads under `file://`;
+- every promised lesson contains real interactive content;
+- exact content totals and phrase limits match the request;
+- Day 2 onward retrieves the immediately previous day;
+- the 30/70 balance is represented by real response opportunities;
+- the selected game engines recur and deepen across the course;
+- flip-card order changes across reloads and replay;
+- opened flip cards reveal and play the correct mapped content;
+- every listening question has exactly one correct option;
+- feedback, retries, scoring, progress restore, and reset work;
+- no answer label leaks through testing images;
+- desktop and 390px mobile layouts stay within bounds;
+- keyboard focus, contrast, reduced motion, and `aria-live` feedback remain usable;
+- the console has no severe errors and the course makes no runtime network request.
 
-## Fun promise
-[One child-facing sentence]
+For compatible courses, run:
 
-## Reference design enhancement
-[When a reference is supplied: a compact Retain / Adapt / Replace / Add table]
-
-## Recommended game concept
-- Fantasy or role:
-- Learning objective:
-- Core game verb:
-- Meaningful choices:
-- Evidence of learning:
-
-## Core loop
-[Short numbered loop]
-
-## Acceptance and enjoyment methods
-[Onboarding, agency, challenge, feedback, dignity, accessibility]
-
-## Progression and replay
-[Welcome → explore → master → transfer → revisit]
-
-## Concept-validation method
-[What to observe before implementation]
-
-## Alternatives and tradeoffs
-[Include only when useful]
+```bash
+python scripts/validate_game_diversity.py --course-data <course>/assets/course-data.js
+python scripts/validate_course_balance.py <course-folder>
 ```
 
-End with the clearest next design decision. Do not append code, production steps, or technical deliverables.
+Do not claim a check passed unless it was actually run.
+
+## 10. Deliver for immediate teaching
+
+Provide:
+
+- a direct link to the course entry file;
+- the complete offline course folder;
+- a ZIP when portability matters;
+- Chinese usage instructions when the learner, parent, or teacher is Chinese-speaking;
+- a concise summary of objectives, daily rhythm, progress, replay, reset, and audio controls;
+- validation results and any remaining limitations.
+
+Open the entry page after successful validation when working on a local desktop. The handoff should make it obvious how a parent or teacher can start the first lesson immediately.
