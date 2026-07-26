@@ -1,6 +1,6 @@
 ---
 name: build-child-learning-course
-description: Develop and critique concept-only designs for child-friendly learning games and game-based courses across English, mathematics, Chinese, and other subjects. Use whenever a user asks for children's educational game ideas, an engaging learning-game concept, a playful course proposal, game mechanics children will readily accept, motivation or replayability methods, a high-level game-based learning plan, or an upgrade based on a reference proposal, inspiration, sample, or existing design. Extract and improve the useful principles in a reference rather than copying it rigidly. Return only design philosophies, concepts, proposals, and methods—not HTML, code, assets, prototypes, production files, or implementation work.
+description: Develop and critique concept-only designs for child-friendly learning games and game-based courses across English, mathematics, Chinese, and other subjects. Use whenever a user asks for children's educational game ideas, an engaging learning-game concept, a playful course proposal, game mechanics children will readily accept, motivation or replayability methods, a high-level game-based learning plan, or an upgrade based on a reference proposal, inspiration, sample, or existing design. Extract and improve the useful principles in a reference rather than copying it rigidly. Return design philosophies, concepts, proposals, and methods—not courseware or product implementation. When the user explicitly requests a styled HTML proposal or template, present the same concept-only content with the bundled standalone proposal template.
 ---
 
 # Build Child Learning Course
@@ -9,7 +9,7 @@ Design learning games that children can understand quickly, choose willingly, an
 
 ## Scope
 
-This is a concept-design skill. Produce prose, tables, and simple text diagrams only when they clarify a design relationship.
+This is a concept-design skill. Default to prose, tables, and simple text diagrams when they clarify a design relationship.
 
 Stay at these levels:
 
@@ -23,13 +23,24 @@ Stay at these levels:
 
 Do not produce or modify:
 
-- HTML, CSS, JavaScript, application code, or technical architecture;
+- courseware HTML, application code, or technical architecture;
 - interactive prototypes, runnable courseware, or detailed UI specifications;
 - images, audio, animation files, datasets, or other assets;
 - folder structures, ZIP packages, deployment instructions, or browser tests;
 - claims that a proposed game has been implemented or validated with children.
 
 If the user asks for a finished digital product, provide a concept specification that another implementation workflow can use. Keep this skill's own response conceptual.
+
+### Presentation-only HTML exception
+
+When the user explicitly asks for an HTML proposal, design document, or template, adapt [assets/proposal-template.html](assets/proposal-template.html). This exception changes the presentation format, not the scope of the content.
+
+- Replace all sample content with the current proposal; use the HTML comments and section anchors as editing guides.
+- Preserve the proposal's information hierarchy while adapting its title, copy, accent choices, and examples to the concept.
+- Keep it as one standalone, responsive, printable file with no external runtime dependencies.
+- Retain visible keyboard focus and reduced-motion behavior.
+- Check the result at desktop and 390px mobile widths.
+- Do not turn the presentation into an interactive learning game, product prototype, or implementation specification.
 
 ## Route the references
 
