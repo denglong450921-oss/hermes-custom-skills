@@ -1,0 +1,1823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#2f6bff">
+  <title>Build Child Learning Course — HTML Demo</title>
+  <!--
+    BUILD CHILD LEARNING COURSE · CANONICAL HTML DEMO
+
+    Replace the sample content while preserving the information hierarchy.
+    Useful search anchors:
+      [PROJECT]    proposal title and summary
+      [LEARNER]    audience and context
+      [REFERENCE]  Retain / Adapt / Replace / Add decisions
+      [CONCEPT]    fantasy, objective, verb, choices, evidence
+      [LOOP]       shortest satisfying play loop
+      [METHODS]    acceptance and enjoyment methods
+      [PROGRESS]   welcome → explore → master → transfer → revisit
+      [VALIDATE]   concept-validation observations
+      [DECISION]   clearest next design decision
+
+    This file has no external dependencies and is designed to print cleanly.
+  -->
+  <style>
+    :root {
+      --ink: #17304e;
+      --ink-soft: #40546d;
+      --paper: #fffdf8;
+      --paper-blue: #edf3ff;
+      --blue: #2f6bff;
+      --blue-dark: #1749c6;
+      --coral: #ff6b57;
+      --sun: #ffd84d;
+      --mint: #8de2c3;
+      --violet: #a995ff;
+      --line: #ced8e8;
+      --white: #ffffff;
+      --shadow: 0 20px 60px rgba(23, 48, 78, 0.12);
+      --shadow-small: 0 8px 24px rgba(23, 48, 78, 0.09);
+      --radius-xl: 34px;
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --display: "Avenir Next Rounded", "Arial Rounded MT Bold", "Trebuchet MS", sans-serif;
+      --body: "Avenir Next", "Segoe UI", Helvetica, Arial, sans-serif;
+      --utility: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      --page-max: 1180px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--paper-blue);
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 1px 1px, rgba(47, 107, 255, 0.13) 1px, transparent 1.2px)
+        0 0 / 22px 22px,
+        var(--paper-blue);
+      font-family: var(--body);
+      font-size: 17px;
+      line-height: 1.65;
+      text-rendering: optimizeLegibility;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :focus-visible {
+      outline: 4px solid var(--sun);
+      outline-offset: 4px;
+      border-radius: 8px;
+    }
+
+    .skip-link {
+      position: fixed;
+      z-index: 99;
+      top: 12px;
+      left: 12px;
+      padding: 10px 14px;
+      color: var(--white);
+      background: var(--ink);
+      border-radius: 10px;
+      transform: translateY(-160%);
+      transition: transform 160ms ease;
+    }
+
+    .skip-link:focus {
+      transform: translateY(0);
+    }
+
+    .site-shell {
+      width: min(calc(100% - 40px), var(--page-max));
+      margin: 32px auto 72px;
+      display: grid;
+      grid-template-columns: 214px minmax(0, 1fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .proposal-rail {
+      position: sticky;
+      top: 24px;
+      overflow: hidden;
+      min-height: calc(100vh - 48px);
+      display: flex;
+      flex-direction: column;
+      padding: 24px 18px 18px;
+      color: var(--white);
+      background: var(--ink);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+    }
+
+    .proposal-rail::after {
+      content: "";
+      position: absolute;
+      right: -38px;
+      bottom: 88px;
+      width: 120px;
+      height: 120px;
+      background: var(--blue);
+      border: 18px solid var(--mint);
+      border-radius: 42% 58% 70% 30% / 48% 42% 58% 52%;
+      opacity: 0.88;
+      transform: rotate(17deg);
+    }
+
+    .brand-mark {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 7px;
+      margin-bottom: 34px;
+    }
+
+    .brand-kicker,
+    .eyebrow,
+    .card-label,
+    .metric-label,
+    .section-tag {
+      font-family: var(--utility);
+      font-size: 0.72rem;
+      font-weight: 700;
+      line-height: 1.25;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .brand-kicker {
+      color: var(--mint);
+    }
+
+    .brand-title {
+      max-width: 8ch;
+      font-family: var(--display);
+      font-size: 1.8rem;
+      font-weight: 800;
+      line-height: 0.98;
+      letter-spacing: -0.045em;
+    }
+
+    .rail-nav {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 2px;
+    }
+
+    .rail-nav a {
+      display: grid;
+      grid-template-columns: 22px 1fr;
+      gap: 7px;
+      align-items: baseline;
+      padding: 9px 8px;
+      color: #dfe8f7;
+      border-radius: 10px;
+      font-size: 0.84rem;
+      line-height: 1.25;
+      text-decoration: none;
+      transition: color 160ms ease, background 160ms ease, transform 160ms ease;
+    }
+
+    .rail-nav a:hover {
+      color: var(--white);
+      background: rgba(255, 255, 255, 0.09);
+      transform: translateX(3px);
+    }
+
+    .rail-nav .nav-index {
+      color: var(--sun);
+      font-family: var(--utility);
+      font-size: 0.68rem;
+    }
+
+    .rail-footer {
+      position: relative;
+      z-index: 1;
+      margin-top: auto;
+      padding-top: 34px;
+    }
+
+    .print-button {
+      width: 100%;
+      min-height: 46px;
+      padding: 10px 14px;
+      color: var(--ink);
+      background: var(--sun);
+      border: 0;
+      border-radius: 14px;
+      box-shadow: 0 4px 0 #d8ae16;
+      font: 800 0.86rem/1 var(--body);
+      cursor: pointer;
+      transition: transform 140ms ease, box-shadow 140ms ease;
+    }
+
+    .print-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 #d8ae16;
+    }
+
+    .print-button:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 #d8ae16;
+    }
+
+    .rail-note {
+      margin: 14px 4px 0;
+      color: #b8c7db;
+      font-size: 0.72rem;
+      line-height: 1.4;
+    }
+
+    .proposal {
+      overflow: hidden;
+      background: var(--paper);
+      border: 1px solid rgba(23, 48, 78, 0.08);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      position: relative;
+      min-height: 630px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(300px, 0.92fr);
+      gap: 42px;
+      align-items: center;
+      padding: 68px 60px 58px;
+      color: var(--white);
+      background: var(--blue);
+      isolation: isolate;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      top: -92px;
+      left: 44%;
+      width: 380px;
+      height: 250px;
+      border: 46px solid rgba(255, 255, 255, 0.13);
+      border-radius: 50%;
+      transform: rotate(-18deg);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      right: -80px;
+      bottom: -110px;
+      width: 300px;
+      height: 300px;
+      background: var(--blue-dark);
+      border-radius: 48% 52% 37% 63% / 63% 37% 63% 37%;
+      transform: rotate(26deg);
+    }
+
+    .hero-copy {
+      position: relative;
+      z-index: 2;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 24px;
+      color: var(--sun);
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 24px;
+      height: 8px;
+      background: var(--sun);
+      border-radius: 999px;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1,
+    h2,
+    h3 {
+      font-family: var(--display);
+      text-wrap: balance;
+    }
+
+    h1 {
+      max-width: 8.8ch;
+      margin-bottom: 26px;
+      font-size: clamp(3.6rem, 7vw, 6.6rem);
+      font-weight: 900;
+      line-height: 0.85;
+      letter-spacing: -0.07em;
+    }
+
+    .hero-summary {
+      max-width: 50ch;
+      margin-bottom: 32px;
+      color: #e9efff;
+      font-size: 1.05rem;
+      line-height: 1.55;
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .meta-pill {
+      padding: 8px 12px;
+      color: var(--white);
+      background: rgba(8, 34, 99, 0.28);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-radius: 999px;
+      font-size: 0.76rem;
+      font-weight: 700;
+    }
+
+    .play-map {
+      position: relative;
+      z-index: 1;
+      min-height: 450px;
+      display: grid;
+      place-items: center;
+    }
+
+    .play-map svg {
+      width: min(100%, 430px);
+      height: auto;
+      overflow: visible;
+      filter: drop-shadow(0 22px 28px rgba(9, 34, 92, 0.22));
+    }
+
+    .map-card {
+      position: absolute;
+      z-index: 2;
+      max-width: 220px;
+      padding: 17px 18px 15px;
+      color: var(--ink);
+      background: var(--paper);
+      border-radius: 20px 20px 20px 6px;
+      box-shadow: var(--shadow-small);
+      transform: rotate(-3deg);
+    }
+
+    .map-card .card-label {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--coral);
+    }
+
+    .map-card strong {
+      display: block;
+      font-family: var(--display);
+      font-size: 1.05rem;
+      line-height: 1.2;
+    }
+
+    .map-card-top {
+      top: 4%;
+      right: 0;
+    }
+
+    .map-card-bottom {
+      bottom: 0;
+      left: -6%;
+      border-radius: 20px 6px 20px 20px;
+      transform: rotate(2.5deg);
+    }
+
+    .map-card-bottom .card-label {
+      color: var(--blue);
+    }
+
+    .fun-promise {
+      position: relative;
+      z-index: 3;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 20px;
+      align-items: center;
+      margin: -38px 38px 0;
+      padding: 24px 28px;
+      background: var(--sun);
+      border: 3px solid var(--ink);
+      border-radius: 22px;
+      box-shadow: 8px 9px 0 var(--ink);
+      transform: rotate(-0.7deg);
+    }
+
+    .promise-mark {
+      width: 56px;
+      height: 56px;
+      display: grid;
+      place-items: center;
+      color: var(--white);
+      background: var(--coral);
+      border: 3px solid var(--ink);
+      border-radius: 50% 44% 54% 46%;
+      font-family: var(--display);
+      font-size: 2rem;
+      font-weight: 900;
+      line-height: 1;
+      transform: rotate(7deg);
+    }
+
+    .fun-promise .section-tag {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .fun-promise p {
+      margin: 0;
+      font-family: var(--display);
+      font-size: clamp(1.12rem, 2vw, 1.42rem);
+      font-weight: 800;
+      line-height: 1.3;
+      letter-spacing: -0.02em;
+    }
+
+    .content-section {
+      scroll-margin-top: 28px;
+      padding: 84px 60px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .content-section:last-of-type {
+      border-bottom: 0;
+    }
+
+    .section-heading {
+      display: grid;
+      grid-template-columns: minmax(0, 0.82fr) minmax(300px, 1.18fr);
+      gap: 54px;
+      align-items: start;
+      margin-bottom: 42px;
+    }
+
+    .section-heading h2 {
+      margin-bottom: 0;
+      font-size: clamp(2.4rem, 4vw, 4.4rem);
+      font-weight: 900;
+      line-height: 0.95;
+      letter-spacing: -0.055em;
+    }
+
+    .section-intro {
+      max-width: 50ch;
+      margin: 4px 0 0;
+      color: var(--ink-soft);
+      font-size: 1rem;
+    }
+
+    .section-tag {
+      display: inline-flex;
+      margin-bottom: 14px;
+      color: var(--blue);
+    }
+
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .metric {
+      min-height: 158px;
+      padding: 20px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      box-shadow: 0 5px 0 var(--line);
+    }
+
+    .metric:nth-child(2) {
+      box-shadow: 0 5px 0 var(--mint);
+    }
+
+    .metric:nth-child(3) {
+      box-shadow: 0 5px 0 var(--sun);
+    }
+
+    .metric:nth-child(4) {
+      box-shadow: 0 5px 0 var(--coral);
+    }
+
+    .metric-label {
+      display: block;
+      margin-bottom: 17px;
+      color: var(--ink-soft);
+    }
+
+    .metric-value {
+      display: block;
+      font-family: var(--display);
+      font-size: 1.17rem;
+      font-weight: 800;
+      line-height: 1.25;
+      letter-spacing: -0.025em;
+    }
+
+    .reference-table-wrap {
+      overflow-x: auto;
+      border: 2px solid var(--ink);
+      border-radius: 18px;
+      box-shadow: 7px 8px 0 var(--mint);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--white);
+      font-size: 0.88rem;
+    }
+
+    th,
+    td {
+      padding: 16px 17px;
+      text-align: left;
+      vertical-align: top;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    th:last-child,
+    td:last-child {
+      border-right: 0;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    th {
+      color: var(--white);
+      background: var(--ink);
+      font-family: var(--utility);
+      font-size: 0.68rem;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    .decision {
+      display: inline-flex;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-family: var(--utility);
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .retain {
+      background: var(--mint);
+    }
+
+    .adapt {
+      background: var(--sun);
+    }
+
+    .replace {
+      color: var(--white);
+      background: var(--coral);
+    }
+
+    .add {
+      color: var(--white);
+      background: var(--blue);
+    }
+
+    .concept-board {
+      display: grid;
+      grid-template-columns: minmax(260px, 0.8fr) minmax(0, 1.2fr);
+      gap: 18px;
+    }
+
+    .concept-story {
+      position: relative;
+      overflow: hidden;
+      min-height: 420px;
+      padding: 32px;
+      color: var(--white);
+      background: var(--ink);
+      border-radius: 26px;
+    }
+
+    .concept-story::before,
+    .concept-story::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+    }
+
+    .concept-story::before {
+      right: -42px;
+      top: -38px;
+      width: 150px;
+      height: 150px;
+      background: var(--violet);
+    }
+
+    .concept-story::after {
+      left: -34px;
+      bottom: -46px;
+      width: 160px;
+      height: 160px;
+      background: var(--coral);
+    }
+
+    .concept-story > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .concept-story .card-label {
+      display: inline-flex;
+      margin-bottom: 42px;
+      color: var(--mint);
+    }
+
+    .concept-story h3 {
+      max-width: 8ch;
+      margin-bottom: 20px;
+      font-size: 3.15rem;
+      font-weight: 900;
+      line-height: 0.9;
+      letter-spacing: -0.055em;
+    }
+
+    .concept-story p {
+      max-width: 31ch;
+      margin-bottom: 0;
+      color: #dfe7f3;
+    }
+
+    .concept-facts {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .fact-card {
+      min-height: 196px;
+      padding: 24px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+    }
+
+    .fact-card:nth-child(1) {
+      border-top: 8px solid var(--blue);
+    }
+
+    .fact-card:nth-child(2) {
+      border-top: 8px solid var(--coral);
+    }
+
+    .fact-card:nth-child(3) {
+      border-top: 8px solid var(--sun);
+    }
+
+    .fact-card:nth-child(4) {
+      border-top: 8px solid var(--mint);
+    }
+
+    .fact-card .card-label {
+      display: block;
+      margin-bottom: 14px;
+      color: var(--ink-soft);
+    }
+
+    .fact-card strong {
+      display: block;
+      margin-bottom: 8px;
+      font-family: var(--display);
+      font-size: 1.15rem;
+      line-height: 1.25;
+    }
+
+    .fact-card p {
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+
+    .loop-track {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 11px;
+      padding-top: 24px;
+    }
+
+    .loop-track::before {
+      content: "";
+      position: absolute;
+      top: 58px;
+      left: 7%;
+      right: 7%;
+      height: 4px;
+      background: var(--line);
+      border-radius: 999px;
+    }
+
+    .loop-step {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      justify-items: center;
+      text-align: center;
+    }
+
+    .loop-dot {
+      width: 70px;
+      height: 70px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 16px;
+      color: var(--ink);
+      background: var(--paper);
+      border: 4px solid var(--ink);
+      border-radius: 46% 54% 41% 59% / 58% 44% 56% 42%;
+      box-shadow: 4px 5px 0 var(--line);
+      font-family: var(--display);
+      font-size: 1.4rem;
+      font-weight: 900;
+      transform: rotate(-4deg);
+    }
+
+    .loop-step:nth-child(2) .loop-dot {
+      background: var(--sun);
+      transform: rotate(4deg);
+    }
+
+    .loop-step:nth-child(3) .loop-dot {
+      color: var(--white);
+      background: var(--coral);
+      transform: rotate(-2deg);
+    }
+
+    .loop-step:nth-child(4) .loop-dot {
+      background: var(--mint);
+      transform: rotate(5deg);
+    }
+
+    .loop-step:nth-child(5) .loop-dot {
+      color: var(--white);
+      background: var(--blue);
+      transform: rotate(-3deg);
+    }
+
+    .loop-step strong {
+      display: block;
+      margin-bottom: 5px;
+      font-family: var(--display);
+      font-size: 0.98rem;
+      line-height: 1.2;
+    }
+
+    .loop-step span {
+      max-width: 16ch;
+      color: var(--ink-soft);
+      font-size: 0.75rem;
+      line-height: 1.4;
+    }
+
+    .method-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .method-card {
+      min-height: 232px;
+      display: flex;
+      flex-direction: column;
+      padding: 25px;
+      background: var(--paper-blue);
+      border: 1px solid #c8d7f2;
+      border-radius: 20px;
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .method-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-small);
+    }
+
+    .method-icon {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 30px;
+      color: var(--white);
+      background: var(--blue);
+      border-radius: 13px;
+      font-family: var(--display);
+      font-weight: 900;
+      transform: rotate(-5deg);
+    }
+
+    .method-card:nth-child(2) .method-icon {
+      color: var(--ink);
+      background: var(--sun);
+      transform: rotate(4deg);
+    }
+
+    .method-card:nth-child(3) .method-icon {
+      background: var(--coral);
+    }
+
+    .method-card:nth-child(4) .method-icon {
+      color: var(--ink);
+      background: var(--mint);
+      transform: rotate(3deg);
+    }
+
+    .method-card:nth-child(5) .method-icon {
+      background: var(--violet);
+      transform: rotate(-2deg);
+    }
+
+    .method-card:nth-child(6) .method-icon {
+      background: var(--ink);
+      transform: rotate(5deg);
+    }
+
+    .method-card h3 {
+      margin-bottom: 8px;
+      font-size: 1.15rem;
+      line-height: 1.2;
+    }
+
+    .method-card p {
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: 0.86rem;
+      line-height: 1.5;
+    }
+
+    .progression {
+      position: relative;
+      display: grid;
+      gap: 12px;
+      max-width: 820px;
+      margin: 0 auto;
+    }
+
+    .progress-row {
+      display: grid;
+      grid-template-columns: 112px 1fr auto;
+      gap: 20px;
+      align-items: center;
+      padding: 19px 22px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+    }
+
+    .progress-stage {
+      font-family: var(--display);
+      font-weight: 900;
+    }
+
+    .progress-action {
+      color: var(--ink-soft);
+      font-size: 0.9rem;
+    }
+
+    .progress-shift {
+      width: 56px;
+      height: 12px;
+      overflow: hidden;
+      background: var(--line);
+      border-radius: 999px;
+    }
+
+    .progress-shift::after {
+      content: "";
+      display: block;
+      height: 100%;
+      width: var(--fill, 30%);
+      background: var(--blue);
+      border-radius: inherit;
+    }
+
+    .progress-24 {
+      --fill: 24%;
+    }
+
+    .progress-42 {
+      --fill: 42%;
+    }
+
+    .progress-61 {
+      --fill: 61%;
+    }
+
+    .progress-79 {
+      --fill: 79%;
+    }
+
+    .progress-94 {
+      --fill: 94%;
+    }
+
+    .progress-row:nth-child(2) .progress-shift::after {
+      background: var(--violet);
+    }
+
+    .progress-row:nth-child(3) .progress-shift::after {
+      background: var(--coral);
+    }
+
+    .progress-row:nth-child(4) .progress-shift::after {
+      background: var(--sun);
+    }
+
+    .progress-row:nth-child(5) .progress-shift::after {
+      background: var(--mint);
+    }
+
+    .validation-board {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .validation-card {
+      padding: 25px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+    }
+
+    .validation-card .card-label {
+      display: block;
+      margin-bottom: 12px;
+      color: var(--blue);
+    }
+
+    .validation-card h3 {
+      margin-bottom: 15px;
+      font-size: 1.35rem;
+    }
+
+    .checklist {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .checklist li {
+      position: relative;
+      padding-left: 29px;
+      color: var(--ink-soft);
+      font-size: 0.88rem;
+      line-height: 1.45;
+    }
+
+    .checklist li::before {
+      content: "";
+      position: absolute;
+      top: 0.2em;
+      left: 0;
+      width: 15px;
+      height: 15px;
+      background: var(--mint);
+      border: 2px solid var(--ink);
+      border-radius: 50% 45% 55% 44%;
+    }
+
+    .decision-banner {
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 24px;
+      align-items: center;
+      padding: 38px;
+      color: var(--white);
+      background: var(--ink);
+      border-radius: 26px;
+    }
+
+    .decision-banner::after {
+      content: "?";
+      position: absolute;
+      right: 18%;
+      bottom: -72px;
+      color: rgba(255, 255, 255, 0.08);
+      font-family: var(--display);
+      font-size: 13rem;
+      font-weight: 900;
+      line-height: 1;
+      transform: rotate(8deg);
+    }
+
+    .decision-banner > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .decision-banner .section-tag {
+      color: var(--sun);
+    }
+
+    .decision-banner h2 {
+      max-width: 18ch;
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.6rem);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -0.045em;
+    }
+
+    .decision-badge {
+      width: 154px;
+      height: 154px;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      color: var(--ink);
+      background: var(--sun);
+      border: 4px solid var(--white);
+      border-radius: 49% 51% 44% 56% / 58% 43% 57% 42%;
+      text-align: center;
+      font-family: var(--display);
+      font-size: 0.98rem;
+      font-weight: 900;
+      line-height: 1.2;
+      transform: rotate(5deg);
+    }
+
+    .proposal-footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 25px 60px 28px;
+      color: var(--ink-soft);
+      background: #f3f6fb;
+      font-family: var(--utility);
+      font-size: 0.68rem;
+      line-height: 1.45;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 1040px) {
+      .site-shell {
+        grid-template-columns: 1fr;
+      }
+
+      .proposal-rail {
+        position: static;
+        min-height: auto;
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        gap: 20px;
+        align-items: center;
+        padding: 16px 18px;
+      }
+
+      .proposal-rail::after,
+      .rail-note {
+        display: none;
+      }
+
+      .brand-mark,
+      .rail-footer {
+        margin: 0;
+        padding: 0;
+      }
+
+      .brand-title {
+        max-width: none;
+        font-size: 1.05rem;
+      }
+
+      .rail-nav {
+        display: flex;
+        overflow-x: auto;
+      }
+
+      .rail-nav a {
+        flex: 0 0 auto;
+      }
+
+      .print-button {
+        min-width: 112px;
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-copy {
+        max-width: 640px;
+      }
+
+      .play-map {
+        min-height: 410px;
+      }
+    }
+
+    @media (max-width: 760px) {
+      html,
+      body {
+        max-width: 100%;
+        overflow-x: hidden;
+      }
+
+      body {
+        font-size: 16px;
+      }
+
+      .site-shell {
+        width: min(calc(100% - 20px), var(--page-max));
+        margin-top: 10px;
+      }
+
+      .proposal-rail {
+        grid-template-columns: 1fr auto;
+        border-radius: 18px;
+      }
+
+      .brand-kicker,
+      .rail-nav,
+      .print-button {
+        display: none;
+      }
+
+      .proposal {
+        width: 100%;
+        min-width: 0;
+        border-radius: 24px;
+      }
+
+      .hero {
+        width: 100%;
+        min-width: 0;
+        min-height: auto;
+        gap: 22px;
+        padding: 48px 24px 70px;
+      }
+
+      .hero > *,
+      .hero-copy,
+      .play-map {
+        min-width: 0;
+        max-width: 100%;
+      }
+
+      h1 {
+        max-width: 100%;
+        font-size: clamp(3rem, 14vw, 4.15rem);
+        text-wrap: wrap;
+      }
+
+      .hero-summary {
+        font-size: 0.96rem;
+      }
+
+      .play-map {
+        min-height: 355px;
+      }
+
+      .map-card {
+        max-width: 178px;
+        padding: 13px 14px;
+      }
+
+      .map-card strong {
+        font-size: 0.88rem;
+      }
+
+      .map-card-top {
+        right: 0;
+      }
+
+      .map-card-bottom {
+        left: 0;
+      }
+
+      .fun-promise {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        margin: -30px 18px 0;
+        padding: 22px;
+        box-shadow: 6px 7px 0 var(--ink);
+      }
+
+      .promise-mark {
+        width: 45px;
+        height: 45px;
+        font-size: 1.6rem;
+      }
+
+      .content-section {
+        padding: 68px 24px;
+      }
+
+      .section-heading {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+
+      .overview-grid,
+      .method-grid,
+      .validation-board,
+      .concept-board,
+      .concept-facts {
+        grid-template-columns: 1fr;
+      }
+
+      .metric,
+      .method-card {
+        min-height: auto;
+      }
+
+      .concept-story {
+        min-height: 360px;
+      }
+
+      .loop-track {
+        grid-template-columns: 1fr;
+        gap: 14px;
+        padding-top: 0;
+      }
+
+      .loop-track::before {
+        top: 3%;
+        bottom: 3%;
+        left: 33px;
+        width: 4px;
+        height: auto;
+      }
+
+      .loop-step {
+        grid-template-columns: 70px 1fr;
+        gap: 16px;
+        align-items: center;
+        justify-items: start;
+        text-align: left;
+      }
+
+      .loop-dot {
+        margin-bottom: 0;
+      }
+
+      .loop-step span {
+        max-width: 30ch;
+      }
+
+      .progress-row {
+        grid-template-columns: 1fr;
+        gap: 5px;
+      }
+
+      .progress-shift {
+        margin-top: 8px;
+      }
+
+      .decision-banner {
+        grid-template-columns: 1fr;
+        padding: 30px 24px;
+      }
+
+      .decision-badge {
+        width: 125px;
+        height: 125px;
+        justify-self: end;
+      }
+
+      .proposal-footer {
+        flex-direction: column;
+        padding: 24px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+      }
+    }
+
+    @media print {
+      @page {
+        margin: 14mm;
+      }
+
+      html,
+      body {
+        background: var(--white);
+      }
+
+      body {
+        font-size: 11pt;
+      }
+
+      .skip-link,
+      .proposal-rail {
+        display: none !important;
+      }
+
+      .site-shell {
+        width: 100%;
+        display: block;
+        margin: 0;
+      }
+
+      .proposal {
+        overflow: visible;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+      }
+
+      .hero {
+        min-height: 0;
+        padding: 24mm 16mm;
+        break-after: page;
+      }
+
+      .fun-promise {
+        margin-top: -20px;
+      }
+
+      .content-section {
+        padding: 15mm 8mm;
+      }
+
+      .method-card,
+      .fact-card,
+      .validation-card,
+      .progress-row,
+      .reference-table-wrap {
+        break-inside: avoid;
+      }
+
+      .method-card:hover {
+        transform: none;
+        box-shadow: none;
+      }
+
+      .proposal-footer {
+        padding-inline: 8mm;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#proposal">Skip to proposal</a>
+
+  <div class="site-shell">
+    <aside class="proposal-rail" aria-label="Proposal navigation">
+      <div class="brand-mark">
+        <span class="brand-kicker">Play lab fieldbook</span>
+        <span class="brand-title">Learning game proposal</span>
+      </div>
+
+      <nav class="rail-nav" aria-label="Sections">
+        <a href="#overview"><span class="nav-index">01</span><span>Learner</span></a>
+        <a href="#reference"><span class="nav-index">02</span><span>Enhance</span></a>
+        <a href="#concept"><span class="nav-index">03</span><span>Concept</span></a>
+        <a href="#loop"><span class="nav-index">04</span><span>Play loop</span></a>
+        <a href="#methods"><span class="nav-index">05</span><span>Methods</span></a>
+        <a href="#progress"><span class="nav-index">06</span><span>Progress</span></a>
+        <a href="#validate"><span class="nav-index">07</span><span>Validate</span></a>
+      </nav>
+
+      <div class="rail-footer">
+        <button class="print-button" type="button" onclick="window.print()">Print proposal</button>
+        <p class="rail-note">Standalone HTML · responsive · print ready · no external assets</p>
+      </div>
+    </aside>
+
+    <main class="proposal" id="proposal">
+      <!-- [PROJECT] Replace the sample project content below. -->
+      <header class="hero">
+        <div class="hero-copy">
+          <span class="eyebrow">Concept proposal · Ages 6–8</span>
+          <h1>The Lantern Garden</h1>
+          <p class="hero-summary">
+            A gentle number-sense adventure where children become junior lightkeepers,
+            waking a sleepy garden by building tiny lantern creatures from number pairs.
+          </p>
+          <div class="hero-meta">
+            <span class="meta-pill">Number bonds to 10</span>
+            <span class="meta-pill">8–12 minute sessions</span>
+            <span class="meta-pill">Solo + family share</span>
+            <span class="meta-pill">Concept stage</span>
+          </div>
+        </div>
+
+        <div class="play-map">
+          <svg viewBox="0 0 430 430" role="img" aria-labelledby="map-title map-desc">
+            <title id="map-title">The play path</title>
+            <desc id="map-desc">A looping path connects invitation, action, feedback, growth, and replay.</desc>
+            <path d="M75 123 C75 39 222 26 320 88 C408 144 371 227 282 222 C174 216 113 258 139 337 C167 419 322 399 358 313"
+                  fill="none" stroke="#17304e" stroke-width="34" stroke-linecap="round"/>
+            <path d="M75 123 C75 39 222 26 320 88 C408 144 371 227 282 222 C174 216 113 258 139 337 C167 419 322 399 358 313"
+                  fill="none" stroke="#ffd84d" stroke-width="19" stroke-linecap="round" stroke-dasharray="2 32"/>
+            <circle cx="75" cy="123" r="34" fill="#ff6b57" stroke="#fffdf8" stroke-width="8"/>
+            <circle cx="325" cy="91" r="34" fill="#8de2c3" stroke="#fffdf8" stroke-width="8"/>
+            <circle cx="281" cy="222" r="34" fill="#a995ff" stroke="#fffdf8" stroke-width="8"/>
+            <circle cx="139" cy="338" r="34" fill="#ffd84d" stroke="#fffdf8" stroke-width="8"/>
+            <circle cx="358" cy="313" r="34" fill="#ff6b57" stroke="#fffdf8" stroke-width="8"/>
+            <text x="75" y="131" text-anchor="middle" fill="#fffdf8" font-size="25" font-weight="900">1</text>
+            <text x="325" y="99" text-anchor="middle" fill="#17304e" font-size="25" font-weight="900">2</text>
+            <text x="281" y="230" text-anchor="middle" fill="#fffdf8" font-size="25" font-weight="900">3</text>
+            <text x="139" y="346" text-anchor="middle" fill="#17304e" font-size="25" font-weight="900">4</text>
+            <text x="358" y="321" text-anchor="middle" fill="#fffdf8" font-size="25" font-weight="900">5</text>
+          </svg>
+          <div class="map-card map-card-top">
+            <span class="card-label">Invitation</span>
+            <strong>One mystery. One obvious move.</strong>
+          </div>
+          <div class="map-card map-card-bottom">
+            <span class="card-label">Replay</span>
+            <strong>The garden changes because the child did.</strong>
+          </div>
+        </div>
+      </header>
+
+      <aside class="fun-promise" aria-label="Fun promise">
+        <span class="promise-mark" aria-hidden="true">!</span>
+        <div>
+          <span class="section-tag">The fun promise</span>
+          <p>Pair glowing numbers, invent a lantern creature, and watch your garden wake up.</p>
+        </div>
+      </aside>
+
+      <!-- [LEARNER] -->
+      <section class="content-section" id="overview">
+        <div class="section-heading">
+          <div>
+            <span class="section-tag">Learner and context</span>
+            <h2>Design for this child, not “children.”</h2>
+          </div>
+          <p class="section-intro">
+            The concept assumes an early primary learner who understands counting but still
+            relies on objects or fingers to compose ten. Reading demand stays low; strategy
+            and confidence matter more than speed.
+          </p>
+        </div>
+
+        <div class="overview-grid">
+          <article class="metric">
+            <span class="metric-label">Learner</span>
+            <span class="metric-value">Ages 6–8, emerging independent readers</span>
+          </article>
+          <article class="metric">
+            <span class="metric-label">Learning goal</span>
+            <span class="metric-value">Compose and decompose numbers to 10</span>
+          </article>
+          <article class="metric">
+            <span class="metric-label">Play context</span>
+            <span class="metric-value">Short solo play with a shareable creation</span>
+          </article>
+          <article class="metric">
+            <span class="metric-label">Success evidence</span>
+            <span class="metric-value">Build, explain, and transfer a number pair</span>
+          </article>
+        </div>
+      </section>
+
+      <!-- [REFERENCE] Show how inspiration was enhanced rather than copied. -->
+      <section class="content-section" id="reference">
+        <div class="section-heading">
+          <div>
+            <span class="section-tag">Reference design enhancement</span>
+            <h2>Keep the reason. Improve the expression.</h2>
+          </div>
+          <p class="section-intro">
+            The reference contributes useful intent and mechanisms. Its surface choices are
+            adapted only when they strengthen this learner’s sense of agency, competence,
+            curiosity, and safety.
+          </p>
+        </div>
+
+        <div class="reference-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Reference signal</th>
+                <th scope="col">Decision</th>
+                <th scope="col">Enhanced direction</th>
+                <th scope="col">Why it fits better</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Begin without long instructions</td>
+                <td><span class="decision retain">Retain</span></td>
+                <td>The first number pair is completed through a playable demonstration.</td>
+                <td>Success teaches the rule faster than explanation.</td>
+              </tr>
+              <tr>
+                <td>Stars and world restoration</td>
+                <td><span class="decision adapt">Adapt</span></td>
+                <td>Correct strategies create unique lantern creatures and visible garden life.</td>
+                <td>Progress expresses competence instead of becoming a detached currency.</td>
+              </tr>
+              <tr>
+                <td>Always-present companion</td>
+                <td><span class="decision replace">Replace</span></td>
+                <td>A quiet moth guide appears only after hesitation or a request for help.</td>
+                <td>The child keeps authorship; support remains available without interruption.</td>
+              </tr>
+              <tr>
+                <td>Reward-focused success criteria</td>
+                <td><span class="decision add">Add</span></td>
+                <td>Track strategy change, emotional recovery, explanation, and transfer.</td>
+                <td>Enjoyment, comfort, and learning need separate evidence.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- [CONCEPT] -->
+      <section class="content-section" id="concept">
+        <div class="section-heading">
+          <div>
+            <span class="section-tag">Recommended concept</span>
+            <h2>Learning is the move that changes the world.</h2>
+          </div>
+          <p class="section-intro">
+            Children do not answer a worksheet and then receive entertainment. Pairing,
+            composing, and explaining numbers are the actions that grow the garden.
+          </p>
+        </div>
+
+        <div class="concept-board">
+          <article class="concept-story">
+            <span class="card-label">Fantasy and role</span>
+            <h3>Junior lightkeeper</h3>
+            <p>
+              Night has arrived early. Each lantern creature needs two number-glows that
+              combine to its target brightness. The child discovers which pairs make it wake.
+            </p>
+          </article>
+
+          <div class="concept-facts">
+            <article class="fact-card">
+              <span class="card-label">Core game verb</span>
+              <strong>Pair → build → explain</strong>
+              <p>Choose two glows, combine them, then show how the total was made.</p>
+            </article>
+            <article class="fact-card">
+              <span class="card-label">Meaningful choice</span>
+              <strong>Several pairs can work</strong>
+              <p>The child chooses a valid strategy and a creature form, not one obvious button.</p>
+            </article>
+            <article class="fact-card">
+              <span class="card-label">Game consequence</span>
+              <strong>The garden remembers</strong>
+              <p>Different number strategies produce different plants, light patterns, and paths.</p>
+            </article>
+            <article class="fact-card">
+              <span class="card-label">Learning evidence</span>
+              <strong>Production plus transfer</strong>
+              <p>The child constructs a pair, explains it, and uses it in a new garden problem.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- [LOOP] -->
+      <section class="content-section" id="loop">
+        <div class="section-heading">
+          <div>
+            <span class="section-tag">Core loop</span>
+            <h2>Five beats. One satisfying thought.</h2>
+          </div>
+          <p class="section-intro">
+            The shortest loop is clear enough to enter quickly and rich enough to support
+            different strategies. Feedback names what happened; it never replaces thinking.
+          </p>
+        </div>
+
+        <div class="loop-track">
+          <article class="loop-step">
+            <span class="loop-dot">1</span>
+            <div><strong>Notice</strong><span>A lantern needs a target glow.</span></div>
+          </article>
+          <article class="loop-step">
+            <span class="loop-dot">2</span>
+            <div><strong>Choose</strong><span>Pair two number-glows.</span></div>
+          </article>
+          <article class="loop-step">
+            <span class="loop-dot">3</span>
+            <div><strong>See</strong><span>The creature reacts to the total.</span></div>
+          </article>
+          <article class="loop-step">
+            <span class="loop-dot">4</span>
+            <div><strong>Explain</strong><span>Show or say how the pair works.</span></div>
+          </article>
+          <article class="loop-step">
+            <span class="loop-dot">5</span>
+            <div><strong>Revisit</strong><span>Try a new pair or garden need.</span></div>
+          </article>
+        </div>
+      </section>
+
+      <!-- [METHODS] -->
+      <section class="content-section" id="methods">
+        <div class="section-heading">
+          <div>
+            <span class="section-tag">Acceptance and enjoyment</span>
+            <h2>Invite. Support. Then step back.</h2>
+          </div>
+          <p class="section-intro">
+            Enjoyment grows from competence, autonomy, curiosity, and meaning—not pressure,
+            spectacle, or an endless prize economy.
+          </p>
+        </div>
+
+        <div class="method-grid">
+          <article class="method-card">
+            <span class="method-icon">01</span>
+            <h3>Playable first turn</h3>
+            <p>A moth silently demonstrates one move, then pauses so the child completes it.</p>
+          </article>
+          <article class="method-card">
+            <span class="method-icon">02</span>
+            <h3>Earned early success</h3>
+            <p>The first target allows several familiar pairs, so success is genuine but likely.</p>
+          </article>
+          <article class="method-card">
+            <span class="method-icon">03</span>
+            <h3>Safe mistakes</h3>
+            <p>A dim lantern reveals the mismatch and returns the pieces without loss or shame.</p>
+          </article>
+          <article class="method-card">
+            <span class="method-icon">04</span>
+            <h3>Bounded agency</h3>
+            <p>Children choose a strategy, creature form, and garden placement within a clear goal.</p>
+          </article>
+          <article class="method-card">
+            <span class="method-icon">05</span>
+            <h3>Meaningful growth</h3>
+            <p>The garden’s paths record explored number relationships rather than points collected.</p>
+          </article>
+          <article class="method-card">
+            <span class="method-icon">06</span>
+            <h3>Quiet accessibility</h3>
+            <p>No essential timer; color has shape partners; speech, touch, and keyboard have alternatives.</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- [PROGRESS] -->
+      <section class="content-section" id="progress">
+        <div class="section-heading">
+          <div>
+            <span class="section-tag">Progression and replay</span>
+            <h2>Keep the language. Deepen the thinking.</h2>
+          </div>
+          <p class="section-intro">
+            The interaction stays familiar while support, representation, and transfer distance
+            change one main dimension at a time.
+          </p>
+        </div>
+
+        <div class="progression">
+          <article class="progress-row">
+            <span class="progress-stage">Welcome</span>
+            <span class="progress-action">Copy a demonstrated pair with objects still visible.</span>
+            <span class="progress-shift progress-24" aria-hidden="true"></span>
+          </article>
+          <article class="progress-row">
+            <span class="progress-stage">Explore</span>
+            <span class="progress-action">Choose among several valid pairs and compare outcomes.</span>
+            <span class="progress-shift progress-42" aria-hidden="true"></span>
+          </article>
+          <article class="progress-row">
+            <span class="progress-stage">Master</span>
+            <span class="progress-action">Build from a target with fewer visual supports.</span>
+            <span class="progress-shift progress-61" aria-hidden="true"></span>
+          </article>
+          <article class="progress-row">
+            <span class="progress-stage">Transfer</span>
+            <span class="progress-action">Use number pairs to solve a new path or sharing problem.</span>
+            <span class="progress-shift progress-79" aria-hidden="true"></span>
+          </article>
+          <article class="progress-row">
+            <span class="progress-stage">Revisit</span>
+            <span class="progress-action">Invent a creature whose glow can be made two ways.</span>
+            <span class="progress-shift progress-94" aria-hidden="true"></span>
+          </article>
+        </div>
+      </section>
+
+      <!-- [VALIDATE] -->
+      <section class="content-section" id="validate">
+        <div class="section-heading">
+          <div>
+            <span class="section-tag">Concept validation</span>
+            <h2>Observe four truths separately.</h2>
+          </div>
+          <p class="section-intro">
+            A child can enjoy a game without learning, learn without wanting to return, or persist
+            while feeling uncomfortable. The concept should not collapse these signals into one score.
+          </p>
+        </div>
+
+        <div class="validation-board">
+          <article class="validation-card">
+            <span class="card-label">Acceptance</span>
+            <h3>Will the child begin?</h3>
+            <ul class="checklist">
+              <li>Understands the first action without a long explanation</li>
+              <li>Reaches an independent move quickly</li>
+              <li>Knows what changed after the move</li>
+            </ul>
+          </article>
+          <article class="validation-card">
+            <span class="card-label">Enjoyment</span>
+            <h3>Is the child choosing to continue?</h3>
+            <ul class="checklist">
+              <li>Shows curiosity about another pair or creature</li>
+              <li>Changes strategy rather than repeating blindly</li>
+              <li>Requests another round without reward pressure</li>
+            </ul>
+          </article>
+          <article class="validation-card">
+            <span class="card-label">Learning</span>
+            <h3>Can the child use the idea?</h3>
+            <ul class="checklist">
+              <li>Constructs a valid number pair independently</li>
+              <li>Explains the relationship in words or objects</li>
+              <li>Transfers it to a new representation</li>
+            </ul>
+          </article>
+          <article class="validation-card">
+            <span class="card-label">Comfort</span>
+            <h3>Can the child recover safely?</h3>
+            <ul class="checklist">
+              <li>Continues after a mismatch without embarrassment</li>
+              <li>Uses help without losing ownership</li>
+              <li>Experiences no avoidable sensory or motor barrier</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <!-- [DECISION] -->
+      <section class="content-section">
+        <div class="decision-banner">
+          <div>
+            <span class="section-tag">Next design decision</span>
+            <h2>Which visible garden change best helps a child explain the number strategy they used?</h2>
+          </div>
+          <span class="decision-badge">Test with a paper first turn</span>
+        </div>
+      </section>
+
+      <footer class="proposal-footer">
+        <span>Build Child Learning Course · Canonical HTML demo</span>
+        <span>Design philosophy → concept → method → validation</span>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

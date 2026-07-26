@@ -1,13 +1,13 @@
 ---
 name: draft-to-high-quality-prose
-description: Transform rough drafts, notes, academic prose, essays, long-form articles, speeches, scripts, reports, emails, HTML documents, or bilingual Chinese/English text into clear, fluent, high-quality prose and polished reading experiences. Use when the user asks to polish, rewrite, smooth, tighten, improve readability, remove AI-flavored or bureaucratic writing, strengthen sentence and paragraph flow, convert or enhance HTML presentation, create a premium editorial article page, modern letter-style HTML, quiet tech-style reading layout, executive summary, table of contents, key-point highlights, final takeaways, save Markdown/HTML outputs, open generated HTML previews, copy Markdown outputs to the liuskill Obsidian vault, or apply Liu Junqiang's "flow" method from Writing Is a Craft.
+description: Transform rough drafts, notes, academic prose, essays, long-form articles, speeches, scripts, reports, emails, HTML documents, or bilingual Chinese/English text into clear, fluent, high-quality prose and polished reading experiences. Use when the user asks to polish, rewrite, smooth, tighten, improve readability, remove AI-flavored or bureaucratic writing, strengthen sentence and paragraph flow, convert or enhance HTML presentation, keep long English text fully visible without horizontal sentence scrolling, create a premium editorial article page, modern letter-style HTML, quiet tech-style reading layout, executive summary, table of contents, key-point highlights, final takeaways, save Markdown/HTML outputs, open generated HTML previews, copy Markdown outputs to the liuskill Obsidian vault, or apply Liu Junqiang's "flow" method from Writing Is a Craft.
 ---
 
 # Draft To High Quality Prose
 
 Rewrite drafts by rebuilding the reader's path. Do not merely beautify wording. Preserve the user's meaning, facts, stance, names, numbers, citations, and necessary terminology while improving clarity, flow, structure, and rhythm.
 
-This skill uses a harness extracted from Liu Junqiang's "flow" framework in `references/liu-flow-framework.md`. Read that reference when the request is substantial, the draft is more than a few paragraphs, the user asks for diagnosis, or the prose has academic, bureaucratic, AI-flavored, or structural problems. For converted HTML, article-page design, visual enhancement, letter-style layouts, quiet tech aesthetics, or polished reading pages, also read `references/html-presentation.md`.
+This skill uses a harness extracted from Liu Junqiang's "flow" framework in `references/liu-flow-framework.md`. Read that reference when the request is substantial, the draft is more than a few paragraphs, the user asks for diagnosis, or the prose has academic, bureaucratic, AI-flavored, or structural problems. For converted HTML, article-page design, visual enhancement, letter-style layouts, quiet tech aesthetics, or polished reading pages, also read `references/html-presentation.md`. When the page contains English sentences, quotations, vocabulary examples, bilingual explanations, or long Latin-script text, also read `references/english-text-display.md` and use its components instead of improvising scrollable sentence boxes.
 
 ## Default Response Contract
 
@@ -26,7 +26,7 @@ For ordinary rewrite requests, return:
 
 If the user asks for only the revised text, return only the revised text. If the user asks for diagnosis, diagnose before rewriting and wait if they asked to review first.
 
-For HTML presentation requests, return or save a complete self-contained HTML document unless the user asks for a fragment. Preserve the core text and full context, but remove junk sentences, confusing phrasing, repetition, and needless complexity when it improves comprehension. Build a premium article reading page with a clear first screen, readable article column, executive summary when useful, table of contents for longer pieces, selective highlights, and final key takeaways that reflect the source without inventing new claims.
+For HTML presentation requests, return or save a complete self-contained HTML document unless the user asks for a fragment. Preserve the core text and full context, but remove junk sentences, confusing phrasing, repetition, and needless complexity when it improves comprehension. Build a premium article reading page with a clear first screen, readable article column, executive summary when useful, table of contents for longer pieces, selective highlights, a visible reading prompt, and final key takeaways that reflect the source without inventing new claims. Display English prose as readable prose, not as code: keep complete sentences visible through natural wrapping and reserve horizontal scrolling for genuine code, wide tables, or intrinsically non-wrappable data.
 
 ## Key Point Marking
 
@@ -53,8 +53,14 @@ For premium article HTML outputs:
 - **Center the article column in the viewport.** Do not push content with a left margin to clear a fixed TOC. Position the TOC and reading tip relative to the centered column using `calc()`. (See `references/html-presentation.md` for the CSS pattern.)
 - Align the article header, executive summary, main text column, and footer/takeaway text to the same article-column left edge — the centered column is the alignment anchor.
 - **TOC must always be visible.** On narrow screens, render it as a card in normal flow (below the summary, above the content). On wide screens (≥1180px), pin it as a fixed left-side rail using `calc()` relative to the centered article column. Never hide the TOC on any screen size.
+- Include one concise, content-specific `阅读提示` on every polished HTML reading page. It should tell readers how to approach the material, what to notice, or which question to keep in mind; it should not merely repeat the executive summary.
+- Display `阅读提示` in a dedicated right-side rail when the viewport is wide enough. At narrower widths, move the same prompt into normal flow near the summary or table of contents so it remains visible; do not hide or delete it at any breakpoint.
 - Keep `阅读提示` separate from `目录`; they must never overlap each other, the article text, the header, or the footer.
 - After generating HTML with fixed side rails, verify the rendered layout at the top and after scrolling: TOC left of content, reading tip outside content, and no overlapping boxes.
+- Put English sentences and quotations in semantic elements such as `<p lang="en">` or `<blockquote lang="en">`, not `<pre><code>`.
+- Let English prose wrap in full with `white-space: normal`, `overflow-wrap: break-word`, and `hyphens: none`; add `min-width: 0` to grid or flex children so text can shrink without forcing page overflow. Preserving whole words is especially important in language-learning examples.
+- Avoid fixed heights, clipped text, ellipsis, internal horizontal scroll, and `white-space: nowrap` on reading content. Use horizontal scrolling only where preserving an exact technical sequence matters more than continuous reading.
+- Use the shared display patterns in `references/english-text-display.md`; preview them in `assets/english-text-display-examples.html` when a consistent visual reference is useful.
 
 ## HTML Key Point Visual Design
 
@@ -161,6 +167,15 @@ Load `references/html-presentation.md` for:
 - rules for preserving text while cleaning confusing phrasing
 - key-point highlighting and final takeaway summaries
 - accessibility, performance, responsive behavior, and self-contained HTML output requirements
+
+Load `references/english-text-display.md` for:
+
+- full-width English sentence and quotation treatment without internal scrolling
+- responsive before/after and bilingual example layouts
+- defensive wrapping for URLs, identifiers, and other long unbroken strings
+- the shared visual vocabulary for labels, example panels, annotations, and compact comparison blocks
+
+Use `assets/english-text-display-examples.html` as the canonical rendered showcase for these patterns. Adapt its components and tokens to the article rather than copying every component into every page.
 
 Load `references/content-types.md` for:
 

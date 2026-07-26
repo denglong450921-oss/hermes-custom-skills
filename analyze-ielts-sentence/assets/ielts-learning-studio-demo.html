@@ -1,0 +1,1154 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>IELTS Memory Studio · 句子学习实验室</title>
+  <style>
+    :root {
+      --canvas: #f4f1e9;
+      --paper: #fffdf8;
+      --ink: #17233b;
+      --muted: #5f6775;
+      --indigo: #3347a8;
+      --indigo-soft: #e7eaff;
+      --jade: #087a68;
+      --jade-soft: #ddf4ec;
+      --amber: #a95d08;
+      --amber-soft: #fff0d8;
+      --rose: #a33b54;
+      --line: #d8d8d2;
+      --shadow: 0 18px 50px rgba(23, 35, 59, .08);
+      --radius: 22px;
+      --focus: 0 0 0 3px #fff, 0 0 0 6px #3347a8;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        linear-gradient(rgba(51, 71, 168, .035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(51, 71, 168, .035) 1px, transparent 1px),
+        var(--canvas);
+      background-size: 32px 32px;
+      font: 16px/1.65 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+    button:focus-visible, input:focus-visible, select:focus-visible,
+    a:focus-visible { outline: none; box-shadow: var(--focus); }
+    [hidden] { display: none !important; }
+
+    .skip-link {
+      position: fixed;
+      z-index: 20;
+      left: 1rem;
+      top: -5rem;
+      padding: .7rem 1rem;
+      color: white;
+      background: var(--ink);
+      border-radius: 10px;
+    }
+    .skip-link:focus { top: 1rem; }
+
+    .shell { width: min(1180px, calc(100% - 32px)); margin: 0 auto; }
+
+    .hero {
+      margin: 24px auto 18px;
+      padding: clamp(24px, 5vw, 56px);
+      border: 1px solid rgba(51, 71, 168, .18);
+      border-radius: 30px;
+      color: white;
+      background:
+        radial-gradient(circle at 82% 12%, rgba(255,255,255,.22), transparent 22%),
+        linear-gradient(135deg, #17233b 0%, #283b85 68%, #087a68 145%);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: #c9d1ff;
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 0; max-width: 740px; font-size: clamp(2rem, 6vw, 4.4rem); line-height: 1.02; }
+    .hero-copy { max-width: 680px; margin: 18px 0 0; color: #e8ebfa; font-size: 1.05rem; }
+
+    .session-meter {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: 28px;
+      max-width: 560px;
+    }
+    .session-meter progress { width: 100%; accent-color: #7ee0c9; }
+
+    .stage-nav {
+      position: sticky;
+      top: 10px;
+      z-index: 10;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin-bottom: 18px;
+      padding: 10px;
+      background: rgba(255, 253, 248, .9);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: 0 10px 26px rgba(23,35,59,.07);
+      backdrop-filter: blur(14px);
+    }
+    .stage-nav a {
+      padding: 10px;
+      color: var(--muted);
+      text-align: center;
+      text-decoration: none;
+      border-radius: 12px;
+    }
+    .stage-nav a:hover { color: var(--indigo); background: var(--indigo-soft); }
+    .stage-nav strong { display: block; color: var(--ink); font-size: .86rem; }
+
+    .studio-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 286px;
+      gap: 18px;
+      align-items: start;
+    }
+    .workspace { display: grid; gap: 18px; min-width: 0; }
+    .coach { position: sticky; top: 100px; display: grid; gap: 14px; }
+
+    .card {
+      padding: clamp(20px, 4vw, 34px);
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 8px 28px rgba(23, 35, 59, .05);
+    }
+    .card h2 { margin: 0 0 8px; font-size: clamp(1.45rem, 3vw, 2rem); line-height: 1.2; }
+    .card h3 { margin-top: 0; }
+    .stage-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      color: var(--indigo);
+      font-weight: 800;
+      font-size: .82rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .stage-kicker::before {
+      content: "";
+      width: 9px;
+      height: 9px;
+      background: currentColor;
+      border-radius: 50%;
+    }
+    .lead { margin-top: 0; color: var(--muted); }
+
+    .coach-card {
+      padding: 20px;
+      background: #17233b;
+      color: white;
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+    }
+    .coach-card h2 { margin: 0 0 8px; font-size: 1.05rem; }
+    .coach-card p { margin: 0; color: #d9deef; font-size: .93rem; }
+    .strategy-tag {
+      display: inline-block;
+      margin-bottom: 12px;
+      padding: 4px 9px;
+      color: #153a33;
+      background: #8fe3d0;
+      border-radius: 999px;
+      font-size: .75rem;
+      font-weight: 800;
+    }
+    .coach-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; }
+    .coach-stats div { padding: 10px; background: rgba(255,255,255,.08); border-radius: 12px; }
+    .coach-stats strong { display: block; font-size: 1.25rem; }
+
+    .english-unit {
+      display: grid;
+      gap: 10px;
+      margin: 18px 0;
+      padding: 18px;
+      background: #fbfaff;
+      border: 1px solid #dcdff5;
+      border-left: 5px solid var(--indigo);
+      border-radius: 16px;
+    }
+    .english-line { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: 1.15rem; }
+    .translation { margin: 0; color: #41516b; }
+    mark { padding: .08em .24em; color: inherit; background: #ffe2a3; border-radius: 4px; }
+    .highlight-note { margin: 0; color: var(--amber); font-size: .9rem; }
+
+    .audio-row, .button-row, .speed-row, .move-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      align-items: center;
+    }
+    .btn {
+      min-height: 44px;
+      padding: 9px 15px;
+      color: var(--ink);
+      background: white;
+      border: 1px solid #bfc5d4;
+      border-radius: 12px;
+      font-weight: 750;
+    }
+    .btn:hover { border-color: var(--indigo); color: var(--indigo); }
+    .btn.primary { color: white; background: var(--indigo); border-color: var(--indigo); }
+    .btn.jade { color: white; background: var(--jade); border-color: var(--jade); }
+    .btn.ghost { background: transparent; }
+    .btn[aria-pressed="true"] { color: white; background: var(--indigo); border-color: var(--indigo); }
+
+    .prediction-grid, .choice-grid {
+      display: grid;
+      gap: 10px;
+      margin: 18px 0;
+    }
+    .choice {
+      display: flex;
+      gap: 10px;
+      align-items: start;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: white;
+    }
+    .choice:has(input:checked) { border-color: var(--indigo); background: var(--indigo-soft); }
+
+    .chunk-map { display: grid; gap: 10px; margin: 18px 0; }
+    .chunk {
+      position: relative;
+      padding: 16px 16px 16px 48px;
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+    }
+    .chunk::before {
+      content: attr(data-step);
+      position: absolute;
+      left: 14px;
+      top: 15px;
+      display: grid;
+      place-items: center;
+      width: 24px;
+      height: 24px;
+      color: white;
+      background: var(--indigo);
+      border-radius: 50%;
+      font-size: .76rem;
+      font-weight: 800;
+    }
+    .chunk[hidden] { display: none; }
+
+    .micro-check {
+      margin-top: 20px;
+      padding: 18px;
+      background: var(--jade-soft);
+      border-radius: 16px;
+    }
+    .micro-check h3 { margin-bottom: 6px; }
+    .feedback { margin: 10px 0 0; font-weight: 700; }
+    .feedback.good { color: var(--jade); }
+    .feedback.try { color: var(--rose); }
+
+    .recall-panel {
+      padding: 22px;
+      text-align: center;
+      background: var(--amber-soft);
+      border: 1px dashed #d49c50;
+      border-radius: 18px;
+    }
+    .recall-panel .covered {
+      filter: blur(8px);
+      user-select: none;
+      opacity: .65;
+    }
+
+    .games { display: grid; gap: 18px; }
+    .memory-game {
+      padding: 20px;
+      background: #f8f8ff;
+      border: 1px solid #d7daef;
+      border-radius: 18px;
+    }
+    .memory-game header { display: flex; justify-content: space-between; gap: 12px; align-items: start; }
+    .memory-game h3 { margin-bottom: 4px; }
+    .game-label { color: var(--jade); font-weight: 800; font-size: .8rem; }
+
+    .chunk-order { display: grid; gap: 8px; margin: 16px 0; padding: 0; list-style: none; }
+    .chunk-order li {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      align-items: center;
+      padding: 10px;
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+    }
+    .move-row .btn { min-height: 38px; padding: 6px 10px; }
+
+    .match-board { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; }
+    .match-column { display: grid; gap: 8px; align-content: start; }
+    .match-card { min-height: 58px; text-align: left; }
+    .match-card.matched { color: #275649; background: var(--jade-soft); border-color: #68bca7; }
+
+    .transfer-frame {
+      padding: 18px;
+      color: white;
+      background: linear-gradient(135deg, #273a82, #1a665b);
+      border-radius: 18px;
+    }
+    .transfer-frame code { color: #fff1b9; font-family: Georgia, serif; white-space: normal; }
+
+    .sealed {
+      padding: 18px;
+      background: #f0edf9;
+      border: 1px solid #dad2ef;
+      border-radius: 18px;
+    }
+    .assessment-form { display: grid; gap: 14px; }
+    .summative-question {
+      padding: 18px;
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+    }
+    .summative-question.is-wrong { border-color: #d8899b; }
+    .summative-question.is-right { border-color: #75b9a9; }
+    .question-meta { color: var(--indigo); font-size: .78rem; font-weight: 800; letter-spacing: .06em; }
+    .field { width: 100%; min-height: 46px; padding: 10px 12px; border: 1px solid #aeb5c4; border-radius: 10px; }
+    .confidence {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+      padding: 0;
+      border: 0;
+    }
+    .confidence legend { width: 100%; margin-bottom: 4px; font-size: .88rem; font-weight: 750; }
+    .confidence label { padding: 7px 10px; border: 1px solid var(--line); border-radius: 10px; }
+    .confidence label:has(input:checked) { background: var(--amber-soft); border-color: #d49c50; }
+
+    .results {
+      margin-top: 18px;
+      padding: 24px;
+      background: #17233b;
+      color: white;
+      border-radius: 20px;
+    }
+    .score-line { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+    .score { font-size: 3rem; font-weight: 900; line-height: 1; }
+    .dimension-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 18px 0; }
+    .dimension-grid div { padding: 12px; background: rgba(255,255,255,.09); border-radius: 12px; }
+    .dimension-grid strong { display: block; font-size: 1.3rem; }
+    .review-plan { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .review-plan div { padding: 14px; color: var(--ink); background: var(--paper); border-radius: 12px; }
+
+    .audio-dock {
+      position: fixed;
+      z-index: 12;
+      right: 18px;
+      bottom: 18px;
+      width: min(430px, calc(100% - 36px));
+      padding: 12px;
+      background: rgba(255,253,248,.96);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+    }
+    .audio-dock audio { width: 100%; height: 36px; }
+    .audio-dock small { color: var(--muted); }
+
+    @media (max-width: 860px) {
+      .studio-grid { grid-template-columns: 1fr; }
+      .coach { position: static; grid-row: 1; }
+      .stage-nav { position: static; }
+      .dimension-grid, .review-plan { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 560px) {
+      .shell { width: min(100% - 20px, 1180px); }
+      .hero { margin-top: 10px; border-radius: 22px; }
+      .stage-nav { grid-template-columns: 1fr; }
+      .stage-nav a { display: flex; justify-content: space-between; text-align: left; }
+      .match-board, .dimension-grid, .review-plan { grid-template-columns: 1fr; }
+      .memory-game header { display: block; }
+      .audio-dock { right: 10px; bottom: 10px; width: calc(100% - 20px); }
+      body { padding-bottom: 135px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#lesson">跳到学习内容</a>
+
+  <header class="hero shell">
+    <p class="eyebrow">IELTS Memory Studio · UI Demo</p>
+    <h1>读懂，只是第一步。把句子带进记忆里。</h1>
+    <p class="hero-copy">用“观察—搭建—提取—迁移—复习”完成一次可测量的学习循环。练习分不等于掌握度，最终测评才决定本课结果。</p>
+    <div class="session-meter">
+      <span id="session-label">阶段 1 / 5</span>
+      <progress id="session-progress" max="5" value="1" aria-labelledby="session-label"></progress>
+    </div>
+  </header>
+
+  <nav class="stage-nav shell" aria-label="学习阶段">
+    <a href="#notice" data-stage="notice"><strong>01 观察</strong><span>先预测</span></a>
+    <a href="#build" data-stage="build"><strong>02 搭建</strong><span>看层级</span></a>
+    <a href="#recall" data-stage="recall"><strong>03 提取</strong><span>盖住再想</span></a>
+    <a href="#transfer" data-stage="transfer"><strong>04 迁移</strong><span>换题材</span></a>
+    <a href="#review" data-stage="review"><strong>05 复习</strong><span>测评诊断</span></a>
+  </nav>
+
+  <div class="studio-grid shell">
+    <main id="lesson" class="workspace">
+      <section id="notice" class="card" aria-labelledby="notice-title">
+        <span class="stage-kicker">Notice · 生成效应</span>
+        <h2 id="notice-title">先做一个不计分的判断</h2>
+        <p class="lead">先承诺一个答案，再学习。预测不会计入掌握度。</p>
+
+        <div class="english-unit">
+          <p class="english-line" lang="en">The growth of freight transport is <mark>due largely to structural changes</mark> in the economy.</p>
+          <p class="translation" lang="zh-CN">货运增长主要源于经济中的结构性变化。</p>
+          <p class="highlight-note">高亮部分是正式因果表达；largely 保留“主要但并非全部”的谨慎程度。</p>
+          <div class="audio-row">
+            <button class="btn tts-play" type="button" data-audio-src="ielts-assessment-workflow-example.mp3">▶ 播放原句</button>
+          </div>
+        </div>
+
+        <fieldset class="prediction-grid">
+          <legend>这句话的重点更接近哪一项？</legend>
+          <label class="choice"><input type="radio" name="prediction" value="detail"> 描述货运过程中的一个操作细节</label>
+          <label class="choice"><input type="radio" name="prediction" value="cause"> 解释货运增长背后的系统性原因</label>
+          <label class="choice"><input type="radio" name="prediction" value="opinion"> 表达作者对运输公司的态度</label>
+        </fieldset>
+        <div class="button-row">
+          <button id="commit-prediction" class="btn primary" type="button">提交预测</button>
+        </div>
+        <p id="prediction-feedback" class="feedback" aria-live="polite"></p>
+      </section>
+
+      <section id="build" class="card" aria-labelledby="build-title">
+        <span class="stage-kicker">Build · 分块</span>
+        <h2 id="build-title">从主干开始，一层层搭回去</h2>
+        <p class="lead">每次只揭示一个功能块，避免把长句当作一整堵墙。</p>
+
+        <div class="chunk-map progressive-reveal">
+          <article class="chunk" data-step="1">
+            <strong>主干：</strong>货运的增长 + 是由于……
+          </article>
+          <article class="chunk" data-step="2" hidden>
+            <strong>程度：</strong>largely 把原因限定为“主要原因”，不是“唯一原因”。
+          </article>
+          <article class="chunk" data-step="3" hidden>
+            <strong>原因核心：</strong>structural changes 指系统层面的结构变化。
+          </article>
+          <article class="chunk" data-step="4" hidden>
+            <strong>范围：</strong>in the economy 说明这些变化发生在经济体系中。
+          </article>
+        </div>
+        <button id="reveal-next" class="btn primary" type="button" data-reveal-next>揭示下一层</button>
+
+        <div class="english-unit">
+          <p class="english-line" lang="en"><mark>due largely to</mark></p>
+          <p class="translation" lang="zh-CN">主要由于；在正式论述中表达主要但非唯一原因。</p>
+          <p class="highlight-note">记忆钩子：due to 是“因”，largely 是“力度旋钮”。</p>
+          <button class="btn tts-play" type="button" data-audio-src="audio-demo/due-largely-to.mp3">▶ 播放搭配</button>
+        </div>
+
+        <div class="micro-check">
+          <h3>微检 1 · 立即解释</h3>
+          <p>如果删掉 largely，语气会怎样变化？</p>
+          <div class="button-row">
+            <button class="btn micro-answer" type="button" data-micro="weaker">原因更不确定</button>
+            <button class="btn micro-answer" type="button" data-micro="stronger">更像直接归因，谨慎程度下降</button>
+          </div>
+          <p id="micro-one" class="feedback" aria-live="polite"></p>
+        </div>
+      </section>
+
+      <section id="recall" class="card" aria-labelledby="recall-title">
+        <span class="stage-kicker">Recall · 提取练习</span>
+        <h2 id="recall-title">盖住中文，再从记忆里取出来</h2>
+        <p class="lead">重读会制造熟悉感；主动提取才能检验是否真的会。</p>
+
+        <div class="recall-panel">
+          <p id="recall-meaning">货运增长主要源于经济中的结构性变化。</p>
+          <div class="button-row" style="justify-content:center">
+            <button id="toggle-cover" class="btn" type="button" aria-pressed="false">盖住中文</button>
+            <button id="recall-done" class="btn jade" type="button">我已口头复述</button>
+          </div>
+        </div>
+
+        <div class="games">
+          <section class="memory-game" data-memory-strategy="chunking retrieval practice" aria-labelledby="forge-title">
+            <header>
+              <div>
+                <span class="game-label">GAME 01 · 句子锻造炉</span>
+                <h3 id="forge-title">重建句子顺序</h3>
+              </div>
+              <span>练习分 <strong id="forge-score">0</strong></span>
+            </header>
+            <p>用上移/下移按钮排列四个功能块。键盘和触屏都可操作。</p>
+
+            <div class="english-unit">
+              <ol id="chunk-order" class="chunk-order" lang="en">
+                <li data-key="c"><span>structural changes</span><span class="move-row"><button class="btn move-up" type="button" aria-label="上移 structural changes">↑</button><button class="btn move-down" type="button" aria-label="下移 structural changes">↓</button></span></li>
+                <li data-key="a"><span>The growth of freight transport</span><span class="move-row"><button class="btn move-up" type="button" aria-label="上移主语块">↑</button><button class="btn move-down" type="button" aria-label="下移主语块">↓</button></span></li>
+                <li data-key="d"><span>in the economy.</span><span class="move-row"><button class="btn move-up" type="button" aria-label="上移范围块">↑</button><button class="btn move-down" type="button" aria-label="下移范围块">↓</button></span></li>
+                <li data-key="b"><span>is due largely to</span><span class="move-row"><button class="btn move-up" type="button" aria-label="上移谓语块">↑</button><button class="btn move-down" type="button" aria-label="下移谓语块">↓</button></span></li>
+              </ol>
+              <p class="translation" lang="zh-CN">目标顺序：主语 → 因果谓语 → 原因核心 → 范围。</p>
+              <p class="highlight-note">高亮策略：<mark>先主干，后细节</mark>。这四块合起来就是完整原句。</p>
+              <button class="btn tts-play" type="button" data-audio-src="ielts-assessment-workflow-example.mp3">▶ 播放完整顺序</button>
+            </div>
+
+            <div class="button-row">
+              <button id="check-forge" class="btn primary" type="button">检查顺序</button>
+              <button id="reset-forge" class="btn" type="button">重新打乱</button>
+            </div>
+            <p id="forge-feedback" class="feedback" aria-live="polite"></p>
+          </section>
+
+          <section class="memory-game" data-memory-strategy="retrieval practice elaboration" aria-labelledby="pairs-title">
+            <header>
+              <div>
+                <span class="game-label">GAME 02 · 搭配配对站</span>
+                <h3 id="pairs-title">把表达和功能配成对</h3>
+              </div>
+              <span>练习分 <strong id="pair-score">0</strong></span>
+            </header>
+            <p>先选左侧表达，再选右侧功能。配错后会说明区别。</p>
+
+            <div class="english-unit">
+              <div class="match-board">
+                <div class="match-column" lang="en">
+                  <button class="btn match-card" type="button" data-side="left" data-pair="cause"><mark>due largely to</mark></button>
+                  <button class="btn match-card" type="button" data-side="left" data-pair="system">structural changes</button>
+                  <button class="btn match-card" type="button" data-side="left" data-pair="formal">can be attributed largely to</button>
+                </div>
+                <div class="match-column" lang="zh-CN">
+                  <button class="btn match-card" type="button" data-side="right" data-pair="formal">更正式的被动归因框架</button>
+                  <button class="btn match-card" type="button" data-side="right" data-pair="cause">主要由于</button>
+                  <button class="btn match-card" type="button" data-side="right" data-pair="system">系统层面的结构变化</button>
+                </div>
+              </div>
+              <p class="translation" lang="zh-CN">三组对应关系覆盖原因、系统变化和正式改写。</p>
+              <p class="highlight-note">高亮策略：不要孤立背词，把表达和它的<mark>写作功能</mark>绑定。</p>
+              <button class="btn tts-play" type="button" data-audio-src="audio-demo/collocation-set.mp3">▶ 播放三组表达</button>
+            </div>
+            <button id="reset-pairs" class="btn" type="button">重新配对</button>
+            <p id="pairs-feedback" class="feedback" aria-live="polite"></p>
+          </section>
+        </div>
+
+        <div class="micro-check">
+          <h3>微检 2 · 无提示提取</h3>
+          <label for="micro-cloze">根据“主要由于”写出三个词：</label>
+          <input id="micro-cloze" class="field" autocomplete="off">
+          <div class="button-row" style="margin-top:10px">
+            <button id="check-cloze" class="btn primary" type="button">检查</button>
+            <button id="cloze-hint" class="btn" type="button">使用提示</button>
+          </div>
+          <p id="cloze-feedback" class="feedback" aria-live="polite"></p>
+        </div>
+      </section>
+
+      <section id="transfer" class="card" aria-labelledby="transfer-title">
+        <span class="stage-kicker">Transfer · 迁移生成</span>
+        <h2 id="transfer-title">保留逻辑，替换话题</h2>
+        <p class="lead">迁移不是换几个同义词，而是保留因果关系、正式语域和谨慎程度。</p>
+
+        <div class="english-unit">
+          <p class="english-line" lang="en">The rise in remote work <mark>can be attributed largely to</mark> advances in communication technology.</p>
+          <p class="translation" lang="zh-CN">远程办公的增长主要可以归因于通信技术的进步。</p>
+          <p class="highlight-note">高亮部分把原句的正式因果关系迁移到了工作话题。</p>
+          <button class="btn tts-play" type="button" data-audio-src="audio-demo/transfer-example.mp3">▶ 播放迁移句</button>
+        </div>
+
+        <div class="transfer-frame">
+          <strong>万能框架</strong>
+          <p><code>The rise in X can be attributed largely to Y.</code></p>
+          <p>把 X 和 Y 换成教育、科技或城市生活中的内容。</p>
+        </div>
+
+        <div class="micro-check">
+          <h3>微检 3 · 框架生成</h3>
+          <label for="transfer-input">补全：在线课程的增长，主要可归因于数字平台普及。</label>
+          <input id="transfer-input" class="field" placeholder="输入中间的正式因果表达" autocomplete="off">
+          <button id="check-transfer" class="btn primary" type="button" style="margin-top:10px">检查表达</button>
+          <p id="transfer-feedback" class="feedback" aria-live="polite"></p>
+        </div>
+      </section>
+
+      <section id="review" class="card" aria-labelledby="review-title">
+        <span class="stage-kicker">Review · 交错测评</span>
+        <h2 id="review-title">8 题密封测评</h2>
+        <p class="lead">意义、结构、词汇、迁移各 2 题。提交前答案和解析保持隐藏。</p>
+
+        <div class="sealed">
+          <strong>测评规则</strong>
+          <p>每题先作答，再选择信心。信心不加分，只用于识别“很自信但理解错误”的误区。</p>
+        </div>
+
+        <form id="assessment" class="assessment-form" novalidate>
+          <article class="summative-question" data-question="q1" data-dimension="meaning" data-response-format="choice">
+            <span class="question-meta">01 · 意义理解 · 单选</span>
+            <h3>原句的核心功能是什么？</h3>
+            <label class="choice"><input type="radio" name="q1" value="a" required> 描述一种运输方式</label>
+            <label class="choice"><input type="radio" name="q1" value="b"> 解释货运增长的系统性原因</label>
+            <label class="choice"><input type="radio" name="q1" value="c"> 批评经济政策</label>
+            <fieldset class="confidence" data-confidence>
+              <legend>作答信心</legend>
+              <label><input type="radio" name="c1" value="low" required> 不确定</label>
+              <label><input type="radio" name="c1" value="medium"> 有点把握</label>
+              <label><input type="radio" name="c1" value="high"> 很有把握</label>
+            </fieldset>
+            <p class="feedback item-feedback" hidden></p>
+          </article>
+
+          <article class="summative-question" data-question="q2" data-dimension="meaning" data-response-format="choice">
+            <span class="question-meta">02 · 意义理解 · 单选</span>
+            <h3>largely 在原句中保留了什么含义？</h3>
+            <label class="choice"><input type="radio" name="q2" value="a" required> 这是唯一原因</label>
+            <label class="choice"><input type="radio" name="q2" value="b"> 这是主要但不一定唯一的原因</label>
+            <label class="choice"><input type="radio" name="q2" value="c"> 作者完全不确定</label>
+            <fieldset class="confidence" data-confidence>
+              <legend>作答信心</legend>
+              <label><input type="radio" name="c2" value="low" required> 不确定</label>
+              <label><input type="radio" name="c2" value="medium"> 有点把握</label>
+              <label><input type="radio" name="c2" value="high"> 很有把握</label>
+            </fieldset>
+            <p class="feedback item-feedback" hidden></p>
+          </article>
+
+          <article class="summative-question" data-question="q3" data-dimension="structure" data-response-format="choice">
+            <span class="question-meta">03 · 句子结构 · 单选</span>
+            <h3>句子的主语是哪一部分？</h3>
+            <label class="choice"><input type="radio" name="q3" value="a" required> 货运的增长</label>
+            <label class="choice"><input type="radio" name="q3" value="b"> 结构性变化</label>
+            <label class="choice"><input type="radio" name="q3" value="c"> 经济体系</label>
+            <fieldset class="confidence" data-confidence>
+              <legend>作答信心</legend>
+              <label><input type="radio" name="c3" value="low" required> 不确定</label>
+              <label><input type="radio" name="c3" value="medium"> 有点把握</label>
+              <label><input type="radio" name="c3" value="high"> 很有把握</label>
+            </fieldset>
+            <p class="feedback item-feedback" hidden></p>
+          </article>
+
+          <article class="summative-question" data-question="q4" data-dimension="structure" data-response-format="ordering">
+            <span class="question-meta">04 · 句子结构 · 排序</span>
+            <h3>按“主语—因果谓语—原因—范围”输入编号。</h3>
+            <p>① 主语　② 因果谓语　③ 原因核心　④ 范围</p>
+            <input class="field" name="q4" required placeholder="例如：1-2-3-4" autocomplete="off">
+            <fieldset class="confidence" data-confidence>
+              <legend>作答信心</legend>
+              <label><input type="radio" name="c4" value="low" required> 不确定</label>
+              <label><input type="radio" name="c4" value="medium"> 有点把握</label>
+              <label><input type="radio" name="c4" value="high"> 很有把握</label>
+            </fieldset>
+            <p class="feedback item-feedback" hidden></p>
+          </article>
+
+          <article class="summative-question" data-question="q5" data-dimension="vocabulary" data-response-format="fill">
+            <span class="question-meta">05 · 词汇搭配 · 填空</span>
+            <h3>根据“主要由于”写出三个词。</h3>
+            <input class="field" name="q5" required autocomplete="off">
+            <fieldset class="confidence" data-confidence>
+              <legend>作答信心</legend>
+              <label><input type="radio" name="c5" value="low" required> 不确定</label>
+              <label><input type="radio" name="c5" value="medium"> 有点把握</label>
+              <label><input type="radio" name="c5" value="high"> 很有把握</label>
+            </fieldset>
+            <p class="feedback item-feedback" hidden></p>
+          </article>
+
+          <article class="summative-question" data-question="q6" data-dimension="vocabulary" data-response-format="fill">
+            <span class="question-meta">06 · 词汇搭配 · 填空</span>
+            <h3>根据“结构性变化”写出两个词。</h3>
+            <input class="field" name="q6" required autocomplete="off">
+            <fieldset class="confidence" data-confidence>
+              <legend>作答信心</legend>
+              <label><input type="radio" name="c6" value="low" required> 不确定</label>
+              <label><input type="radio" name="c6" value="medium"> 有点把握</label>
+              <label><input type="radio" name="c6" value="high"> 很有把握</label>
+            </fieldset>
+            <p class="feedback item-feedback" hidden></p>
+          </article>
+
+          <article class="summative-question" data-question="q7" data-dimension="transfer" data-response-format="choice">
+            <span class="question-meta">07 · 话题迁移 · 单选</span>
+            <h3>哪种新话题最适合直接套用本课因果框架？</h3>
+            <label class="choice"><input type="radio" name="q7" value="a" required> 解释远程办公增长的主要原因</label>
+            <label class="choice"><input type="radio" name="q7" value="b"> 罗列三种颜色</label>
+            <label class="choice"><input type="radio" name="q7" value="c"> 描写一个人的外貌</label>
+            <fieldset class="confidence" data-confidence>
+              <legend>作答信心</legend>
+              <label><input type="radio" name="c7" value="low" required> 不确定</label>
+              <label><input type="radio" name="c7" value="medium"> 有点把握</label>
+              <label><input type="radio" name="c7" value="high"> 很有把握</label>
+            </fieldset>
+            <p class="feedback item-feedback" hidden></p>
+          </article>
+
+          <article class="summative-question" data-question="q8" data-dimension="transfer" data-response-format="production">
+            <span class="question-meta">08 · 话题迁移 · 受限生成</span>
+            <h3>完成正式框架：远程办公的增长，主要可以归因于技术进步。只填写中间的五词因果表达。</h3>
+            <input class="field" name="q8" required autocomplete="off">
+            <fieldset class="confidence" data-confidence>
+              <legend>作答信心</legend>
+              <label><input type="radio" name="c8" value="low" required> 不确定</label>
+              <label><input type="radio" name="c8" value="medium"> 有点把握</label>
+              <label><input type="radio" name="c8" value="high"> 很有把握</label>
+            </fieldset>
+            <p class="feedback item-feedback" hidden></p>
+          </article>
+
+          <div class="button-row">
+            <button class="btn primary" type="submit">提交并查看诊断</button>
+            <button id="clear-test" class="btn" type="button">提交前清空</button>
+          </div>
+          <p id="test-status" aria-live="polite">答案仍处于隐藏状态。</p>
+        </form>
+
+        <section id="results" class="results" tabindex="-1" hidden>
+          <div class="score-line">
+            <strong id="score" class="score">0%</strong>
+            <span id="mastery-label">等待测评</span>
+          </div>
+          <p id="score-note"></p>
+          <div id="dimension-grid" class="dimension-grid"></div>
+          <h3>信心校准</h3>
+          <p id="calibration"></p>
+          <h3>复习诊断</h3>
+          <p id="diagnosis"></p>
+          <ul id="drills"></ul>
+          <h3>间隔提取计划</h3>
+          <div class="review-plan">
+            <div><strong>10 分钟</strong><br>不看页面说出主干和两个搭配。</div>
+            <div><strong>1 天</strong><br>用打乱的功能块重建完整框架。</div>
+            <div><strong>3 天</strong><br>写一个新话题句并检查限定语。</div>
+          </div>
+          <div class="button-row" style="margin-top:18px">
+            <button id="retry-wrong" class="btn jade" type="button">只重做错题</button>
+            <button id="restart-lesson" class="btn" type="button">重新开始整课</button>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <aside class="coach" aria-label="记忆教练">
+      <section class="coach-card">
+        <span id="strategy-tag" class="strategy-tag">生成效应</span>
+        <h2>记忆教练</h2>
+        <p id="coach-message">先预测，不怕猜错。承诺答案会让后面的解释更容易留下痕迹。</p>
+        <div class="coach-stats">
+          <div><strong id="practice-points">0</strong><span>练习分</span></div>
+          <div><strong id="hint-count">0</strong><span>提示次数</span></div>
+        </div>
+      </section>
+      <section class="card" style="padding:18px">
+        <h2 style="font-size:1rem">掌握度 ≠ 游戏分</h2>
+        <p class="lead" style="margin-bottom:0">游戏用于练习；只有最后 8 题进入掌握度。</p>
+      </section>
+    </aside>
+  </div>
+
+  <div class="audio-dock" aria-label="共享音频播放器">
+    <audio id="shared-audio" controls preload="none"></audio>
+    <div class="speed-row" aria-label="播放速度">
+      <button class="btn" type="button" data-speed="0.6" aria-pressed="false">0.6x</button>
+      <button class="btn" type="button" data-speed="0.7" aria-pressed="true">0.7x</button>
+      <button class="btn" type="button" data-speed="0.8" aria-pressed="false">0.8x</button>
+      <button class="btn" type="button" data-speed="0.9" aria-pressed="false">0.9x</button>
+    </div>
+    <small id="audio-status" aria-live="polite">选择任一英语单元播放；默认 0.7x。</small>
+  </div>
+
+  <script>
+    (() => {
+      const $ = (selector, root = document) => root.querySelector(selector);
+      const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
+      const state = {
+        points: 0,
+        hints: 0,
+        weak: new Set(),
+        lastResults: [],
+        selectedMatch: { left: null, right: null },
+        matchedPairs: new Set()
+      };
+
+      const coach = {
+        notice: ["生成效应", "先预测，不怕猜错。承诺答案会让后面的解释更容易留下痕迹。"],
+        build: ["分块", "先抓主干，再把程度、原因和范围一层层接回去。"],
+        recall: ["提取练习", "先尝试回忆，再揭示答案。一次吃力的提取比三次顺滑重读更有效。"],
+        transfer: ["迁移", "保留逻辑关系和语域，只替换话题内容。"],
+        review: ["信心校准", "很有把握却答错的题优先复习，那通常是需要纠正的误区。"]
+      };
+
+      function setCoach(stage) {
+        const [tag, message] = coach[stage];
+        $("#strategy-tag").textContent = tag;
+        $("#coach-message").textContent = message;
+        const order = ["notice", "build", "recall", "transfer", "review"];
+        const value = order.indexOf(stage) + 1;
+        $("#session-progress").value = value;
+        $("#session-label").textContent = `阶段 ${value} / 5`;
+      }
+
+      function addPoints(value) {
+        state.points += value;
+        $("#practice-points").textContent = String(state.points);
+      }
+
+      const observer = new IntersectionObserver(entries => {
+        const visible = entries.filter(entry => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (visible) setCoach(visible.target.id);
+      }, { threshold: [.25, .55] });
+      ["notice", "build", "recall", "transfer", "review"].forEach(id => observer.observe(document.getElementById(id)));
+
+      $("#commit-prediction").addEventListener("click", () => {
+        const selected = $('input[name="prediction"]:checked');
+        const feedback = $("#prediction-feedback");
+        if (!selected) {
+          feedback.textContent = "请先选择一个预测；这一步不计分。";
+          feedback.className = "feedback try";
+          return;
+        }
+        feedback.textContent = selected.value === "cause"
+          ? "预测方向正确：句子在解释系统性原因。继续寻找语言证据。"
+          : "已记录。学习后再回来比较：关键证据是因果谓语和结构性变化。";
+        feedback.className = "feedback good";
+        addPoints(5);
+      });
+
+      $("#reveal-next").addEventListener("click", event => {
+        const hidden = $(".chunk[hidden]");
+        if (hidden) {
+          hidden.hidden = false;
+          addPoints(2);
+        }
+        if (!$(".chunk[hidden]")) {
+          event.currentTarget.textContent = "全部层级已揭示";
+          event.currentTarget.disabled = true;
+        }
+      });
+
+      $$(".micro-answer").forEach(button => {
+        button.addEventListener("click", () => {
+          const correct = button.dataset.micro === "stronger";
+          $("#micro-one").textContent = correct
+            ? "正确。删掉 largely 后，句子更像直接归因，失去“主要但非唯一”的限定。"
+            : "再想一步：largely 不是削弱“是否有原因”，而是限定“原因占多大比重”。";
+          $("#micro-one").className = `feedback ${correct ? "good" : "try"}`;
+          if (correct) addPoints(5); else state.weak.add("meaning");
+        });
+      });
+
+      $("#toggle-cover").addEventListener("click", event => {
+        const covered = $("#recall-meaning").classList.toggle("covered");
+        event.currentTarget.setAttribute("aria-pressed", String(covered));
+        event.currentTarget.textContent = covered ? "揭开中文" : "盖住中文";
+      });
+      $("#recall-done").addEventListener("click", () => {
+        addPoints(5);
+        $("#coach-message").textContent = "已完成一次主动提取。现在用结构游戏检验顺序记忆。";
+      });
+
+      function moveChunk(button, direction) {
+        const item = button.closest("li");
+        const sibling = direction === "up" ? item.previousElementSibling : item.nextElementSibling;
+        if (!sibling) return;
+        if (direction === "up") item.parentElement.insertBefore(item, sibling);
+        else item.parentElement.insertBefore(sibling, item);
+        button.focus();
+      }
+      $$(".move-up").forEach(button => button.addEventListener("click", () => moveChunk(button, "up")));
+      $$(".move-down").forEach(button => button.addEventListener("click", () => moveChunk(button, "down")));
+
+      const initialChunkOrder = ["c", "a", "d", "b"];
+      function setChunkOrder(keys) {
+        const list = $("#chunk-order");
+        const nodes = Object.fromEntries($$("li", list).map(item => [item.dataset.key, item]));
+        keys.forEach(key => list.append(nodes[key]));
+      }
+      $("#check-forge").addEventListener("click", () => {
+        const order = $$("#chunk-order li").map(item => item.dataset.key).join("");
+        const correct = order === "abcd";
+        $("#forge-feedback").textContent = correct
+          ? "锻造成功：先主语和因果谓语，再接原因核心与范围。"
+          : "还差一点。先锁定完整主干，再把原因核心和范围接到后面。";
+        $("#forge-feedback").className = `feedback ${correct ? "good" : "try"}`;
+        if (correct) {
+          $("#forge-score").textContent = "20";
+          addPoints(20);
+        } else state.weak.add("structure");
+      });
+      $("#reset-forge").addEventListener("click", () => {
+        setChunkOrder(initialChunkOrder);
+        $("#forge-feedback").textContent = "已重新打乱。";
+        $("#forge-feedback").className = "feedback";
+      });
+
+      $$(".match-card").forEach(button => {
+        button.addEventListener("click", () => {
+          if (button.classList.contains("matched")) return;
+          const side = button.dataset.side;
+          state.selectedMatch[side] = button;
+          $$(`[data-side="${side}"]`).forEach(card => card.setAttribute("aria-pressed", String(card === button)));
+          const left = state.selectedMatch.left;
+          const right = state.selectedMatch.right;
+          if (!left || !right) return;
+          const correct = left.dataset.pair === right.dataset.pair;
+          if (correct) {
+            left.classList.add("matched");
+            right.classList.add("matched");
+            left.disabled = true;
+            right.disabled = true;
+            state.matchedPairs.add(left.dataset.pair);
+            $("#pairs-feedback").textContent = "配对正确：把表达和写作功能一起储存，更容易在新话题中调用。";
+            $("#pairs-feedback").className = "feedback good";
+            addPoints(8);
+          } else {
+            $("#pairs-feedback").textContent = "暂不匹配：区分“原因连接”“系统变化”和“正式被动归因”三种功能。";
+            $("#pairs-feedback").className = "feedback try";
+            state.weak.add("vocabulary");
+          }
+          state.selectedMatch = { left: null, right: null };
+          if (state.matchedPairs.size === 3) $("#pair-score").textContent = "24";
+        });
+      });
+      $("#reset-pairs").addEventListener("click", () => {
+        state.matchedPairs.clear();
+        $$(".match-card").forEach(card => {
+          card.disabled = false;
+          card.classList.remove("matched");
+          card.setAttribute("aria-pressed", "false");
+        });
+        $("#pair-score").textContent = "0";
+        $("#pairs-feedback").textContent = "已重置配对。";
+      });
+
+      function normalized(value) {
+        return value.normalize("NFKC").toLowerCase().trim().replace(/[.!?。！？]+$/g, "").replace(/\s+/g, " ");
+      }
+      $("#check-cloze").addEventListener("click", () => {
+        const correct = normalized($("#micro-cloze").value) === "due largely to";
+        $("#cloze-feedback").textContent = correct
+          ? "提取成功。注意词序：due + largely + to。"
+          : "未命中。先想因果核心 due to，再把程度副词插在中间。";
+        $("#cloze-feedback").className = `feedback ${correct ? "good" : "try"}`;
+        if (correct) addPoints(8); else state.weak.add("vocabulary");
+      });
+      $("#cloze-hint").addEventListener("click", () => {
+        state.hints += 1;
+        $("#hint-count").textContent = String(state.hints);
+        $("#cloze-feedback").textContent = "提示：d__ l______ t_。提示次数只用于教练反馈，不影响掌握度。";
+      });
+
+      $("#check-transfer").addEventListener("click", () => {
+        const value = normalized($("#transfer-input").value);
+        const correct = value === "can be attributed largely to";
+        $("#transfer-feedback").textContent = correct
+          ? "迁移成功：正式语域和谨慎程度都保留了。"
+          : "检查五词框架：情态动词 + 被动归因 + 程度副词 + 介词。";
+        $("#transfer-feedback").className = `feedback ${correct ? "good" : "try"}`;
+        if (correct) addPoints(10); else state.weak.add("transfer");
+      });
+
+      const answers = (() => ({
+        q1: { accepted: ["b"], dimension: "meaning", answer: "解释货运增长的系统性原因", why: "因果谓语和结构性变化共同表明句子在解释系统原因。" },
+        q2: { accepted: ["b"], dimension: "meaning", answer: "主要但不一定唯一", why: "largely 限定原因的主要程度，没有宣称唯一性。" },
+        q3: { accepted: ["a"], dimension: "structure", answer: "货运的增长", why: "这一名词短语位于系动词和因果补语之前，是主语。" },
+        q4: { accepted: ["1-2-3-4", "1234", "1 2 3 4"], dimension: "structure", answer: "1-2-3-4", why: "先建立主干，再补原因核心和范围。" },
+        q5: { accepted: ["due largely to"], dimension: "vocabulary", answer: "due largely to", why: "largely 位于固定因果框架 due to 中间。" },
+        q6: { accepted: ["structural changes"], dimension: "vocabulary", answer: "structural changes", why: "该搭配表示系统层面的结构变化。" },
+        q7: { accepted: ["a"], dimension: "transfer", answer: "解释远程办公增长的主要原因", why: "同样需要正式表达“增长主要源于某原因”。" },
+        q8: { accepted: ["can be attributed largely to"], dimension: "transfer", answer: "can be attributed largely to", why: "这是原因果逻辑的正式被动改写。" }
+      }))();
+
+      function responseFor(id) {
+        const controls = $$(`[name="${id}"]`);
+        if (controls[0]?.type === "radio") return controls.find(control => control.checked)?.value || "";
+        return controls[0]?.value || "";
+      }
+      function confidenceFor(id) {
+        return $(`[name="c${id.slice(1)}"]:checked`)?.value || "";
+      }
+      function correctFor(id, value) {
+        return answers[id].accepted.map(normalized).includes(normalized(value));
+      }
+      function masteryLabel(percent) {
+        if (percent >= 90) return "熟练掌握";
+        if (percent >= 75) return "基本掌握";
+        if (percent >= 60) return "需要巩固";
+        return "建议重学";
+      }
+
+      $("#assessment").addEventListener("submit", event => {
+        event.preventDefault();
+        const form = event.currentTarget;
+        if (!form.checkValidity()) {
+          $("#test-status").textContent = "请完成每题作答和信心选择后再提交。";
+          form.reportValidity();
+          return;
+        }
+
+        const graded = Object.keys(answers).map(id => {
+          const response = responseFor(id);
+          const confidence = confidenceFor(id);
+          return { id, response, confidence, correct: correctFor(id, response), dimension: answers[id].dimension };
+        });
+        state.lastResults = graded;
+
+        graded.forEach(item => {
+          const question = $(`[data-question="${item.id}"]`);
+          question.classList.toggle("is-right", item.correct);
+          question.classList.toggle("is-wrong", !item.correct);
+          const feedback = $(".item-feedback", question);
+          feedback.textContent = `${item.correct ? "正确" : "需要复习"}｜正确答案：${answers[item.id].answer}｜${answers[item.id].why}`;
+          feedback.className = `feedback item-feedback ${item.correct ? "good" : "try"}`;
+          feedback.hidden = false;
+        });
+
+        const correct = graded.filter(item => item.correct).length;
+        const percent = Math.round(correct / 8 * 100);
+        $("#score").textContent = `${percent}%`;
+        $("#mastery-label").textContent = masteryLabel(percent);
+        $("#score-note").textContent = `${correct} / 8 题正确。本结果是本课掌握度，不是 IELTS band 估计；练习分未计入。`;
+
+        const dimensions = { meaning: "意义", structure: "结构", vocabulary: "词汇", transfer: "迁移" };
+        $("#dimension-grid").replaceChildren();
+        Object.entries(dimensions).forEach(([key, label]) => {
+          const items = graded.filter(item => item.dimension === key);
+          const count = items.filter(item => item.correct).length;
+          const box = document.createElement("div");
+          box.innerHTML = `<span>${label}</span><strong>${count} / 2</strong>`;
+          $("#dimension-grid").append(box);
+        });
+
+        const confidentCorrect = graded.filter(item => item.correct && item.confidence === "high").length;
+        const unsureCorrect = graded.filter(item => item.correct && item.confidence !== "high").length;
+        const confidentWrong = graded.filter(item => !item.correct && item.confidence === "high").length;
+        $("#calibration").textContent = `自信且正确 ${confidentCorrect} 题；不太自信但正确 ${unsureCorrect} 题；自信但错误 ${confidentWrong} 题。后者优先复习。`;
+
+        const dimensionScores = Object.keys(dimensions).map(key => ({
+          key,
+          score: graded.filter(item => item.dimension === key && item.correct).length
+        }));
+        const strongest = [...dimensionScores].sort((a, b) => b.score - a.score)[0];
+        const weak = dimensionScores.filter(item => item.score < 2).sort((a, b) => a.score - b.score);
+        $("#diagnosis").textContent = weak.length
+          ? `最稳定维度：${dimensions[strongest.key]}。优先补强：${weak.map(item => dimensions[item.key]).join("、")}。`
+          : `四个维度都已掌握；${dimensions[strongest.key]}最稳定。`;
+
+        const drillText = {
+          meaning: "盖住中文，用一句话说出主旨，再检查 largely 是否被保留。",
+          structure: "从主语和谓语开始，用四块按钮向外重建。",
+          vocabulary: "根据中文线索写出搭配，再口头造一个短句。",
+          transfer: "替换 X 和 Y，保留正式归因框架与谨慎程度。"
+        };
+        $("#drills").replaceChildren();
+        weak.forEach(item => {
+          const li = document.createElement("li");
+          li.textContent = `${dimensions[item.key]}微练习：${drillText[item.key]}`;
+          $("#drills").append(li);
+        });
+
+        $("#results").hidden = false;
+        $("#test-status").textContent = "测评已提交，答案和诊断现已显示。";
+        $("#results").focus({ preventScroll: true });
+        $("#results").scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+
+      $("#clear-test").addEventListener("click", () => {
+        $("#assessment").reset();
+        $$(".summative-question").forEach(question => {
+          question.classList.remove("is-right", "is-wrong");
+          $(".item-feedback", question).hidden = true;
+        });
+        $("#results").hidden = true;
+        $("#test-status").textContent = "作答已清空，答案仍处于隐藏状态。";
+        state.lastResults = [];
+      });
+
+      $("#retry-wrong").addEventListener("click", () => {
+        const wrong = state.lastResults.filter(item => !item.correct);
+        if (!wrong.length) {
+          $("#test-status").textContent = "本轮没有错题。请按间隔计划延迟提取。";
+          return;
+        }
+        state.lastResults.forEach(item => {
+          const question = $(`[data-question="${item.id}"]`);
+          if (item.correct) {
+            $$("input", question).forEach(input => { input.disabled = true; });
+            return;
+          }
+          $$("input", question).forEach(input => {
+            input.disabled = false;
+            if (input.type === "radio") input.checked = false;
+            else input.value = "";
+          });
+          question.classList.remove("is-right", "is-wrong");
+          $(".item-feedback", question).hidden = true;
+        });
+        $("#results").hidden = true;
+        $("#test-status").textContent = `已保留正确题，并重新密封 ${wrong.length} 道错题。`;
+        const first = $(`[data-question="${wrong[0].id}"] input`);
+        first.focus();
+        first.scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+
+      $("#restart-lesson").addEventListener("click", () => {
+        location.reload();
+      });
+
+      const audio = $("#shared-audio");
+      let speed = .7;
+      $$(".tts-play").forEach(button => {
+        button.addEventListener("click", async () => {
+          audio.src = button.dataset.audioSrc;
+          audio.playbackRate = speed;
+          try {
+            await audio.play();
+            $("#audio-status").textContent = `正在播放，速度 ${speed.toFixed(1)}x。`;
+          } catch {
+            $("#audio-status").textContent = "音频未能自动开始，请使用播放器的播放按钮。";
+          }
+        });
+      });
+      $$("[data-speed]").forEach(button => {
+        button.addEventListener("click", () => {
+          speed = Number(button.dataset.speed);
+          audio.playbackRate = speed;
+          $$("[data-speed]").forEach(item => item.setAttribute("aria-pressed", String(item === button)));
+          $("#audio-status").textContent = `播放速度已设为 ${speed.toFixed(1)}x。`;
+        });
+      });
+      audio.playbackRate = speed;
+    })();
+  </script>
+</body>
+</html>

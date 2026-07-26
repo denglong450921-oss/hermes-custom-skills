@@ -1,0 +1,4 @@
+interface:
+  display_name: "儿童互动课程构建器"
+  short_description: "用可复用精美 UI 构建可直接上课的儿童互动课件"
+  default_prompt: "Use $build-child-learning-course to create a ready-to-teach child course with a visually distinctive, agent-copyable UI, complete interactions, and validated offline assets."

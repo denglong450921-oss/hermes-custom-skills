@@ -1,0 +1,22 @@
+{
+  "name": "Unified Paradigm UI",
+  "version": "1.1.0",
+  "type": "ready-to-teach child learning course template",
+  "primaryPrinciple": "Visual appeal is the first learner-facing design principle and a completion criterion.",
+  "styleManifest": "ui-style.json",
+  "entry": "index.html",
+  "dailyPagePattern": "dayNN.html",
+  "dailyPages": 15,
+  "learningLoop": [
+    "previous-day retrieval",
+    "micro-lesson",
+    "fading practice",
+    "flip-card game",
+    "variation game",
+    "exit challenge"
+  ],
+  "offline": true,
+  "imageRenderer": "measurable CSS atlas surface with direct local URLs and preserved cell ratios",
+  "audioRenderer": "local Edge TTS MP3 through HTMLAudioElement",
+  "validation": "node tools/validate_template.js"
+}

@@ -12,9 +12,11 @@ The page should feel like a carefully typeset publication, not a dashboard full 
 - [Recommended Structure](#recommended-structure)
 - [Layout Specifications](#layout-specifications)
 - [Typography](#typography)
+- [English Text and Long Strings](#english-text-and-long-strings)
 - [Vertical Rhythm](#vertical-rhythm)
 - [Color and Contrast](#color-and-contrast)
 - [Summary and Table of Contents](#summary-and-table-of-contents)
+- [Reading Prompt Contract](#reading-prompt-contract)
 - [Cards, Callouts, and Highlights](#cards-callouts-and-highlights)
 - [Figures, Quotes, Lists, Tables, and Code](#figures-quotes-lists-tables-and-code)
 - [Links, Sidebar, and Reading Utilities](#links-sidebar-and-reading-utilities)
@@ -80,6 +82,7 @@ Use this structure for most long-form article outputs:
       <header class="article-header"></header>
       <aside class="article-summary"></aside>
       <nav class="table-of-contents"></nav>
+      <aside class="reading-tip" aria-labelledby="reading-tip-title"></aside>
       <div class="article-layout">
         <div class="article-content" id="content"></div>
         <aside class="article-sidebar"></aside>
@@ -146,6 +149,16 @@ Desktop with fixed side rails (centered article column):
   --toc-width: 248px;
 }
 
+.reading-tip {
+  width: min(100%, var(--content-width));
+  margin: 32px auto 0;
+  padding: 18px 20px;
+  background: var(--quote-bg);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 8px;
+}
+
 @media (min-width: 1180px) {
   main {
     max-width: var(--content-width);
@@ -176,6 +189,7 @@ Desktop with fixed side rails (centered article column):
     top: 104px;
     right: calc(50% - var(--content-width) / 2 - 260px);
     width: 220px;
+    margin: 0;
     max-height: calc(100vh - 128px);
     overflow-y: auto;
   }
@@ -267,6 +281,56 @@ Use a limited weight hierarchy:
 - Strong emphasis: `600-650`
 
 Avoid bolding entire paragraphs.
+
+## English Text and Long Strings
+
+English prose should read vertically with the rest of the article. Do not place ordinary sentences, quotations, vocabulary examples, or before/after rewrites in `<pre><code>` merely to create a styled box. That treatment preserves whitespace and often forces readers to scroll sideways.
+
+Use semantic prose elements and let them wrap:
+
+```html
+<figure class="sentence-feature">
+  <figcaption>Original sentence</figcaption>
+  <blockquote class="english-text" lang="en">
+    A complete English sentence remains visible and wraps naturally at word boundaries.
+  </blockquote>
+</figure>
+```
+
+```css
+.english-text {
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: normal;
+  hyphens: none;
+}
+
+.sentence-feature,
+.comparison-grid > *,
+.bilingual-row > * {
+  min-width: 0;
+}
+
+.unbroken-token {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+```
+
+Apply `overflow-wrap: anywhere` only to strings that may have no spaces, such as URLs, hashes, filenames, or generated identifiers. Normal English prose should prefer natural word boundaries.
+
+For language-learning or bilingual pages, use the shared featured-sentence, comparison, bilingual-row, and unbroken-token patterns in `english-text-display.md`. The canonical rendered reference is `../assets/english-text-display-examples.html`.
+
+English reading-content rules:
+
+- Keep the complete sentence visible without an internal horizontal scrollbar.
+- Avoid clipping, ellipsis, fixed-height text boxes, and `white-space: nowrap`.
+- Use `<p lang="en">` for model sentences and `<blockquote lang="en">` for quotations.
+- Preserve whole words with `hyphens: none` in language-learning examples; automatic hyphenation can make spelling and phrase boundaries harder to study.
+- Add `min-width: 0` to grid and flex children that contain text.
+- Collapse two-column comparisons to one column on narrow screens.
+- Keep code behavior separate: exact source code may scroll horizontally when wrapping would damage meaning.
 
 ## Vertical Rhythm
 
@@ -390,6 +454,38 @@ Mobile/narrow TOC:
 
 Always use real anchor links and correct heading IDs.
 
+## Reading Prompt Contract
+
+Every polished HTML reading page includes one visible reading prompt, labeled `阅读提示`, `Reading Prompt`, or an equivalent phrase in the page language. Its job is to orient the next reading action, not to summarize the entire article again.
+
+Good reading prompts may tell the reader to:
+
+- read the original passage once before opening the explanation
+- compare two versions and notice one specific structural difference
+- keep one guiding question in mind while reading
+- scan headings first, then return for evidence or examples
+- distinguish a surface phenomenon from the mechanism underneath it
+
+Keep the prompt concise: usually a short heading plus one to three sentences or bullets. Derive it from the actual content; avoid generic instructions such as “read carefully.”
+
+Visibility and placement rules:
+
+- Render the prompt as a semantic `<aside class="reading-tip">` with a labeled heading.
+- On wide desktop layouts with sufficient side space, place it in a dedicated right rail outside the article column.
+- Below the right-rail breakpoint, keep the same prompt in normal document flow near the summary or table of contents.
+- Never hide it with `display: none`, `visibility: hidden`, clipping, a collapsed disclosure, or an off-screen position.
+- Do not place it inside the TOC, inside the executive-summary card, or inside another card.
+- Keep it independent from the article body so a fixed version cannot cover text while scrolling.
+
+Recommended markup:
+
+```html
+<aside class="reading-tip" aria-labelledby="reading-tip-title">
+  <h2 id="reading-tip-title">阅读提示</h2>
+  <p>先读原文，再看结构拆解；第二遍只追踪每句话如何承接上一句。</p>
+</aside>
+```
+
 ## Cards, Callouts, and Highlights
 
 Use cards only for repeated or framed content:
@@ -485,6 +581,7 @@ Code:
 - Inline code gets subtle background and `5px` radius.
 - Code blocks need horizontal scrolling, language label when known, high contrast, `14-16px` font, `1.55-1.7` line-height, and `20-24px` padding.
 - Do not force line wrapping by default in code blocks.
+- Do not use code blocks for English prose, example sentences, quotations, vocabulary definitions, or rewritten passages. Those should use the wrapping prose patterns above.
 
 ## Links, Sidebar, and Reading Utilities
 
@@ -513,9 +610,9 @@ Fixed side-rail rules:
 
 - **Center the article column.** Position the TOC and reading tip relative to the centered column using `calc()`, not relative to viewport edges. The TOC should float beside the centered column without pushing it.
 - Keep the TOC and reading-tip/utility card in separate rails or separate normal-flow blocks; never stack a sticky card under a sticky TOC in the same narrow column if their boxes can overlap while scrolling.
-- For wide desktop layouts, a safe pattern is: fixed TOC on the left (positioned relative to the centered column), article column centered in the viewport, fixed or normal-flow reading tip on the right.
+- For wide desktop layouts, use a fixed TOC on the left, centered article column, and visible reading prompt on the right.
 - If the right reading tip is fixed, give it its own width and right offset (relative to the centered column); do not place it inside the article content box.
-- At narrower desktop widths, collapse the reading tip below the article content or keep it in normal flow so it cannot collide with the fixed left TOC.
+- At narrower desktop and mobile widths, keep the reading prompt in normal flow near the summary or TOC so it remains visible without colliding with the left rail.
 - After generating HTML with fixed side rails, verify the rendered boxes at the top and after scrolling: TOC left of content, reading tip outside content, and no overlap between TOC, reading tip, content, header, or footer.
 
 Optional utilities:
@@ -606,6 +703,10 @@ Unless the user requests otherwise:
 - include accessible contrast and focus states
 - keep print readability reasonable
 - ensure text fits on mobile
+- include one visible, content-specific reading prompt
+- place the reading prompt in the right rail when side space permits and keep it in normal flow otherwise
+- keep English prose fully visible without internal horizontal scrolling
+- defensively wrap unbroken URLs and identifiers so they cannot widen the page
 - do not rely on JavaScript for core reading
 
 If saving to disk, use a clear filename and open it only when the user asks or when preview/open behavior is part of the task.
@@ -621,11 +722,16 @@ Reading quality:
 - Paragraphs are distinguishable without huge gaps.
 - Headings create a clear argument map.
 - Highlighting is selective.
+- A content-specific reading prompt is present and visible.
+- On wide desktop, the reading prompt occupies the right rail; below that breakpoint, it remains visible in normal flow.
 - Fixed TOC and reading-tip/sidebar boxes do not overlap each other or the article content at top or scrolled positions.
 
 Mobile quality:
 
 - No horizontal page scrolling.
+- Long English sentences wrap at natural word boundaries and remain fully visible.
+- Sentence, quotation, and rewrite panels have no internal horizontal scrollbar, clipping, or ellipsis.
+- URLs and other unbroken strings wrap defensively without widening the document.
 - Text remains at least `16-17px`.
 - Tables and code remain usable.
 - Controls are easy to tap.
@@ -767,6 +873,24 @@ Use or adapt this skeleton for a self-contained article page:
       line-height: 1.3;
     }
 
+    .reading-tip {
+      width: min(100%, var(--content-width));
+      margin: 32px auto 0;
+      padding: 18px 20px;
+      background: var(--quote-bg);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: var(--radius);
+    }
+
+    .reading-tip h2 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+      line-height: 1.35;
+    }
+
+    .reading-tip p { margin: 0; }
+
     .article-layout {
       margin: 56px auto 0;
     }
@@ -839,6 +963,18 @@ Use or adapt this skeleton for a self-contained article page:
       border-top: 1px solid var(--border);
     }
 
+    @media (min-width: 1280px) {
+      .reading-tip {
+        position: fixed;
+        top: 104px;
+        right: 24px;
+        width: 220px;
+        margin: 0;
+        max-height: calc(100vh - 128px);
+        overflow-y: auto;
+      }
+    }
+
     @media (max-width: 860px) {
       body {
         font-size: 17px;
@@ -889,6 +1025,11 @@ Use or adapt this skeleton for a self-contained article page:
           <li>Key point two.</li>
           <li>Key point three.</li>
         </ul>
+      </aside>
+
+      <aside class="reading-tip" aria-labelledby="reading-tip-title">
+        <h2 id="reading-tip-title">阅读提示</h2>
+        <p>先快速浏览标题和摘要，再带着一个问题进入正文：作者如何从现象推进到原因与证据？</p>
       </aside>
 
       <div class="article-layout">
