@@ -1,6 +1,6 @@
 ---
 name: build-child-learning-course
-description: Develop and critique concept-only designs for child-friendly learning games and game-based courses across English, mathematics, Chinese, and other subjects. Use whenever a user asks for children's educational game ideas, an engaging learning-game concept, a playful course proposal, game mechanics children will readily accept, motivation or replayability methods, a high-level game-based learning plan, or an upgrade based on a reference proposal, inspiration, sample, or existing design. Extract and improve the useful principles in a reference rather than copying it rigidly. Return design philosophies, concepts, proposals, and methods—not courseware or product implementation. When the user explicitly requests a styled HTML proposal or template, present the same concept-only content with the bundled standalone proposal template.
+description: Develop and critique concept-only designs for child-friendly learning games and game-based courses across English, mathematics, Chinese, and other subjects. Use whenever a user asks for children's educational game ideas, an engaging learning-game concept, a playful course proposal, game mechanics children will readily accept, motivation or replayability methods, a high-level game-based learning plan, or an upgrade based on a reference proposal, inspiration, sample, or existing design. Extract and improve the useful principles in a reference rather than copying it rigidly. Return design philosophies, concepts, proposals, and methods—not courseware or product implementation. When the user explicitly requests a styled HTML proposal, template, or demo, use the bundled `demo.html` as the visual and structural basis, replacing its sample content with the new concept.
 ---
 
 # Build Child Learning Course
@@ -33,10 +33,11 @@ If the user asks for a finished digital product, provide a concept specification
 
 ### Presentation-only HTML exception
 
-When the user explicitly asks for an HTML proposal, design document, or template, adapt [assets/proposal-template.html](assets/proposal-template.html). This exception changes the presentation format, not the scope of the content.
+When the user explicitly asks for an HTML proposal, design document, template, or demo, adapt [demo.html](demo.html). Treat it as the skill's canonical presentation demo and as a basis for enhancement, not a rigid page that every proposal must copy. This exception changes the presentation format, not the scope of the content.
 
+- Start from `demo.html` rather than recreating a presentation from scratch.
 - Replace all sample content with the current proposal; use the HTML comments and section anchors as editing guides.
-- Preserve the proposal's information hierarchy while adapting its title, copy, accent choices, and examples to the concept.
+- Preserve the demo's clarity, visual rhythm, and information hierarchy while adapting its title, copy, accent choices, examples, and signature visual to the concept.
 - Keep it as one standalone, responsive, printable file with no external runtime dependencies.
 - Retain visible keyboard focus and reduced-motion behavior.
 - Check the result at desktop and 390px mobile widths.
