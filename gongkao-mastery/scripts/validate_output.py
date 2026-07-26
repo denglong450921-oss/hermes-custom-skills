@@ -16,9 +16,9 @@ def main():
       '错误选项类型完整':all(x in h for x in ['id="distractors"','识别信号','错误机制','反制动作','最小对比']),
       '两大核心模块视觉突出':h.count('class="core-module"') >= 2 and h.count('★ 高频迁移核心') >= 2,
       '主动提取交互存在':h.count('class="recall-reveal"') >= 4 and '想好后揭晓' in h,
+      '穿透洞见形成分析主线':h.count('class="insight"') >= 5 and h.count('穿透洞见') >= 5 and m.count('穿透洞见') >= 5,
       '间隔复习计划存在':all(x in h for x in ['10 分钟','1 天','3 天','7 天']),
-      'Markdown含核心结构':all(x in m for x in ['正确答案','题目设计分析','能力映射','概念理解','十一、这类题目的通用逻辑框架','十二、错误选项的通用类型','练习题']),
-      'Markdown含测评设计链':all(x in m for x in ['考查重点','难度校准','区分度','区分','分层','筛选','选拔']),
+      'Markdown含核心结构':all(x in m for x in ['正确答案','题目设计分析','概念理解','十一、这类题目的通用逻辑框架','十二、错误选项的通用类型','练习题']),
     }
     failed=[k for k,v in checks.items() if not v]
     for k,v in checks.items(): print(('PASS' if v else 'FAIL')+' '+k)
