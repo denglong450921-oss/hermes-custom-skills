@@ -1,22 +1,22 @@
 [
   {
     "id": 1,
-    "prompt": "Use $analyze-ielts-sentence to analyze: Technology is good for students.",
-    "expected": "Chinese IELTS coaching that starts with a simple core meaning, then gives a short correct version, a safe IELTS upgrade, high-frequency collocations, and avoids unnecessarily long complex sentences."
+    "prompt": "Use $analyze-ielts-sentence to analyze this sentence in chat: Although online learning platforms are often praised for giving students unprecedented access to educational resources, their actual impact on learning depends largely on whether students receive enough guidance to use those resources critically and consistently.",
+    "expected": "A Chinese ten-part analysis that starts with meaning and main structure, reveals clause hierarchy, pairs chunks bilingually, explains qualifiers and collocations, provides easier and formal paraphrases, gives a reusable transfer frame, and ends with a compact memory hook."
   },
   {
     "id": 2,
-    "prompt": "Use $analyze-ielts-sentence to analyze this long sentence: Although online learning platforms are often praised for giving students unprecedented access to educational resources, their actual impact on learning depends largely on whether students receive enough guidance to use those resources critically and consistently.",
-    "expected": "Chinese analysis that simplifies the long sentence first, breaks it into meaning chunks, identifies the learnable logic, provides a shorter IELTS version before an advanced version, and warns against memorizing the whole long sentence."
+    "prompt": "Use $analyze-ielts-sentence to build a polished mobile-friendly interactive HTML lesson for: Although public transport is expensive to build, it can reduce congestion and air pollution. Include pronunciation, learning games, and a final assessment.",
+    "expected": "A visually authored five-stage learning studio with progressive chunk reveal, bilingual local Edge TTS units, at least two accessible memory games, three formative checks, an eight-item four-dimension assessment, per-item confidence, calibration, adaptive retry, and spaced retrieval."
   },
   {
     "id": 3,
-    "prompt": "Use $analyze-ielts-sentence to improve my sentence: Many people use phone too much so they cannot talk with family very good.",
-    "expected": "Chinese feedback that corrects grammar first, then upgrades step by step from clear learner English to Band 6.5-7 and Band 7+ versions, with a compact memorisable sentence and a learnable IELTS paragraph."
+    "prompt": "Use $analyze-ielts-sentence to turn this learner sentence into an interactive lesson: Many people use phone too much so they cannot talk with family very good. Help me remember the corrected version and use it in IELTS writing.",
+    "expected": "A supportive correction-first lesson that distinguishes basic correction from IELTS upgrade, uses retrieval and structure/vocabulary games to memorize a compact version, assesses meaning/structure/vocabulary/transfer without leaking answers, and provides targeted feedback rather than rewarding game points as mastery."
   },
   {
     "id": 4,
-    "prompt": "Use $analyze-ielts-sentence to turn this into an interactive HTML lesson with pronunciation practice: Although public transport is expensive to build, it can reduce congestion and air pollution.",
-    "expected": "A complete HTML lesson in which every learner-facing English item—including chunks, collocations, examples, upgrades, model text, templates, quiz English, and submitted English feedback—is an audited bilingual unit with aligned Chinese, at least one explained semantic highlight, an exact locally generated Microsoft Edge TTS track, an individual play control, and shared accessible 0.6x/0.7x/0.8x/0.9x speed controls, while preserving the hidden-answer assessment and retry workflow."
+    "prompt": "Create an interactive IELTS sentence learning page from: The growth of freight transport is due largely to structural changes in the economy. Show me a UI demo with memory techniques.",
+    "expected": "A complete self-contained HTML learning studio matching the canonical demo contract and passing both bundled audits."
   }
 ]

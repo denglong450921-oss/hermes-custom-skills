@@ -1,0 +1,53 @@
+{
+  "skill_name": "analyze-ielts-sentence",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Use $analyze-ielts-sentence to create a polished, self-contained interactive HTML lesson for: Although public transport is expensive to build, it can reduce congestion and air pollution. Save it as lesson.html. Include pronunciation, learning games, and a final assessment.",
+      "expected_output": "A responsive bilingual five-stage learning studio with pedagogical interactions, local audio, sealed assessment, calibration, adaptive review, and spaced retrieval.",
+      "files": [],
+      "expectations": [
+        "lesson.html contains all five stages: notice, build, recall, transfer, and review.",
+        "lesson.html contains at least two accessible memory games with named memory strategies and replay controls.",
+        "The summative assessment has exactly eight questions, two for each of meaning, structure, vocabulary, and transfer, using at least three response formats.",
+        "Each final item collects confidence before checking and the results distinguish confident-wrong responses.",
+        "Correct answers and results remain hidden before final submission, and retry-wrong reseals wrong-item feedback.",
+        "Game points and hints are explicitly separate from mastery.",
+        "The result includes targeted weak-dimension drills and a 10-minute, 1-day, and 3-day retrieval plan.",
+        "Every learner-facing English unit includes aligned Chinese, a highlight note, and a local audio control with 0.6x–0.9x speeds."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Use $analyze-ielts-sentence to create a mobile-first interactive HTML learning studio for: Although online learning platforms are often praised for giving students unprecedented access to educational resources, their actual impact on learning depends largely on whether students receive enough guidance to use those resources critically and consistently. Save it as lesson.html.",
+      "expected_output": "A long-sentence lesson that progressively reveals clause hierarchy, teaches retrieval rather than passive rereading, and meets the full UI/game/assessment/audio contract.",
+      "files": [],
+      "expectations": [
+        "The page progressively decomposes the long sentence from main clause to dependent clauses and modifiers.",
+        "The page contains cover-and-recall or cloze retrieval, plus at least two pedagogically relevant memory games.",
+        "The layout is responsive at 320px, has semantic landmarks, visible focus styling, aria-live feedback, and reduced-motion support.",
+        "The assessment has eight sealed scored items balanced across four dimensions and uses at least three formats.",
+        "Confidence calibration and adaptive review prioritize confident-wrong misconceptions.",
+        "The page provides a reusable writing frame and a constrained new-topic transfer task.",
+        "Bilingual local-audio units and all four slow-speed controls are present.",
+        "Practice metrics remain separate from the final mastery calculation."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Use $analyze-ielts-sentence to turn this learner sentence into a polished interactive HTML lesson: Many people use phone too much so they cannot talk with family very good. Correct it, help me remember a compact IELTS-ready version, and teach me to transfer the idea. Save it as lesson.html.",
+      "expected_output": "A correction-first learning studio with scaffolded upgrades, memory-based practice, fair assessment, and a usable transfer pattern.",
+      "files": [],
+      "expectations": [
+        "The lesson clearly separates the basic grammatical correction, a compact IELTS-safe version, and a more formal upgrade.",
+        "The learner practices the corrected sentence through retrieval and at least two accessible memory games.",
+        "The page teaches why article, adverb, and family-communication choices change rather than only showing replacements.",
+        "The eight-item assessment balances meaning, structure, vocabulary, and transfer and keeps answers hidden until submit.",
+        "Each assessed response includes confidence and contributes to calibration without changing mastery points.",
+        "Wrong-answer retry preserves correct items, hides wrong-item answers again, and focuses the first wrong task.",
+        "Weak skills produce specific micro-drills and a 10-minute, 1-day, 3-day review plan.",
+        "Every authored English learning unit is paired with Chinese, an explained highlight, and local Edge TTS audio."
+      ]
+    }
+  ]
+}

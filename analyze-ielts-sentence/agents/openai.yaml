@@ -1,4 +1,4 @@
 interface:
-  display_name: "IELTS Sentence Coach"
-  short_description: "Analyze, test, and strengthen IELTS sentences"
-  default_prompt: "Use $analyze-ielts-sentence to turn this sentence into an IELTS lesson with an interactive mastery test."
+  display_name: "IELTS Memory Studio"
+  short_description: "Analyze IELTS sentences with retrieval games and calibrated assessment"
+  default_prompt: "Use $analyze-ielts-sentence to turn this sentence into a bilingual interactive learning studio with memory games, slow audio, and a confidence-calibrated mastery test."
