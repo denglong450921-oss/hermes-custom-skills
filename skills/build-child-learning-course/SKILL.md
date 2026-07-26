@@ -1,6 +1,6 @@
 ---
 name: build-child-learning-course
-description: Build, revise, and validate complete ready-to-teach interactive courseware for children across English, mathematics, Chinese, and other subjects. Use whenever a user asks to create, make, design, or deliver a child learning course, multi-day curriculum, lesson pages, educational games, pronunciation practice, mastery checks, or a playful learning website—even when they describe it as a plan. Unless the user explicitly asks for concepts only, deliver a working offline HTML course with real content, functional games, feedback, progress, responsive UI, and validation; do not stop at philosophies, mockups, proposals, or descriptions. Use the bundled `demo.html` as visual inspiration and improve it for the learner rather than copying it rigidly.
+description: Build, revise, and validate complete ready-to-teach interactive courseware for children across English, mathematics, Chinese, and other subjects. Use whenever a user asks to create, make, design, or deliver a child learning course, multi-day curriculum, lesson pages, educational games, pronunciation practice, mastery checks, or a playful learning website—even when they describe it as a plan. Unless the user explicitly asks for concepts only, deliver a working offline HTML course with real content, functional games, feedback, progress, child-ready visual quality, dedicated daily pages for long courses, responsive UI, and validation; do not stop at philosophies, mockups, proposals, or descriptions. Use the bundled `demo.html` as visual inspiration and improve it for the learner rather than copying it rigidly.
 ---
 
 # Build Child Learning Course
@@ -15,6 +15,7 @@ The course is not complete until:
 - every lesson contains the actual teaching content, questions, answers, and feedback;
 - every described game is a working interaction rather than a card explaining future gameplay;
 - audio, images, data, styles, and scripts are available locally when they are part of the request;
+- every pronunciation or listening course uses pre-generated local MP3 as its primary audio; browser or system speech synthesis is never the delivered audio source;
 - progress, replay, reset, difficulty, responsive layout, and accessibility behavior work;
 - the course runs offline under `file://` with no runtime network dependency;
 - representative learning paths pass real-browser validation.
@@ -44,7 +45,7 @@ Determine or reasonably infer:
 - subject, scope, duration, daily study time, and mastery target;
 - learning environment, offline or device constraints, and adult support;
 - output language, pronunciation model, accessibility needs, and delivery folder;
-- whether the user needs recorded audio, a ZIP, or both.
+- whether the user needs a ZIP; treat recorded local audio as required whenever pronunciation or listening is a learning objective.
 
 Ask only when an unknown would materially change the curriculum or assets. Otherwise state the assumption and continue building.
 
@@ -146,7 +147,8 @@ For English:
 - connect sound, print, meaning, and use;
 - pair each word with a clean picture that does not print the answer;
 - provide a short memorable phrase when requested;
-- include word and phrase pronunciation;
+- generate separate local Edge TTS MP3 files for every word and every phrase;
+- store the word-audio and phrase-audio paths on the same content record as the text, image, answer, and feedback;
 - use familiar vocabulary rather than obscure words chosen only to satisfy a pattern;
 - test listening, picture recognition, spoken recall, and short-phrase use.
 
@@ -157,7 +159,7 @@ Populate every promised day with its complete content. Verify requested totals p
 For a multi-day HTML course, normally deliver:
 
 - `index.html` with the course map, objectives, progress, and entry links;
-- one dedicated page per day or an equally clear offline routing structure;
+- one dedicated `dayNN.html` page per day for courses of 10 or more days; use a single-page router only when the user explicitly asks for it;
 - local shared CSS, JavaScript, structured course data, images, fonts, and audio;
 - a consistent learner-facing navigation pattern on desktop and mobile;
 - actual renderers for review, micro-lesson, fading example, games, and exit challenge;
@@ -171,12 +173,29 @@ For a multi-day HTML course, normally deliver:
 
 Avoid local `fetch()` dependencies. Load course data from a local script such as `window.COURSE_DATA`. Do not use CDNs, analytics, remote images, remote fonts, or runtime TTS requests.
 
-If recorded pronunciation is requested, generate local audio before delivery, test a sample voice, and map every file from the same content record used for the visible item and answer.
+### Treat pronunciation audio as a build artifact
+
+Whenever pronunciation, listening, phonics, spoken vocabulary, or oral language is part of the course:
+
+- use Microsoft Edge TTS during the build to pre-generate local MP3 files;
+- default English child-facing content to `en-US-AnaNeural` unless the requested accent or learner context requires another appropriate Microsoft Neural voice;
+- generate one deterministic `<key>-word.mp3` and one `<key>-phrase.mp3` for every English learning item;
+- test a short sample before the full batch, then generate the full set with `scripts/generate_edge_tts_audio.py`;
+- keep generation-time network use separate from the delivered course: the finished HTML must play local files and remain fully offline;
+- implement speed, repeat, cancellation, replay, and playing-state controls with `HTMLAudioElement`;
+- use browser `speechSynthesis` only as an explicitly labeled emergency fallback for a missing or undecodable file, never as the primary audio implementation;
+- fail validation when any expected MP3 is absent, empty, undecodable, or mapped to the wrong item.
+
+Do not silently omit recorded audio or substitute system speech. If Edge TTS generation is blocked, report the blocker before claiming the course is complete.
 
 ## 7. Build a child-ready visual and interaction system
 
 Choose one coherent world, mascot, map, or story motif that persists across all days.
 
+- Make the learner-facing UI unmistakably playful and age-appropriate. An adult dashboard, proposal page, or generic component gallery is a visual QA failure even when it is technically functional.
+- Use coherent, high-quality local raster images or custom illustrations as the primary semantic visuals. Do not use emoji, Unicode glyphs, icon-font pictures, or mixed-quality placeholders as substitutes for vocabulary or concept images.
+- Map every learning item to a deliberate image or visual model from the same content record. Keep assessment images free of printed answer labels and crop them so the intended subject remains clear at card size.
+- Keep one illustration language across the course. When generating atlases or sprites, verify every panel, item-to-panel mapping, source dimension, crop position, and decoded local file before delivery.
 - Use large touch targets, short instructions, readable contrast, and low reading burden.
 - Let the first successful action teach the interaction instead of front-loading instructions.
 - Make learning progress visibly change something meaningful in the course world.
@@ -213,7 +232,10 @@ Run [references/qa-checklist.md](references/qa-checklist.md) and verify in a rea
 - flip-card order changes across reloads and replay;
 - opened flip cards reveal and play the correct mapped content;
 - every listening question has exactly one correct option;
+- the expected Edge TTS MP3 count matches the audio-bearing content records, every MP3 decodes, and the page references local audio paths;
 - feedback, retries, scoring, progress restore, and reset work;
+- the file count includes the promised dedicated daily HTML pages, and every page contains the complete shared teaching loop rather than a placeholder;
+- every learning item has a valid local image mapping, every image decodes at its intended dimensions, and no core learning visual is emoji-only;
 - no answer label leaks through testing images;
 - desktop and 390px mobile layouts stay within bounds;
 - keyboard focus, contrast, reduced motion, and `aria-live` feedback remain usable;
