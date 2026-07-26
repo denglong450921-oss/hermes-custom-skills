@@ -1,6 +1,6 @@
 ---
 name: build-child-learning-course
-description: Develop and critique concept-only designs for child-friendly learning games and game-based courses across English, mathematics, Chinese, and other subjects. Use whenever a user asks for children's educational game ideas, an engaging learning-game concept, a playful course proposal, game mechanics children will readily accept, motivation or replayability methods, or a high-level game-based learning plan. Return only design philosophies, concepts, proposals, and methods—not HTML, code, assets, prototypes, production files, or implementation work.
+description: Develop and critique concept-only designs for child-friendly learning games and game-based courses across English, mathematics, Chinese, and other subjects. Use whenever a user asks for children's educational game ideas, an engaging learning-game concept, a playful course proposal, game mechanics children will readily accept, motivation or replayability methods, a high-level game-based learning plan, or an upgrade based on a reference proposal, inspiration, sample, or existing design. Extract and improve the useful principles in a reference rather than copying it rigidly. Return only design philosophies, concepts, proposals, and methods—not HTML, code, assets, prototypes, production files, or implementation work.
 ---
 
 # Build Child Learning Course
@@ -37,6 +37,34 @@ If the user asks for a finished digital product, provide a concept specification
 - Read [references/game-patterns.md](references/game-patterns.md) before selecting mechanics. Treat it as a library of learner actions and evidence types, not as a software specification.
 - Read the relevant part of [references/subject-patterns.md](references/subject-patterns.md) when the request names a school subject. Extract only the learning representations and activity ideas.
 - Do not use the implementation specification, QA checklist, visual build rules, or bundled scripts for this concept-only workflow.
+
+## Reference Design Enhancement
+
+When the user supplies a reference design, read it completely and use it as evidence and inspiration—not as a specification to follow line by line. The reference should improve the proposal without narrowing the design to its particular theme, structure, assumptions, or favorite mechanics.
+
+Extract four layers:
+
+1. **Intent:** the child need, learning purpose, emotional goal, and success condition.
+2. **Mechanisms:** the play actions, onboarding, feedback, progression, motivation, and safety ideas that may cause the intended result.
+3. **Surface expression:** the world, characters, colors, rewards, activity names, layout ideas, and story treatment.
+4. **Assumptions and gaps:** the age range, context, evidence, accessibility, feasibility, and tradeoffs the reference leaves untested.
+
+Evaluate each useful element against the actual learner, subject, play context, and learning objective. Then make one of four decisions:
+
+- **Retain** an element when its rationale and fit are already strong.
+- **Adapt** an element when the underlying idea is useful but its expression, difficulty, or context should change.
+- **Replace** an element when it creates friction, weakens the learning-play connection, or conflicts with dignity, accessibility, or safety.
+- **Add** an element when the reference overlooks a need that materially affects acceptance, enjoyment, or learning.
+
+Favor synthesis over imitation. A supplied island world, animal companion, star economy, color palette, mini-game set, session duration, or rollout plan is an option, not a default. Preserve the reason behind a strong idea while finding a better expression for the current child and context.
+
+When a reference is present, include a compact enhancement table before the final concept:
+
+| Reference signal | Decision | Enhanced direction | Why it fits better |
+|---|---|---|---|
+| [Principle or feature, paraphrased] | Retain / Adapt / Replace / Add | [Resulting design choice] | [Learner-, play-, or learning-based rationale] |
+
+Paraphrase rather than reproducing long passages. Do not borrow distinctive names, characters, worlds, or wording unless the user explicitly asks to preserve them.
 
 ## 1. Frame the child and the play context
 
@@ -110,6 +138,8 @@ Build enjoyment from competence, autonomy, curiosity, and connection:
 
 Use celebration to acknowledge effort, strategy, and improvement. Do not rely on streak anxiety, loss pressure, endless variable rewards, shaming, deceptive scarcity, ads, purchases, or compulsive retention patterns.
 
+Treat stars, collectibles, companions, decorations, maps, and world restoration as optional motivation patterns. Use them only when they make effort or growing competence visible; replace them when creative expression, humor, discovery, cooperation, or story consequences would be more meaningful for the child.
+
 ## 6. Shape the core loop and progression
 
 Describe the shortest satisfying loop:
@@ -129,6 +159,8 @@ Then show how the same familiar loop deepens:
 - **Revisit:** create a fresh reason to replay rather than merely increasing quantity or speed.
 
 For a multi-session course, prefer a small, coherent family of reusable mechanics. Familiarity lowers interface effort; novelty should come from decisions, content, combinations, and consequences.
+
+Increase challenge legibly. Change one main difficulty dimension at a time—such as number of choices, similarity of distractors, amount of support, number of steps, or transfer distance—so the child can form a strategy and the designer can understand why performance changed. When the child struggles repeatedly, propose a recovery path that clarifies the action, restores a useful hint, reduces irrelevant load, or offers an easier rehearsal without punishment.
 
 ## 7. Offer a small concept portfolio
 
@@ -180,6 +212,9 @@ Use the user's language and adapt the length to the request.
 
 ## Fun promise
 [One child-facing sentence]
+
+## Reference design enhancement
+[When a reference is supplied: a compact Retain / Adapt / Replace / Add table]
 
 ## Recommended game concept
 - Fantasy or role:
