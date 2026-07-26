@@ -58,6 +58,10 @@ Run applicable checks before delivery.
 - [ ] Game controls accept real learner responses; they are not static descriptions.
 - [ ] Completed, retry, and current states are visually and textually clear.
 - [ ] Local progress restores after reload.
+- [ ] Every visible learning image has a positive rendered width and height.
+- [ ] Every `<img>` decodes with `naturalWidth > 0`; every background/sprite has a computed `backgroundImage` other than `none`.
+- [ ] Empty background-image elements use block, grid, or flex layout with an explicit width and height/aspect ratio.
+- [ ] A fresh reload of the versioned CSS/JavaScript shows the corrected UI on the actual daily page.
 
 ## Content mappings
 
@@ -123,6 +127,7 @@ Test representative interactions in a real browser:
 6. verify desktop and mobile bounding boxes.
 7. complete a block, reload, and verify saved progress.
 8. enable and disable responsive motion.
+9. inspect a learning image in review, micro-lesson, flip-card, and exit views; confirm each has visible pixels, not only a mapped file.
 
 ## Delivery
 

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ff7b97">
+  <meta name="color-scheme" content="light">
+  <title>第3天｜身体小地图｜100词声音邮局</title>
+  <link rel="stylesheet" href="assets/styles.css?v=20260726-image-fix">
+</head>
+<body class="lesson-page" data-day="3">
+  <a class="skip-link" href="#lesson-panel">跳到今日任务</a>
+  <header class="lesson-topbar">
+    <a class="mini-brand" href="index.html" aria-label="返回课程首页">
+      <span class="brand-bird" aria-hidden="true"><i></i></span>
+      <span><strong>声音邮局</strong><small>第 3 封来信</small></span>
+    </a>
+    <div class="audio-controls" aria-label="发音设置">
+      <span class="edge-label">Edge MP3</span>
+      <label>语速
+        <select id="speech-rate">
+          <option value="0.7">慢速</option>
+          <option value="0.85" selected>标准</option>
+          <option value="1">稍快</option>
+        </select>
+      </label>
+      <label>重复
+        <select id="speech-repeat">
+          <option value="1">1遍</option>
+          <option value="2">2遍</option>
+          <option value="3">3遍</option>
+        </select>
+      </label>
+      <button class="soft-button" id="motion-toggle" type="button" aria-pressed="false">动效开</button>
+    </div>
+  </header>
+
+  <div class="lesson-layout">
+    <aside class="day-drawer" aria-label="15天课程目录">
+      <div class="drawer-top"><a href="index.html">← 全部来信</a><strong>课程路线</strong></div>
+      <nav class="day-links" id="day-list"></nav>
+      <button class="soft-button reset-day" id="reset-day" type="button">重玩今天</button>
+    </aside>
+
+    <main class="lesson-main">
+      <section class="daily-cover" id="day-hero"></section>
+      <div class="learning-balance" aria-label="学习与提取练习比例">
+        <span class="balance-learn"><b>30%</b> 学一学</span>
+        <span class="balance-test"><b>70%</b> 想一想、玩一玩</span>
+      </div>
+      <nav class="mission-tabs" id="stage-tabs" aria-label="今日六段任务"></nav>
+      <section class="mission-panel" id="lesson-panel" tabindex="-1"></section>
+      <nav class="page-turner" aria-label="前后日课">
+        <a href="day02.html">← 第 2 天</a>
+        <a href="day04.html">第 4 天 →</a>
+      </nav>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="assets/course-data.js?v=20260726-image-fix"></script>
+  <script src="assets/app.js?v=20260726-image-fix"></script>
+</body>
+</html>

@@ -1,6 +1,6 @@
 ---
 name: build-child-learning-course
-description: Build, revise, and validate complete ready-to-teach interactive courseware for children across English, mathematics, Chinese, and other subjects. Use whenever a user asks to create, make, design, or deliver a child learning course, multi-day curriculum, lesson pages, educational games, pronunciation practice, mastery checks, or a playful learning website—even when they describe it as a plan. Unless the user explicitly asks for concepts only, deliver a working offline HTML course with real content, functional games, feedback, progress, child-ready and cost-aware visual quality, dedicated daily pages for long courses, responsive UI, and validation; do not stop at philosophies, mockups, proposals, or descriptions. Use the bundled `demo.html` as visual inspiration and improve it for the learner rather than copying it rigidly.
+description: Build, revise, and validate complete ready-to-teach interactive courseware for children across English, mathematics, Chinese, and other subjects. Use whenever a user asks to create, make, design, or deliver a child learning course, multi-day curriculum, lesson pages, educational games, pronunciation practice, mastery checks, or a playful learning website—even when they describe it as a plan. Unless the user explicitly asks for concepts only, deliver a working offline HTML course with real content, functional games, feedback, progress, child-ready and cost-aware visual quality, dedicated daily pages for long courses, responsive UI, and validation; do not stop at philosophies, mockups, proposals, or descriptions. Start from the bundled Unified Paradigm UI project when it fits, then adapt it rather than copying it rigidly.
 ---
 
 # Build Child Learning Course
@@ -30,6 +30,7 @@ If the user explicitly requests only a philosophy, concept, proposal, or method,
 - Read [references/visual-design.md](references/visual-design.md) before creating the learner-facing UI.
 - Read [references/implementation-spec.md](references/implementation-spec.md) before writing the course files.
 - Read [references/qa-checklist.md](references/qa-checklist.md) before final validation.
+- Copy [assets/unified-paradigm-ui](assets/unified-paradigm-ui) as the preferred working project for a multi-day offline HTML course. Run its `node tools/validate_template.js` before and after adaptation.
 - Inspect [demo.html](demo.html) for visual rhythm, hierarchy, color discipline, accessibility, and responsive behavior. Adapt its design principles to the child-facing course; do not reuse its adult proposal layout unchanged.
 - Use `scripts/scaffold_course.py` when a multi-page course needs a consistent starting structure, then replace every scaffold placeholder with real structured content and renderers.
 - Use `scripts/validate_game_diversity.py` and `scripts/validate_course_balance.py` for compatible generated courses.
@@ -173,6 +174,16 @@ For a multi-day HTML course, normally deliver:
 
 Avoid local `fetch()` dependencies. Load course data from a local script such as `window.COURSE_DATA`. Do not use CDNs, analytics, remote images, remote fonts, or runtime TTS requests.
 
+### Start from the Unified Paradigm UI
+
+Use the bundled [assets/unified-paradigm-ui](assets/unified-paradigm-ui) project as the default implementation starting point when the request needs a multi-day, game-based offline course:
+
+- copy the complete folder into the delivery workspace; never make the delivered course depend on paths inside the installed skill;
+- preserve its separate index and daily pages, six-stage 30/70 loop, responsive navigation, progress/reset behavior, audio controls, and escalating flip-card architecture unless the learner contract requires a change;
+- replace the sample curriculum, visual world, asset mappings, storage key, title, and instructions with the requested course;
+- reuse sample images or audio only when they are semantically correct and their usage rights fit; the template is an implementation paradigm, not mandatory subject matter;
+- keep `template.json` and `tools/validate_template.js` synchronized with structural changes, and run the validator before packaging.
+
 ### Treat pronunciation audio as a build artifact
 
 Whenever pronunciation, listening, phonics, spoken vocabulary, or oral language is part of the course:
@@ -239,6 +250,9 @@ Run [references/qa-checklist.md](references/qa-checklist.md) and verify in a rea
 - feedback, retries, scoring, progress restore, and reset work;
 - the file count includes the promised dedicated daily HTML pages, and every page contains the complete shared teaching loop rather than a placeholder;
 - every learning item has a valid local image mapping, every image decodes at its intended dimensions, ready-made resources have compatible usage rights, and no core learning item relies only on a platform-dependent Unicode glyph;
+- every visible learning-image surface has a nonzero rendered rectangle and either a decoded `<img>` (`naturalWidth > 0`) or a computed background image other than `none`; file existence alone does not prove that an image is visible;
+- every empty element used as a background or sprite surface is `display: block`, grid, or flex with explicit width and height/aspect ratio; prefer a direct local image URL and verify any CSS-variable indirection in computed styles;
+- version local CSS and JavaScript URLs after renderer fixes, reload the actual daily page rather than a retired hash route, and reject results produced by stale cached assets;
 - no answer label leaks through testing images;
 - desktop and 390px mobile layouts stay within bounds;
 - keyboard focus, contrast, reduced motion, and `aria-live` feedback remain usable;

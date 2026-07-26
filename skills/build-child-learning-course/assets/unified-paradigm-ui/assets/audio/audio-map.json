@@ -1,0 +1,413 @@
+{
+  "provider": "Microsoft Edge TTS",
+  "voice": "en-US-AnaNeural",
+  "rate": "-5%",
+  "pitch": "+0Hz",
+  "volume": "+0%",
+  "itemCount": 100,
+  "fileCount": 200,
+  "generated": 199,
+  "skipped": 1,
+  "audio": {
+    "hello": {
+      "word": "hello-word.mp3",
+      "phrase": "hello-phrase.mp3"
+    },
+    "hi": {
+      "word": "hi-word.mp3",
+      "phrase": "hi-phrase.mp3"
+    },
+    "name": {
+      "word": "name-word.mp3",
+      "phrase": "name-phrase.mp3"
+    },
+    "i": {
+      "word": "i-word.mp3",
+      "phrase": "i-phrase.mp3"
+    },
+    "you": {
+      "word": "you-word.mp3",
+      "phrase": "you-phrase.mp3"
+    },
+    "yes": {
+      "word": "yes-word.mp3",
+      "phrase": "yes-phrase.mp3"
+    },
+    "no": {
+      "word": "no-word.mp3",
+      "phrase": "no-phrase.mp3"
+    },
+    "mom": {
+      "word": "mom-word.mp3",
+      "phrase": "mom-phrase.mp3"
+    },
+    "dad": {
+      "word": "dad-word.mp3",
+      "phrase": "dad-phrase.mp3"
+    },
+    "baby": {
+      "word": "baby-word.mp3",
+      "phrase": "baby-phrase.mp3"
+    },
+    "brother": {
+      "word": "brother-word.mp3",
+      "phrase": "brother-phrase.mp3"
+    },
+    "sister": {
+      "word": "sister-word.mp3",
+      "phrase": "sister-phrase.mp3"
+    },
+    "family": {
+      "word": "family-word.mp3",
+      "phrase": "family-phrase.mp3"
+    },
+    "love": {
+      "word": "love-word.mp3",
+      "phrase": "love-phrase.mp3"
+    },
+    "head": {
+      "word": "head-word.mp3",
+      "phrase": "head-phrase.mp3"
+    },
+    "eye": {
+      "word": "eye-word.mp3",
+      "phrase": "eye-phrase.mp3"
+    },
+    "ear": {
+      "word": "ear-word.mp3",
+      "phrase": "ear-phrase.mp3"
+    },
+    "nose": {
+      "word": "nose-word.mp3",
+      "phrase": "nose-phrase.mp3"
+    },
+    "mouth": {
+      "word": "mouth-word.mp3",
+      "phrase": "mouth-phrase.mp3"
+    },
+    "hand": {
+      "word": "hand-word.mp3",
+      "phrase": "hand-phrase.mp3"
+    },
+    "foot": {
+      "word": "foot-word.mp3",
+      "phrase": "foot-phrase.mp3"
+    },
+    "red": {
+      "word": "red-word.mp3",
+      "phrase": "red-phrase.mp3"
+    },
+    "blue": {
+      "word": "blue-word.mp3",
+      "phrase": "blue-phrase.mp3"
+    },
+    "yellow": {
+      "word": "yellow-word.mp3",
+      "phrase": "yellow-phrase.mp3"
+    },
+    "green": {
+      "word": "green-word.mp3",
+      "phrase": "green-phrase.mp3"
+    },
+    "black": {
+      "word": "black-word.mp3",
+      "phrase": "black-phrase.mp3"
+    },
+    "white": {
+      "word": "white-word.mp3",
+      "phrase": "white-phrase.mp3"
+    },
+    "pink": {
+      "word": "pink-word.mp3",
+      "phrase": "pink-phrase.mp3"
+    },
+    "one": {
+      "word": "one-word.mp3",
+      "phrase": "one-phrase.mp3"
+    },
+    "two": {
+      "word": "two-word.mp3",
+      "phrase": "two-phrase.mp3"
+    },
+    "three": {
+      "word": "three-word.mp3",
+      "phrase": "three-phrase.mp3"
+    },
+    "four": {
+      "word": "four-word.mp3",
+      "phrase": "four-phrase.mp3"
+    },
+    "five": {
+      "word": "five-word.mp3",
+      "phrase": "five-phrase.mp3"
+    },
+    "six": {
+      "word": "six-word.mp3",
+      "phrase": "six-phrase.mp3"
+    },
+    "seven": {
+      "word": "seven-word.mp3",
+      "phrase": "seven-phrase.mp3"
+    },
+    "cat": {
+      "word": "cat-word.mp3",
+      "phrase": "cat-phrase.mp3"
+    },
+    "dog": {
+      "word": "dog-word.mp3",
+      "phrase": "dog-phrase.mp3"
+    },
+    "bird": {
+      "word": "bird-word.mp3",
+      "phrase": "bird-phrase.mp3"
+    },
+    "fish": {
+      "word": "fish-word.mp3",
+      "phrase": "fish-phrase.mp3"
+    },
+    "rabbit": {
+      "word": "rabbit-word.mp3",
+      "phrase": "rabbit-phrase.mp3"
+    },
+    "bear": {
+      "word": "bear-word.mp3",
+      "phrase": "bear-phrase.mp3"
+    },
+    "duck": {
+      "word": "duck-word.mp3",
+      "phrase": "duck-phrase.mp3"
+    },
+    "apple": {
+      "word": "apple-word.mp3",
+      "phrase": "apple-phrase.mp3"
+    },
+    "banana": {
+      "word": "banana-word.mp3",
+      "phrase": "banana-phrase.mp3"
+    },
+    "milk": {
+      "word": "milk-word.mp3",
+      "phrase": "milk-phrase.mp3"
+    },
+    "bread": {
+      "word": "bread-word.mp3",
+      "phrase": "bread-phrase.mp3"
+    },
+    "egg": {
+      "word": "egg-word.mp3",
+      "phrase": "egg-phrase.mp3"
+    },
+    "rice": {
+      "word": "rice-word.mp3",
+      "phrase": "rice-phrase.mp3"
+    },
+    "cake": {
+      "word": "cake-word.mp3",
+      "phrase": "cake-phrase.mp3"
+    },
+    "home": {
+      "word": "home-word.mp3",
+      "phrase": "home-phrase.mp3"
+    },
+    "door": {
+      "word": "door-word.mp3",
+      "phrase": "door-phrase.mp3"
+    },
+    "window": {
+      "word": "window-word.mp3",
+      "phrase": "window-phrase.mp3"
+    },
+    "bed": {
+      "word": "bed-word.mp3",
+      "phrase": "bed-phrase.mp3"
+    },
+    "chair": {
+      "word": "chair-word.mp3",
+      "phrase": "chair-phrase.mp3"
+    },
+    "table": {
+      "word": "table-word.mp3",
+      "phrase": "table-phrase.mp3"
+    },
+    "room": {
+      "word": "room-word.mp3",
+      "phrase": "room-phrase.mp3"
+    },
+    "book": {
+      "word": "book-word.mp3",
+      "phrase": "book-phrase.mp3"
+    },
+    "pen": {
+      "word": "pen-word.mp3",
+      "phrase": "pen-phrase.mp3"
+    },
+    "bag": {
+      "word": "bag-word.mp3",
+      "phrase": "bag-phrase.mp3"
+    },
+    "desk": {
+      "word": "desk-word.mp3",
+      "phrase": "desk-phrase.mp3"
+    },
+    "teacher": {
+      "word": "teacher-word.mp3",
+      "phrase": "teacher-phrase.mp3"
+    },
+    "school": {
+      "word": "school-word.mp3",
+      "phrase": "school-phrase.mp3"
+    },
+    "read": {
+      "word": "read-word.mp3",
+      "phrase": "read-phrase.mp3"
+    },
+    "run": {
+      "word": "run-word.mp3",
+      "phrase": "run-phrase.mp3"
+    },
+    "jump": {
+      "word": "jump-word.mp3",
+      "phrase": "jump-phrase.mp3"
+    },
+    "sit": {
+      "word": "sit-word.mp3",
+      "phrase": "sit-phrase.mp3"
+    },
+    "stand": {
+      "word": "stand-word.mp3",
+      "phrase": "stand-phrase.mp3"
+    },
+    "look": {
+      "word": "look-word.mp3",
+      "phrase": "look-phrase.mp3"
+    },
+    "listen": {
+      "word": "listen-word.mp3",
+      "phrase": "listen-phrase.mp3"
+    },
+    "clap": {
+      "word": "clap-word.mp3",
+      "phrase": "clap-phrase.mp3"
+    },
+    "sun": {
+      "word": "sun-word.mp3",
+      "phrase": "sun-phrase.mp3"
+    },
+    "moon": {
+      "word": "moon-word.mp3",
+      "phrase": "moon-phrase.mp3"
+    },
+    "star": {
+      "word": "star-word.mp3",
+      "phrase": "star-phrase.mp3"
+    },
+    "tree": {
+      "word": "tree-word.mp3",
+      "phrase": "tree-phrase.mp3"
+    },
+    "flower": {
+      "word": "flower-word.mp3",
+      "phrase": "flower-phrase.mp3"
+    },
+    "rain": {
+      "word": "rain-word.mp3",
+      "phrase": "rain-phrase.mp3"
+    },
+    "ball": {
+      "word": "ball-word.mp3",
+      "phrase": "ball-phrase.mp3"
+    },
+    "doll": {
+      "word": "doll-word.mp3",
+      "phrase": "doll-phrase.mp3"
+    },
+    "car": {
+      "word": "car-word.mp3",
+      "phrase": "car-phrase.mp3"
+    },
+    "kite": {
+      "word": "kite-word.mp3",
+      "phrase": "kite-phrase.mp3"
+    },
+    "box": {
+      "word": "box-word.mp3",
+      "phrase": "box-phrase.mp3"
+    },
+    "round": {
+      "word": "round-word.mp3",
+      "phrase": "round-phrase.mp3"
+    },
+    "happy": {
+      "word": "happy-word.mp3",
+      "phrase": "happy-phrase.mp3"
+    },
+    "sad": {
+      "word": "sad-word.mp3",
+      "phrase": "sad-phrase.mp3"
+    },
+    "tired": {
+      "word": "tired-word.mp3",
+      "phrase": "tired-phrase.mp3"
+    },
+    "hungry": {
+      "word": "hungry-word.mp3",
+      "phrase": "hungry-phrase.mp3"
+    },
+    "good": {
+      "word": "good-word.mp3",
+      "phrase": "good-phrase.mp3"
+    },
+    "okay": {
+      "word": "okay-word.mp3",
+      "phrase": "okay-phrase.mp3"
+    },
+    "shirt": {
+      "word": "shirt-word.mp3",
+      "phrase": "shirt-phrase.mp3"
+    },
+    "shoes": {
+      "word": "shoes-word.mp3",
+      "phrase": "shoes-phrase.mp3"
+    },
+    "hat": {
+      "word": "hat-word.mp3",
+      "phrase": "hat-phrase.mp3"
+    },
+    "coat": {
+      "word": "coat-word.mp3",
+      "phrase": "coat-phrase.mp3"
+    },
+    "hot": {
+      "word": "hot-word.mp3",
+      "phrase": "hot-phrase.mp3"
+    },
+    "cold": {
+      "word": "cold-word.mp3",
+      "phrase": "cold-phrase.mp3"
+    },
+    "go": {
+      "word": "go-word.mp3",
+      "phrase": "go-phrase.mp3"
+    },
+    "come": {
+      "word": "come-word.mp3",
+      "phrase": "come-phrase.mp3"
+    },
+    "help": {
+      "word": "help-word.mp3",
+      "phrase": "help-phrase.mp3"
+    },
+    "please": {
+      "word": "please-word.mp3",
+      "phrase": "please-phrase.mp3"
+    },
+    "thank": {
+      "word": "thank-word.mp3",
+      "phrase": "thank-phrase.mp3"
+    },
+    "bye": {
+      "word": "bye-word.mp3",
+      "phrase": "bye-phrase.mp3"
+    }
+  }
+}

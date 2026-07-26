@@ -21,6 +21,12 @@ course-slug/
 
 Keep course content in one structured data source. Each page should load the same local JavaScript and select content using `data-day`.
 
+## Unified Paradigm UI template
+
+Start compatible projects by copying the complete `assets/unified-paradigm-ui/` folder from the skill. It is a working offline reference project with an index, 15 dedicated day pages, shared renderers, escalating flip cards, responsive styling, local image atlases, Edge TTS MP3s, and a deterministic validator.
+
+Do not link a delivered project back to the skill installation. Copy the resource, run `node tools/validate_template.js`, replace its curriculum and asset mappings, change the storage key, and rerun the validator. Keep the architecture; replace sample subject matter that does not match the request.
+
 ## `file://` compatibility
 
 - Do not depend on `fetch()` for local JSON; many browsers block it under `file://`.
@@ -46,6 +52,25 @@ Use one record as the source of truth for visual, audio, answer, and feedback ma
 ```
 
 Never derive correctness from grid position or visible text.
+
+## Image rendering contract
+
+An existing image file does not prove that the learner can see it. Give every empty semantic image surface a measurable layout box:
+
+```css
+.atlas-art {
+  display: block;
+  width: 100%;
+  aspect-ratio: var(--art-ratio, 1);
+  background-image: url("assets/images/day01-atlas.png");
+  background-position: var(--x) var(--y);
+  background-size: 400% 200%;
+}
+```
+
+Do not leave a background image on an empty inline `<span>`; its width, height, and aspect ratio can collapse. Prefer a direct local `background-image` declaration. If a URL passes through a CSS variable, inspect the computed style rather than assuming substitution worked.
+
+After CSS or renderer changes, version the local stylesheet and script URLs. In browser QA, assert `getBoundingClientRect().width` and `.height` are positive and that either `naturalWidth > 0` for `<img>` or `getComputedStyle(element).backgroundImage !== "none"` for a background. Reload the actual daily HTML page, not a retired hash URL.
 
 ## Game plan record
 
