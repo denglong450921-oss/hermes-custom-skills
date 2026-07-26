@@ -1,7 +1,9 @@
 {
   "name": "Unified Paradigm UI",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "type": "ready-to-teach child learning course template",
+  "primaryPrinciple": "Visual appeal is the first learner-facing design principle and a completion criterion.",
+  "styleManifest": "ui-style.json",
   "entry": "index.html",
   "dailyPagePattern": "dayNN.html",
   "dailyPages": 15,

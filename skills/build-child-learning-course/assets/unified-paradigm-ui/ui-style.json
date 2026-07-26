@@ -1,0 +1,78 @@
+{
+  "name": "Unified Paradigm UI",
+  "version": "1.1.0",
+  "primaryPrinciple": "Visual appeal is the first learner-facing design principle and a completion criterion.",
+  "direction": {
+    "name": "soft-clay picture-book post office",
+    "audience": "young children learning through short daily missions",
+    "mood": ["warm", "optimistic", "tactile", "calm", "playful"],
+    "signature": "A little mail bird carries completed learning through a fold-out storybook map.",
+    "avoid": ["adult SaaS dashboard", "generic component gallery", "arbitrary gradients", "emoji-only learning art"]
+  },
+  "canonicalFiles": {
+    "entry": "index.html",
+    "dailyPagePattern": "dayNN.html",
+    "stylesheet": "assets/styles.css",
+    "lessonRenderer": "assets/app.js",
+    "homeRenderer": "assets/home.js",
+    "courseData": "assets/course-data.js",
+    "validator": "tools/validate_template.js"
+  },
+  "tokens": {
+    "color": {
+      "ink": "#47394f",
+      "inkSoft": "#75677d",
+      "cream": "#fff8e8",
+      "paper": "#fffdf7",
+      "strawberry": "#ff7895",
+      "strawberryDark": "#d94f70",
+      "sky": "#83d8ff",
+      "skyDark": "#2c9bca",
+      "lemon": "#ffd65c",
+      "mint": "#8de2bf",
+      "mintDark": "#2f9d77",
+      "grape": "#9480df",
+      "grapeDark": "#6550b3",
+      "peach": "#ffb887"
+    },
+    "type": {
+      "display": "\"HanziPen SC\", \"Kaiti SC\", \"STKaiti\", \"Arial Rounded MT Bold\", cursive",
+      "body": "\"Avenir Next Rounded\", \"PingFang SC\", \"Microsoft YaHei\", sans-serif",
+      "utility": "\"Avenir Next\", \"PingFang SC\", sans-serif",
+      "runtimeNetworkFonts": false
+    },
+    "geometry": {
+      "outline": "3px solid #47394f",
+      "popShadow": "0 8px 0 rgba(71, 57, 79, .16)",
+      "softShadow": "0 22px 60px rgba(91, 69, 108, .14)",
+      "radii": {"medium": "18px", "large": "26px", "extraLarge": "36px"}
+    }
+  },
+  "components": [
+    "mail-bird mini brand",
+    "tactile top bar",
+    "fold-out storybook hero",
+    "day-map cards",
+    "30/70 learning meter",
+    "six mission tabs",
+    "paper activity card",
+    "responsive image-choice grid",
+    "semantic feedback states",
+    "progressive flip-card grid",
+    "page-turner navigation"
+  ],
+  "responsive": {
+    "wideImageChoiceColumns": 4,
+    "mobileImageChoiceColumns": 2,
+    "minimumViewportWidth": 320,
+    "requiredTestViewportWidth": 390
+  },
+  "copyWorkflow": [
+    "Copy the complete project folder; do not rebuild from screenshots.",
+    "Preserve tokens, component grammar, interaction shell, accessibility states, responsive layout, and image-ratio behavior.",
+    "Replace curriculum, story world, semantic assets, audio, labels, storage key, and learner-facing copy.",
+    "Make one subject-specific signature choice rather than merely recoloring.",
+    "Run node tools/validate_template.js before and after adaptation."
+  ],
+  "validation": "node tools/validate_template.js"
+}

@@ -1,6 +1,6 @@
 ---
 name: build-child-learning-course
-description: Build, revise, and validate complete ready-to-teach interactive courseware for children across English, mathematics, Chinese, and other subjects. Use whenever a user asks to create, make, design, or deliver a child learning course, multi-day curriculum, lesson pages, educational games, pronunciation practice, mastery checks, or a playful learning website—even when they describe it as a plan. Unless the user explicitly asks for concepts only, deliver a working offline HTML course with real content, functional games, feedback, progress, child-ready and cost-aware visual quality, dedicated daily pages for long courses, responsive UI, and validation; do not stop at philosophies, mockups, proposals, or descriptions. Start from the bundled Unified Paradigm UI project when it fits, then adapt it rather than copying it rigidly.
+description: Build, revise, and validate complete ready-to-teach interactive courseware for children across English, mathematics, Chinese, and other subjects. Use whenever a user asks to create, make, design, or deliver a child learning course, multi-day curriculum, lesson pages, educational games, pronunciation practice, mastery checks, or a playful learning website—even when they describe it as a plan. Unless the user explicitly asks for concepts only, deliver a working offline HTML course with real content, functional games, feedback, progress, dedicated daily pages for long courses, responsive UI, and validation; treat a visually appealing child-facing UI as the primary design principle, not final polish. Start from the bundled, agent-copyable Unified Paradigm UI project when it fits, then adapt it rather than copying it rigidly.
 ---
 
 # Build Child Learning Course
@@ -11,6 +11,7 @@ Deliver **可直接上课的互动课件**: a child must be able to open the ent
 
 The course is not complete until:
 
+- the first viewport presents a cohesive, distinctive story world that a child can understand and wants to enter;
 - the entry HTML and every promised lesson page open successfully;
 - every lesson contains the actual teaching content, questions, answers, and feedback;
 - every described game is a working interaction rather than a card explaining future gameplay;
@@ -28,9 +29,10 @@ If the user explicitly requests only a philosophy, concept, proposal, or method,
 - Read [references/game-patterns.md](references/game-patterns.md) before choosing the course-level game spine.
 - Read the relevant section of [references/subject-patterns.md](references/subject-patterns.md) for the requested subject.
 - Read [references/visual-design.md](references/visual-design.md) before creating the learner-facing UI.
+- Read [references/unified-paradigm-ui.md](references/unified-paradigm-ui.md) before copying or styling the bundled template for another course or AI agent.
 - Read [references/implementation-spec.md](references/implementation-spec.md) before writing the course files.
 - Read [references/qa-checklist.md](references/qa-checklist.md) before final validation.
-- Copy [assets/unified-paradigm-ui](assets/unified-paradigm-ui) as the preferred working project for a multi-day offline HTML course. Run its `node tools/validate_template.js` before and after adaptation.
+- Copy [assets/unified-paradigm-ui](assets/unified-paradigm-ui) as the preferred working project for a multi-day offline HTML course. Treat its `ui-style.json` as the machine-readable design contract and run `node tools/validate_template.js` before and after adaptation.
 - Inspect [demo.html](demo.html) for visual rhythm, hierarchy, color discipline, accessibility, and responsive behavior. Adapt its design principles to the child-facing course; do not reuse its adult proposal layout unchanged.
 - Use `scripts/scaffold_course.py` when a multi-page course needs a consistent starting structure, then replace every scaffold placeholder with real structured content and renderers.
 - Use `scripts/validate_game_diversity.py` and `scripts/validate_course_balance.py` for compatible generated courses.
@@ -199,10 +201,13 @@ Whenever pronunciation, listening, phonics, spoken vocabulary, or oral language 
 
 Do not silently omit recorded audio or substitute system speech. If Edge TTS generation is blocked, report the blocker before claiming the course is complete.
 
-## 7. Build a child-ready visual and interaction system
+## 7. Lead with a visually appealing, copyable UI system
 
 Choose one coherent world, mascot, map, or story motif that persists across all days.
 
+- Treat visual appeal as the primary learner-facing design principle and a completion criterion, while keeping pedagogy, accessibility, offline reliability, and legibility non-negotiable.
+- Choose a subject-grounded palette, type system, layout concept, and one memorable signature element before coding; reject any choice that could belong unchanged to a generic dashboard.
+- Hand another AI agent the complete template folder, [references/unified-paradigm-ui.md](references/unified-paradigm-ui.md), and `ui-style.json` together. Never ask it to recreate the UI from prose or screenshots.
 - Make the learner-facing UI unmistakably playful and age-appropriate. An adult dashboard, proposal page, or generic component gallery is a visual QA failure even when it is technically functional.
 - Use an asset-reuse-first workflow: prefer suitable bundled or local assets, then free/openly licensed cartoon illustration or high-quality cartoon-emoji image sets, and generate custom images only when no suitable resource exists or the user explicitly requests original art.
 - Treat simple, clear, consistent pictures as sufficient. For large vocabularies, a coherent ready-made PNG/SVG/WebP set is usually better than generating every item from scratch.

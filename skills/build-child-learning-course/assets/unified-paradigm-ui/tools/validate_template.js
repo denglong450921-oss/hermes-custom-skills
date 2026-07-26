@@ -47,6 +47,8 @@ function loadAtlasRatios(relativePath) {
 }
 
 const course = loadCourse();
+const template = JSON.parse(read("template.json"));
+const style = JSON.parse(read("ui-style.json"));
 const words = course.flatMap(day => day.words);
 const dayPages = fs.readdirSync(root).filter(file => /^day\d\d\.html$/.test(file)).sort();
 const appRatios = loadAtlasRatios("assets/app.js");
@@ -56,6 +58,13 @@ assert(course.length === 15, `expected 15 course days, found ${course.length}`);
 assert(dayPages.length === 15, `expected 15 daily HTML pages, found ${dayPages.length}`);
 assert(words.length === 100, `expected 100 learning items, found ${words.length}`);
 assert(new Set(words.map(item => item.w.toLowerCase())).size === 100, "learning words must be unique");
+assert(template.styleManifest === "ui-style.json", "template.json must route agents to ui-style.json");
+assert(style.name === "Unified Paradigm UI", "style manifest has the wrong design-system name");
+assert(
+  /Visual appeal is the first learner-facing design principle/.test(style.primaryPrinciple),
+  "style manifest must make visual appeal the primary learner-facing principle"
+);
+assert(style.canonicalFiles.stylesheet === "assets/styles.css", "style manifest must identify the canonical stylesheet");
 
 const pageFiles = ["index.html", ...dayPages];
 for (const page of pageFiles) {
@@ -70,6 +79,13 @@ for (const page of pageFiles) {
 }
 
 const css = read("assets/styles.css");
+for (const [token, value] of Object.entries(style.tokens.color)) {
+  const cssName = token.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`);
+  assert(
+    new RegExp(`--${cssName}:\\s*${value.replace("#", "\\#")}\\s*;`, "i").test(css),
+    `style token ${token} (${value}) is not synchronized with assets/styles.css`
+  );
+}
 const atlasRule = css.match(/^\.atlas-art\s*\{([\s\S]*?)\}/m);
 assert(atlasRule, "missing .atlas-art rule");
 assert(/\bdisplay\s*:\s*block\s*;/.test(atlasRule[1]), ".atlas-art must be a measurable block box");
@@ -142,6 +158,7 @@ const result = {
   audioFiles: audioFiles.length,
   imageSurface: "block + direct URL",
   aspectRatioContract: "native atlas cell ratio",
+  styleManifest: "pass",
   offlineReferences: "pass"
 };
 
