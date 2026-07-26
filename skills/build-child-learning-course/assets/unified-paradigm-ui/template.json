@@ -1,6 +1,6 @@
 {
   "name": "Unified Paradigm UI",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "ready-to-teach child learning course template",
   "entry": "index.html",
   "dailyPagePattern": "dayNN.html",
@@ -14,7 +14,7 @@
     "exit challenge"
   ],
   "offline": true,
-  "imageRenderer": "measurable CSS atlas surface with direct local URLs",
+  "imageRenderer": "measurable CSS atlas surface with direct local URLs and preserved cell ratios",
   "audioRenderer": "local Edge TTS MP3 through HTMLAudioElement",
   "validation": "node tools/validate_template.js"
 }

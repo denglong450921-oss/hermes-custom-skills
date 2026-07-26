@@ -70,7 +70,9 @@ An existing image file does not prove that the learner can see it. Give every em
 
 Do not leave a background image on an empty inline `<span>`; its width, height, and aspect ratio can collapse. Prefer a direct local `background-image` declaration. If a URL passes through a CSS variable, inspect the computed style rather than assuming substitution worked.
 
-After CSS or renderer changes, version the local stylesheet and script URLs. In browser QA, assert `getBoundingClientRect().width` and `.height` are positive and that either `naturalWidth > 0` for `<img>` or `getComputedStyle(element).backgroundImage !== "none"` for a background. Reload the actual daily HTML page, not a retired hash URL.
+Preserve the source or atlas-cell ratio. Set one dimension plus `aspect-ratio`; do not set both `width: 100%` and `height: 100%` on mixed-ratio art. If a fixed frame is necessary, crop without distortion using `object-fit: cover` or equivalent. For four image answers, prefer four columns on wide screens and two on mobile instead of flattening every source into a short two-column card.
+
+After CSS or renderer changes, version the local stylesheet and script URLs. In browser QA, assert `getBoundingClientRect().width` and `.height` are positive, compare the rendered ratio with the source/cell ratio unless cropping is intentional, and confirm either `naturalWidth > 0` for `<img>` or `getComputedStyle(element).backgroundImage !== "none"` for a background. Reload the actual daily HTML page, not a retired hash URL.
 
 ## Game plan record
 

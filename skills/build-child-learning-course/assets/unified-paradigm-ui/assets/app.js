@@ -372,7 +372,7 @@
         <h3 class="question-title">${escapeHTML(prompt)}</h3>
         ${question.type === "listen" ? `<button class="action-button audio" type="button" data-speak="${escapeHTML(question.item.w)}">♪ 播放单词</button>` : ""}
         ${question.type === "picture" ? `<div class="recall-picture">${art(question.item)}</div>` : ""}
-        <div class="choice-grid">${question.choices.map(choice => quizChoice(choice, question, quizState, "data-quiz-answer")).join("")}</div>
+        <div class="choice-grid${question.type === "listen" ? " image-choice-grid" : ""}">${question.choices.map(choice => quizChoice(choice, question, quizState, "data-quiz-answer")).join("")}</div>
         <div class="feedback${quizState.answered ? (quizState.selected === question.item.w ? " good" : " retry") : ""}">
           ${quizState.answered ? (quizState.selected === question.item.w
             ? `答对啦！${question.item.w} ${question.item.ipa}，${question.item.zh}。`
@@ -586,7 +586,7 @@
         <p class="question-count">声音侦探 ${gameState.index + 1} / ${gameState.items.length}</p>
         <h3 class="question-title">哪个画面属于这个声音？</h3>
         <button type="button" class="action-button audio" data-speak="${escapeHTML(item.w)}">♪ 播放声音</button>
-        <div class="choice-grid">${gameState.choices.map(choice => `
+        <div class="choice-grid image-choice-grid">${gameState.choices.map(choice => `
           <button type="button" class="choice image-choice${gameState.answered && choice.w === item.w ? " correct" : ""}${gameState.answered && choice.w === gameState.selected && choice.w !== item.w ? " wrong" : ""}"
             data-game-answer="${escapeHTML(choice.w)}" ${gameState.answered ? "disabled" : ""}>${art(choice)}</button>`).join("")}
         </div>${gameFeedback(item)}
@@ -753,7 +753,7 @@
         <p class="question-count">EXIT ${exitState.index + 1} / 5</p>
         <h3 class="question-title">${escapeHTML(prompt)}</h3>
         ${question.type === "listen" ? `<button type="button" class="action-button audio" data-speak="${escapeHTML(question.item.w)}">♪ 播放单词</button>` : ""}
-        <div class="choice-grid">${question.choices.map(choice => {
+        <div class="choice-grid${question.type === "listen" ? " image-choice-grid" : ""}">${question.choices.map(choice => {
           const correct = exitState.answered && choice.w === question.item.w;
           const wrong = exitState.answered && choice.w === exitState.selected && choice.w !== question.item.w;
           return `<button type="button" class="choice${question.type === "listen" ? " image-choice" : ""}${correct ? " correct" : ""}${wrong ? " wrong" : ""}"

@@ -252,6 +252,7 @@ Run [references/qa-checklist.md](references/qa-checklist.md) and verify in a rea
 - every learning item has a valid local image mapping, every image decodes at its intended dimensions, ready-made resources have compatible usage rights, and no core learning item relies only on a platform-dependent Unicode glyph;
 - every visible learning-image surface has a nonzero rendered rectangle and either a decoded `<img>` (`naturalWidth > 0`) or a computed background image other than `none`; file existence alone does not prove that an image is visible;
 - every empty element used as a background or sprite surface is `display: block`, grid, or flex with explicit width and height/aspect ratio; prefer a direct local image URL and verify any CSS-variable indirection in computed styles;
+- every image preserves its source or atlas-cell aspect ratio unless it uses an intentional nondistorting crop such as `object-fit: cover`; never force both width and height to `100%` on mixed-ratio learning art;
 - version local CSS and JavaScript URLs after renderer fixes, reload the actual daily page rather than a retired hash route, and reject results produced by stale cached assets;
 - no answer label leaks through testing images;
 - desktop and 390px mobile layouts stay within bounds;

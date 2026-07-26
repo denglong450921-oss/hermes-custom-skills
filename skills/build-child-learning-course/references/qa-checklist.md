@@ -61,6 +61,7 @@ Run applicable checks before delivery.
 - [ ] Every visible learning image has a positive rendered width and height.
 - [ ] Every `<img>` decodes with `naturalWidth > 0`; every background/sprite has a computed `backgroundImage` other than `none`.
 - [ ] Empty background-image elements use block, grid, or flex layout with an explicit width and height/aspect ratio.
+- [ ] The rendered image ratio matches the source or atlas-cell ratio unless an intentional `cover` crop is documented; no image is stretched or squashed.
 - [ ] A fresh reload of the versioned CSS/JavaScript shows the corrected UI on the actual daily page.
 
 ## Content mappings
@@ -127,7 +128,7 @@ Test representative interactions in a real browser:
 6. verify desktop and mobile bounding boxes.
 7. complete a block, reload, and verify saved progress.
 8. enable and disable responsive motion.
-9. inspect a learning image in review, micro-lesson, flip-card, and exit views; confirm each has visible pixels, not only a mapped file.
+9. inspect a learning image in review, micro-lesson, flip-card, and exit views; confirm each has visible pixels and natural proportions, not only a mapped file.
 
 ## Delivery
 

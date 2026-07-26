@@ -39,9 +39,18 @@ function pngDimensions(filePath) {
   };
 }
 
+function loadAtlasRatios(relativePath) {
+  const source = read(relativePath);
+  const match = source.match(/const ATLAS_RATIOS\s*=\s*(\{[\s\S]*?\});/);
+  assert(match, `${relativePath}: missing ATLAS_RATIOS`);
+  return vm.runInNewContext(`(${match[1]})`);
+}
+
 const course = loadCourse();
 const words = course.flatMap(day => day.words);
 const dayPages = fs.readdirSync(root).filter(file => /^day\d\d\.html$/.test(file)).sort();
+const appRatios = loadAtlasRatios("assets/app.js");
+const homeRatios = loadAtlasRatios("assets/home.js");
 
 assert(course.length === 15, `expected 15 course days, found ${course.length}`);
 assert(dayPages.length === 15, `expected 15 daily HTML pages, found ${dayPages.length}`);
@@ -66,6 +75,18 @@ assert(atlasRule, "missing .atlas-art rule");
 assert(/\bdisplay\s*:\s*block\s*;/.test(atlasRule[1]), ".atlas-art must be a measurable block box");
 assert(/\bbackground-size\s*:\s*400%\s+200%\s*;/.test(atlasRule[1]), ".atlas-art crop geometry is missing");
 
+for (const selector of [".choice .atlas-art", ".flip-card .atlas-art"]) {
+  const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const rule = css.match(new RegExp(`^${escaped}\\s*\\{([\\s\\S]*?)\\}`, "m"));
+  assert(rule, `missing ${selector} rule`);
+  assert(/\bheight\s*:\s*auto\s*;/.test(rule[1]), `${selector}: do not force atlas art to a fixed height`);
+  assert(
+    /\baspect-ratio\s*:\s*var\(--art-ratio,\s*1\)\s*;/.test(rule[1]),
+    `${selector}: preserve each atlas cell's source ratio`
+  );
+  assert(!/\bheight\s*:\s*100%\s*;/.test(rule[1]), `${selector}: height:100% squashes mixed-ratio art`);
+}
+
 for (const renderer of ["assets/app.js", "assets/home.js"]) {
   const source = read(renderer);
   assert(
@@ -73,6 +94,10 @@ for (const renderer of ["assets/app.js", "assets/home.js"]) {
     `${renderer}: render each atlas with a direct local background-image URL`
   );
 }
+assert(
+  (read("assets/app.js").match(/image-choice-grid/g) || []).length >= 3,
+  "image-answer rounds must use the responsive image-choice grid"
+);
 
 const imageFiles = [];
 for (const day of course) {
@@ -81,6 +106,15 @@ for (const day of course) {
   assert(fs.existsSync(absolutePath), `missing ${relativePath}`);
   const dimensions = pngDimensions(absolutePath);
   assert(dimensions.width > 0 && dimensions.height > 0, `${relativePath}: collapsed image dimensions`);
+  const nativeCellRatio = dimensions.width / (dimensions.height * 2);
+  assert(
+    Math.abs(appRatios[day.day] - nativeCellRatio) < .01,
+    `${relativePath}: app ratio ${appRatios[day.day]} does not match native cell ratio ${nativeCellRatio.toFixed(3)}`
+  );
+  assert(
+    Math.abs(homeRatios[day.day] - nativeCellRatio) < .01,
+    `${relativePath}: home ratio ${homeRatios[day.day]} does not match native cell ratio ${nativeCellRatio.toFixed(3)}`
+  );
   imageFiles.push(relativePath);
 }
 
@@ -107,6 +141,7 @@ const result = {
   imageAtlases: imageFiles.length,
   audioFiles: audioFiles.length,
   imageSurface: "block + direct URL",
+  aspectRatioContract: "native atlas cell ratio",
   offlineReferences: "pass"
 };
 

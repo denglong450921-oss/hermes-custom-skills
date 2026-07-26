@@ -40,7 +40,7 @@ const pageHead = title => `<!DOCTYPE html>
   <meta name="theme-color" content="#ff7b97">
   <meta name="color-scheme" content="light">
   <title>${title}</title>
-  <link rel="stylesheet" href="assets/styles.css?v=20260726-image-fix">
+  <link rel="stylesheet" href="assets/styles.css?v=20260726-aspect-fix">
 </head>`;
 
 const home = `${pageHead("100词声音邮局｜15天可爱英语课")}
@@ -99,8 +99,8 @@ const home = `${pageHead("100词声音邮局｜15天可爱英语课")}
     </section>
   </main>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script src="assets/course-data.js?v=20260726-image-fix"></script>
-  <script src="assets/home.js?v=20260726-image-fix"></script>
+  <script src="assets/course-data.js?v=20260726-aspect-fix"></script>
+  <script src="assets/home.js?v=20260726-aspect-fix"></script>
 </body>
 </html>`;
 
@@ -160,8 +160,8 @@ for (const day of course) {
     </main>
   </div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script src="assets/course-data.js?v=20260726-image-fix"></script>
-  <script src="assets/app.js?v=20260726-image-fix"></script>
+  <script src="assets/course-data.js?v=20260726-aspect-fix"></script>
+  <script src="assets/app.js?v=20260726-aspect-fix"></script>
 </body>
 </html>`;
   fs.writeFileSync(path.join(root, `day${n}.html`), html, "utf8");
