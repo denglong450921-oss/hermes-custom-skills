@@ -1,6 +1,6 @@
 ---
 name: build-child-learning-course
-description: Build, revise, and validate complete ready-to-teach interactive courseware for children across English, mathematics, Chinese, and other subjects. Use whenever a user asks to create, make, design, or deliver a child learning course, multi-day curriculum, lesson pages, educational games, pronunciation practice, mastery checks, or a playful learning website—even when they describe it as a plan. Unless the user explicitly asks for concepts only, deliver a working offline HTML course with real content, functional games, feedback, progress, child-ready visual quality, dedicated daily pages for long courses, responsive UI, and validation; do not stop at philosophies, mockups, proposals, or descriptions. Use the bundled `demo.html` as visual inspiration and improve it for the learner rather than copying it rigidly.
+description: Build, revise, and validate complete ready-to-teach interactive courseware for children across English, mathematics, Chinese, and other subjects. Use whenever a user asks to create, make, design, or deliver a child learning course, multi-day curriculum, lesson pages, educational games, pronunciation practice, mastery checks, or a playful learning website—even when they describe it as a plan. Unless the user explicitly asks for concepts only, deliver a working offline HTML course with real content, functional games, feedback, progress, child-ready and cost-aware visual quality, dedicated daily pages for long courses, responsive UI, and validation; do not stop at philosophies, mockups, proposals, or descriptions. Use the bundled `demo.html` as visual inspiration and improve it for the learner rather than copying it rigidly.
 ---
 
 # Build Child Learning Course
@@ -193,9 +193,12 @@ Do not silently omit recorded audio or substitute system speech. If Edge TTS gen
 Choose one coherent world, mascot, map, or story motif that persists across all days.
 
 - Make the learner-facing UI unmistakably playful and age-appropriate. An adult dashboard, proposal page, or generic component gallery is a visual QA failure even when it is technically functional.
-- Use coherent, high-quality local raster images or custom illustrations as the primary semantic visuals. Do not use emoji, Unicode glyphs, icon-font pictures, or mixed-quality placeholders as substitutes for vocabulary or concept images.
+- Use an asset-reuse-first workflow: prefer suitable bundled or local assets, then free/openly licensed cartoon illustration or high-quality cartoon-emoji image sets, and generate custom images only when no suitable resource exists or the user explicitly requests original art.
+- Treat simple, clear, consistent pictures as sufficient. For large vocabularies, a coherent ready-made PNG/SVG/WebP set is usually better than generating every item from scratch.
+- High-quality cartoon emoji-style image assets may serve as primary semantic visuals when they remain unambiguous at card size. Avoid raw platform-dependent Unicode emoji as the only learning image because their appearance changes across devices.
+- Download or copy selected resources into the course for offline use. Record the source and license when attribution is required; never depend on remote image URLs at runtime.
 - Map every learning item to a deliberate image or visual model from the same content record. Keep assessment images free of printed answer labels and crop them so the intended subject remains clear at card size.
-- Keep one illustration language across the course. When generating atlases or sprites, verify every panel, item-to-panel mapping, source dimension, crop position, and decoded local file before delivery.
+- Keep one illustration language across the course instead of mixing unrelated libraries. For atlases, sprites, or individual files, verify every item mapping, source dimension, crop position, and decoded local file before delivery.
 - Use large touch targets, short instructions, readable contrast, and low reading burden.
 - Let the first successful action teach the interaction instead of front-loading instructions.
 - Make learning progress visibly change something meaningful in the course world.
@@ -235,7 +238,7 @@ Run [references/qa-checklist.md](references/qa-checklist.md) and verify in a rea
 - the expected Edge TTS MP3 count matches the audio-bearing content records, every MP3 decodes, and the page references local audio paths;
 - feedback, retries, scoring, progress restore, and reset work;
 - the file count includes the promised dedicated daily HTML pages, and every page contains the complete shared teaching loop rather than a placeholder;
-- every learning item has a valid local image mapping, every image decodes at its intended dimensions, and no core learning visual is emoji-only;
+- every learning item has a valid local image mapping, every image decodes at its intended dimensions, ready-made resources have compatible usage rights, and no core learning item relies only on a platform-dependent Unicode glyph;
 - no answer label leaks through testing images;
 - desktop and 390px mobile layouts stay within bounds;
 - keyboard focus, contrast, reduced motion, and `aria-live` feedback remain usable;
