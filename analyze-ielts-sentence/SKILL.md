@@ -229,7 +229,7 @@ Use these branches exactly; never report a failed check as complete.
 | Edge TTS generation fails | Retry once with the exact visible transcript and `en-US-AriaNeural`; verify the MP3 is non-empty | Preserve bilingual text, mark audio as unavailable, show the exact retry command, and ask approval before delivering a text-only page |
 | Bilingual/audio audit fails | Repair every reported `.english-unit`, audio path, highlight, or speed-control violation, then rerun the audit | Do not deliver the page; report the failing lines and required corrections |
 | Learning-experience audit fails | Restore the reported stage, game, assessment, confidence, retry, or progressive-reveal contract, then rerun | Do not deliver the page; report the unmet contract and keep results sealed |
-| Inline JavaScript does not parse | Fix quoting/template interpolation and run a syntax check again | Deliver no interactive artifact; provide the exact syntax error and file path |
+| Inline JavaScript does not parse | Fix quoting/template interpolation and run `node --check` on the extracted script block. Common root cause: bare `\u201c`/`\u201d` (Chinese curly quotes) inside `"..."` JS strings — replace with `\u201c`/`\u201d` escapes. | Deliver no interactive artifact; provide the exact syntax error and file path |
 | Resolved output path already exists | Apply the overwrite checkpoint and choose a new path or obtain explicit approval | Preserve the existing artifact unchanged |
 
 ## Canonical UI demo
@@ -255,6 +255,7 @@ If any red light is present, repair it before delivery.
 | Learner-facing English outside audited bilingual units, or browser speech synthesis | Breaks alignment, exact transcript, and offline guarantees | Use `.english-unit` plus verified local Edge TTS |
 | Dragging, color, sound, or animation as the only operating cue | Excludes keyboard, low-vision, and reduced-motion users | Add buttons, text status, focus behavior, and semantic state |
 | Failed audit, missing audio, or JavaScript error reported as completed | Delivers a knowingly broken lesson | Follow Failure recovery and state the unresolved blocker |
+| Chinese-style quotes (U+201C/U+201D) or other non-ASCII quotes used inside JS double-quoted strings without escaping | JS parser treats them as string terminators, breaking all event listeners | Use `\u201c`/`\u201d` Unicode escapes in JS strings, or switch to backtick template literals `\u0060...\u0060` for strings containing Chinese punctuation |
 
 ## Delivery checklist
 
@@ -272,4 +273,5 @@ Before completing the task, verify:
 - spaced review includes 10 minutes, 1 day, and 3 days;
 - every learner-facing English unit passes the bilingual/audio audit;
 - the page is readable and operable at 320px and with reduced motion;
-- all template-generated strings use safe JavaScript quoting.
+- all template-generated strings use safe JavaScript quoting;
+- inline JavaScript passes `node --check` before delivery (Chinese quotes in JS strings are the most common silent breakage).
