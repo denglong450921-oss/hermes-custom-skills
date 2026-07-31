@@ -51,6 +51,7 @@ stage navigation: Notice → Build → Recall → Transfer → Review
 main:
   learning workspace: one dominant active task
   memory coach: strategy, hint budget, next action
+  keyword lab: 4–6 practical words/collocations + daily-life use
 practice strip: game progress, separate from mastery
 assessment: sealed until the learner reaches Review
 ```
@@ -71,8 +72,35 @@ Recommended qualities:
 - a visible chunk map or memory-loop motif;
 - calm motion under 240ms, disabled with reduced-motion.
 
-The UI should look authored for language learning. Avoid generic KPI cards,
-meaningless gradients, trophy clutter, and excessive shadows.
+The UI should look authored for the sentence topic and for language learning.
+Use a purposeful display/body type pairing and a sentence-specific visual
+motif (for example a route for transport, branching nodes for clause logic, or
+linked cards for cause and effect). Add one small moment of useful delight,
+such as a keyword-to-example connection or a progress trail, while keeping
+motion optional and under 240ms. Avoid generic KPI cards, meaningless
+gradients, trophy clutter, and excessive shadows.
+
+## Keyword Lab
+
+Teach 4–6 reusable words or collocations rather than every unfamiliar word.
+Mark the area `.keyword-lab` and each item `.keyword-card`. Every card should
+answer five learner questions quickly: What does it mean here? How do I say it?
+What words naturally go with it? What mistake should I avoid? How can I use it
+today?
+
+Keep the default face of each card concise. Reveal the daily-life example,
+common mistake, and personal prompt progressively with a real button and an
+announced expanded state. Examples should come from familiar adult contexts
+such as work, study, shopping, transport, health routines, family, or plans.
+
+Follow the keyword cards with a `.difficulty-ladder`:
+
+1. `data-difficulty="easy-notice"`: recognition or matching with strong cues;
+2. `data-difficulty="easy-use"`: a guided first-person completion;
+3. `data-difficulty="moderate-transfer"`: one constrained familiar-topic use.
+
+Do not introduce a hard tier unless requested. The moderate task should supply
+a reusable frame, a word bank or constraints, and a hidden model response.
 
 ## Interaction rules
 

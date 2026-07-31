@@ -21,6 +21,10 @@ class StudioParser(HTMLParser):
         self.hidden_results = False
         self.progressive_reveals = 0
         self.reveal_controls = 0
+        self.keyword_labs = 0
+        self.keyword_cards = 0
+        self.difficulty_ladders = 0
+        self.difficulty_levels: set[str] = set()
         self.has_reduced_motion = False
         self.has_live_region = False
         self.has_main = False
@@ -40,6 +44,14 @@ class StudioParser(HTMLParser):
             self.memory_strategies.append(attrs.get("data-memory-strategy") or "")
         if "progressive-reveal" in classes:
             self.progressive_reveals += 1
+        if "keyword-lab" in classes:
+            self.keyword_labs += 1
+        if "keyword-card" in classes:
+            self.keyword_cards += 1
+        if "difficulty-ladder" in classes:
+            self.difficulty_ladders += 1
+        if attrs.get("data-difficulty"):
+            self.difficulty_levels.add(attrs["data-difficulty"] or "")
         if "data-reveal-next" in attrs:
             self.reveal_controls += 1
         if "summative-question" in classes:
@@ -85,6 +97,26 @@ def audit(path: Path) -> list[str]:
         failures.append("fewer than two .memory-game sections")
     if parser.progressive_reveals < 1 or parser.reveal_controls < 1:
         failures.append("missing .progressive-reveal container or data-reveal-next control")
+    if parser.keyword_labs < 1:
+        failures.append("missing .keyword-lab section")
+    if not 4 <= parser.keyword_cards <= 6:
+        failures.append(
+            f"expected 4–6 .keyword-card units, found {parser.keyword_cards}"
+        )
+    if parser.difficulty_ladders < 1:
+        failures.append("missing .difficulty-ladder section")
+    required_difficulties = {
+        "easy-notice",
+        "easy-use",
+        "moderate-transfer",
+    }
+    if not required_difficulties.issubset(parser.difficulty_levels):
+        failures.append(
+            "difficulty ladder must include easy-notice, easy-use, and "
+            "moderate-transfer"
+        )
+    if any("hard" in level.lower() for level in parser.difficulty_levels):
+        failures.append("unrequested hard difficulty tier detected")
     if any(not strategy.strip() for strategy in parser.memory_strategies):
         failures.append("every memory game needs data-memory-strategy")
     if len(parser.question_dimensions) != 8:

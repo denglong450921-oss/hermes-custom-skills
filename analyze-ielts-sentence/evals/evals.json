@@ -8,6 +8,8 @@
       "files": [],
       "expectations": [
         "lesson.html contains all five stages: notice, build, recall, transfer, and review.",
+        "lesson.html contains a visually distinct Keyword Lab with 4–6 practical keyword or collocation cards, each including a daily-life example and use-it-today prompt.",
+        "The lesson includes easy-notice, easy-use, and moderate-transfer keyword practice and does not introduce a hard tier.",
         "lesson.html contains at least two accessible memory games with named memory strategies and replay controls.",
         "The summative assessment has exactly eight questions, two for each of meaning, structure, vocabulary, and transfer, using at least three response formats.",
         "Each final item collects confidence before checking and the results distinguish confident-wrong responses.",
@@ -15,6 +17,7 @@
         "Game points and hints are explicitly separate from mastery.",
         "The result includes targeted weak-dimension drills and a 10-minute, 1-day, and 3-day retrieval plan.",
         "Every learner-facing English unit includes aligned Chinese, a highlight note, and a local audio control with 0.6x–0.9x speeds."
+        ,"Every English unit declares an exact transcript, has exactly one play control, and references its own unique existing non-empty local MP3; no MP3 contains multiple sentences."
       ]
     },
     {
@@ -24,12 +27,15 @@
       "files": [],
       "expectations": [
         "The page progressively decomposes the long sentence from main clause to dependent clauses and modifiers.",
+        "Supplying the sentence without an explicit display-mode request still produces HTML by default.",
+        "A 4–6 item Keyword Lab progresses from scaffolded recognition and personal use to constrained moderate transfer.",
         "The page contains cover-and-recall or cloze retrieval, plus at least two pedagogically relevant memory games.",
         "The layout is responsive at 320px, has semantic landmarks, visible focus styling, aria-live feedback, and reduced-motion support.",
         "The assessment has eight sealed scored items balanced across four dimensions and uses at least three formats.",
         "Confidence calibration and adaptive review prioritize confident-wrong misconceptions.",
         "The page provides a reusable writing frame and a constrained new-topic transfer task.",
         "Bilingual local-audio units and all four slow-speed controls are present.",
+        "Every sentence or English learning unit owns a unique local MP3 whose declared transcript exactly matches the visible English.",
         "Practice metrics remain separate from the final mastery calculation."
       ]
     },

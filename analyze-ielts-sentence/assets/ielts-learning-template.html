@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>IELTS Learning Atelier · Standard Template</title>
+  <style>
+    :root {
+      --canvas: #f3f0e8;
+      --paper: #fffdf8;
+      --ink: #17233b;
+      --muted: #647083;
+      --blue: #3049a5;
+      --blue-soft: #e9edff;
+      --jade: #087a68;
+      --jade-soft: #dff5ed;
+      --amber: #ad650d;
+      --amber-soft: #fff0d6;
+      --line: #d7d9d3;
+      --radius: 22px;
+      --shadow: 0 20px 55px rgba(23, 35, 59, .09);
+      --focus: 0 0 0 3px #fff, 0 0 0 6px #3049a5;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      padding-bottom: 120px;
+      color: var(--ink);
+      background:
+        linear-gradient(rgba(48,73,165,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(48,73,165,.035) 1px, transparent 1px),
+        var(--canvas);
+      background-size: 30px 30px;
+      font: 16px/1.7 Inter, ui-sans-serif, system-ui, -apple-system,
+        BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif;
+    }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    button:focus-visible, input:focus-visible, summary:focus-visible,
+    a:focus-visible { outline: none; box-shadow: var(--focus); }
+    .shell { width: min(1080px, calc(100% - 28px)); margin-inline: auto; }
+    .skip-link { position: fixed; top: -80px; left: 16px; z-index: 30; padding: 10px 14px; color: white; background: var(--ink); border-radius: 10px; }
+    .skip-link:focus { top: 16px; }
+    .hero {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      margin-top: 18px;
+      padding: clamp(28px, 7vw, 72px);
+      color: white;
+      background: linear-gradient(135deg, #17233b, #3049a5 72%, #087a68 150%);
+      border-radius: 30px;
+      box-shadow: var(--shadow);
+    }
+    .hero::after {
+      content: "A → B → C";
+      position: absolute;
+      right: -20px;
+      bottom: -32px;
+      z-index: -1;
+      color: rgba(255,255,255,.09);
+      font: 900 clamp(4rem, 14vw, 10rem)/1 Georgia, serif;
+      transform: rotate(-7deg);
+    }
+    .eyebrow { margin: 0 0 10px; color: #bcebdd; font-size: .78rem; font-weight: 850; letter-spacing: .16em; text-transform: uppercase; }
+    h1, h2, h3 { line-height: 1.15; }
+    h1 { max-width: 760px; margin: 0; font: 750 clamp(2.15rem, 6vw, 4.8rem)/1.02 Georgia, "Times New Roman", serif; }
+    .hero p:last-child { max-width: 660px; margin: 20px 0 0; color: #e3e8f8; }
+    .stage-nav {
+      position: sticky;
+      top: 10px;
+      z-index: 20;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+      margin: 16px auto;
+      padding: 8px;
+      background: rgba(255,253,248,.92);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(23,35,59,.07);
+      backdrop-filter: blur(14px);
+    }
+    .stage-nav a { padding: 10px 8px; color: var(--muted); text-align: center; text-decoration: none; border-radius: 11px; }
+    .stage-nav a:hover { color: var(--blue); background: var(--blue-soft); }
+    .stage-nav strong { display: block; color: var(--ink); font-size: .82rem; }
+    main { display: grid; gap: 16px; }
+    .card {
+      padding: clamp(20px, 5vw, 42px);
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 10px 34px rgba(23,35,59,.05);
+    }
+    .stage-kicker { color: var(--blue); font-weight: 850; font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; }
+    .card h2 { margin: 8px 0; font-size: clamp(1.55rem, 4vw, 2.4rem); }
+    .lead { max-width: 720px; margin-top: 0; color: var(--muted); }
+    .english-unit {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+      padding: clamp(18px, 4vw, 28px);
+      background: #fbfaff;
+      border: 1px solid #d9ddf3;
+      border-left: 5px solid var(--blue);
+      border-radius: 18px;
+    }
+    .english-line { margin: 0; font: 600 clamp(1.18rem, 3vw, 1.6rem)/1.55 Georgia, "Times New Roman", serif; }
+    .translation, .highlight-note { margin: 0; }
+    .translation { color: #43516a; }
+    .highlight-note { color: var(--amber); font-size: .92rem; }
+    mark { padding: .08em .22em; color: inherit; background: #ffe39d; border-radius: 5px; }
+    .audio-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .audio-badge { color: var(--jade); font-size: .8rem; font-weight: 850; letter-spacing: .05em; text-transform: uppercase; }
+    .btn {
+      min-height: 44px;
+      padding: 9px 15px;
+      color: var(--ink);
+      background: white;
+      border: 1px solid #b9c0ce;
+      border-radius: 12px;
+      font-weight: 760;
+    }
+    .btn:hover { color: var(--blue); border-color: var(--blue); }
+    .btn.primary { color: white; background: var(--blue); border-color: var(--blue); }
+    .progressive-reveal { display: grid; gap: 9px; margin-top: 18px; }
+    .chunk { padding: 15px; background: white; border: 1px solid var(--line); border-radius: 14px; }
+    .chunk[hidden] { display: none; }
+    .keyword-lab { position: relative; overflow: hidden; background: radial-gradient(circle at 96% 4%, rgba(8,122,104,.16), transparent 25%), var(--paper); }
+    .keyword-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 18px; }
+    .keyword-card { min-width: 0; padding: 16px; background: rgba(255,255,255,.88); border: 1px solid #cfd5e8; border-radius: 18px; }
+    .keyword-card h3 { margin: 0; color: var(--blue); }
+    .keyword-card .english-unit { margin-top: 10px; padding: 14px; }
+    .keyword-card .english-line { font-size: 1.08rem; }
+    .pronunciation { margin: 3px 0 0; color: var(--muted); font-size: .86rem; }
+    details { margin-top: 10px; }
+    summary { color: var(--jade); font-weight: 800; cursor: pointer; }
+    .difficulty-ladder { display: grid; gap: 10px; margin-top: 18px; }
+    .rung { display: grid; grid-template-columns: 135px minmax(0,1fr); gap: 14px; padding: 16px; background: white; border: 1px solid var(--line); border-radius: 14px; }
+    .rung strong { color: var(--blue); }
+    .field { width: 100%; min-height: 46px; margin-top: 8px; padding: 10px 12px; border: 1px solid #adb5c3; border-radius: 10px; }
+    .review-plan { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-top: 18px; }
+    .review-plan div { padding: 16px; background: var(--jade-soft); border-radius: 14px; }
+    .audio-dock {
+      position: fixed;
+      right: 14px;
+      bottom: 14px;
+      z-index: 25;
+      width: min(450px, calc(100% - 28px));
+      padding: 12px;
+      background: rgba(255,253,248,.97);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+    }
+    .audio-dock audio { width: 100%; height: 36px; }
+    .speed-row { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 8px; }
+    .speed-row .btn { min-height: 36px; padding: 5px 10px; }
+    .speed-row .btn[aria-pressed="true"] { color: white; background: var(--blue); border-color: var(--blue); }
+    #audio-status { display: block; margin-top: 6px; color: var(--muted); }
+    @media (max-width: 700px) {
+      .stage-nav { position: static; grid-template-columns: 1fr; }
+      .stage-nav a { display: flex; justify-content: space-between; text-align: left; }
+      .keyword-grid, .review-plan { grid-template-columns: 1fr; }
+      .rung { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#lesson">跳到学习内容</a>
+
+  <header class="hero shell">
+    <p class="eyebrow">IELTS Learning Atelier · Standard House Style</p>
+    <h1>一句一句听懂，<br>一步一步用出来。</h1>
+    <p>这是所有代理都应复用的学习模板：清晰双语、重点高亮、生活迁移，以及每个英语学习单元独享一个 MP3。</p>
+  </header>
+
+  <nav class="stage-nav shell" aria-label="学习阶段">
+    <a href="#notice" data-stage="notice"><strong>01 观察</strong><span>先理解</span></a>
+    <a href="#build" data-stage="build"><strong>02 搭建</strong><span>看结构</span></a>
+    <a href="#recall" data-stage="recall"><strong>03 提取</strong><span>记关键词</span></a>
+    <a href="#transfer" data-stage="transfer"><strong>04 迁移</strong><span>用于生活</span></a>
+    <a href="#review" data-stage="review"><strong>05 复习</strong><span>间隔回想</span></a>
+  </nav>
+
+  <main id="lesson" class="shell">
+    <section id="notice" class="card">
+      <span class="stage-kicker">Notice · 原句对照</span>
+      <h2>先听完整意思，再看重点</h2>
+      <p class="lead">第一次只抓大意；第二次跟着高亮读；第三次关掉中文复述。</p>
+      <article class="english-unit" data-audio-transcript="Small daily habits can lead to meaningful progress when learners practise consistently.">
+        <p class="english-line" lang="en">Small daily habits can <mark>lead to meaningful progress</mark> when learners <mark>practise consistently</mark>.</p>
+        <p class="translation" lang="zh-CN">当学习者持续练习时，微小的日常习惯能够带来有意义的进步。</p>
+        <p class="highlight-note">结构重点：lead to 表示“带来”；when 引出取得结果的条件。</p>
+        <div class="audio-row"><span class="audio-badge">MP3 01 · 仅此一句</span><button class="btn primary tts-play" type="button" data-audio-src="audio-template/u01-source.mp3" data-audio-transcript="Small daily habits can lead to meaningful progress when learners practise consistently." data-audio-label="原句">▶ 播放原句</button></div>
+      </article>
+    </section>
+
+    <section id="build" class="card">
+      <span class="stage-kicker">Build · 结构地图</span>
+      <h2>先主干，后条件</h2>
+      <p class="lead">每次只展开一个功能块，让长句有清楚的路线。</p>
+      <div class="progressive-reveal" aria-live="polite">
+        <div class="chunk"><strong>主干：</strong>小习惯可以带来进步。</div>
+        <div class="chunk" hidden><strong>程度：</strong>meaningful 说明进步是有实际价值的。</div>
+        <div class="chunk" hidden><strong>条件：</strong>when learners practise consistently。</div>
+      </div>
+      <button id="reveal-next" class="btn primary" type="button" data-reveal-next>揭示下一层</button>
+    </section>
+
+    <section id="recall" class="card keyword-lab">
+      <span class="stage-kicker">Recall · Keyword Lab</span>
+      <h2>4 个今天就能使用的关键词</h2>
+      <p class="lead">每张卡只放一个英语单元、一个精确文本和一个独享 MP3。</p>
+      <div class="keyword-grid">
+        <article class="keyword-card">
+          <h3>daily habit</h3><p class="pronunciation">DAI-ly HAB-it · 日常习惯</p>
+          <div class="english-unit" data-audio-transcript="A short walk is a healthy daily habit.">
+            <p class="english-line" lang="en">A short walk is a healthy <mark>daily habit</mark>.</p>
+            <p class="translation" lang="zh-CN">短距离散步是一种健康的日常习惯。</p>
+            <p class="highlight-note">搭配：build a habit；避免说 make a habit when you mean develop one。</p>
+            <div class="audio-row"><span class="audio-badge">MP3 02</span><button class="btn tts-play" type="button" data-audio-src="audio-template/u02-daily-habit.mp3" data-audio-transcript="A short walk is a healthy daily habit." data-audio-label="daily habit 例句">▶ 听例句</button></div>
+          </div>
+          <details><summary>Use it today</summary><p>写下你希望建立的一个小习惯。</p></details>
+        </article>
+
+        <article class="keyword-card">
+          <h3>lead to</h3><p class="pronunciation">LEAD to · 带来、导致</p>
+          <div class="english-unit" data-audio-transcript="Better planning can lead to less stress at work.">
+            <p class="english-line" lang="en">Better planning can <mark>lead to</mark> less stress at work.</p>
+            <p class="translation" lang="zh-CN">更好的规划可以减少工作压力。</p>
+            <p class="highlight-note">后接名词或动名词；不要直接接一个没有连接词的完整句子。</p>
+            <div class="audio-row"><span class="audio-badge">MP3 03</span><button class="btn tts-play" type="button" data-audio-src="audio-template/u03-lead-to.mp3" data-audio-transcript="Better planning can lead to less stress at work." data-audio-label="lead to 例句">▶ 听例句</button></div>
+          </div>
+          <details><summary>Use it today</summary><p>说说一种能让你今天更轻松的行动。</p></details>
+        </article>
+
+        <article class="keyword-card">
+          <h3>meaningful progress</h3><p class="pronunciation">MEAN-ing-ful PRO-gress · 有意义的进步</p>
+          <div class="english-unit" data-audio-transcript="Ten focused minutes can create meaningful progress.">
+            <p class="english-line" lang="en">Ten focused minutes can create <mark>meaningful progress</mark>.</p>
+            <p class="translation" lang="zh-CN">专注的十分钟也能创造有意义的进步。</p>
+            <p class="highlight-note">progress 不可数；通常不说 a progress。</p>
+            <div class="audio-row"><span class="audio-badge">MP3 04</span><button class="btn tts-play" type="button" data-audio-src="audio-template/u04-progress.mp3" data-audio-transcript="Ten focused minutes can create meaningful progress." data-audio-label="meaningful progress 例句">▶ 听例句</button></div>
+          </div>
+          <details><summary>Use it today</summary><p>今天哪一个十分钟任务最值得完成？</p></details>
+        </article>
+
+        <article class="keyword-card">
+          <h3>consistently</h3><p class="pronunciation">con-SIS-tent-ly · 持续稳定地</p>
+          <div class="english-unit" data-audio-transcript="I practise English consistently during my commute.">
+            <p class="english-line" lang="en">I practise English <mark>consistently</mark> during my commute.</p>
+            <p class="translation" lang="zh-CN">我在通勤时持续练习英语。</p>
+            <p class="highlight-note">强调规律持续，不等于 continuously“不间断地”。</p>
+            <div class="audio-row"><span class="audio-badge">MP3 05</span><button class="btn tts-play" type="button" data-audio-src="audio-template/u05-consistently.mp3" data-audio-transcript="I practise English consistently during my commute." data-audio-label="consistently 例句">▶ 听例句</button></div>
+          </div>
+          <details><summary>Use it today</summary><p>选择一个你能稳定练习英语的时间点。</p></details>
+        </article>
+      </div>
+    </section>
+
+    <section id="transfer" class="card">
+      <span class="stage-kicker">Transfer · Easy → Moderate</span>
+      <h2>从会认，到能用于自己的生活</h2>
+      <div class="difficulty-ladder">
+        <article class="rung" data-difficulty="easy-notice"><strong>Easy · Notice</strong><div>把“带来”与 lead to 配对；把“持续地”与 consistently 配对。</div></article>
+        <article class="rung" data-difficulty="easy-use"><strong>Easy · Use today</strong><div><label for="easy-use">完成一个关于你的中文思路，再尝试使用关键词表达。</label><input id="easy-use" class="field" autocomplete="off"></div></article>
+        <article class="rung" data-difficulty="moderate-transfer"><strong>Moderate · Transfer</strong><div><label for="moderate-use">使用两个关键词说明一个熟悉习惯带来的变化。</label><input id="moderate-use" class="field" autocomplete="off"></div></article>
+      </div>
+    </section>
+
+    <section id="review" class="card">
+      <span class="stage-kicker">Review · 轻量复习</span>
+      <h2>把记忆安排到未来</h2>
+      <p class="lead">完整课程应在此继续加入标准八题测评；交互实现请复用完整 demo。</p>
+      <div class="review-plan">
+        <div><strong>10 分钟</strong><br>不看页面说出主干和两个关键词。</div>
+        <div><strong>1 天</strong><br>听五段独立 MP3，并各复述一次。</div>
+        <div><strong>3 天</strong><br>用两个关键词写一个生活化新句。</div>
+      </div>
+    </section>
+  </main>
+
+  <aside class="audio-dock" aria-label="共享播放控制器">
+    <audio id="shared-audio" controls preload="none"></audio>
+    <div class="speed-row" role="group" aria-label="播放速度">
+      <button class="btn" type="button" data-speed="0.6" aria-pressed="false">0.6x</button>
+      <button class="btn" type="button" data-speed="0.7" aria-pressed="true">0.7x</button>
+      <button class="btn" type="button" data-speed="0.8" aria-pressed="false">0.8x</button>
+      <button class="btn" type="button" data-speed="0.9" aria-pressed="false">0.9x</button>
+    </div>
+    <small id="audio-status" aria-live="polite">选择一句播放；默认速度 0.7x。</small>
+  </aside>
+
+  <script>
+    (() => {
+      const audio = document.querySelector("#shared-audio");
+      const status = document.querySelector("#audio-status");
+      const speedButtons = [...document.querySelectorAll("[data-speed]")];
+      let speed = 0.7;
+
+      function setSpeed(nextSpeed) {
+        speed = nextSpeed;
+        audio.playbackRate = speed;
+        audio.defaultPlaybackRate = speed;
+        speedButtons.forEach(button => button.setAttribute("aria-pressed", String(Number(button.dataset.speed) === speed)));
+        status.textContent = `当前速度：${speed.toFixed(1)}x`;
+      }
+
+      speedButtons.forEach(button => button.addEventListener("click", () => setSpeed(Number(button.dataset.speed))));
+      document.querySelectorAll(".tts-play").forEach(button => {
+        button.addEventListener("click", async () => {
+          audio.src = button.dataset.audioSrc;
+          audio.playbackRate = speed;
+          status.textContent = `正在播放：${button.dataset.audioLabel} · ${speed.toFixed(1)}x`;
+          try { await audio.play(); } catch { status.textContent = "音频未能播放，请检查本地 MP3 文件。"; }
+        });
+      });
+
+      const revealButton = document.querySelector("[data-reveal-next]");
+      revealButton.addEventListener("click", () => {
+        const next = document.querySelector(".chunk[hidden]");
+        if (next) next.hidden = false;
+        if (!document.querySelector(".chunk[hidden]")) {
+          revealButton.textContent = "结构已完整显示";
+          revealButton.disabled = true;
+        }
+      });
+
+      setSpeed(0.7);
+    })();
+  </script>
+</body>
+</html>

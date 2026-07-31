@@ -306,6 +306,56 @@
     .match-card { min-height: 58px; text-align: left; }
     .match-card.matched { color: #275649; background: var(--jade-soft); border-color: #68bca7; }
 
+    .keyword-lab {
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 92% 8%, rgba(126, 224, 201, .3), transparent 24%),
+        var(--paper);
+    }
+    .keyword-lab::before {
+      content: "WORDS → LIFE";
+      position: absolute;
+      top: 22px;
+      right: 24px;
+      color: rgba(51, 71, 168, .14);
+      font-size: clamp(1.2rem, 3vw, 2.5rem);
+      font-weight: 900;
+      letter-spacing: .08em;
+      pointer-events: none;
+    }
+    .keyword-grid {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 20px;
+    }
+    .keyword-card {
+      min-width: 0;
+      padding: 18px;
+      background: rgba(255,255,255,.82);
+      border: 1px solid #cfd5ef;
+      border-radius: 18px;
+    }
+    .keyword-card h3 { margin-bottom: 2px; color: var(--indigo); }
+    .keyword-card .pronunciation { margin: 0 0 10px; color: var(--muted); font-size: .86rem; }
+    .keyword-card details { margin-top: 12px; border-top: 1px dashed var(--line); padding-top: 10px; }
+    .keyword-card summary { color: var(--jade); font-weight: 800; cursor: pointer; }
+    .use-today { padding: 12px; background: var(--amber-soft); border-radius: 12px; }
+    .difficulty-ladder { display: grid; gap: 10px; margin-top: 18px; }
+    .difficulty-rung {
+      display: grid;
+      grid-template-columns: 118px minmax(0, 1fr);
+      gap: 14px;
+      align-items: start;
+      padding: 16px;
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+    }
+    .difficulty-rung strong { color: var(--indigo); }
+
     .transfer-frame {
       padding: 18px;
       color: white;
@@ -384,7 +434,8 @@
       .hero { margin-top: 10px; border-radius: 22px; }
       .stage-nav { grid-template-columns: 1fr; }
       .stage-nav a { display: flex; justify-content: space-between; text-align: left; }
-      .match-board, .dimension-grid, .review-plan { grid-template-columns: 1fr; }
+      .match-board, .dimension-grid, .review-plan, .keyword-grid { grid-template-columns: 1fr; }
+      .difficulty-rung { grid-template-columns: 1fr; }
       .memory-game header { display: block; }
       .audio-dock { right: 10px; bottom: 10px; width: calc(100% - 20px); }
       body { padding-bottom: 135px; }
@@ -427,12 +478,12 @@
         <h2 id="notice-title">先做一个不计分的判断</h2>
         <p class="lead">先承诺一个答案，再学习。预测不会计入掌握度。</p>
 
-        <div class="english-unit">
+        <div class="english-unit" data-audio-transcript="The growth of freight transport is due largely to structural changes in the economy.">
           <p class="english-line" lang="en">The growth of freight transport is <mark>due largely to structural changes</mark> in the economy.</p>
           <p class="translation" lang="zh-CN">货运增长主要源于经济中的结构性变化。</p>
           <p class="highlight-note">高亮部分是正式因果表达；largely 保留“主要但并非全部”的谨慎程度。</p>
           <div class="audio-row">
-            <button class="btn tts-play" type="button" data-audio-src="ielts-assessment-workflow-example.mp3">▶ 播放原句</button>
+            <button class="btn tts-play" type="button" data-audio-src="audio-demo-dedicated/u01-source.mp3" data-audio-transcript="The growth of freight transport is due largely to structural changes in the economy.">▶ 播放原句</button>
           </div>
         </div>
 
@@ -469,11 +520,11 @@
         </div>
         <button id="reveal-next" class="btn primary" type="button" data-reveal-next>揭示下一层</button>
 
-        <div class="english-unit">
+        <div class="english-unit" data-audio-transcript="due largely to">
           <p class="english-line" lang="en"><mark>due largely to</mark></p>
           <p class="translation" lang="zh-CN">主要由于；在正式论述中表达主要但非唯一原因。</p>
           <p class="highlight-note">记忆钩子：due to 是“因”，largely 是“力度旋钮”。</p>
-          <button class="btn tts-play" type="button" data-audio-src="audio-demo/due-largely-to.mp3">▶ 播放搭配</button>
+          <button class="btn tts-play" type="button" data-audio-src="audio-demo-dedicated/u02-due-largely-to.mp3" data-audio-transcript="due largely to">▶ 播放搭配</button>
         </div>
 
         <div class="micro-check">
@@ -511,16 +562,17 @@
             </header>
             <p>用上移/下移按钮排列四个功能块。键盘和触屏都可操作。</p>
 
-            <div class="english-unit">
-              <ol id="chunk-order" class="chunk-order" lang="en">
+            <div class="english-unit" data-audio-transcript="The growth of freight transport is due largely to structural changes in the economy.">
+              <ol id="chunk-order" class="chunk-order">
                 <li data-key="c"><span>structural changes</span><span class="move-row"><button class="btn move-up" type="button" aria-label="上移 structural changes">↑</button><button class="btn move-down" type="button" aria-label="下移 structural changes">↓</button></span></li>
                 <li data-key="a"><span>The growth of freight transport</span><span class="move-row"><button class="btn move-up" type="button" aria-label="上移主语块">↑</button><button class="btn move-down" type="button" aria-label="下移主语块">↓</button></span></li>
                 <li data-key="d"><span>in the economy.</span><span class="move-row"><button class="btn move-up" type="button" aria-label="上移范围块">↑</button><button class="btn move-down" type="button" aria-label="下移范围块">↓</button></span></li>
                 <li data-key="b"><span>is due largely to</span><span class="move-row"><button class="btn move-up" type="button" aria-label="上移谓语块">↑</button><button class="btn move-down" type="button" aria-label="下移谓语块">↓</button></span></li>
               </ol>
+              <p class="english-line" lang="en">The growth of freight transport is <mark>due largely to structural changes</mark> in the economy.</p>
               <p class="translation" lang="zh-CN">目标顺序：主语 → 因果谓语 → 原因核心 → 范围。</p>
               <p class="highlight-note">高亮策略：<mark>先主干，后细节</mark>。这四块合起来就是完整原句。</p>
-              <button class="btn tts-play" type="button" data-audio-src="ielts-assessment-workflow-example.mp3">▶ 播放完整顺序</button>
+              <button class="btn tts-play" type="button" data-audio-src="audio-demo-dedicated/u03-ordered-sentence.mp3" data-audio-transcript="The growth of freight transport is due largely to structural changes in the economy.">▶ 播放完整顺序</button>
             </div>
 
             <div class="button-row">
@@ -540,9 +592,9 @@
             </header>
             <p>先选左侧表达，再选右侧功能。配错后会说明区别。</p>
 
-            <div class="english-unit">
+            <div class="english-unit" data-audio-transcript="Due largely to; structural changes; can be attributed largely to.">
               <div class="match-board">
-                <div class="match-column" lang="en">
+                <div class="match-column">
                   <button class="btn match-card" type="button" data-side="left" data-pair="cause"><mark>due largely to</mark></button>
                   <button class="btn match-card" type="button" data-side="left" data-pair="system">structural changes</button>
                   <button class="btn match-card" type="button" data-side="left" data-pair="formal">can be attributed largely to</button>
@@ -553,9 +605,10 @@
                   <button class="btn match-card" type="button" data-side="right" data-pair="system">系统层面的结构变化</button>
                 </div>
               </div>
+              <p class="english-line" lang="en"><mark>Due largely to</mark>; structural changes; can be attributed largely to.</p>
               <p class="translation" lang="zh-CN">三组对应关系覆盖原因、系统变化和正式改写。</p>
               <p class="highlight-note">高亮策略：不要孤立背词，把表达和它的<mark>写作功能</mark>绑定。</p>
-              <button class="btn tts-play" type="button" data-audio-src="audio-demo/collocation-set.mp3">▶ 播放三组表达</button>
+              <button class="btn tts-play" type="button" data-audio-src="audio-demo-dedicated/u04-collocation-set.mp3" data-audio-transcript="Due largely to; structural changes; can be attributed largely to.">▶ 播放三组表达</button>
             </div>
             <button id="reset-pairs" class="btn" type="button">重新配对</button>
             <p id="pairs-feedback" class="feedback" aria-live="polite"></p>
@@ -574,16 +627,88 @@
         </div>
       </section>
 
+      <section class="card keyword-lab" aria-labelledby="keyword-lab-title">
+        <span class="stage-kicker">Keyword Lab · 从句子走进生活</span>
+        <h2 id="keyword-lab-title">今天真正用得上的 4 组表达</h2>
+        <p class="lead">先理解，再在熟悉场景中开口。点击“生活用法”逐步展开，不需要一开始就做难题。</p>
+
+        <div class="keyword-grid">
+          <article class="keyword-card">
+            <h3>growth</h3>
+            <p class="pronunciation">/ɡrəʊθ/ · 注意结尾 th</p>
+            <div class="english-unit" data-audio-transcript="There has been steady growth in online shopping.">
+              <p class="english-line" lang="en">There has been steady <mark>growth</mark> in online shopping.</p>
+              <p class="translation" lang="zh-CN">网上购物一直在稳步增长。</p>
+              <p class="highlight-note">常见搭配：steady/rapid growth；不要说 growthing。</p>
+              <button class="btn tts-play" type="button" data-audio-src="audio-demo-dedicated/u05-growth.mp3" data-audio-transcript="There has been steady growth in online shopping.">▶ 播放生活例句</button>
+            </div>
+            <details><summary>展开生活用法</summary><p class="use-today">Use it today：说说你所在城市哪件事正在增长：There has been growth in ___.</p></details>
+          </article>
+
+          <article class="keyword-card">
+            <h3>due largely to</h3>
+            <p class="pronunciation">重音提示：DUE largely TO</p>
+            <div class="english-unit" data-audio-transcript="My better sleep is due largely to a regular routine.">
+              <p class="english-line" lang="en">My better sleep is <mark>due largely to</mark> a regular routine.</p>
+              <p class="translation" lang="zh-CN">我的睡眠改善主要得益于规律作息。</p>
+              <p class="highlight-note">正式地说明主要原因；后面接名词，不直接接完整句子。</p>
+              <button class="btn tts-play" type="button" data-audio-src="audio-demo-dedicated/u06-sleep-routine.mp3" data-audio-transcript="My better sleep is due largely to a regular routine.">▶ 播放生活例句</button>
+            </div>
+            <details><summary>展开生活用法</summary><p class="use-today">Use it today：完成 My progress is due largely to ___.</p></details>
+          </article>
+
+          <article class="keyword-card">
+            <h3>structural changes</h3>
+            <p class="pronunciation">STRUC-tur-al CHANG-es</p>
+            <div class="english-unit" data-audio-transcript="Our team needs structural changes, not another quick fix.">
+              <p class="english-line" lang="en">Our team needs <mark>structural changes</mark>, not another quick fix.</p>
+              <p class="translation" lang="zh-CN">我们的团队需要结构性改变，而不是另一个临时补救。</p>
+              <p class="highlight-note">指系统或组织层面的变化；比 small changes 更深层。</p>
+              <button class="btn tts-play" type="button" data-audio-src="audio-demo-dedicated/u07-structural-changes.mp3" data-audio-transcript="Our team needs structural changes, not another quick fix.">▶ 播放生活例句</button>
+            </div>
+            <details><summary>展开生活用法</summary><p class="use-today">Use it today：你的工作或学习中，哪里需要结构性改变？</p></details>
+          </article>
+
+          <article class="keyword-card">
+            <h3>economy</h3>
+            <p class="pronunciation">/ɪˈkɒnəmi/ · 重音在第二音节</p>
+            <div class="english-unit" data-audio-transcript="Small businesses support the local economy.">
+              <p class="english-line" lang="en">Small businesses support the local <mark>economy</mark>.</p>
+              <p class="translation" lang="zh-CN">小企业支持当地经济。</p>
+              <p class="highlight-note">常见搭配：local/global economy；注意 economic 是形容词。</p>
+              <button class="btn tts-play" type="button" data-audio-src="audio-demo-dedicated/u08-local-economy.mp3" data-audio-transcript="Small businesses support the local economy.">▶ 播放生活例句</button>
+            </div>
+            <details><summary>展开生活用法</summary><p class="use-today">Use it today：说出一种支持 local economy 的日常选择。</p></details>
+          </article>
+        </div>
+
+        <div class="difficulty-ladder" aria-labelledby="ladder-title">
+          <h3 id="ladder-title">三步难度梯 · Easy → Moderate</h3>
+          <article class="difficulty-rung" data-difficulty="easy-notice">
+            <strong>Easy · Notice</strong>
+            <div>把 steady、local、structural 分别与 growth、economy、changes 配成自然搭配。</div>
+          </article>
+          <article class="difficulty-rung" data-difficulty="easy-use">
+            <strong>Easy · Use today</strong>
+            <div><label for="daily-keyword">完成与你有关的一句：My progress is due largely to ...</label><input id="daily-keyword" class="field" autocomplete="off"></div>
+          </article>
+          <article class="difficulty-rung" data-difficulty="moderate-transfer">
+            <strong>Moderate · Transfer</strong>
+            <div><label for="moderate-keyword">使用 growth + due largely to，解释一个熟悉的生活变化。</label><input id="moderate-keyword" class="field" autocomplete="off"><details><summary>完成后查看模型</summary><p>The growth in my confidence is due largely to regular speaking practice.</p></details></div>
+          </article>
+        </div>
+      </section>
+
       <section id="transfer" class="card" aria-labelledby="transfer-title">
         <span class="stage-kicker">Transfer · 迁移生成</span>
         <h2 id="transfer-title">保留逻辑，替换话题</h2>
         <p class="lead">迁移不是换几个同义词，而是保留因果关系、正式语域和谨慎程度。</p>
 
-        <div class="english-unit">
+        <div class="english-unit" data-audio-transcript="The rise in remote work can be attributed largely to advances in communication technology.">
           <p class="english-line" lang="en">The rise in remote work <mark>can be attributed largely to</mark> advances in communication technology.</p>
           <p class="translation" lang="zh-CN">远程办公的增长主要可以归因于通信技术的进步。</p>
           <p class="highlight-note">高亮部分把原句的正式因果关系迁移到了工作话题。</p>
-          <button class="btn tts-play" type="button" data-audio-src="audio-demo/transfer-example.mp3">▶ 播放迁移句</button>
+          <button class="btn tts-play" type="button" data-audio-src="audio-demo-dedicated/u09-transfer.mp3" data-audio-transcript="The rise in remote work can be attributed largely to advances in communication technology.">▶ 播放迁移句</button>
         </div>
 
         <div class="transfer-frame">

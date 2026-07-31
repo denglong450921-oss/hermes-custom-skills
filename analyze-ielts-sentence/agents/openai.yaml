@@ -1,4 +1,4 @@
 interface:
   display_name: "IELTS Memory Studio"
-  short_description: "Analyze IELTS sentences with retrieval games and calibrated assessment"
-  default_prompt: "Use $analyze-ielts-sentence to turn this sentence into a bilingual interactive learning studio with memory games, slow audio, and a confidence-calibrated mastery test."
+  short_description: "Beautiful HTML IELTS lessons with dedicated MP3 audio"
+  default_prompt: "Use $analyze-ielts-sentence to turn this sentence into the standard polished bilingual HTML learning template, with one dedicated local MP3 per English unit, practical keyword cards, easy-to-moderate transfer, and a calibrated mastery test."

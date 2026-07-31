@@ -1,6 +1,23 @@
 # Bilingual Display and Microsoft Edge TTS Workflow
 
-Use this reference for every interactive HTML lesson created by `analyze-ielts-sentence`. The coverage rule is universal: every learner-facing English item needs Chinese alignment, a meaningful highlight, a visible explanation, and Microsoft Edge TTS playback.
+Use this reference for every interactive HTML lesson created by `analyze-ielts-sentence`. The coverage rule is universal: every learner-facing English item needs Chinese alignment, a meaningful highlight, a visible explanation, and its own Microsoft Edge TTS MP3.
+
+## Iron rule: one English unit = one dedicated MP3
+
+This mapping is non-negotiable:
+
+```text
+1 .english-unit
+→ 1 exact English transcript
+→ 1 .tts-play control
+→ 1 unique local .mp3 file
+```
+
+Do not combine multiple sentences into a compilation MP3. Do not reuse an MP3
+path across two units, even when the same sentence appears twice. Repetition is
+a separate learning event and receives a separately generated file. A shared
+HTML `<audio>` element is allowed only as a playback surface; it does not alter
+file ownership.
 
 ## Coverage rule
 
@@ -22,7 +39,9 @@ Each `.english-unit` must include or reference:
 - an aligned Chinese rendering (`[lang="zh-CN"]`)
 - at least one `<mark>` in the English and the corresponding Chinese emphasis when meaningful
 - a visible `.highlight-note`
-- a `.tts-play` control with `data-audio-src` pointing to a non-empty Edge TTS MP3
+- `data-audio-transcript` containing the exact normalized English text
+- exactly one `.tts-play` control with a unique `data-audio-src`
+- a non-empty local Edge TTS MP3 at that relative path
 
 Use one shared audio controller for compactness. Clicking a unit's play button loads its `data-audio-src`, announces the unit label, and plays at the currently selected rate. This gives every English item audio without repeating a full native player in every row.
 
@@ -39,7 +58,9 @@ The bilingual view should reduce lookup friction while preserving English proces
 Pair English and Chinese in the same semantic component:
 
 ```html
-<section class="bilingual-pair english-unit" aria-labelledby="source-pair-title">
+<section class="bilingual-pair english-unit"
+         data-audio-transcript="Although X, Y because Z."
+         aria-labelledby="source-pair-title">
   <h3 id="source-pair-title">原句对照</h3>
   <div class="bilingual-grid">
     <div class="language-panel" lang="en">
@@ -57,6 +78,7 @@ Pair English and Chinese in the same semantic component:
   </ul>
   <button class="tts-play" type="button"
           data-audio-src="audio/source.mp3"
+          data-audio-transcript="Although X, Y because Z."
           data-audio-label="原句">播放英语</button>
 </section>
 ```
@@ -111,7 +133,12 @@ python scripts/generate_edge_tts.py \
 
 The helper validates the input and writes the MP3 atomically. Audio generation requires network access. Playback does not, provided the MP3 is delivered beside the HTML or embedded as a data URL.
 
-Generate at a natural base rate. Learners change speed in the browser; this avoids storing four duplicate audio files. Generate one MP3 for each unique English transcript and reuse it when the exact same text appears more than once.
+Generate at a natural base rate. Learners change speed in the browser; this
+avoids storing four speed variants. Generate one MP3 for every unit. Do not
+reuse it, even when exact wording appears more than once. Use deterministic
+filenames such as `audio/u01-source.mp3`,
+`audio/u02-keyword-example.mp3`, and `audio/u03-transfer-model.mp3` so
+ownership stays obvious.
 
 ## Accessible player and speed controls
 
@@ -167,6 +194,12 @@ For a shared-player page, keep one native `<audio>` element and one global speed
 ## Validation checklist
 
 - Run `scripts/audit_bilingual_audio.py lesson.html` and require a clean result.
+- Confirm each unit's `data-audio-transcript` exactly matches its visible
+  `[lang="en"]` text after whitespace normalization.
+- Confirm every unit has exactly one play control and every `data-audio-src` is
+  unique across the page.
+- Confirm every audio path is local, ends in `.mp3`, exists relative to the
+  HTML file, and is non-empty.
 - Confirm every `.english-unit` has English, Chinese, a mark, a highlight note, and a TTS play control.
 - Confirm no learner-facing English remains outside an `.english-unit` except the documented UI-only exclusions.
 - Confirm the source sentence and key upgraded sentence have explicit key-point highlights.

@@ -1,13 +1,13 @@
 [
   {
     "id": 1,
-    "prompt": "Use $analyze-ielts-sentence to analyze this sentence in chat: Although online learning platforms are often praised for giving students unprecedented access to educational resources, their actual impact on learning depends largely on whether students receive enough guidance to use those resources critically and consistently.",
-    "expected": "A Chinese ten-part analysis that starts with meaning and main structure, reveals clause hierarchy, pairs chunks bilingually, explains qualifiers and collocations, provides easier and formal paraphrases, gives a reusable transfer frame, and ends with a compact memory hook."
+    "prompt": "Use $analyze-ielts-sentence to analyze this sentence: Although online learning platforms are often praised for giving students unprecedented access to educational resources, their actual impact on learning depends largely on whether students receive enough guidance to use those resources critically and consistently.",
+    "expected": "A polished interactive HTML lesson by default using the canonical house style, with the full Chinese ten-part analysis, progressive clause reveal, a visually engaging Keyword Lab, practical easy-to-moderate daily-life transfer, and one dedicated exact local MP3 per English unit."
   },
   {
     "id": 2,
     "prompt": "Use $analyze-ielts-sentence to build a polished mobile-friendly interactive HTML lesson for: Although public transport is expensive to build, it can reduce congestion and air pollution. Include pronunciation, learning games, and a final assessment.",
-    "expected": "A visually authored five-stage learning studio with progressive chunk reveal, bilingual local Edge TTS units, at least two accessible memory games, three formative checks, an eight-item four-dimension assessment, per-item confidence, calibration, adaptive retry, and spaced retrieval."
+    "expected": "A visually authored five-stage learning studio using the canonical template, with progressive chunk reveal, a 4–6 item practical Keyword Lab, easy-notice/easy-use/moderate-transfer practice, exactly one unique local Edge TTS MP3 per English unit, at least two accessible memory games, three formative checks, an eight-item four-dimension assessment, per-item confidence, calibration, adaptive retry, and spaced retrieval."
   },
   {
     "id": 3,
