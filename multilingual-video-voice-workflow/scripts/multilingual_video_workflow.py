@@ -978,6 +978,7 @@ def generate_tts_and_srt(
     rate: str,
     pronunciation_entries: Sequence[Dict[str, object]] = (),
     protected_terms: Sequence[str] = (),
+    chinese_segments: Sequence[str] = None,
 ) -> List[Dict[str, str]]:
     """Generate MP3 files and one cumulative SRT per voice."""
     manifests: List[Dict[str, str]] = []
@@ -1034,12 +1035,19 @@ def generate_tts_and_srt(
         if voice_locale in {"zh-CN", "zh-TW"}:
             reference_srt_path_str = ""
         else:
-            chinese_segments = translate_segments_to_reference_chinese(
-                segments,
-                target_locale=voice_locale,
-                protected_terms=protected_terms,
+            # ponytail: AI-translation mode — reuse source segments from the
+            # bilingual review instead of back-translating via Google Translate.
+            # Fall back to back-translation only when no source segments are given.
+            reference_chinese = (
+                chinese_segments
+                if chinese_segments is not None
+                else translate_segments_to_reference_chinese(
+                    segments,
+                    target_locale=voice_locale,
+                    protected_terms=protected_terms,
+                )
             )
-            reference_cues = build_reference_chinese_cues(cues, chinese_segments)
+            reference_cues = build_reference_chinese_cues(cues, reference_chinese)
             write_srt_from_cues(reference_cues, reference_srt_path)
             reference_srt_path_str = str(reference_srt_path)
         manifests.append(
@@ -1166,6 +1174,7 @@ def main() -> int:
         args.rate,
         pronunciation_entries=pronunciation_entries,
         protected_terms=protected_terms,
+        chinese_segments=source_segments,
     )
 
     pronunciation_report = {

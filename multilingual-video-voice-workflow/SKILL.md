@@ -45,8 +45,27 @@ If the user omits minor details, proceed with sensible defaults instead of block
 
 This is a two-stage workflow designed for quality assurance. **Always** do stage 1 first, ask the user to review the segmentation/translation, and then run stage 2.
 
-1. Read the source file or capture the pasted text into a temporary markdown file if needed.
-2. **Stage 1 (Prepare):** Run the script to segment, translate, and extract pronunciation candidates:
+### AI-Translation Mode (preferred — no Google Translate)
+
+The script's Google Translate dependency (deep_translator) is heavily rate-limited and unreliable. **Do not run `--stage prepare` for translation.** Instead:
+
+1. Segment the source text yourself (clause-level, ~36 CJK chars / ~18 words max, merge short fragments <15 CJK chars / <8 words).
+2. Translate each segment yourself — you are the translator.
+3. Write the bilingual review markdown directly at `<output-dir>/<base_name>_bilingual_review.md` (see `write_bilingual_markdown` format: `| No. | Source | Target |` table).
+4. Run only `--stage generate`. The script reads the review file, generates TTS MP3s and SRTs, and — since the patch — builds the Chinese reference SRT directly from the review's source segments instead of back-translating. Zero Google Translate calls.
+
+```bash
+python3 /Users/f/.trae/skills/multilingual-video-voice-workflow/scripts/multilingual_video_workflow.py \
+  --input-file "<source-file>" \
+  --target-language "<target-language>" \
+  --project-name "<project-name>" \
+  --voice-count 3 \
+  --stage "generate"
+```
+
+Note: `--source-language`, `--protected-terms`, and `--pronunciation-*` flags are NOT needed in AI-translation mode — you control the target text directly in the review file. Omit `--rate` too (argparse issue on this script; default +0% is fine).
+
+### Legacy mode (Google Translate)
 
 ```bash
 python3 /Users/f/.trae/skills/multilingual-video-voice-workflow/scripts/multilingual_video_workflow.py \
@@ -124,6 +143,34 @@ When handing results back to the user:
 - Prefer the auto-selected female voices for the target locale unless the user requested specific voices.
 - Keep segmentation natural for speaking, not literal sentence-for-sentence splitting when a long line needs clause-level breakup.
 - Keep source numbering out of spoken text and subtitle body content even if the input file already contains numbered lines.
+
+## Troubleshooting & Pitfalls
+
+Session learnings from real Chinese→Portuguese/Spanish runs.
+
+### Google Translate rate limits → use AI-Translation Mode
+
+The `deep_translator` free Google endpoint is heavily rate-limited: transient "No translation was found" errors, retry loops, and back-translation failures (e.g. segment 5 fails while 1-4, 6-19 succeed). The fix is architectural, not a retry: **AI-Translation Mode** (see above) removes every Google call from the generate stage. Do not fall back to `--stage prepare` translation unless the user explicitly wants machine translation.
+
+### `--protected-terms` breaks the legacy generate stage
+
+In legacy mode, passing `--protected-terms` to `--stage generate` makes the back-translation pass choke on the ZXQPH...QXZ placeholder tokens ("No translation was found"). Omit it from generate. In AI-Translation Mode the flag is unnecessary — the review file already holds the final target text with brand names preserved.
+
+### Number-comma splits during segmentation
+
+A line like "拥有超过13,000名专业员工" can split across two segments ("...超过13" / "000名专业员工...") because the segmenter treats the comma in "13,000" as a clause boundary. Fix: merge the rows in the review file before generating, then renumber the rest.
+
+### Pronunciation overrides silently dropped (legacy generate)
+
+The generate stage hardcodes `review_mode="off"` in `prepare_pronunciation_entries()` (script line ~1156), so edits to `*_pronunciation_candidates.md` are ignored — the manifest shows `matched_terms: []`. Workarounds: add entries to `config/pronunciation_dictionary.json` before prepare, or write the run dictionary to `*_pronunciation_dictionary.json` by hand. In AI-Translation Mode, write the phonetic spelling directly into the target text in the review file — simplest and always applied.
+
+### `--rate` argparse quirk
+
+Omitting `--rate` is safer; the default `+0%` is fine. (Passing it can fail on some argparse versions of this script.)
+
+### Script path
+
+The skill references `/Users/f/.trae/skills/...` — that is the real installed path (symlinked into `.agents/skills/`). The `.hermes/skills/` copy is the pitfalls companion only.
 
 ## Harness (Self-Eval)
 
