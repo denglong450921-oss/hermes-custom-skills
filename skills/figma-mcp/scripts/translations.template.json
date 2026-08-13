@@ -1,0 +1,18 @@
+{
+  "languages": [
+    { "code": "ru", "name": "俄语" },
+    { "code": "kk", "name": "哈萨克语" }
+  ],
+  "translations": {
+    "ru": [
+      "338 Euston Road, Лондон",
+      "AMR (AMR International E-commerce Ltd.) была основана...",
+      "План развития на 2025–2035 годы..."
+    ],
+    "kk": [
+      "338 Euston Road, Лондон",
+      "AMR (AMR International E-commerce Ltd.) компаниясы 2020 жылғы...",
+      "2025–2035 жылдарға арналған даму жоспары..."
+    ]
+  }
+}

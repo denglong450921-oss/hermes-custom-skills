@@ -1,0 +1,4 @@
+interface:
+  display_name: "Figma MCP Operations"
+  short_description: "Route, inspect, and edit Figma safely in Codex"
+  default_prompt: "Use $figma-mcp to test the available Figma backend. If I provide a node URL, inspect that node; otherwise ask for a node-specific URL and do not assume access to my desktop selection."
