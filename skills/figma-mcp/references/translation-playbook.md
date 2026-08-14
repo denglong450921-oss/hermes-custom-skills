@@ -128,6 +128,14 @@ node translate-frame.js 851:7 translations.json
 
 - Clones are placed in a grid **below** the source (cols default 5,
   `GRID_COLS=3` to change). Positions never overlap the source.
+- **Multi-frame translation (several stacked frames selected at once):** the
+  default "clones below the source" would drop the TOP frame's clones on top of
+  the frame beneath it. Anchor each run explicitly with `GRID_X0`/`GRID_Y0`:
+  set `GRID_X0` = shared source x, and each frame's `GRID_Y0` = the bottom of
+  the previous frame's clone grid (frame2 `GRID_Y0` = frame1 clones' max y).
+  Clones land at `Y0 + H + gap + row`, so pass `GRID_Y0` as the Y *above* where
+  clones should start, not the first clone's own y. Verify with one
+  `get_nodes_info` across all clone ids (2D bounds, no pairwise overlap).
 - Each clone is renamed `<source>-<语言名>` (e.g. `1.修改-俄语`).
 - After the run it re-scans every clone and reports
   `exact=N/N` — the byte-exact verification.

@@ -17,10 +17,21 @@
  * Options (env vars):
  *   GRID_COLS=5            columns in the placement grid (default 5)
  *   GRID_GAP=300           gap between clones (default 300)
+ *   GRID_X0=<int>          override the grid anchor X (default: source bounds.x)
+ *   GRID_Y0=<int>          override the grid anchor Y (default: source bounds.y)
+ *                          — clones still land BELOW the anchor (Y0+H+gap+row),
+ *                            so set GRID_Y0 above the source's bottom to steer
+ *                            clones clear of OTHER frames that sit below the
+ *                            source. Use when translating several stacked
+ *                            frames: pass each one a GRID_Y0 past the last
+ *                            clone so no two runs overlap.
  *   NAME_PREFIX=""         prefix added to clone names (default: source name)
  *   FONT_FIX="hy:Noto Sans Armenian"  comma list "langCode:FontFamily" applied
  *                                     AFTER set_text for scripts the source font
- *                                     lacks (e.g. Armenian -> Arial Unicode MS)
+ *                                     lacks (e.g. Armenian -> Arial Unicode MS).
+ *                                     Omit when the source font already carries
+ *                                     the target script (e.g. Inter source,
+ *                                     Inter target) — clones inherit it.
  */
 const fs = require("fs");
 const { connect } = require("./mcp-client.js");
@@ -46,8 +57,10 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   const srcNode = srcInfo && srcInfo.node ? srcInfo.node : srcInfo;
   const W = srcNode && srcNode.bounds ? Math.round(srcNode.bounds.width) : 1120;
   const H = srcNode && srcNode.bounds ? Math.round(srcNode.bounds.height) : 9385;
-  const X0 = srcNode && srcNode.bounds ? Math.round(srcNode.bounds.x) : 0;
-  const Y0 = srcNode && srcNode.bounds ? Math.round(srcNode.bounds.y) : 0;
+  const X0 = process.env.GRID_X0 !== undefined ? Number(process.env.GRID_X0)
+           : srcNode && srcNode.bounds ? Math.round(srcNode.bounds.x) : 0;
+  const Y0 = process.env.GRID_Y0 !== undefined ? Number(process.env.GRID_Y0)
+           : srcNode && srcNode.bounds ? Math.round(srcNode.bounds.y) : 0;
   const gap = Number(process.env.GRID_GAP || 300);
   const cols = Number(process.env.GRID_COLS || 5);
   const namePrefix = process.env.NAME_PREFIX || "";

@@ -173,7 +173,10 @@ node scripts/scan-frame.js 851:7
 #    then clone + translate + verify in one shot:
 node scripts/translate-frame.js 851:7 translations.json
 #    env: FONT_FIX="hy:Arial Unicode MS" for scripts the source font lacks
+#         (omit when the source font already has the target script — clones inherit it)
 #    env: GRID_COLS=3  GRID_GAP=300  NAME_PREFIX=""
+#    env: GRID_X0=... GRID_Y0=...  override the grid anchor to steer clones
+#         clear of other frames stacked below the source (multi-frame translate)
 
 # 2b. frame already exists (language clone with placeholder text)? No clone:
 node scripts/translate-inplace.js 897:8317 translations.json
